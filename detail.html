@@ -110,13 +110,15 @@
                 <div id="overview" role="tabpanel" aria-labelledby="overview-tab" class="tab-pane active">
                     <div class="overview-calendar-block">
                         <div class="row">
-                            <div class="col-2">
-                                <div class="title">TICKETS FROM</div>
-                                <div class="price">$ 46.39</div>
-                                <a href="#" class="btn buy-btn">Buy now</a>
-                                <span></span>
+                            <div class="col-md-2">
+                                <div class="ticket">
+                                    <div class="title">TICKETS FROM</div>
+                                    <div class="price">$ 46.39</div>
+                                    <a href="#" class="btn buy-btn">Buy now</a>
+                                    <span></span>
+                                </div>
                             </div>
-                            <div class="col-10">
+                            <div class="col-md-10">
                                 <div class="availability">
                                     <div class="head">Availability</div>
                                     <i class="fa fa-angle-right fa-gradient"></i>
@@ -125,56 +127,58 @@
                                 <div class="availability-line"></div>
                                 <div class="week-wrap calendar-slider calendar-slider-in-order">
                                     <div class="frame horizontal calendar-slider-items" id="basic">
-                                        <div class="it has-ticket active" data-date="2023-04-26">
-                                            <div class="date">Apr 26</div>
-                                            <div class="w">Wed</div>
-                                            <a href="#" data-href="#" data-date="2023-04-26 19:30:00">07:30 pm</a>
-                                        </div>
-                                        <div class="it" data-date="2023-04-27">
-                                            <div class="date">Apr 27</div>
-                                            <div class="w">Thu</div>
-                                            <div class="tag">N/A</div>
-                                        </div>
-                                        <div class="it has-ticket" data-date="2023-04-28">
-                                            <div class="date">Apr 28</div>
-                                            <div class="w">Fri</div>
-                                            <a href="#" data-href="#" data-date="2023-04-28 19:30:00">07:30 pm</a>
-                                        </div>
-                                        <div class="it" data-date="2023-04-29">
-                                            <div class="date">Apr 29</div>
-                                            <div class="w">Sat</div>
-                                            <div class="tag">N/A</div>
-                                        </div>
-                                        <div class="it has-ticket" data-date="2023-04-30">
-                                            <div class="date">Apr 30</div>
-                                            <div class="w">Sun</div>
-                                            <a href="#" data-href="#" data-date="2023-04-30 19:30:00">07:30 pm</a>
-                                        </div>
-                                        <div class="it" data-date="2023-05-01">
-                                            <div class="date">May 01</div>
-                                            <div class="w">Mon</div>
-                                            <div class="tag">N/A</div>
-                                        </div>
-                                        <div class="it has-ticket" data-date="2023-05-02">
-                                            <div class="date">May 02</div>
-                                            <div class="w">Tue</div>
-                                            <a href="#" data-href="#" data-date="2023-05-02 19:30:00">07:30 pm</a>
-                                        </div>
-                                        <div class="it" data-date="2023-05-03">
-                                            <div class="date">May 03</div>
-                                            <div class="w">Wed</div>
-                                            <div class="tag">N/A</div>
-                                        </div>
-                                        <div class="it has-ticket" data-date="2023-05-04">
-                                            <div class="date">May 04</div>
-                                            <div class="w">Thu</div>
-                                            <a href="#" data-href="#" data-date="2023-05-04 19:30:00">07:30 pm</a>
-                                        </div>
-                                        <div class="it" data-date="2023-05-05">
-                                            <div class="date">May 05</div>
-                                            <div class="w">Fri</div>
-                                            <div class="tag">N/A</div>
-                                        </div>
+                                        <ul>
+                                            <li class="it has-ticket act active" data-date="2023-04-26">
+                                                <div class="date">Apr 26</div>
+                                                <div class="w">Wed</div>
+                                                <a class="show-over-info tag tag-discount" href="#" data-href="#" data-date="2023-04-26 19:30:00">07:30 pm</a>
+                                            </li>
+                                            <li class="it" data-date="2023-04-27">
+                                                <div class="date">Apr 27</div>
+                                                <div class="w">Thu</div>
+                                                <div class="tag">N/A</div>
+                                            </li>
+                                            <li class="it has-ticket" data-date="2023-04-28">
+                                                <div class="date">Apr 28</div>
+                                                <div class="w">Fri</div>
+                                                <a class="show-over-info tag tag-discount" href="#" data-href="#" data-date="2023-04-28 19:30:00">07:30 pm</a>
+                                            </li>
+                                            <li class="it" data-date="2023-04-29">
+                                                <div class="date">Apr 29</div>
+                                                <div class="w">Sat</div>
+                                                <div class="tag">N/A</div>
+                                            </li>
+                                            <li class="it has-ticket" data-date="2023-04-30">
+                                                <div class="date">Apr 30</div>
+                                                <div class="w">Sun</div>
+                                                <a class="show-over-info tag tag-discount" href="#" data-href="#" data-date="2023-04-30 19:30:00">07:30 pm</a>
+                                            </li>
+                                            <li class="it" data-date="2023-05-01">
+                                                <div class="date">May 01</div>
+                                                <div class="w">Mon</div>
+                                                <div class="tag">N/A</div>
+                                            </li>
+                                            <li class="it has-ticket" data-date="2023-05-02">
+                                                <div class="date">May 02</div>
+                                                <div class="w">Tue</div>
+                                                <a class="show-over-info tag tag-discount" href="#" data-href="#" data-date="2023-05-02 19:30:00">07:30 pm</a>
+                                            </li>
+                                            <li class="it" data-date="2023-05-03">
+                                                <div class="date">May 03</div>
+                                                <div class="w">Wed</div>
+                                                <div class="tag">N/A</div>
+                                            </li>
+                                            <li class="it has-ticket" data-date="2023-05-04">
+                                                <div class="date">May 04</div>
+                                                <div class="w">Thu</div>
+                                                <a class="show-over-info tag tag-discount" href="#" data-href="#" data-date="2023-05-04 19:30:00">07:30 pm</a>
+                                            </li>
+                                            <li class="it" data-date="2023-05-05">
+                                                <div class="date">May 05</div>
+                                                <div class="w">Fri</div>
+                                                <div class="tag">N/A</div>
+                                            </li>
+                                        </ul>
                                     </div>
                                 </div>
                             </div>
@@ -182,12 +186,12 @@
                     </div>
                     <div class="overview-description">
                         <div class="row">
-                            <div class="col-6">
+                            <div class="col-sm-6">
                                 <div class="title">Description</div>
                                 <div class="description">Clay Cooper’s Country Express has something for everyone with 25 entertainers on stage, great visual effects and a variety of music - old & new country, rock n roll, gospel, and patriotic! The singing, dancing, and hysterical comedy will keep you on the edge of your seat from start to finish. Clay...</div>
                                 <a href="#" class="view-full-description">View full Description <i class="fa fa-angle-right fa-gradient"></i></a>
                             </div>
-                            <div class="col-6">
+                            <div class="col-sm-6">
                                 <div class="title">Voucher Exchange</div>
                                 <div class="description">PLEASE EXCHANGE VOUCHER FOR PRINTED TICKETS 2 HOURS PRIOR TO SCHEDULED EVENT. <br><br> Centrally located at the Clay Cooper Theatre 3216 W Hwy 76 in Branson, MO 65616.</div>
                                 <div class="title">Cancellation policy</div>
@@ -229,10 +233,10 @@
                 <div id="description" role="tabpanel" aria-labelledby="description-tab" class="tab-pane">
                     <div class="description-panel">
                         <div class="row">
-                            <div class="col-6">
+                            <div class="col-sm-6">
                                 <div class="description">Clay Cooper’s Country Express has something for everyone with 25 entertainers on stage, great visual effects and a variety of music - old & new country, rock n roll, gospel, and patriotic! The singing, dancing, and hysterical comedy will keep you on the edge of your seat from start to finish. Clay and his gang guarantee a family-friendly show, perfect for all ages. Then in November and December, this show features a Christmas Celebration that has become a "MUST SEE" in Branson. The first half is filled with highlights from the regular season show, and the second half is ALL Christmas!</div>
                             </div>
-                            <div class="col-6">
+                            <div class="col-sm-6">
                                 <div class="title">Directions</div>
                                 <div class="description">Clay Cooper Theatre located at 3216 West 76 Country Blvd., across from the Titanic Museum in Branson, MO.</div>
                                 <div class="title">Amenities</div>
@@ -279,16 +283,16 @@
                         <div class="title">This show is available in the following packages</div>
                         <div id="packages-list-1" class="item">
                             <div class="row">
-                                <div class="col-8">
+                                <div class="col-sm-7 col-md-8">
                                     <div class="title">Real Country and a Little ComedyPackage</div>
                                 </div>
-                                <div class="col-4">
+                                <div class="col-sm-5 col-md-4">
                                     <div class="save-up">Save up to $48.00</div>
                                 </div>
                             </div>
                             <div class="line"></div>
                             <div class="row">
-                                <div class="col-7">
+                                <div class="col-md-7">
                                     <div class="info">
                                         <div class="info-item">
                                             <div class="info-title">Available Dates:</div>
@@ -300,7 +304,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-5">
+                                <div class="col-md-5">
                                     <div class="price">
                                         <div class="price-item">
                                             <div class="price-title">Package from</div>
@@ -315,58 +319,58 @@
                             </div>
                             <div class="line"></div>
                             <div class="row">
-                                <div class="col-8">
+                                <div class="col-sm-8">
                                     <div class="description">This package features shows & attractions located right in the heart of Branson. Park the car and do it all! Ideal with a stay at award-winning Best Western Center Pointe Inn. 2 shows and 4 attractions.
                                     <br><b>Save up to $25 per person.</b> Certain dates may be excluded.</div>
                                 </div>
-                                <div class="col-4">
+                                <div class="col-sm-4">
                                     <a href="#" class="btn buy-package">Buy Package</a>
                                 </div>
                             </div>
                             <div class="items-in row">
-                                <div class="col-md-3">
+                                <div class="col-md-5 col-lg-4 col-xl-3">
                                     <a href="#" class="package-item">
                                         <img src="img/package-1.png" alt="Beyond The Lens Family Fun Branson">
                                         <span>Beyond The Lens Family Fun Branson<span>
                                     </a>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-5 col-lg-4 col-xl-3">
                                     <a href="#" class="package-item">
                                         <img src="img/package-2.png" alt="Branson's Famous Baldknobbers">
                                         <span>Branson's Famous Baldknobbers<span>
                                     </a>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-5 col-lg-4 col-xl-3">
                                     <a href="#" class="package-item">
                                         <img src="img/package-3.png" alt="Grand Jubilee">
                                         <span>Grand Jubilee<span>
                                     </a>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-5 col-lg-4 col-xl-3">
                                     <a href="#" class="package-item">
                                         <img src="img/package-2.png" alt="Beyond The Lens Family Fun Branson">
                                         <span>Beyond The Lens Family Fun Branson<span>
                                     </a>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-5 col-lg-4 col-xl-3">
                                     <a href="#" class="package-item">
                                         <img src="img/package-4.png" alt="Pierce Arrow Country">
                                         <span>Pierce Arrow Country</span>
                                     </a>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-5 col-lg-4 col-xl-3">
                                     <a href="#" class="package-item">
                                         <img src="img/package-5.png" alt="Hughes Brothers Country Show">
                                         <span>Hughes Brothers Country Show<span>
                                     </a>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-5 col-lg-4 col-xl-3">
                                     <a href="#" class="package-item">
                                         <img src="img/package-6.png" alt="Beyond The Lens Family Fun Branson">
                                         <span>Beyond The Lens Family Fun Branson<span>
                                     </a>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-5 col-lg-4 col-xl-3">
                                     <a href="#" class="package-item">
                                         <img src="img/package-4.png" alt="Pierce Arrow Country">
                                         <span>Pierce Arrow Country<span>
@@ -376,16 +380,16 @@
                         </div>
                         <div id="packages-list-2" class="item">
                             <div class="row">
-                                <div class="col-8">
+                                <div class="col-sm-7 col-md-8">
                                     <div class="title">Park & PlayPackage</div>
                                 </div>
-                                <div class="col-4">
+                                <div class="col-sm-5 col-md-4">
                                     <div class="save-up">Save up to $25.00</div>
                                 </div>
                             </div>
                             <div class="line"></div>
                             <div class="row">
-                                <div class="col-7">
+                                <div class="col-md-7">
                                     <div class="info">
                                         <div class="info-item">
                                             <div class="info-title">Available Dates:</div>
@@ -397,7 +401,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-5">
+                                <div class="col-md-5">
                                     <div class="price">
                                         <div class="price-item">
                                             <div class="price-title">Package from</div>
@@ -412,58 +416,58 @@
                             </div>
                             <div class="line"></div>
                             <div class="row">
-                                <div class="col-8">
+                                <div class="col-sm-8">
                                     <div class="description">This package features shows & attractions located right in the heart of Branson. Park the car and do it all! Ideal with a stay at award-winning Best Western Center Pointe Inn. 2 shows and 4 attractions.
                                     <br><b>Save up to $25 per person.</b> Certain dates may be excluded.</div>
                                 </div>
-                                <div class="col-4">
+                                <div class="col-sm-4">
                                     <a href="#" class="btn buy-package">Buy Package</a>
                                 </div>
                             </div>
                             <div class="items-in row">
-                                <div class="col-md-3">
+                                <div class="col-md-5 col-lg-4 col-xl-3">
                                     <a href="#" class="package-item">
                                         <img src="img/package-6.png" alt="Beyond The Lens Family Fun Branson">
                                         <span>Beyond The Lens Family Fun Branson<span>
                                     </a>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-5 col-lg-4 col-xl-3">
                                     <a href="#" class="package-item">
                                         <img src="img/package-2.png" alt="Branson's Famous Baldknobbers">
                                         <span>Branson's Famous Baldknobbers<span>
                                     </a>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-5 col-lg-4 col-xl-3">
                                     <a href="#" class="package-item">
                                         <img src="img/package-1.png" alt="Beyond The Lens Family Fun Branson">
                                         <span>Beyond The Lens Family Fun Branson<span>
                                     </a>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-5 col-lg-4 col-xl-3">
                                     <a href="#" class="package-item">
                                         <img src="img/package-3.png" alt="Grand Jubilee">
                                         <span>Grand Jubilee<span>
                                     </a>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-5 col-lg-4 col-xl-3">
                                     <a href="#" class="package-item">
                                         <img src="img/package-5.png" alt="Hughes Brothers Country Show">
                                         <span>Hughes Brothers Country Show<span>
                                     </a>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-5 col-lg-4 col-xl-3">
                                     <a href="#" class="package-item">
                                         <img src="img/package-4.png" alt="Pierce Arrow Country">
                                         <span>Pierce Arrow Country<span>
                                     </a>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-5 col-lg-4 col-xl-3">
                                     <a href="#" class="package-item">
                                         <img src="img/package-2.png" alt="Beyond The Lens Family Fun Branson">
                                         <span>Beyond The Lens Family Fun Branson<span>
                                     </a>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-5 col-lg-4 col-xl-3">
                                     <a href="#" class="package-item">
                                         <img src="img/package-4.png" alt="Pierce Arrow Country">
                                         <span>Pierce Arrow Country</span>
@@ -485,6 +489,9 @@
     </div>
 </footer>
 
+<script src="js/sly.min.js"></script>
+<script src="js/jquery.easing.1.3.js"></script>
+<script src="js/schedule-slider.js"></script>
 <script src="js/masonry.pkgd.min.js"></script>
 <script src="js/lightbox.js"></script>
 <script>
