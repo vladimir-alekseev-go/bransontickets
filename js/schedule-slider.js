@@ -9,21 +9,18 @@ let scheduleSlider = {
     sly: null,
     cloneInfoOver: null,
     orderFormContainer: null,
-    init: function () {
+    init: function() {
         let _self = this;
         _self.calendarSlider = $('.calendar-slider');
         _self.frame = _self.calendarSlider.find('.frame');
         _self.orderFormContainer = $('#order-form-container');
         _self.wrap = _self.frame.parent();
-
         _self.initSly();
-
-        _self.frame.find('a.tag').click(function () {
+        _self.frame.find('a.tag').click(function() {
             _self.loadPage($(this).data('href'), $(this));
             return false;
         });
-
-        $(document).on('click', '.js-allotment', function(){
+        $(document).on('click', '.js-allotment', function() {
             _self.frame.find("a.tag[data-allotment-id='" + $(this).data('allotmentId') + "']").eq(0).trigger('click');
             let index = $(".calendar-slider .frame li").index($(".calendar-slider .frame li .tag.active").closest('li'));
             _self.toCenter(index, true);
@@ -51,33 +48,29 @@ let scheduleSlider = {
             _self.calendarSlider.find('a.tag').eq(0).trigger('click');
         }
     },
-    loadPage: function (url, ob) {
-
+    loadPage: function(url, ob) {
         if (modification) {
             modification.dataHash = null;
         }
-
         window.location.hash = 'availability';
         let _self = this;
         _self.orderFormContainer.addClass('load-progress');
         _self.frame.find('.tag').removeClass('active');
         ob.addClass('active');
-        $.get(url, function (result) {
+        $.get(url, function(result) {
             $('#order-form-container').html(result);
             _self.orderFormContainer.removeClass('load-progress');
-
             order.resetSumm();
             order.resetZero();
-
             $("input.count").trigger("change");
         });
     },
-    initSly: function () {
+    initSly: function() {
         let _self = this;
         if (_self.frame.length === 0) {
             return;
         }
-        _self.sly = new Sly(_self.frame, {
+        _self.sly = new Sly(_self.frame,{
             horizontal: 1,
             itemNav: 'basic',
             smart: 1,
@@ -95,36 +88,27 @@ let scheduleSlider = {
             dragHandle: 1,
             dynamicHandle: 1,
             clickBar: 1,
-
-            // Buttons
             prevPage: _self.wrap.find('.left'),
             nextPage: _self.wrap.find('.right'),
         });
-        _self.sly.one('load', function (eventName) {
+        _self.sly.one('load', function(eventName) {
             $(".calendar-slider-block").css('height', 'auto');
             let index = $(".calendar-slider .frame li").index($(".calendar-slider .frame li .tag.active").closest('li'));
             _self.toCenter(index, true);
         });
         _self.sly.init();
     },
-    toCenter: function (index, immediate) {
-        if (index === null) { //for safary
+    toCenter: function(index, immediate) {
+        if (index === null) {
             index = 0;
         }
-        if (immediate === null) { //for safary
+        if (immediate === null) {
             immediate = false;
         }
-
         let _self = this;
         _self.sly.toCenter(index, immediate);
     },
-    initHash: function () {
-
-    },
-    setHash: function (hash) {
-
-    },
-    initInfoOver: function () {
-
-    }
-}
+    initHash: function() {},
+    setHash: function(hash) {},
+    initInfoOver: function() {}
+};

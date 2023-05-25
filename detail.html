@@ -225,6 +225,9 @@
                                 <div class="grid-item" style="position: absolute;">
                                     <div><a href="img/gallery-5.png" data-lightbox="image-1" data-title="Clay Coopers Country Express"><img src="img/gallery-5.png" alt=""></a></div>
                                 </div>
+                                <div class="grid-item" style="position: absolute;">
+                                    <div><a href="img/gallery-6.jpg" data-lightbox="image-1" data-title="Clay Coopers Country Express"><img src="img/gallery-6.jpg" alt=""></a></div>
+                                </div>
                                 <div class="grid-sizer"></div>
                             </div>
                         </div>
@@ -495,20 +498,28 @@
 <script src="js/masonry.pkgd.min.js"></script>
 <script src="js/lightbox.js"></script>
 <script>
-    let masonryGrid = $('.masonry-grid').masonry({
-        itemSelector: '.grid-item',
-        columnWidth: '.grid-sizer',
-        percentPosition: true
+    $(document).ready(function () {
+        $('#overview-tab').click();
     });
-    setTimeout(function() {
-        masonryGrid.masonry('layout')
-    }, 200);
-    setTimeout(function() {
-        masonryGrid.masonry('layout')
-    }, 1000);
-    setTimeout(function() {
-        masonryGrid.masonry('layout')
-    }, 3000);
+    
+    $("#overview-tab").on("click", function () {
+		setTimeout(function () {
+            let masonryGrid = $('.masonry-grid').masonry({
+                itemSelector: '.grid-item',
+                columnWidth: '.grid-sizer',
+                percentPosition: true
+            });
+            setTimeout(function() {
+                masonryGrid.masonry('layout')
+            }, 200);
+            setTimeout(function() {
+                masonryGrid.masonry('layout')
+            }, 1000);
+            setTimeout(function() {
+                masonryGrid.masonry('layout')
+            }, 3000);
+        }, 1);    
+	});
 </script>
 <script src="js/moment.js"></script>
 <script src="js/fullcalendar.min.js"></script>
