@@ -4,16 +4,16 @@
     <path d="M15 13.75C15.3315 13.75 15.6495 13.6183 15.8839 13.3839C16.1183 13.1495 16.25 12.8315 16.25 12.5C16.25 12.1685 16.1183 11.8505 15.8839 11.6161C15.6495 11.3817 15.3315 11.25 15 11.25C14.6685 11.25 14.3505 11.3817 14.1161 11.6161C13.8817 11.8505 13.75 12.1685 13.75 12.5C13.75 12.8315 13.8817 13.1495 14.1161 13.3839C14.3505 13.6183 14.6685 13.75 15 13.75Z" fill="url(#paint1_linear_367_200)" stroke="url(#paint2_linear_367_200)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
     <defs>
         <linearGradient id="paint0_linear_367_200" x1="5" y1="14.6622" x2="25" y2="14.6622" gradientUnits="userSpaceOnUse">
-            <stop stop-color="#252161"/>
-            <stop offset="1" stop-color="#92278E"/>
+            <stop stop-color="#7F00FF"/>
+            <stop offset="1" stop-color="#E100FF"/>
         </linearGradient>
         <linearGradient id="paint1_linear_367_200" x1="13.75" y1="12.4662" x2="16.25" y2="12.4662" gradientUnits="userSpaceOnUse">
-            <stop stop-color="#252161"/>
-            <stop offset="1" stop-color="#92278E"/>
+            <stop stop-color="#7F00FF"/>
+            <stop offset="1" stop-color="#E100FF"/>
         </linearGradient>
         <linearGradient id="paint2_linear_367_200" x1="13.75" y1="12.4662" x2="16.25" y2="12.4662" gradientUnits="userSpaceOnUse">
-            <stop stop-color="#252161"/>
-            <stop offset="1" stop-color="#92278E"/>
+            <stop stop-color="#7F00FF"/>
+            <stop offset="1" stop-color="#E100FF"/>
         </linearGradient>
     </defs>
 </svg>
