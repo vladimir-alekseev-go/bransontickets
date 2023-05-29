@@ -2,8 +2,8 @@
 .header-logo {display:flex;align-items:center;gap:60px;}
 .header-logo .header-search {padding:20px 0 0 0;flex:1;}
 .header-logo .header-search input {background:var(--c-white) url(../img/search.svg) no-repeat 97% 50% !important;background-size:16px !important;padding-right:35px;}
-.header-logo .header-search .form-control, input {padding-top: 8px;max-width: 400px;color: var(--c-blue-deep);font-weight: 350;font-size:16px;border:1px solid var(--c-blue-deep);border-radius:5px;}
-::placeholder {color:var(--c-blue-deep) !important;}
+.header-logo .header-search .form-control, input {padding-top:8px;max-width:400px;color:var(--c-blue-deep);font-weight:350;font-size:16px;border:1px solid var(--c-blue-deep);border-radius:5px;}
+.header-logo .header-search input::placeholder {color:var(--c-blue-deep) !important;}
 .header-menu-right {padding:20px 0 0 0;display:flex;align-items:center;justify-content:end;gap:20px;}
 .header-menu-right img {width:20px;}
 .header-menu-right .header-phone {padding-right:20px;color:var(--c-blue-deep);font-weight:700;font-size:20px;}

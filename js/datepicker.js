@@ -26,19 +26,4 @@ $('.input-daterange').datepicker({startDate: '+0d', orientation: 'bottom'}).on("
     }
 });
 
-$('#popup-print-schedule .field-datepicker').datepicker({})
-
-$datepickerEls.on('keydown', false);
-
-$datepickerField.find(".icon").on('click', function () {
-    $(this).closest(".field").find(".datepicker").focus();
-});
-
-// $(window).scroll(function () {
-//     if ($("#popup-print-schedule").css("display") === "block") {
-//         let $datepickerPopupEls = $('.datepicker');
-//         $datepickerPopupEls.datepicker('show');
-//         $datepickerPopupEls.datepicker('hide');
-//         $datepickerPopupEls.on('keydown', false);
-//     }
-// });
+$('.input-group.date').datepicker({startDate: '+0d', orientation: 'bottom', todayHighlight: true, autoclose: true});
