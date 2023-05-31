@@ -1,18 +1,44 @@
-.header {width:100%;padding:20px 0;z-index:100;margin-bottom:22px;}
+.header {width:100%;padding:20px 0;z-index:100;margin-bottom:22px;background:var(--c-white-smoky);}
+.header .menu-up-control {display:none;float:left;color:var(--c-blue-deep);font-size:21px;top:5px;position:relative;cursor:pointer;}
+.header .menu-up-control.menu-up-control-is-close .fa-times {display:none;}
+.header .menu-up-control.menu-up-control-is-open .fa-bars {display:none;}
 .header-logo {display:flex;align-items:center;gap:60px;}
 .header-logo .header-search {padding:20px 0 0 0;flex:1;}
-.header-logo .header-search input {background:var(--c-white) url(../img/search.svg) no-repeat 97% 50% !important;background-size:16px !important;padding-right:35px;}
-.header-logo .header-search .form-control, input {padding-top:8px;max-width:400px;color:var(--c-blue-deep);font-weight:350;font-size:16px;border:1px solid var(--c-blue-deep);border-radius:5px;}
+.header-logo .header-search input {background:var(--c-white) url(../img/search.svg) no-repeat 97% 50% !important;background-size:16px !important;padding-right:35px;box-shadow:none !important;}
+.header-logo .header-search .form-control {padding-top:8px;max-width:400px;color:var(--c-blue-deep);font-weight:350;font-size:16px;border:1px solid var(--c-blue-deep);border-radius:5px;}
 .header-logo .header-search input::placeholder {color:var(--c-blue-deep) !important;}
 .header-menu-right {padding:20px 0 0 0;display:flex;align-items:center;justify-content:end;gap:20px;}
 .header-menu-right img {width:20px;}
-.header-menu-right .header-phone {padding-right:20px;color:var(--c-blue-deep);font-weight:700;font-size:20px;}
+.header-menu-right .header-phone {padding-right:20px;color:var(--c-blue-deep);font-weight:700;font-size:20px;text-decoration:none;}
 .header-menu-right .auth-item {padding:1px;background:linear-gradient(90deg, var(--c-violet-gray) 0%, var(--c-violet) 100%);border-radius:5px;}
 .header-menu-right .auth-item .sign-up {padding:5px 19px;color:var(--c-blue-deep);font-weight:700;font-size:20px;background:var(--c-white);}
 .header-menu-right .auth-item .sign-in {padding:5px 21px;color:var(--c-white);font-weight:700;font-size:20px;}
 .header-menu-bottom-line {background:var(--c-blue-deep);}
 .header-menu-bottom {margin-top:20px;display:flex;align-items:center;justify-content:start;gap:16px;}
 .header-menu-bottom .header-menu-item {font-weight:700;font-size:20px;color:var(--c-white);}
+
+.menu-general.menu-general-control-is-close .search-up {display:none;}
+.menu-general.menu-general-control-is-close .menu-main {display:none;}
+.menu-general.menu-general-control-is-open .search-up {display:none;}
+.menu-general.menu-general-control-is-open .menu-main {display:none;}
+.menu-general.menu-general-control-is-open .menu-main-phone {display:none;}
+.menu-general.menu-general-control-is-close .menu-main-phone {display:none;}
+
+.search-up .header-search input {background:var(--c-white) url(../img/search.svg) no-repeat 97% 50% !important;background-size:16px !important;padding-right:35px;box-shadow:none !important;}
+.search-up .header-search .form-control {padding-top:6px;color:var(--c-blue-deep);font-weight:350;font-size:14px;border:1px solid var(--c-blue-deep);border-radius:5px;}
+.search-up .header-search input::placeholder {color:var(--c-blue-deep) !important;}
+
+.menu-main {display:none;padding:10px;margin:0 0 20px;border-radius:4px;}
+.menu-main, .menu-main li {margin:0;padding:0;}
+.menu-main {padding:20px 0 10px;margin:0 0 10px;clear:both;overflow:hidden}
+.menu-main li {margin:0 0 10px;padding:0 20px;list-style:none;float:left;width:50%;text-align:center;}
+.menu-main li:before {display:none;}
+.menu-main li, .menu-main li a {font-size:16px}
+.menu-main li a {font-weight:bold;color:var(--c-blue-deep);text-decoration:none;}
+.menu-main li a:hover {color:var(--c-blue-deep);}
+.menu-main-phone {text-align:center;font-weight:700;font-size:16px;color:var(--c-blue-deep);text-decoration:none;}
+.menu-main-phone:hover {color:var(--c-blue-deep);}
+.menu-main-phone img {width:17px;}
 
 @media (max-width:991px) {
     .header-logo .bransontickets-logo img {width:200px;}
@@ -22,6 +48,14 @@
 }
 
 @media (max-width:767px) {
+    .header.header-menu-is-open {position:fixed;top:0;bottom:0;left:0;right:0;z-index:999;margin:0;}
+    .header .menu-up-control {display:block;}
+    .header-logo {gap:15px;}
     .header-logo .bransontickets-logo img {width:150px;}
     .header-menu-right, .header-menu-bottom-line, .header-logo .header-search {display:none;}
+
+    .menu-general.menu-general-control-is-open {position:absolute;background:var(--c-white-smoky);top:75px;left:0;right:0;bottom:0;z-index:9999;padding:10px;}
+    .menu-general.menu-general-control-is-open .search-up {display:block;}
+    .menu-general.menu-general-control-is-open .menu-main {display:block;}
+    .menu-general.menu-general-control-is-open .menu-main-phone {display:block;}
 }

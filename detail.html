@@ -35,6 +35,10 @@
         <div class="row">
             <div class="col">
                 <div class="header-logo">
+                    <a id="menu-up-control" class="menu-up-control menu-up-control-is-close">
+                        <i class="fa fa-bars"></i>
+                        <i class="fa fa-times"></i>
+                    </a>
                     <a href="#" class="bransontickets-logo">
                         <img src="img/bransontickets-logo.png" alt="Branson Tickets">
                     </a>
@@ -47,7 +51,7 @@
             <div class="col">
                 <div class="header-menu-right">
                     <img src="img/phone.svg" alt="phone icon">
-                    <div class="header-phone">417-337-8455</div>
+                    <a href="tel:417-337-8455" class="header-phone">417-337-8455</a>
                     <div class="auth-item">
                         <a class="btn sign-up" href="#">Sign up</a>
                     </div>
@@ -56,6 +60,27 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <div id="menu-general" class="menu-general menu-general-control-is-close">
+            <div class="search-up">
+                <form action="#" method="get" data-hs-cf-bound="true">
+                    <div class="form-group header-search input-search">
+                        <input type="text" class="form-control" name="Search[name]" value="" aria-required="true" aria-invalid="false" placeholder="Search">
+                    </div>
+                </form>
+            </div>
+            <ul class="menu-main">
+                <li><a href="#">Shows</a></li>
+                <li><a href="#">Attractions</a></li>
+                <li><a href="#">Lodging</a></li>
+                <li><a href="#">Dining</a></li>
+                <li><a href="#">Sign up</a></li>
+                <li><a href="#">Sign in</a></li>
+            </ul>
+            <a class="menu-main-phone" href="tel:417-337-8455">
+                <img src="img/phone.svg" alt="phone icon">
+                417-337-8455
+            </a>
         </div>
     </div>
     <div class="header-menu-bottom-line">
@@ -496,6 +521,7 @@
     </div>
 </footer>
 
+<script src="js/header.js"></script>
 <script src="js/sly.min.js"></script>
 <script src="js/jquery.easing.1.3.js"></script>
 <script src="js/schedule-slider.js"></script>
