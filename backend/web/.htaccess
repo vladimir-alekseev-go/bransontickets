@@ -1,0 +1,16 @@
+<IfModule mod_rewrite.c>
+	RewriteEngine on
+	
+	RewriteCond %{HTTP_HOST} ^www\.(.*)$
+	RewriteRule ^(.*)$ https://%1/$1 [L,R=301]
+
+	RewriteCond %{HTTPS} off
+	RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+	# if a directory or a file exists, use it directly
+	RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteCond %{REQUEST_FILENAME} !-d
+	
+	# otherwise forward it to index.php
+	RewriteRule . index.php
+</IfModule>
