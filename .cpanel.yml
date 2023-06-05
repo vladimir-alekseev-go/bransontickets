@@ -1,0 +1,15 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=./../../public_html/advanced/
+    - rsync -av --progress ./ $DEPLOYPATH --exclude .git
+    - chmod 755 ./../../public_html/;
+    - chmod 755 ./../../public_html/advanced/;
+    - cd ./../../public_html/advanced/; php -C /opt/cpanel/composer/bin/composer clearcache
+    - cd ./../../public_html/advanced/; php -C /opt/cpanel/composer/bin/composer install
+    - cd ./../../public_html/advanced/; php -C /opt/cpanel/composer/bin/composer clearcache
+    - cd ./../../public_html/advanced/; php yii migrate --interactive=0
+    - cd ./../../public_html/advanced/; php yii cache/flush-all
+    - cd ./../../public_html/advanced/; php yii cache/flush-schema --interactive=0
+    - cd ./../../public_html/advanced/; php yii clear/assets
+    - cd ./../../public_html/advanced/; php yii clear/minify
