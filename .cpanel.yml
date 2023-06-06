@@ -8,6 +8,7 @@ deployment:
     - cd ./../../public_html/advanced/; php -C /opt/cpanel/composer/bin/composer clearcache
     - cd ./../../public_html/advanced/; php -C /opt/cpanel/composer/bin/composer install
     - cd ./../../public_html/advanced/; php -C /opt/cpanel/composer/bin/composer clearcache
+    - cd ./../../public_html/advanced/; php yii migrate --migrationPath=vendor/webvimark/module-user-management/migrations/ --interactive=0
     - cd ./../../public_html/advanced/; php yii migrate --interactive=0
     - cd ./../../public_html/advanced/; php yii cache/flush-all
     - cd ./../../public_html/advanced/; php yii cache/flush-schema --interactive=0
