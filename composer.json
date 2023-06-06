@@ -1,0 +1,71 @@
+{
+    "name": "branson/tickets",
+    "description": "Branson tickets",
+    "keywords": ["branson", "tickets"],
+    "homepage": "https://www.yiiframework.com/",
+    "type": "project",
+    "license": "BSD-3-Clause",
+    "support": {
+        "issues": "https://github.com/yiisoft/yii2/issues?state=open",
+        "forum": "https://www.yiiframework.com/forum/",
+        "wiki": "https://www.yiiframework.com/wiki/",
+        "irc": "irc://irc.freenode.net/yii",
+        "source": "https://github.com/yiisoft/yii2"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable" : true,
+    "require": {
+        "php": ">=7.4.0",
+        "yiisoft/yii2": "~2.0.45",
+        "yiisoft/yii2-bootstrap": "*",
+        "yiisoft/yii2-symfonymailer": "~2.0.3",
+        "yidas/yii2-fontawesome": "^5.0",
+        "webvimark/module-user-management": "*",
+        "dmstr/yii2-adminlte-asset": "*",
+        "almasaeed2010/adminlte": "v2.3.11",
+        "vladimir-alekseev-go/yii2-image-processor": ">=v1.1.2",
+        "2amigos/yii2-file-upload-widget": "*",
+        "2amigos/yii2-file-input-widget": "~1.0",
+        "2amigos/yii2-ckeditor-widget" : "*"
+    },
+    "require-dev": {
+        "yiisoft/yii2-debug": "~2.1.0",
+        "yiisoft/yii2-gii": "~2.2.0",
+        "yiisoft/yii2-faker": "~2.0.0",
+        "phpunit/phpunit": "~9.5.0",
+        "codeception/codeception": "^5.0.0 || ^4.0",
+        "codeception/lib-innerbrowser": "^4.0 || ^3.0 || ^1.1",
+        "codeception/module-asserts": "^3.0 || ^1.1",
+        "codeception/module-yii2": "^1.1",
+        "codeception/module-filesystem": "^3.0 || ^2.0 || ^1.1",
+        "codeception/verify": "^3.0 || ^2.2",
+        "symfony/browser-kit": "^6.0 || >=2.7 <=4.2.4"
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "common\\tests\\": ["common/tests/", "common/tests/_support"],
+            "backend\\tests\\": ["backend/tests/", "backend/tests/_support"],
+            "frontend\\tests\\": ["frontend/tests/", "frontend/tests/_support"]
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "yiisoft/yii2-composer" : true
+        },
+        "process-timeout": 1800,
+        "fxp-asset": {
+            "enabled": false
+        }
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        }
+    ],
+    "autoload": {
+        "classmap": [
+            "common/models/source"
+        ]
+    }
+}

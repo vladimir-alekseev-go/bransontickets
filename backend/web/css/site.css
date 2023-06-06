@@ -1,0 +1,27 @@
+.main-sidebar, .left-side {padding-top:0;}
+
+.grid-view > table {display:block;overflow-x:auto;}
+
+.image-list, .image-list li {margin:0;padding:0;}
+.image-list {overflow: hidden;margin:0 0 20px;}
+.image-list li {list-style: none;float:left;margin:0 10px 10px 0;display:block;text-align: center}
+.image-list li img {border-radius:4px; max-width: 100px;}
+
+.open-hours-container {max-width: 300px;}
+.open-hours-name {margin: 0 0 5px 10px; font-weight: bold;}
+.open-hours-row {margin: 0 0 5px 10px; display: flex; justify-content: space-between;}
+
+del {
+    color: red;
+    background: #fdd;
+}
+ins {
+    color: green;
+    background: #dfd;
+}
+.only-deletions del {display: none;}
+.only-insertions ins {display: none;}
+
+.moderate-info .it {border-top:1px solid #f4f4f4;padding:5px 0;margin:0 0 5px;}
+.moderate-info .it:first-child {border-top: none;}
+.moderate-info .it:last-child {border-top: none;}
