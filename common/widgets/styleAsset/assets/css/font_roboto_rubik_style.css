@@ -1,0 +1,35 @@
+html, body, td, th,
+input[type=text], input[type=password], input[type=number], select, option, textarea,
+.btn-primary,
+.btn-secondary, 
+.btn-timing, 
+.btn-timing-without, .btn-timing-without:hover, .btn-timing-without:focus, .btn-timing-without:active, .btn-timing-without:focus.btn-timing-without:active,
+.menu-main a, 
+.show-detail .restaurant-menu .rest-menu-notice, 
+.show-list .descrip, 
+.show-list .amenities, 
+.rooms-type .description .rows 
+{font-family: Roboto, Arial, sans-serif;}
+
+
+h1, .h1, h2.h1,
+h2, .h2, h1.h2,
+h3, .h3,
+h4, .h4,
+.cart .title,
+.show-list .title,
+.show-list .place,
+.show-list .days .rows div,
+.show-list .days .rows .month-day,
+.calendar h2,
+.calendar th,
+.calendar-slider li .date,
+.calendar-slider li .w,
+.rooms-type .title,
+.rooms-type .subtitle,
+.packages-list-new .date, 
+.packages-list-new .category,
+.main-slider li .info h2,
+.info-block,
+.info-block-contact .status
+{font-family: Rubik, Arial, sans-serif;}
