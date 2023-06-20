@@ -1,6 +1,5 @@
 <?php
 
-use common\helpers\Template;
 use webvimark\modules\UserManagement\UserManagementModule;
 use yii\bootstrap\BootstrapAsset;
 use yii\helpers\Html;
@@ -15,7 +14,6 @@ BootstrapAsset::register($this);
 Yii::$app->view->registerLinkTag(
     [
         'rel'  => 'shortcut icon',
-        'href' => Template::getProperty('favicon')
     ]
 );
 

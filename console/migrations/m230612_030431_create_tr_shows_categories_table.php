@@ -12,7 +12,51 @@ class m230612_030431_create_tr_shows_categories_table extends Migration
      */
     public function safeUp()
     {
-        $this->execute(file_get_contents(__DIR__ . '/sql/tr_shows_categories.sql'));
+        $tableOptions = null;
+        if ($this->db->driverName === 'mysql') {
+            $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
+        }
+        $this->createTable(
+            'tr_shows_categories',
+            [
+                'id'                   => $this->primaryKey(),
+                'id_external_show'     => $this->integer(11)->notNull(),
+                'id_external_category' => $this->integer(11)->notNull(),
+            ],
+            $tableOptions
+        );
+
+        $this->createIndex(
+            'id_external_show',
+            'tr_shows_categories',
+            'id_external_show'
+        );
+
+        $this->addForeignKey(
+            'tr_shows_categories_ibfk_1',
+            'tr_shows_categories',
+            'id_external_show',
+            'tr_shows',
+            'id_external',
+            'CASCADE',
+            'CASCADE'
+        );
+
+        $this->createIndex(
+            'id_external_category',
+            'tr_shows_categories',
+            'id_external_category'
+        );
+
+        $this->addForeignKey(
+            'tr_shows_categories_ibfk_2',
+            'tr_shows_categories',
+            'id_external_category',
+            'tr_categories',
+            'id_external',
+            'CASCADE',
+            'CASCADE'
+        );
     }
 
     /**
@@ -20,6 +64,6 @@ class m230612_030431_create_tr_shows_categories_table extends Migration
      */
     public function safeDown()
     {
-        return false;
+        $this->dropTable('tr_shows_categories');
     }
 }
