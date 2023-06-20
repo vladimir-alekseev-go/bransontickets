@@ -17,10 +17,10 @@ class m230612_033150_create_tr_shows_similar extends Migration
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
         }
         $this->createTable('tr_shows_similar', [
-            'id' => $this->primaryKey(),
-            'external_id' => $this->integer()->notNull(),
+            'id'                  => $this->primaryKey(),
+            'external_id'         => $this->integer()->notNull(),
             'similar_external_id' => $this->integer()->notNull(),
-            'created_at' => $this->datetime()->null(),
+            'created_at'          => $this->datetime()->null(),
         ], $tableOptions);
 
         $this->createIndex('idx-ss-external_id', 'tr_shows_similar', 'external_id');

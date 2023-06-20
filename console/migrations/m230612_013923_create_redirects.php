@@ -3,9 +3,9 @@
 use yii\db\Migration;
 
 /**
- * Class m230612_013923_redirects
+ * Class m230612_013923_create_redirects
  */
-class m230612_013923_redirects extends Migration
+class m230612_013923_create_redirects extends Migration
 {
     /**
      * {@inheritdoc}
@@ -50,7 +50,7 @@ class m230612_013923_redirects extends Migration
 
     public function down()
     {
-        echo "m230612_013923_redirects cannot be reverted.\n";
+        echo "m230612_013923_create_redirects cannot be reverted.\n";
 
         return false;
     }
