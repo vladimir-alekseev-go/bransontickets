@@ -3,14 +3,13 @@
 namespace console\controllers;
 
 /*use common\models\LocationServices;*/
-use common\models\logs\CronTask;
 /*use common\models\priceLine\NewPriceLineHotels;
 use common\models\TrAdmissions;
 use common\models\TrAttractions;
 use common\models\TrAttractionsPrices;
 use common\models\TrBasket;*/
 use common\models\TrCategories;
-use common\models\TrLocations;
+/*use common\models\TrLocations;*/
 /*use common\models\TrLunchs;
 use common\models\TrLunchsCertificates;
 use common\models\TrLunchsPrices;
@@ -31,7 +30,6 @@ use yii\helpers\Json;
 class TripiumController extends Controller
 {
     use CleanControllerTrait;
-    use CronControllerTrait;
 
     /*public function actionPriceLine(array $ids = [], $updateForce = false, $date = null)
     {
@@ -147,7 +145,7 @@ class TripiumController extends Controller
                 'mode' => TripiumUpdater::SHOW_ERROR_DETAIL,
                 'models' => [
                     ['class' => TrCategories::class],
-                    ['class' => TrLocations::class],
+                    /*['class' => TrLocations::class],*/
                     /*['class' => LocationServices::class],*/
 
                     ['class' => TrShows::class],
@@ -351,8 +349,6 @@ class TripiumController extends Controller
 
         $this->markActualImages();
         $this->unMarkDeleteImages();
-
-        CronTask::deleteOldItems();
     }
 
 //    public function actionUpdateAllImages()
@@ -372,7 +368,7 @@ class TripiumController extends Controller
             [
                 'models' => [
                     ['class' => TrCategories::class],
-                    ['class' => TrLocations::class],
+                    /*['class' => TrLocations::class],*/
                     /*['class' => LocationServices::class],*/
                     ['class' => TrShows::class, 'params' => ['updateForce' => true]],
                     /*['class' => TrAttractions::class, 'params' => ['updateForce' => true]],

@@ -16,7 +16,6 @@ class TrTheatersSearch extends \common\models\TrTheaters
         return [
             [['id_external', 'id', 'status'], 'integer'],
             [['name', 'address1', 'address2', 'city', 'state', 'zip_code'], 'string'],
-            //[['location_lat', 'location_lng'], 'double']
         ];
     }
     

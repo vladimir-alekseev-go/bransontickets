@@ -46,7 +46,6 @@ use yii\widgets\Menu;
                 'url'     => ['/static-page/index'],
                 'visible' => true,
             ],
-            ['label' => '<span class="fa fa-database"></span> Locations', 'url' => ['/locations/index'], 'visible' => true],
             ['label' => Yii::t('back', 'Settings'), 'options' => ['class' => 'header']],
             [
                 'label' => '<span class="fa fa-dashboard"></span> ' . Yii::t('back', 'Change own password'),

@@ -19,10 +19,6 @@ use Yii;
  *
  * @property ShowsPhotoJoin[] $showsPhotoJoins
  * @property ShowsPhotoJoin[] $showsPhotoJoins0
- * @property SiteSettings $siteSettings
- * @property SiteSettings $siteSettings0
- * @property SiteSettings[] $siteSettings1
- * @property SiteSettings $siteSettings2
  * @property TrShows[] $trShows
  * @property TrShows[] $trShows0
  * @property TrShows[] $trShows1
@@ -87,46 +83,6 @@ class _source_ContentFiles extends \yii\db\ActiveRecord
     public function getShowsPhotoJoins0()
     {
         return $this->hasMany(ShowsPhotoJoin::class, ['preview_id' => 'id']);
-    }
-
-    /**
-     * Gets query for [[SiteSettings]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getSiteSettings()
-    {
-        return $this->hasOne(SiteSettings::class, ['favicon_id' => 'id']);
-    }
-
-    /**
-     * Gets query for [[SiteSettings0]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getSiteSettings0()
-    {
-        return $this->hasOne(SiteSettings::class, ['logo_id' => 'id']);
-    }
-
-    /**
-     * Gets query for [[SiteSettings1]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getSiteSettings1()
-    {
-        return $this->hasMany(SiteSettings::class, ['logo_mobile_id' => 'id']);
-    }
-
-    /**
-     * Gets query for [[SiteSettings2]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getSiteSettings2()
-    {
-        return $this->hasOne(SiteSettings::class, ['logo_print_id' => 'id']);
     }
 
     /**
