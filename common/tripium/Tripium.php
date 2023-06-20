@@ -136,12 +136,11 @@ class Tripium extends Model
             $res = Json::decode($server_output);
 
             if (isset($res["errorCode"]) && $res["errorCode"] == self::ERROR_CRUD_WITH_PAST_DATE) {
-                $res["originalErrors"] = $res["globalErrors"];
                 if (!empty($itempriceGroup["name"])) {
-                    $res["globalErrors"] = [
+                    $this->addErrors([
                         "Tickets " . ($itempriceGroup["name"] ? 'for ' . $itempriceGroup["name"] : '') . " are no longer available to purchase online. Please remove this item from your shopping cart to complete your order. 
 				If you would like further assistance with purchasing " . $res["data"]["pkg"]["name"] . ", please call us at $phone."
-                    ];
+                    ]);
                 }
             }
             if (isset($res["errorCode"])) {
@@ -149,11 +148,7 @@ class Tripium extends Model
             }
 
             if (!empty($res["errors"])) {
-                $res["globalErrors"] = [$res["errorCode"]];
-            }
-
-            if (empty($res["globalErrors"]) && !empty($res["errorCode"])) {
-                $res["globalErrors"] = array_merge($res["globalErrors"], [$res["errorCode"]]);
+                $this->addErrors([$res["errorCode"]]);
             }
 
             if (isset($res["errorCode"]) && in_array(
@@ -168,33 +163,21 @@ class Tripium extends Model
                 if (!empty($package['category'])) {
                     $itemNames = MarketingItemHelper::getItemNames();
                     $itemName = isset($itemNames[$package['category']]) ? $itemNames[$package['category']] : '';
-                    $res["globalErrors"] = [
+                    $this->addErrors([
                         "You are attempting to purchase tickets for " . strtolower(
                             $itemName
                         ) . " {$package['name']}, {$package['date']}, {$package['time']} within cutoff time or there are not enough tickets available. Please change your requested dates/times or call us $phone"
-                    ];
-                }
-            }
-
-            if (!empty($res["globalErrors"])) {
-                $this->globalErrors = $res["globalErrors"];
-                if (!empty($res["data"])) {
-                    $this->errorData = $res["data"];
+                    ]);
                 }
             }
 
             if (isset($res["errorCode"]) && $res["errorCode"] == self::ERROR_CANCELLED) {
-                $res["globalErrors"][0] .= ".<br/>You could still cancel any individual item(s) that are still within cancellation period or call us $phone to assist you.";
+                $this->addErrors([".<br/>You could still cancel any individual item(s) that are still within cancellation period or call us $phone to assist you."]);
             }
 
             if (!empty($this->errorCode) && $this->errorCode == self::STATUS_ONE_HOTEL_PER_ORDER) {
-                $res["globalErrors"] = [self::getStatusValue(self::STATUS_ONE_HOTEL_PER_ORDER)];
+                $this->addErrors([self::getStatusValue(self::STATUS_ONE_HOTEL_PER_ORDER)]);
             }
-
-            if (!empty($res["globalErrors"])) {
-                $this->addErrors($res["globalErrors"]);
-                $this->addErrors(['globalErrors' => $res['globalErrors']]);
-			}
 			
 			curl_close ($this->ch);
 			
