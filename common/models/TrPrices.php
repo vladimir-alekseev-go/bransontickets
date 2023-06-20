@@ -18,15 +18,8 @@ class TrPrices extends _source_TrPrices
      */
     public const type = 'shows';
     public const TYPE = 'shows';
-    public const TYPE_ID = 2;
-    
-    public const PRICE_TYPE_FAMILY_PASS = 'FAMILY PASS';
-    public const PRICE_TYPE_FAMILY_PASS_4_PACK = 'FAMILY PASS 4 PACK';
-    public const PRICE_TYPE_FAMILY_PASS_8_PACK = 'FAMILY PASS 8 PACK';
     
     public const MAIN_CLASS = TrShows::class;
-
-    public const NAME_ADULT = 'ADULT';
     
 	public function init()
 	{
@@ -70,70 +63,6 @@ class TrPrices extends _source_TrPrices
 		$this->statusCodeTripium = $tripium->statusCode;
 		return $res;
 	}
-
-    /**
-     * @return ActiveQuery
-     */
-    public function getActualPrices(): ActiveQuery
-    {
-        // don't use this, use (main model, example: shows, attractions)::getActualPrices()
-        $Shows = new TrShows;
-        return self::find()
-            ->select(
-                [
-                    self::tableName() . '.id_external',
-                    "DATE_FORMAT(start, '%Y-%m-%d') as start_date",
-                    "DATE_FORMAT(start, '%b%e') as date",
-                    "DATE_FORMAT(start, '%h:%i%p') as time",
-                    'start'
-                ]
-            )
-            ->leftJoin($Shows::tableName() . ' as sh', 'sh.id_external = ' . self::tableName() . '.id_external')
-            ->where('start > NOW( ) + INTERVAL cut_off HOUR ')
-            ->andWhere(['stop_sell' => 0]);
-    }
-	
-	/* 
-	public function	updateFromTripium($params=[])
-    {
-        // remove old price
-//     	self::deleteAll("start < '".date("Y-m-d")."'");
-    	
-    	// remove duplicates price
-//     	self::removeDuplicates();
-    	
-    	$start = !empty($params['start']) ? $params['start'] : date("m/d/Y");
-		$end = !empty($params['end']) ? $params['end'] : date("m/d/Y",time()+3600*24*0);
-    	
-		$mk_start = strtotime($start); 
-		$mk_end = strtotime($end); 
-		
-		for ($i=$mk_start; $i<=$mk_end; $i=$i+3600*24*$this->periodUpdate) {
-			$from = $i;
-			$to = $mk_end < $i+3600*24*$this->periodUpdate ? $mk_end : $i+3600*24*$this->periodUpdate;
-			
-			$data = self::find()->select("id, hash, hash_summ")->where("start >= '".date("Y-m-d H:i:s",$from)."' and start <= '".date("Y-m-d 23:59:59",$to)."'")->asArray()->all();
-	    	$data = ArrayHelper::index($data, 'hash');
-	    	$tripiumData = $this->getSourceData(["start"=>date("m/d/Y",$from),"end"=>date("m/d/Y",$to),'ids'=>$this->updateOnlyIdExternal]);
-			
-	    	if ($this->statusCodeTripium == \common\tripium\Tripium::STATUS_CODE_SUCCESS) {
-	    		$this->updateData($tripiumData, $data);
-	    	}
-			
-	    	unset($data);
-			unset($tripiumData);
-		}
-		
-    	// remove duplicates price
-		self::removeDuplicates();
-    }
-     */
-    public function validateDates($attribute, $params): void
-    {
-        if (strtotime($this->end) <= strtotime($this->start)) {
-            $this->addError('end', 'The end date has to be greater than the start date.');
-        }
-    }
     
     public function updateData($tripiumData, $data): void
     {
@@ -202,66 +131,5 @@ class TrPrices extends _source_TrPrices
 			}
 		}
 		self::removeByHash(array_keys($data));
-    }
-
-	/**
-     * @return ActiveQuery
-     */
-    public static function getActive(): ActiveQuery
-    {
-        return self::find()
-            ->andOnCondition(['stop_sell'=>0])
-            ->andOnCondition('start >= NOW( )')
-        ;
-    }
-	
-    /**
-     * @return ActiveQuery
-     */
-    public static function getAvailable(): ActiveQuery
-    {
-        return self::getActive()
-            ->andOnCondition(['or','available > 0','free_sell=1'])
-        ;
-    }
-	
-    /**
-     * @return ActiveQuery
-     */
-    public static function getAvailableSpecial(): ActiveQuery
-    {
-        return self::getAvailable()
-            ->andOnCondition(['not', ['special_rate'=>false]])
-        ;
-    }
-
-    /**
-     * @param DateTime $date
-     * @param array    $ids
-     *
-     * @return ActiveQuery
-     */
-    public static function getNearestAvailable(DateTime $date, array $ids): ActiveQuery
-    {
-        return self::getAvailable()
-            ->joinWith(['show'], false)
-            ->select([
-                TrShows::tableName().'.id', 
-                TrShows::tableName().'.id_external', 
-                self::tableName().'.price_external_id',
-                'start',
-                'code',
-                'delta' => 'ABS(UNIX_TIMESTAMP(start) - '.$date->getTimestamp().')'
-            ])
-            ->distinct()
-    	    ->orderby('delta')
-    	    ->groupby([
-    	        TrShows::tableName().'.id', 
-    	        TrShows::tableName().'.id_external', 
-    	        self::tableName().'.price_external_id',
-    	        'start', 
-    	        'delta'])
-            ->where([TrShows::tableName().'.id_external' => $ids])
-        ;
     }
 }

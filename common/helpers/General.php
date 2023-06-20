@@ -12,9 +12,6 @@ use yii\web\Response;
 
 class General
 {
-	const PERIOD_MOBILE = 1;
-	const PERIOD_DESKTOP = 4;
-
     public static function formatDateUrlTicket($date)
     {
         if (is_int($date)) {
@@ -40,31 +37,6 @@ class General
 
 		return $phone;
 	}
-
-	public static function handleVideoLink($links): array
-    {
-	    $tmp = [];
-    	foreach ($links as $link) {
-    	    $_link = Media::prepareUrl($link);
-    	    $tmp[$_link] = $_link;
-    	}
-    	return $tmp;
-	}
-
-    /**
-     * @param string $from
-     * @param string $to
-     *
-     * @return array
-     * @throws Exception
-     * @deprecated use General::getDatePeriod()
-     */
-    public static function getRange($from = null, $to = null): array
-    {
-        $datePeriod = self::getDatePeriod($from, $to);
-
-        return ['from' => $datePeriod->start->format('U'), 'to' => $datePeriod->end->format('U')];
-    }
 
     /**
      * Return period
@@ -144,108 +116,6 @@ class General
 
         self::setDatePeriod($from, $to);
     }
-
-    /**
-     * Function to geocode address, it will return false if unable to geocode address
-     *
-     * @see https://developers.google.com/maps/documentation/geocoding/start
-     * @see https://developers.google.com/maps/documentation/geocoding/get-api-key
-     *
-     * @param string $address
-     *
-     * @return array
-     */
-	public static function geocode($address)
-	{
-	    $result = [
-	        "lat" => null,
-	        "lng" => null,
-	        "formatted_address" => null,
-	        "error_message" => null,
-	    ];
-
-	    if (isset(Yii::$app->siteSettings) && !empty(Yii::$app->siteSettings->data->google_map_server_key)) {
-	        $googleMapKey = Yii::$app->siteSettings->data->google_map_server_key;
-	    } else if (!empty(Yii::$app->params['googleApiGeneral']['apiKeyGeocode'])) {
-	        $googleMapKey = Yii::$app->params['googleApiGeneral']['apiKeyGeocode'];
-	    } else {
-	        return $result;
-	    }
-
-	    try {
-	        $address = urlencode($address);
-	        $url = "https://maps.google.com/maps/api/geocode/json?key={$googleMapKey}&address={$address}";
-
-	        $resp_json = file_get_contents($url);
-
-	        $resp = json_decode($resp_json, true);
-
-	        // response status will be 'OK', if able to geocode given address
-	        if ($resp['status'] === 'OK') {
-
-	            $lat = $resp['results'][0]['geometry']['location']['lat'];
-	            $lng = $resp['results'][0]['geometry']['location']['lng'];
-	            $formatted_address = $resp['results'][0]['formatted_address'];
-
-	            // verify if data is complete
-	            if ($lat && $lng && $formatted_address) {
-	                $result["lat"] = $lat;
-	                $result["lng"] = $lng;
-	                $result["formatted_address"] = $formatted_address;
-	            } else {
-	                $result['error_message'] = 'Result is empty';
-	            }
-	        } else {
-	            $result['error_message'] = $resp['error_message'];
-	        }
-	    } catch (Exception $e) {}
-
-	    return $result;
-	}
-
-    /**
-     * Return coordinates of searching place, using aproximly coordinates and name
-     *
-     * @param array $params
-     *
-     * @return bool|array
-     */
-	public static function placeNearBySearch($params)
-	{
-	    if (isset(Yii::$app->siteSettings) && !empty(Yii::$app->siteSettings->data->google_map_server_key)) {
-	        $googleMapKey = Yii::$app->siteSettings->data->google_map_server_key;
-	    } else if (!empty(Yii::$app->params['googleApiGeneral']['apiKeyGeocode'])) {
-	        $googleMapKey = Yii::$app->params['googleApiGeneral']['apiKeyGeocode'];
-	    } else {
-	        return false;
-	    }
-
-	    $url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?';
-	    $url .= 'rankby=distance&key=' . $googleMapKey.'&';
-
-	    foreach ($params as $pName => $pValue) {
-	        $url .= urlencode($pName) . '=' . urlencode($pValue) . '&';
-	    }
-
-	    $resp_json = file_get_contents($url);
-	    $resp = json_decode($resp_json, true);
-
-	    if ($resp['status'] !== 'OK') {
-	        return false;
-	    }
-
-	    $lat = $resp['results'][0]['geometry']['location']['lat'];
-	    $lng = $resp['results'][0]['geometry']['location']['lng'];
-
-	    if (!$lat || !$lng) {
-	        return false;
-	    }
-
-	    return [
-	        "lat" => $lat,
-	        "lng" => $lng,
-	    ];
-	}
 
     /**
      * Get img as data

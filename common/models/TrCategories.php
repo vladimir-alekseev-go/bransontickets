@@ -15,7 +15,6 @@ class TrCategories extends _source_TrCategories
         return array_merge(parent::attributeLabels(), [
             'sort_shows' => 'Sort in a shows section',
             /*'sort_attractions' => 'Sort in an attractions section',
-            'sort_lunches' => 'Sort in a lunches section',
             'sort_hotels' => 'Sort in a hotels section',*/
         ]);
     }
@@ -35,14 +34,6 @@ class TrCategories extends _source_TrCategories
 	{
 	    return $this->hasOne(TrAttractionsCategories::class, ['id_external_category' => 'id_external']);
 	}*/
-	
-	/**
-     * @deprecated Use getTrLunchsCategories()
-     */
-    /*public function getLunchs()
-	{
-	    return $this->hasOne(TrLunchsCategories::class, ['id_external_category' => 'id_external']);
-	}*/    
 
     /**
      * @return \yii\db\ActiveQuery
@@ -59,14 +50,6 @@ class TrCategories extends _source_TrCategories
     {
         return $this->hasMany(TrShows::class, ['id_external' => 'id_external_show'])->viaTable(TrShowsCategories::tableName(), ['id_external_category' => 'id_external']);
     }
-    
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    /*public function gettrLunchs()
-    {
-        return $this->hasMany(TrLunchs::class, ['id_external' => 'id_external_show'])->viaTable(TrLunchsCategories::tableName(), ['id_external_category' => 'id_external']);
-    }*/
     
     /*
      * update data from Tripium
