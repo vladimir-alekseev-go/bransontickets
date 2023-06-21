@@ -8,7 +8,6 @@ use common\models\redirects\Redirects;
 use common\models\shows\ShowsSearch;
 use common\models\TrShows;
 use common\models\upload\UploadItemsBanner;
-use common\models\upload\UploadShowsSeatMap;
 use Yii;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
@@ -54,7 +53,6 @@ class ShowsController extends CrudController
         }
 
         $uploadItemsBanner = new UploadItemsBanner();
-        $uploadShowsSeatMap = new UploadShowsSeatMap();
 
         if ($model->load($post) && $model->save()) {
             $cache = Yii::$app->cache;
@@ -76,26 +74,10 @@ class ShowsController extends CrudController
                 $model->save();
             }
 
-            $uploadShowsSeatMap->file = UploadedFile::getInstance($uploadShowsSeatMap, 'file');
-
-            if ($uploadShowsSeatMap->validate() && $uploadShowsSeatMap->upload()) {
-                if (!empty($model->seatMap)) {
-                    $model->seatMap->delete();
-                }
-                $model->seat_map_id = $uploadShowsSeatMap->id;
-                $model->save();
-            } elseif (!empty($post['deleteSeatMapId'])) {
-                if (!empty($model->seatMap)) {
-                    $model->seatMap->delete();
-                }
-                $model->seat_map_id = null;
-                $model->save();
-            }
-
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
-        return $this->renderIsAjax('update', compact('model', 'uploadItemsBanner', 'uploadShowsSeatMap'));
+        return $this->renderIsAjax('update', compact('model', 'uploadItemsBanner'));
     }
 
     /**

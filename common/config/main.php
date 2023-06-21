@@ -23,6 +23,15 @@ return [
             'class'          => Component::class,
             'jpegQuality'    => 70,
             'pngCompression' => 9,
+            'define' => [
+                'servicesBanners' => [
+			        'process' => [
+			            ['autorotate'],
+			            ['resize', 'width' => 1920, 'height' => 400, 'scaleTo' => 'cover'],
+			            ['crop', 'width' => 1920, 'height' => 400],
+			        ],
+			    ],
+            ]
         ],
     ],
 ];
