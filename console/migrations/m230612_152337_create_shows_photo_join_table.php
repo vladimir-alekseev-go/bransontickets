@@ -24,7 +24,7 @@ class m230612_152337_create_shows_photo_join_table extends Migration
                 'item_id'    => $this->integer(11)->notNull(),
                 'preview_id' => $this->integer(11)->null(),
                 'activity'   => $this->tinyInteger(4)->notNull()->defaultValue(0),
-                'activity'   => $this->integer(11)->notNull()->defaultValue(0),
+                'sort'       => $this->integer(11)->notNull()->defaultValue(0),
             ],
             $tableOptions
         );

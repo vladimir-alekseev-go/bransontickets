@@ -31,6 +31,26 @@ return [
 			            ['crop', 'width' => 1920, 'height' => 400],
 			        ],
 			    ],
+                'itemsPhotos' => [
+			        'process' => [
+			            ['autorotate'],
+			            ['resize', 'width' => 1920, 'height' => 1024, 'scaleTo' => 'fit', 'only' => 'down'],
+			        ],
+			    ],
+                'itemsPhotosPreview' => [
+			        'process' => [
+			            ['autorotate'],
+			            ['resize', 'width' => 260, 'height' => 180, 'scaleTo' => 'cover'],
+			            ['crop', 'width' => 260, 'height' => 180, 'x' => 'center - ' . floor(260/2), 'y' => 'center - ' . floor(180/2)],
+			        ],
+			    ],
+                'itemsPreview' => [
+			        'process' => [
+			            ['autorotate'],
+			            ['resize', 'width' => 260, 'height' => 190, 'scaleTo' => 'cover'],
+			            ['crop', 'width' => 260, 'height' => 190, 'x' => 'center - ' . floor(260/2), 'y' => 'center - ' . floor(190/2)],
+			        ],
+			    ],
             ]
         ],
     ],
