@@ -11,7 +11,7 @@ $this->params['breadcrumbs'][] = UserManagementModule::t('back', 'Editing');
 <div class="shows-update">
 	<div class="panel panel-default">
 		<div class="panel-body">
-			<?= $this->render('_form', compact('model', 'uploadItemsBanner', 'uploadShowsSeatMap')) ?>
+			<?= $this->render('_form', compact('model', 'uploadItemsBanner')) ?>
 		</div>
 	</div>
 </div>

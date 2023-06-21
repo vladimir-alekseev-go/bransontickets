@@ -2,7 +2,6 @@
 
 /**
  * @var $uploadItemsBanner
- * @var $uploadShowsSeatMap
  */
 
 /*use common\models\LocationItem;*/
@@ -53,27 +52,6 @@ use yii\helpers\Html;
     ?>
 
     <?= $form->field($model, 'display_image')->dropDownList(['No', 'Yes'])->label('Display Banner') ?>
-
-    <?php if ($model->seat_map_id) { ?>
-        <div class="form-group">
-            <div class="col-sm-offset-3 col-sm-9">
-                <?= Html::img($model->seatMap->url, ['width' => '300px']) ?>
-                <div class="checkbox">
-                    <label><input type="checkbox" name="deleteSeatMapId" value="1"/> Delete</label>
-                </div>
-            </div>
-        </div>
-    <?php }?>
-
-    <?php
-    $fileInput = $form->field($uploadShowsSeatMap, 'file')->fileInput()->label('Seat Map');
-
-    if ($model->seat_map_id) {
-        $fileInput->hint('Replace the existing file');
-    }
-
-    echo $fileInput;
-    ?>
 
     <?= $form->field($model, 'similarIds')->dropDownList(
         ArrayHelper::map(
