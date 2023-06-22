@@ -11,6 +11,14 @@ use yii\widgets\Menu;
         <?php
         $menu = [
             ['label' => Yii::t('back', 'Content'), 'options' => ['class' => 'header']],
+            ['label' => '<span class="fa fa-cubes"></span> Offered services <span class="caret"></span>', 'url' => '#', 'visible' => true, 'items' => [
+                [
+                    'label' => '<span class="fa fa-folder-open"></span> Categories',
+                    'url' => ['/categories/index'],
+                    'visible' => true
+                ],
+                ['label' => '<span class="fa fa-television"></span> Shows', 'url' => ['/shows/index'], 'visible' => true],
+            ]],
             [
                 'label'   => '<span class="fa fa-envelope"></span> Feedback <span class="caret"></span>',
                 'url'     => '#',
