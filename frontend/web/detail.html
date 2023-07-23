@@ -34,63 +34,40 @@
     <header class="header">
         <div class="fixed">
             <div class="row">
-                <div class="col">
-                    <div class="header-logo">
-                        <a id="menu-up-control" class="menu-up-control menu-up-control-is-close">
-                            <i class="fa fa-bars"></i>
-                            <i class="fa fa-times"></i>
-                        </a>
-                        <a href="#" class="bransontickets-logo">
-                            <img src="img/bransontickets-logo.png" alt="Branson Tickets">
-                        </a>
-                        <div class="header-search input-search">
-                            <input type="text" id="search" class="form-control" name="Search[name]" value="" aria-required="true" aria-invalid="false" placeholder="Search">
-                        </div>
+                <div class="col-4">
+                    <div class="header-menu-phone detail">
+                        <img src="img/phone.svg" alt="phone icon">
+                        <a href="tel:417-337-8455" class="header-phone">417-337-8455</a>
                     </div>
                 </div>
             
-                <div class="col">
-                    <div class="header-menu-right">
-                        <img src="img/phone.svg" alt="phone icon">
-                        <a href="tel:417-337-8455" class="header-phone">417-337-8455</a>
-                        <div class="auth-item">
-                            <a class="btn sign-up" href="#">Sign up</a>
-                        </div>
-                        <div class="auth-item">
-                            <a class=" btn sign-in" href="#">Sign in</a>
-                        </div>
-                    </div>
+                <div class="col-4">
+                    <a href="#" class="bransontickets-logo">
+                        <img src="img/bransontickets-logo.png" alt="Branson Tickets">
+                    </a>
+                </div>
+                
+                <div class="col-4">
+                    <a id="menu-up-control" class="menu-up-control">
+                        <i class="fa fa-bars"></i>
+                    </a>
                 </div>
             </div>
-            <div id="menu-general" class="menu-general menu-general-control-is-close">
-                <div class="search-up">
-                    <form action="#" method="get" data-hs-cf-bound="true">
-                        <div class="form-group header-search input-search">
-                            <input type="text" class="form-control" name="Search[name]" value="" aria-required="true" aria-invalid="false" placeholder="Search">
-                        </div>
-                    </form>
+            <div id="menu-general" class="menu-general">
+                <div id="menu-up-control-close" class="menu-up-control-close">
+                    <i class="fa fa-angle-right"></i>
                 </div>
                 <ul class="menu-main">
                     <li><a href="#">Shows</a></li>
                     <li><a href="#">Attractions</a></li>
                     <li><a href="#">Lodging</a></li>
                     <li><a href="#">Dining</a></li>
-                    <li><a href="#">Sign up</a></li>
-                    <li><a href="#">Sign in</a></li>
+                    <li><a href="#" class="d-md-none">Sign up</a></li>
+                    <li><a href="#" class="d-md-none">Sign in</a></li>
                 </ul>
-                <a class="menu-main-phone" href="tel:417-337-8455">
-                    <img src="img/phone.svg" alt="phone icon">
-                    417-337-8455
-                </a>
-            </div>
-        </div>
-        <div class="header-menu-bottom-line">
-            <div class="fixed">
-                <div class="header-menu-bottom">
-                    <a class="btn header-menu-item" href="#">Shows</a>
-                    <a class="btn header-menu-item" href="#">Attractions</a>
-                    <a class="btn header-menu-item" href="#">Lodging</a>
-                    <a class="btn header-menu-item" href="#">Dining</a>
+                <div class="menu-footer">
+                    <a href="https://bransonrestaurants.com/" target="_blank"><img src="img/branson-restaurants-logo.png" alt="branson restaurants logo"></a>
+                    <a href="https://ibranson.com/" target="_blank"><img src="img/ibranson-logo.png" alt="ibranson logo"></a>
                 </div>
             </div>
         </div>
@@ -99,23 +76,35 @@
     <main>
         <div class="show-detail">
             <div class="fixed">
-                <div class="image-detail">
-                    <img class="preview" src="img/detail-preview.png" alt="Clay Coopers Country Express" itemprop="image">
+                <div class="main-info">
+                    <div class="image-detail">
+                        <img class="preview" src="img/detail-preview.png" alt="Clay Coopers Country Express" itemprop="image">
+                    </div>
+                    <div class="info">
+                        <h1 itemprop="name">Clay Coopers Country Express</h1>
+                        <div class="theatre-info">
+                            <div class="item">
+                                <img src="img/map-marker.svg" alt="map marker icon"><span class="theatre">Clay Cooper Theatre, Branson, 3216 W 76 Country Blvd, 65616</span>
+                            </div>
+                            <div class="item">
+                                <img src="img/phone.svg" class="phone-img" alt="phone icon"><span class="phone">417-332-2529</span>
+                            </div>
+                            <div class="item">
+                                <img src="img/time.svg" alt="time icon"><span class="time">135 min. <b>(1 Intermission for 15min)</b></span>
+                            </div>
+                        </div>
+                        <div class="categories">
+                            <a class="tag text-uppercase" href="#">COMEDY</a>
+                            <a class="tag text-uppercase" href="#">GOSPEL</a>
+                            <a class="tag text-uppercase" href="#">ROCK 'N ROLL</a>
+                            <a class="tag text-uppercase" href="#">VARIETY SHOW</a>
+                            <a class="tag text-uppercase" href="#">COUNTRY</a>
+                        </div>
+                    </div>
                 </div>
-                <h1 itemprop="name">Clay Coopers Country Express</h1>
-                <div class="theatre-info">
-                    <img src="img/map-marker.svg" alt="map marker icon"><span class="theatre">Clay Cooper Theatre, Branson, 3216 W 76 Country Blvd, 65616</span>
-                    <img src="img/phone.svg" class="phone-img" alt="phone icon"><span class="phone">417-332-2529</span>
-                    <img src="img/time.svg" alt="time icon"><span class="time">135 min. <b>(1 Intermission for 15min)</b></span>
-                </div>
-                <div class="categories">
-                    <a class="tag text-uppercase" href="#">COMEDY</a>
-                    <a class="tag text-uppercase" href="#">GOSPEL</a>
-                    <a class="tag text-uppercase" href="#">ROCK 'N ROLL</a>
-                    <a class="tag text-uppercase" href="#">VARIETY SHOW</a>
-                    <a class="tag text-uppercase" href="#">COUNTRY</a>
-                </div>
-                <div class="menu-content margin-block">
+            </div>
+            <div class="menu-content margin-block">
+                <div class="fixed">
                     <ul class="nav nav-tabs" role="tablist">
                         <li role="presentation">
                             <a href="#overview" id="overview-tab" data-bs-toggle="tab" data-bs-target="#overview" role="tab" aria-controls="overview" aria-selected="true" class="active">Overview</a>
@@ -133,25 +122,24 @@
                             <a href="#packages" id="packages-tab" data-bs-toggle="tab" data-bs-target="#packages" role="tab" aria-controls="packages" aria-selected="false" class="">Packages</a>
                         </li>
                     </ul>
-                    <div class="tab-content">
-                        <div id="overview" role="tabpanel" aria-labelledby="overview-tab" class="tab-pane active">
+                </div>
+                <div class="tab-content">
+                    <div id="overview" role="tabpanel" aria-labelledby="overview-tab" class="tab-pane active">
+                        <div class="fixed">
                             <div class="overview-calendar-block">
                                 <div class="row">
-                                    <div class="col-md-2">
+                                    <div class="col-md-3 col-lg-2">
                                         <div class="ticket">
                                             <div class="title">TICKETS FROM</div>
                                             <div class="price">$ 46.39</div>
                                             <a href="#" class="btn buy-btn">Buy now</a>
-                                            <span></span>
                                         </div>
                                     </div>
-                                    <div class="col-md-10">
+                                    <div class="col-md-9 col-lg-10">
                                         <div class="availability">
                                             <div class="head">Availability</div>
-                                            <i class="fa fa-angle-right fa-gradient"></i>
-                                            <a href="#" class="more-available-dates-head">More Available Dates</a>
+                                            <a href="#" class="more-available-dates-head">More Available Dates <i class="fa fa-angle-right fa-gradient"></i></a>
                                         </div>
-                                        <div class="availability-line"></div>
                                         <div class="week-wrap calendar-slider calendar-slider-in-order">
                                             <div class="frame horizontal calendar-slider-items" id="basic">
                                                 <ul>
@@ -163,7 +151,7 @@
                                                     <li class="it" data-date="2023-04-27">
                                                         <div class="date">Apr 27</div>
                                                         <div class="w">Thu</div>
-                                                        <div class="tag">N/A</div>
+                                                        <div class="tag na">N/A</div>
                                                     </li>
                                                     <li class="it has-ticket" data-date="2023-04-28">
                                                         <div class="date">Apr 28</div>
@@ -173,7 +161,7 @@
                                                     <li class="it" data-date="2023-04-29">
                                                         <div class="date">Apr 29</div>
                                                         <div class="w">Sat</div>
-                                                        <div class="tag">N/A</div>
+                                                        <div class="tag na">N/A</div>
                                                     </li>
                                                     <li class="it has-ticket" data-date="2023-04-30">
                                                         <div class="date">Apr 30</div>
@@ -183,7 +171,7 @@
                                                     <li class="it" data-date="2023-05-01">
                                                         <div class="date">May 01</div>
                                                         <div class="w">Mon</div>
-                                                        <div class="tag">N/A</div>
+                                                        <div class="tag na">N/A</div>
                                                     </li>
                                                     <li class="it has-ticket" data-date="2023-05-02">
                                                         <div class="date">May 02</div>
@@ -193,7 +181,7 @@
                                                     <li class="it" data-date="2023-05-03">
                                                         <div class="date">May 03</div>
                                                         <div class="w">Wed</div>
-                                                        <div class="tag">N/A</div>
+                                                        <div class="tag na">N/A</div>
                                                     </li>
                                                     <li class="it has-ticket" data-date="2023-05-04">
                                                         <div class="date">May 04</div>
@@ -203,7 +191,7 @@
                                                     <li class="it" data-date="2023-05-05">
                                                         <div class="date">May 05</div>
                                                         <div class="w">Fri</div>
-                                                        <div class="tag">N/A</div>
+                                                        <div class="tag na">N/A</div>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -211,6 +199,8 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                        <div class="fixed">
                             <div class="overview-description">
                                 <div class="row">
                                     <div class="col-sm-6">
@@ -226,9 +216,13 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="overview-gallery">
+                        </div>
+                        <div class="overview-gallery">
+                            <div class="fixed">
                                 <div class="title">Gallery</div>
-                                <div class="line"></div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="fixed">
                                 <div class="rows">
                                     <div class="masonry-grid" data-ma-sonry="{ 'itemSelector': '.grid-item'}" style="position: relative; height:640px;">
                                         <div class="grid-item grid-item--width2 " style="position: absolute;">
@@ -260,10 +254,143 @@
                                 </div>
                             </div>
                         </div>
-                        <div id="description" role="tabpanel" aria-labelledby="description-tab" class="tab-pane">
+                        <div class="overview-may-also-like">
+                            <div class="fixed">
+                                <div class="title">You may also like</div>
+                            </div>
+                            <div class="line"></div>
+                            <div class="fixed">
+                                <div class="recommended-items" id="recommended-items">
+                                    <div class="week-wrap">
+                                        <div class="frame horizontal">
+                                            <ul class="clearfix">
+                                                <li class="it">
+                                                    <img src="img/features-2.png">
+                                                    <div class="about">
+                                                        <div class="title">Hamners Unbelievable</div>
+                                                        <div class="location">
+                                                            <img src="img/location.svg" alt="location icon">
+                                                            <span>Hamners' Variety Theater</span>
+                                                        </div>
+                                                        <div class="recommended-line"></div>
+                                                    </div>
+                                                    <div class="more">
+                                                        <div class="category">
+                                                            <img src="img/category.svg" alt="category icon">
+                                                            <span>MAGIC, VARIETY SHOW</span>
+                                                        </div>
+                                                        <a href="#" class="item-btn">See details</a>
+                                                    </div>
+                                                </li>
+                                                <li class="it">
+                                                    <img src="img/features-1.png">
+                                                    <div class="about">
+                                                        <div class="title">Grand Jubilee</div>
+                                                        <div class="location">
+                                                            <img src="img/location.svg" alt="location icon">
+                                                            <span>Grand Country Music Hall</span>
+                                                        </div>
+                                                        <div class="recommended-line"></div>
+                                                    </div>
+                                                    <div class="more">
+                                                        <div class="category">
+                                                            <img src="img/category.svg" alt="category icon">
+                                                            <span>VARIETY SHOW</span>
+                                                        </div>
+                                                        <a href="#" class="item-btn">See details</a>
+                                                    </div>
+                                                </li>
+                                                <li class="it">
+                                                    <img src="img/features-3.png">
+                                                    <div class="about">
+                                                        <div class="title">The Haygoods</div>
+                                                        <div class="location">
+                                                            <img src="img/location.svg" alt="location icon">
+                                                            <span>Clay Cooper Theatre</span>
+                                                        </div>
+                                                        <div class="recommended-line"></div>
+                                                    </div>
+                                                    <div class="more">
+                                                        <div class="category">
+                                                            <img src="img/category.svg" alt="category icon">
+                                                            <span>CHRISTMAS, VARIETY SHOW</span>
+                                                        </div>
+                                                        <a href="#" class="item-btn">See details</a>
+                                                    </div>
+                                                </li>
+                                                <li class="it">
+                                                    <img src="img/features-2.png">
+                                                    <div class="about">
+                                                        <div class="title">Hamners Unbelievable</div>
+                                                        <div class="location">
+                                                            <img src="img/location.svg" alt="location icon">
+                                                            <span>Hamners' Variety Theater</span>
+                                                        </div>
+                                                        <div class="recommended-line"></div>
+                                                    </div>
+                                                    <div class="more">
+                                                        <div class="category">
+                                                            <img src="img/category.svg" alt="category icon">
+                                                            <span>MAGIC, VARIETY SHOW</span>
+                                                        </div>
+                                                        <a href="#" class="item-btn">See details</a>
+                                                    </div>
+                                                </li>
+                                                <li class="it">
+                                                    <img src="img/features-1.png">
+                                                    <div class="about">
+                                                        <div class="title">Grand Jubilee</div>
+                                                        <div class="location">
+                                                            <img src="img/location.svg" alt="location icon">
+                                                            <span>Grand Country Music Hall</span>
+                                                        </div>
+                                                        <div class="recommended-line"></div>
+                                                    </div>
+                                                    <div class="more">
+                                                        <div class="category">
+                                                            <img src="img/category.svg" alt="category icon">
+                                                            <span>VARIETY SHOW</span>
+                                                        </div>
+                                                        <a href="#" class="item-btn">See details</a>
+                                                    </div>
+                                                </li>
+                                                <li class="it">
+                                                    <img src="img/features-3.png">
+                                                    <div class="about">
+                                                        <div class="title">The Haygoods</div>
+                                                        <div class="location">
+                                                            <img src="img/location.svg" alt="location icon">
+                                                            <span>Clay Cooper Theatre</span>
+                                                        </div>
+                                                        <div class="recommended-line"></div>
+                                                    </div>
+                                                    <div class="more">
+                                                        <div class="category">
+                                                            <img src="img/category.svg" alt="category icon">
+                                                            <span>CHRISTMAS, VARIETY SHOW</span>
+                                                        </div>
+                                                        <a href="#" class="item-btn">See details</a>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="recommended-items-nav">
+                                <div class="fixed-nav">
+                                    <a href="#" class="recommended-left"><i class="fa fa-angle-left"></i></a>
+                                    <a href="#" class="recommended-right"><i class="fa fa-angle-right"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="description" role="tabpanel" aria-labelledby="description-tab" class="tab-pane">
+                        <div class="fixed">
                             <div class="description-panel">
                                 <div class="row">
                                     <div class="col-sm-6">
+                                        <div class="title">Description</div>
                                         <div class="description">Clay Cooper’s Country Express has something for everyone with 25 entertainers on stage, great visual effects and a variety of music - old & new country, rock n roll, gospel, and patriotic! The singing, dancing, and hysterical comedy will keep you on the edge of your seat from start to finish. Clay and his gang guarantee a family-friendly show, perfect for all ages. Then in November and December, this show features a Christmas Celebration that has become a "MUST SEE" in Branson. The first half is filled with highlights from the regular season show, and the second half is ALL Christmas!</div>
                                     </div>
                                     <div class="col-sm-6">
@@ -275,10 +402,14 @@
                                 </div>
                             </div>
                         </div>
-                        <div id="schedule" role="tabpanel" aria-labelledby="schedule-tab" class="tab-pane">
+                    </div>
+                    <div id="schedule" role="tabpanel" aria-labelledby="schedule-tab" class="tab-pane">
+                        <div class="fixed">
                             <div id="calendar"></div>
                         </div>
-                        <div id="gallery" role="tabpanel" aria-labelledby="gallery-tab" class="tab-pane">
+                    </div>
+                    <div id="gallery" role="tabpanel" aria-labelledby="gallery-tab" class="tab-pane">
+                        <div class="fixed">
                             <div class="gallery-panel">
                                 <div class="row">
                                     <div class="col-sm-12">
@@ -297,57 +428,59 @@
                                             </a>
                                             <a href="https://www.youtube.com/watch?v=Jb6CBwreea8" class="video" title="This is a video">
                                                 <img src="img/gallery-1.png" alt="Alt text" />
-                                                <img src="img/play.svg" class="play-video"/>
+                                                <div class="play-video">
+                                                    <img src="img/play-icon.svg" alt="play icon"/>
+                                                </div>
                                             </a>
                                             <a href="https://www.youtube.com/watch?v=Jb6CBwreea8" class="video" title="This is a video">
                                                 <img src="img/gallery-5.png" alt="Alt text" />
-                                                <img src="img/play.svg" class="play-video"/>
+                                                <div class="play-video">
+                                                    <img src="img/play-icon.svg" alt="play icon"/>
+                                                </div>
                                             </a>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div id="packages" role="tabpanel" aria-labelledby="packages-tab" class="tab-pane">
+                    </div>
+                    <div id="packages" role="tabpanel" aria-labelledby="packages-tab" class="tab-pane">
+                        <div class="fixed">
                             <div class="packages-panel">
                                 <div class="title">This show is available in the following packages</div>
                                 <div id="packages-list-1" class="item">
-                                    <div class="row">
-                                        <div class="col-sm-7 col-md-8">
-                                            <div class="title">Real Country and a Little ComedyPackage</div>
-                                        </div>
-                                        <div class="col-sm-5 col-md-4">
-                                            <div class="save-up">Save up to $48.00</div>
-                                        </div>
+                                    <div class="package-name">
+                                        <div class="name">Real Country and a Little ComedyPackage</div>
+                                        <div class="save-up">Save up to $48.00</div>
                                     </div>
-                                    <div class="line"></div>
-                                    <div class="row">
-                                        <div class="col-md-7">
-                                            <div class="info">
-                                                <div class="info-item">
-                                                    <div class="info-title">Available Dates:</div>
-                                                    <span>Apr 19, 2022 - Dec 30, 2022</span>
-                                                </div>
-                                                <div class="info-item">
-                                                    <div class="info-title">Category:</div>
-                                                    <span>Made for Two, Over-the-top, SAVINGS, SHOWS GALORE</span>
+                                    <div class="package-info">
+                                        <div class="row">
+                                            <div class="col-md-7">
+                                                <div class="info">
+                                                    <div class="info-item">
+                                                        <div class="info-title">Available Dates:</div>
+                                                        <span>Apr 19, 2022 - Dec 30, 2022</span>
+                                                    </div>
+                                                    <div class="info-item">
+                                                        <div class="info-title">Category:</div>
+                                                        <span>Made for Two, Over-the-top, SAVINGS, SHOWS GALORE</span>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="col-md-5">
-                                            <div class="price">
-                                                <div class="price-item">
-                                                    <div class="price-title">Package from</div>
-                                                    <span>$ 164.00</span>
-                                                </div>
-                                                <div class="price-item">
-                                                    <div class="price-title">Pick 2 , 3 or 4 items</div>
-                                                    <span>from $164.00 to $318.00</span>
+                                            <div class="col-md-5">
+                                                <div class="price">
+                                                    <div class="price-item">
+                                                        <div class="price-title">Package from</div>
+                                                        <span>$ 164.00</span>
+                                                    </div>
+                                                    <div class="price-item">
+                                                        <div class="price-title">Pick 2 , 3 or 4 items</div>
+                                                        <span>from $164.00 to $318.00</span>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="line"></div>
                                     <div class="row">
                                         <div class="col-sm-8">
                                             <div class="description">This package features shows & attractions located right in the heart of Branson. Park the car and do it all! Ideal with a stay at award-winning Best Western Center Pointe Inn. 2 shows and 4 attractions.
@@ -409,42 +542,38 @@
                                     </div>
                                 </div>
                                 <div id="packages-list-2" class="item">
-                                    <div class="row">
-                                        <div class="col-sm-7 col-md-8">
-                                            <div class="title">Park & PlayPackage</div>
-                                        </div>
-                                        <div class="col-sm-5 col-md-4">
-                                            <div class="save-up">Save up to $25.00</div>
-                                        </div>
+                                    <div class="package-name">
+                                        <div class="name">Park & PlayPackage</div>
+                                        <div class="save-up">Save up to $25.00</div>
                                     </div>
-                                    <div class="line"></div>
-                                    <div class="row">
-                                        <div class="col-md-7">
-                                            <div class="info">
-                                                <div class="info-item">
-                                                    <div class="info-title">Available Dates:</div>
-                                                    <span>Apr 14, 2020 - Dec 31, 2022</span>
-                                                </div>
-                                                <div class="info-item">
-                                                    <div class="info-title">Category:</div>
-                                                    <span>Made for Two, Productions, Romantic Getaway, SHOWS GALORE</span>
+                                    <div class="package-info">
+                                        <div class="row">
+                                            <div class="col-md-7">
+                                                <div class="info">
+                                                    <div class="info-item">
+                                                        <div class="info-title">Available Dates:</div>
+                                                        <span>Apr 14, 2020 - Dec 31, 2022</span>
+                                                    </div>
+                                                    <div class="info-item">
+                                                        <div class="info-title">Category:</div>
+                                                        <span>Made for Two, Productions, Romantic Getaway, SHOWS GALORE</span>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="col-md-5">
-                                            <div class="price">
-                                                <div class="price-item">
-                                                    <div class="price-title">Package from</div>
-                                                    <span>$ 213.00</span>
-                                                </div>
-                                                <div class="price-item">
-                                                    <div class="price-title">Pick 6 items</div>
-                                                    <span>for $213.00</span>
+                                            <div class="col-md-5">
+                                                <div class="price">
+                                                    <div class="price-item">
+                                                        <div class="price-title">Package from</div>
+                                                        <span>$ 213.00</span>
+                                                    </div>
+                                                    <div class="price-item">
+                                                        <div class="price-title">Pick 6 items</div>
+                                                        <span>for $213.00</span>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="line"></div>
                                     <div class="row">
                                         <div class="col-sm-8">
                                             <div class="description">This package features shows & attractions located right in the heart of Branson. Park the car and do it all! Ideal with a stay at award-winning Best Western Center Pointe Inn. 2 shows and 4 attractions.
@@ -526,6 +655,7 @@
 </div>
 
 <script src="js/header.js"></script>
+<script src="js/general.js"></script>
 <script src="js/sly.min.js"></script>
 <script src="js/jquery.easing.1.3.js"></script>
 <script src="js/schedule-slider.js"></script>
@@ -560,6 +690,8 @@
 <script src="js/schedule.js"></script>
 <script src="js/magnific-popup.min.js"></script>
 <script src="js/gallery.js"></script>
+<script src="js/recommended-items.js"></script>
+<script type = "text/javascript">recommendedItems.init();</script> 
 
 </body>
 </html>

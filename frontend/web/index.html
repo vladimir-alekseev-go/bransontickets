@@ -26,9 +26,6 @@
     <link href="css/footer.css" rel="stylesheet">
     <link href="css/jquery-ui.min.css" rel="stylesheet">
     <link href="css/jquery-ui.structure.min.css" rel="stylesheet">
-    <link href="css/slick.min.css" rel="stylesheet">
-    <link href="css/slick-theme.css" rel="stylesheet">
-    <link href="css/slick.min.css.map" rel="stylesheet">
     <link href="css/bootstrap-datepicker.min.css" rel="stylesheet">
 </head>
 <body>
@@ -37,25 +34,8 @@
     <header class="header">
         <div class="fixed">
             <div class="row">
-                <div class="col">
-                    <div class="header-logo">
-                        <a id="menu-up-control" class="menu-up-control menu-up-control-is-close">
-                            <i class="fa fa-bars"></i>
-                            <i class="fa fa-times"></i>
-                        </a>
-                        <a href="#" class="bransontickets-logo">
-                            <img src="img/bransontickets-logo.png" alt="Branson Tickets">
-                        </a>
-                        <div class="header-search input-search">
-                            <input type="text" id="search" class="form-control" name="Search[name]" value="" aria-required="true" aria-invalid="false" placeholder="Search">
-                        </div>
-                    </div>
-                </div>
-            
-                <div class="col">
-                    <div class="header-menu-right">
-                        <img src="img/phone.svg" alt="phone icon">
-                        <a href="tel:417-337-8455" class="header-phone">417-337-8455</a>
+                <div class="col-4">
+                    <div class="auth-items">
                         <div class="auth-item">
                             <a class="btn sign-up" href="#">Sign up</a>
                         </div>
@@ -64,69 +44,67 @@
                         </div>
                     </div>
                 </div>
+            
+                <div class="col-4">
+                    <div class="header-menu-phone">
+                        <img src="img/phone.svg" alt="phone icon">
+                        <a href="tel:417-337-8455" class="header-phone">417-337-8455</a>
+                    </div>
+                </div>
+                
+                <div class="col-4">
+                    <a id="menu-up-control" class="menu-up-control">
+                        <i class="fa fa-bars"></i>
+                    </a>
+                </div>
             </div>
-            <div id="menu-general" class="menu-general menu-general-control-is-close">
-                <div class="search-up">
-                    <form action="#" method="get" data-hs-cf-bound="true">
-                        <div class="form-group header-search input-search">
-                            <input type="text" class="form-control" name="Search[name]" value="" aria-required="true" aria-invalid="false" placeholder="Search">
-                        </div>
-                    </form>
+            <div id="menu-general" class="menu-general">
+                <div id="menu-up-control-close" class="menu-up-control-close">
+                    <i class="fa fa-angle-right"></i>
                 </div>
                 <ul class="menu-main">
                     <li><a href="#">Shows</a></li>
                     <li><a href="#">Attractions</a></li>
                     <li><a href="#">Lodging</a></li>
                     <li><a href="#">Dining</a></li>
-                    <li><a href="#">Sign up</a></li>
-                    <li><a href="#">Sign in</a></li>
+                    <li><a href="#" class="d-md-none">Sign up</a></li>
+                    <li><a href="#" class="d-md-none">Sign in</a></li>
                 </ul>
-                <a class="menu-main-phone" href="tel:417-337-8455">
-                    <img src="img/phone.svg" alt="phone icon">
-                    417-337-8455
-                </a>
+                <div class="menu-footer">
+                    <a href="https://bransonrestaurants.com/" target="_blank"><img src="img/branson-restaurants-logo.png" alt="branson restaurants logo"></a>
+                    <a href="https://ibranson.com/" target="_blank"><img src="img/ibranson-logo.png" alt="ibranson logo"></a>
+                </div>
             </div>
         </div>
     </header>
 
     <main>
-        <div class="week-wrap main-slider">
-            <div class="frame horizontal" id="basic">
-                <ul class="clearfix">
-                    <li class="it active" style="background-image: url('img/main-slider.png');">
-                        <div class="info">
-                            <div class="fixed">
-                                <div class="title">Test 1</div>
-                                <a href="#" class="btn-buy">Buy now</a>
-                            </div>
-                        </div>
-                        <img src="img/main-slider.png" alt="Test 1">
-                    </li>
-                    <li class="it" style="background-image: url('img/main-slider.png');">
-                        <div class="info">
-                            <div class="fixed">
-                                <div class="title">Branson's Famous Baldknobbers</div>
-                                <a href="#" class="btn-buy">Buy now</a>
-                            </div>
-                        </div>
-                        <img src="img/main-slider.png" alt="Branson's Famous Baldknobbers">
-                    </li>
-                    <li class="it" style="background-image: url('img/main-slider.png');">
-                        <div class="info">
-                            <div class="fixed">
-                                <div class="title">Test 2</div>
-                                <a href="#" class="btn-buy">Buy now</a>
-                            </div>
-                        </div>
-                        <img src="img/main-slider.png" alt="Test 2">
-                    </li>
-                </ul>
+        <div class="main-banner">
+            <div class="main-logo">
+                <img src="img/bransontickets-logo.png" alt="Branson Tickets logo">
             </div>
-            <div class="main-slider-nav">
-                <div class="fixed">
-                    <a href="#" class="left"><i class="fa fa-angle-left fa-gradient"></i></a>
-                    <a href="#" class="right"><i class="fa fa-angle-right fa-gradient"></i></a>
+            <form action="#">
+                <div class="search">
+                    <div class="field form-group input-search">
+                        <input type="text" id="search" class="form-control" name="Search[name]" value="" aria-required="true" aria-invalid="false" placeholder="I'm looking for">
+                    </div>
+                    <div class="field form-group input-group date">
+                        <input name="s[dateFrom]" type="text" class="form-control" autocomplete="off" placeholder="Event date">
+                        <div class="input-group-addon"></div>
+                    </div>
+                    <select id="shows-category" class="form-control" name="s[c][]">
+                        <option value="">Select categories</option>
+                        <option value="1">Category 1</option>
+                        <option value="2">Category 2</option>
+                        <option value="3">Category 3</option>
+                    </select>
+                    <button class="btn btn-search" value="search">Search</button>
                 </div>
+            </form>
+            <div class="pros">
+                <div class="pros-item"><img src="img/check.svg" alt="check icon">Satisfaction guaranteed</div>
+                <div class="pros-item"><img src="img/check.svg" alt="check icon">No additional requirements</div>
+                <div class="pros-item"><img src="img/check.svg" alt="check icon">Best seat available</div>
             </div>
         </div>
 
@@ -136,200 +114,16 @@
                     <div class="col-lg-7">
                         <div class="main-info-description">At <strong>bransontickets.com</strong> you can streamline your vacation process and avoid the lines by getting your tickets ahead of time. We offer a <strong>HUGE</strong> variety of Branson's most beloved shows, attractions and great restaurant deals to choose from.</div>
                         <div class="main-info-line"></div>
-                        <div class="main-info-call">
-                            <div class="main-info-call-text">Have questions? Call us, we have your answers!</div>
-                            <span></span>
-                            <a href="tel:417-337-8455" class="main-info-call-phone"><img src="img/phone.svg" alt="phone icon">417-337-8455</a>
+                        <div class="guitar">
+                            <img src="img/guitar.svg" alt="guitar">
                         </div>
                     </div>
                     <div class="col-lg-5">
-                        <div class="main-info-items">
-                            <div class="main-info-item">
-                                <div class="main-info-item-text"><img src="img/check.svg" alt="check icon">Satisfaction guaranteed</div>
-                            </div>
-                            <div class="main-info-item">
-                                <div class="main-info-item-text"><img src="img/check.svg" alt="check icon">No additional requirements</div>
-                            </div>
-                            <div class="main-info-item">
-                                <div class="main-info-item-text"><img src="img/check.svg" alt="check icon">Best seat available</div>
-                            </div>
+                        <div class="main-info-call">
+                            <div class="main-info-call-title">Have questions?</div>
+                            <div class="main-info-call-text">Call us, we have your answers!</div>
+                            <a href="tel:417-337-8455" class="main-info-call-phone"><img src="img/phone-blue.svg" alt="phone icon">417-337-8455</a>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="fixed">
-            <div class="main-filter margin-block">
-                <ul class="nav nav-tabs" role="tablist">
-                    <li role="presentation">
-                        <a href="#shows" id="shows-tab" data-bs-toggle="tab" data-bs-target="#shows" role="tab" aria-controls="shows" aria-selected="true" class="active">Shows</a>
-                    </li>
-                    <li role="presentation">
-                        <a href="#attractions" id="attractions-tab" data-bs-toggle="tab" data-bs-target="#attractions" role="tab" aria-controls="attractions" aria-selected="false" class="">Attractions</a>
-                    </li>
-                    <li role="presentation">
-                        <a href="#lodging" id="lodging-tab" data-bs-toggle="tab" data-bs-target="#lodging" role="tab" aria-controls="lodging" aria-selected="false" class="">Lodging</a>
-                    </li>
-                    <li role="presentation">
-                        <a href="#lunches" id="lunches-tab" data-bs-toggle="tab" data-bs-target="#lunches" role="tab" aria-controls="lunches" aria-selected="false" class="">Dining</a>
-                    </li>
-                </ul>
-                <div class="tab-content">
-                    <div id="shows" role="tabpanel" aria-labelledby="shows-tab" class="tab-pane active">
-                        <form action="#" data-hs-cf-bound="true">
-                            <div class="rows">
-                                <div class="row">
-                                    <div class="col-lg-9">
-                                        <div class="rows">
-                                            <div class="row">
-                                                <div class="input-daterange col-lg-6 pb-lg-0 pb-3">
-                                                    <div class="row">
-                                                        <div class="col-sm-6 pb-sm-0 pb-3 js-it">
-                                                            <label>Start Date</label>
-                                                            <div class="field form-group input-calendar">
-                                                                <input name="s[dateFrom]" type="text" class="form-control datepicker" autocomplete="off" value="04/18/2023">
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-sm-6 js-it">
-                                                            <label>End Date</label>
-                                                            <div class="field form-group input-calendar">
-                                                                <input name="s[dateTo]" type="text" class="form-control datepicker" autocomplete="off" value="04/24/2023">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-3">
-                                                    <label for="shows-category">Category</label>
-                                                    <select id="shows-category" class="form-control" name="s[c][]">
-                                                        <option value="">All groups</option>
-                                                        <option value="2200">Category 1</option>
-                                                        <option value="1900">Category 2</option>
-                                                        <option value="13600">Category 3</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-3 btns">
-                                        <button class="btn btn-filter" value="search">Search</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <div id="attractions" role="tabpanel" aria-labelledby="attractions-tab" class="tab-pane">
-                        <form action="#" data-hs-cf-bound="true">
-                            <div class="rows">
-                                <div class="row">
-                                    <div class="col-lg-9">
-                                        <div class="rows">
-                                            <div class="row">
-                                                <div class="input-daterange col-lg-6 pb-lg-0 pb-3">
-                                                    <div class="row">
-                                                        <div class="col-sm-6 pb-sm-0 pb-3 js-it">
-                                                            <label>Start Date</label>
-                                                            <div class="field form-group input-calendar">
-                                                                <input name="s[dateFrom]" type="text" class="form-control datepicker" autocomplete="off" value="04/18/2023">
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-sm-6 js-it">
-                                                            <label>End Date</label>
-                                                            <div class="field form-group input-calendar">
-                                                                <input name="s[dateTo]" type="text" class="form-control datepicker" autocomplete="off" value="04/24/2023">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-3">
-                                                    <label for="shows-category">Category</label>
-                                                    <select id="shows-category" class="form-control" name="s[c][]">
-                                                        <option value="">All groups</option>
-                                                        <option value="2200">Category 1</option>
-                                                        <option value="1900">Category 2</option>
-                                                        <option value="13600">Category 3</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-3 btns">
-                                        <button class="btn btn-filter" value="search">Search</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <div id="lodging" role="tabpanel" aria-labelledby="lodging-tab" class="tab-pane">
-                        <form action="#" data-hs-cf-bound="true">
-                            <div class="row">
-                                <div class="col-lg-9">
-                                    <div class="row" id="list-filter">
-                                        <div class="input-daterange col-lg-6 pb-lg-0 pb-3 default-range">
-                                            <div class="row">
-                                                <div class="col-sm-6 pb-sm-0 pb-3 js-it">
-                                                    <label>Check in</label>
-                                                    <div class="field form-group input-calendar">
-                                                        <input name="s[arrivalDate]" type="text" class="form-control datepicker" autocomplete="off" value="04/08/2023">
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-6 js-it">
-                                                    <label>Check out</label>
-                                                    <div class="field form-group input-calendar">
-                                                        <input name="s[departureDate]" type="text" class="form-control datepicker" autocomplete="off" value="04/24/2023">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-3 btns">
-                                    <button class="btn btn-filter" value="search">Search</button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <div id="lunches" role="tabpanel" aria-labelledby="lunches-tab" class="tab-pane">
-                        <form action="#" data-hs-cf-bound="true">
-                            <div class="rows">
-                                <div class="row">
-                                    <div class="col-lg-9">
-                                        <div class="rows">
-                                            <div class="row">
-                                                <div class="input-daterange col-lg-6 pb-lg-0 pb-3">
-                                                    <div class="row">
-                                                        <div class="col-sm-6 pb-sm-0 pb-3 js-it">
-                                                            <label>Start Date</label>
-                                                            <div class="field form-group input-calendar">
-                                                                <input name="s[dateFrom]" type="text" class="form-control datepicker" autocomplete="off" value="04/18/2023">
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-sm-6 js-it">
-                                                            <label>End Date</label>
-                                                            <div class="field form-group input-calendar">
-                                                                <input name="s[dateTo]" type="text" class="form-control datepicker" autocomplete="off" value="04/24/2023">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-3">
-                                                    <label for="shows-category">Category</label>
-                                                    <select id="shows-category" class="form-control" name="s[c][]">
-                                                        <option value="">All groups</option>
-                                                        <option value="2200">Category 1</option>
-                                                        <option value="1900">Category 2</option>
-                                                        <option value="13600">Category 3</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-3 btns">
-                                        <button class="btn btn-filter" value="search">Search</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
                     </div>
                 </div>
             </div>
@@ -337,80 +131,278 @@
 
         <div class="fixed">
             <div class="featured">Featured</div>
-            <div class="featured-line"></div>
-            <div class="featured-items">
-                <div class="featured-item">
-                    <img src="img/features-1.png">
-                    <div class="more">
-                        <div class="about">
-                            <div class="title">Grand Jubilee</div>
-                            <div class="description">Grand Country Music Hall</div>
-                        </div>
-                        <a href="#" class="item-btn"><i class="fa fa-angle-right fa-gradient"></i></a>
-                    </div>
-                </div>
-                <div class="featured-item">
-                    <img src="img/features-2.png">
-                    <div class="more">
-                        <div class="about">
-                            <div class="title">Copperhead Mountain Coaster</div>
-                            <div class="description">Grand Country Music Hall</div>
-                        </div>
-                        <a href="#" class="item-btn"><i class="fa fa-angle-right fa-gradient"></i></a>
-                    </div>
-                </div>
-                <div class="featured-item">
-                    <img src="img/features-3.png">
-                    <div class="more">
-                        <div class="about">
-                            <div class="title">The Haygoods</div>
-                            <div class="description">Clay Cooper Theatre</div>
-                        </div>
-                        <a href="#" class="item-btn"><i class="fa fa-angle-right fa-gradient"></i></a>
-                    </div>
-                </div>
-                <div class="featured-item">
-                    <img src="img/features-1.png">
-                    <div class="more">
-                        <div class="about">
-                            <div class="title">Grand Jubilee</div>
-                            <div class="description">Grand Country Music Hall</div>
-                        </div>
-                        <a href="#" class="item-btn"><i class="fa fa-angle-right fa-gradient"></i></a>
-                    </div>
-                </div>
-                <div class="featured-item">
-                    <img src="img/features-2.png">
-                    <div class="more">
-                        <div class="about">
-                            <div class="title">Copperhead Mountain Coaster</div>
-                            <div class="description">Grand Country Music Hall</div>
-                        </div>
-                        <a href="#" class="item-btn"><i class="fa fa-angle-right fa-gradient"></i></a>
-                    </div>
-                </div>
-                <div class="featured-item">
-                    <img src="img/features-3.png">
-                    <div class="more">
-                        <div class="about">
-                            <div class="title">The Haygoods</div>
-                            <div class="description">Clay Cooper Theatre</div>
-                        </div>
-                        <a href="#" class="item-btn"><i class="fa fa-angle-right fa-gradient"></i></a>
+            <div class="featured-items" id="featured-items">
+                <div class="week-wrap">
+                    <div class="frame horizontal">
+                        <ul class="clearfix">
+                            <li class="it">
+                                <img src="img/features-1.png">
+                                <div class="about">
+                                    <div class="title">Grand Jubilee</div>
+                                    <div class="location">
+                                        <img src="img/location.svg" alt="location icon">
+                                        <span>Grand Country Music Hall</span>
+                                    </div>
+                                    <div class="featured-line"></div>
+                                    <div class="description">Audiences fall in love with the tight harmonies and dynamic performance of Branson’s BEST Quartet, New South! From Country and hand-clapping Gospel, to decades of Rock & Roll favourites, the Grand Jubilee will surpass expectations of any age.</div>
+                                </div>
+                                <div class="more">
+                                    <div class="category">
+                                        <img src="img/category.svg" alt="category icon">
+                                        <span>VARIETY SHOW</span>
+                                    </div>
+                                    <a href="#" class="item-btn">Book now</a>
+                                </div>
+                            </li>
+                            <li class="it">
+                                <img src="img/features-2.png">
+                                <div class="about">
+                                    <div class="title">Hamners Unbelievable</div>
+                                    <div class="location">
+                                        <img src="img/location.svg" alt="location icon">
+                                        <span>Hamners' Variety Theater</span>
+                                    </div>
+                                    <div class="featured-line"></div>
+                                    <div class="description">This show features Master illusionists Dave & Denise Hamner, singing impressionist Jeff Brandt and vocalist Tamra Tinoco, new cast member Brittnay Marie, Cyr Wheel artist Anthony Soumiatin, Trick Roper Johnny Lonestar, dancers "Downtown' Kenny Brown and Kathryn King.</div>
+                                </div>
+                                <div class="more">
+                                    <div class="category">
+                                        <img src="img/category.svg" alt="category icon">
+                                        <span>CHRISTMAS, VARIETY SHOW</span>
+                                    </div>
+                                    <a href="#" class="item-btn">Book now</a>
+                                </div>
+                            </li>
+                            <li class="it">
+                                <img src="img/features-3.png">
+                                <div class="about">
+                                    <div class="title">The Haygoods</div>
+                                    <div class="location">
+                                        <img src="img/location.svg" alt="location icon">
+                                        <span>Clay Cooper Theatre</span>
+                                    </div>
+                                    <div class="featured-line"></div>
+                                    <div class="description">New Show for 2023! <br>
+                                        – 31st SMASH HIT SEASON! <br>
+                                        – Over 6,000,000 Tickets Sold! BOOK NOW! <br>
+                                        – 5 Brothers and 1 Sister performing on 20+ Instruments!
+                                    </div>
+                                </div>
+                                <div class="more">
+                                    <div class="category">
+                                        <img src="img/category.svg" alt="category icon">
+                                        <span>MAGIC, VARIETY SHOW</span>
+                                    </div>
+                                    <a href="#" class="item-btn">Book now</a>
+                                </div>
+                            </li>
+                            <li class="it">
+                                <img src="img/features-1.png">
+                                <div class="about">
+                                    <div class="title">Grand Jubilee</div>
+                                    <div class="location">
+                                        <img src="img/location.svg" alt="location icon">
+                                        <span>Grand Country Music Hall</span>
+                                    </div>
+                                    <div class="featured-line"></div>
+                                    <div class="description">Audiences fall in love with the tight harmonies and dynamic performance of Branson’s BEST Quartet, New South! From Country and hand-clapping Gospel, to decades of Rock & Roll favourites, the Grand Jubilee will surpass expectations of any age.</div>
+                                </div>
+                                <div class="more">
+                                    <div class="category">
+                                        <img src="img/category.svg" alt="category icon">
+                                        <span>VARIETY SHOW</span>
+                                    </div>
+                                    <a href="#" class="item-btn">Book now</a>
+                                </div>
+                            </li>
+                            <li class="it">
+                                <img src="img/features-2.png">
+                                <div class="about">
+                                    <div class="title">Hamners Unbelievable</div>
+                                    <div class="location">
+                                        <img src="img/location.svg" alt="location icon">
+                                        <span>Hamners' Variety Theater</span>
+                                    </div>
+                                    <div class="featured-line"></div>
+                                    <div class="description">This show features Master illusionists Dave & Denise Hamner, singing impressionist Jeff Brandt and vocalist Tamra Tinoco, new cast member Brittnay Marie, Cyr Wheel artist Anthony Soumiatin, Trick Roper Johnny Lonestar, dancers "Downtown' Kenny Brown and Kathryn King.</div>
+                                </div>
+                                <div class="more">
+                                    <div class="category">
+                                        <img src="img/category.svg" alt="category icon">
+                                        <span>CHRISTMAS, VARIETY SHOW</span>
+                                    </div>
+                                    <a href="#" class="item-btn">Book now</a>
+                                </div>
+                            </li>
+                            <li class="it">
+                                <img src="img/features-3.png">
+                                <div class="about">
+                                    <div class="title">The Haygoods</div>
+                                    <div class="location">
+                                        <img src="img/location.svg" alt="location icon">
+                                        <span>Clay Cooper Theatre</span>
+                                    </div>
+                                    <div class="featured-line"></div>
+                                    <div class="description">New Show for 2023! <br>
+                                        – 31st SMASH HIT SEASON! <br>
+                                        – Over 6,000,000 Tickets Sold! BOOK NOW! <br>
+                                        – 5 Brothers and 1 Sister performing on 20+ Instruments!
+                                    </div>
+                                </div>
+                                <div class="more">
+                                    <div class="category">
+                                        <img src="img/category.svg" alt="category icon">
+                                        <span>MAGIC, VARIETY SHOW</span>
+                                    </div>
+                                    <a href="#" class="item-btn">Book now</a>
+                                </div>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
         </div>
         <div class="featured-items-nav">
             <div class="fixed-nav">
-                <a href="#" class="featured-left"><i class="fa fa-angle-left fa-gradient"></i></a>
-                <a href="#" class="featured-right"><i class="fa fa-angle-right fa-gradient"></i></a>
+                <a href="#" class="featured-left"><i class="fa fa-angle-left"></i></a>
+                <a href="#" class="featured-right"><i class="fa fa-angle-right"></i></a>
+            </div>
+        </div>
+
+        <div class="fixed">
+            <div class="recommended">Recommended</div>
+            <div class="recommended-items" id="recommended-items">
+                <div class="week-wrap">
+                    <div class="frame horizontal">
+                        <ul class="clearfix">
+                            <li class="it">
+                                <img src="img/features-2.png">
+                                <div class="about">
+                                    <div class="title">Hamners Unbelievable</div>
+                                    <div class="location">
+                                        <img src="img/location.svg" alt="location icon">
+                                        <span>Hamners' Variety Theater</span>
+                                    </div>
+                                    <div class="recommended-line"></div>
+                                </div>
+                                <div class="more">
+                                    <div class="category">
+                                        <img src="img/category.svg" alt="category icon">
+                                        <span>MAGIC, VARIETY SHOW</span>
+                                    </div>
+                                    <a href="#" class="item-btn">See details</a>
+                                </div>
+                            </li>
+                            <li class="it">
+                                <img src="img/features-1.png">
+                                <div class="about">
+                                    <div class="title">Grand Jubilee</div>
+                                    <div class="location">
+                                        <img src="img/location.svg" alt="location icon">
+                                        <span>Grand Country Music Hall</span>
+                                    </div>
+                                    <div class="recommended-line"></div>
+                                </div>
+                                <div class="more">
+                                    <div class="category">
+                                        <img src="img/category.svg" alt="category icon">
+                                        <span>VARIETY SHOW</span>
+                                    </div>
+                                    <a href="#" class="item-btn">See details</a>
+                                </div>
+                            </li>
+                            <li class="it">
+                                <img src="img/features-3.png">
+                                <div class="about">
+                                    <div class="title">The Haygoods</div>
+                                    <div class="location">
+                                        <img src="img/location.svg" alt="location icon">
+                                        <span>Clay Cooper Theatre</span>
+                                    </div>
+                                    <div class="recommended-line"></div>
+                                </div>
+                                <div class="more">
+                                    <div class="category">
+                                        <img src="img/category.svg" alt="category icon">
+                                        <span>CHRISTMAS, VARIETY SHOW</span>
+                                    </div>
+                                    <a href="#" class="item-btn">See details</a>
+                                </div>
+                            </li>
+                            <li class="it">
+                                <img src="img/features-2.png">
+                                <div class="about">
+                                    <div class="title">Hamners Unbelievable</div>
+                                    <div class="location">
+                                        <img src="img/location.svg" alt="location icon">
+                                        <span>Hamners' Variety Theater</span>
+                                    </div>
+                                    <div class="recommended-line"></div>
+                                </div>
+                                <div class="more">
+                                    <div class="category">
+                                        <img src="img/category.svg" alt="category icon">
+                                        <span>MAGIC, VARIETY SHOW</span>
+                                    </div>
+                                    <a href="#" class="item-btn">See details</a>
+                                </div>
+                            </li>
+                            <li class="it">
+                                <img src="img/features-1.png">
+                                <div class="about">
+                                    <div class="title">Grand Jubilee</div>
+                                    <div class="location">
+                                        <img src="img/location.svg" alt="location icon">
+                                        <span>Grand Country Music Hall</span>
+                                    </div>
+                                    <div class="recommended-line"></div>
+                                </div>
+                                <div class="more">
+                                    <div class="category">
+                                        <img src="img/category.svg" alt="category icon">
+                                        <span>VARIETY SHOW</span>
+                                    </div>
+                                    <a href="#" class="item-btn">See details</a>
+                                </div>
+                            </li>
+                            <li class="it">
+                                <img src="img/features-3.png">
+                                <div class="about">
+                                    <div class="title">The Haygoods</div>
+                                    <div class="location">
+                                        <img src="img/location.svg" alt="location icon">
+                                        <span>Clay Cooper Theatre</span>
+                                    </div>
+                                    <div class="recommended-line"></div>
+                                </div>
+                                <div class="more">
+                                    <div class="category">
+                                        <img src="img/category.svg" alt="category icon">
+                                        <span>CHRISTMAS, VARIETY SHOW</span>
+                                    </div>
+                                    <a href="#" class="item-btn">See details</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="recommended-items-nav">
+            <div class="fixed-nav">
+                <a href="#" class="recommended-left"><i class="fa fa-angle-left"></i></a>
+                <a href="#" class="recommended-right"><i class="fa fa-angle-right"></i></a>
+            </div>
+        </div>
+
+        <div class="fixed">
+            <div class="find-more">
+                <a href="#">Find more</a>
             </div>
         </div>
     </main>
 
     <footer class="footer">
-        <div class="footer-line"></div>
         <div class="fixed">
             <div class="footer-items">
                 <a href="https://bransonrestaurants.com/" target="_blank"><img src="img/branson-restaurants-logo.png" alt="branson restaurants logo"></a>
@@ -425,11 +417,12 @@
 <script src="js/general.js"></script>
 <script src="js/sly.min.js"></script>
 <script src="js/jquery.easing.1.3.js"></script>
-<script src="js/slick.min.js"></script>
 <script src="js/bootstrap-datepicker.min.js"></script>
 <script src="js/datepicker.js"></script>
-<script src="js/main-slider.js"></script>
 <script src="js/featured-items.js"></script>
+<script type = "text/javascript">featuredItems.init();</script>
+<script src="js/recommended-items.js"></script>
+<script type = "text/javascript">recommendedItems.init();</script>  
 
 </body>
 </html>
