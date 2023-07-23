@@ -30,7 +30,7 @@ main {flex:1;}
 .fixed {max-width:1520px;padding:0 20px;margin:0 auto;}
 
 .week-wrap {position:relative;}
-.margin-block {margin:0 0 50px;}
+.margin-block {margin:0 0 60px;}
 
 .frame.horizontal {overflow: hidden;}
 .frame.horizontal ul {list-style:none;margin:0 0 10px;padding:0;height:100%;display:flex;flex-direction:row;overflow:hidden;position:relative;}
@@ -229,7 +229,7 @@ main {flex:1;}
     
 }
 
-.find-more {padding:20px 0 60px 0;}
+.find-more {padding:20px 0 0 0;}
 .find-more a {display:block;margin:0 auto;width:180px;padding:6px 10px;font-size:28px;font-weight:700;text-align:center;border:1px solid transparent;border-radius:7px;color:var(--c-new-blue);
     background:linear-gradient(var(--c-white), var(--c-white)) padding-box,linear-gradient(to right, var(--c-violet-gray), var(--c-violet)) border-box;text-decoration:none;
     box-shadow: 0px 0px 0px 0px var(--c-shadow-purple-1), 2px 3px 8px 0px var(--c-shadow-purple-1), 7px 13px 15px 0px var(--c-shadow-purple-2), 16px 29px 20px 0px var(--c-shadow-purple-3), 29px 51px 23px 0px var(--c-shadow-purple-4), 46px 79px 26px 0px var(--c-shadow-purple-5);}
