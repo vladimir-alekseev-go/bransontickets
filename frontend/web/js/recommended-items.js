@@ -1,10 +1,10 @@
-let featuredItems = {
+let recommendedItems = {
     frame: null,
     wrap: null,
     sly: null,
     init: function () {
         let _self = this;
-        _self.frame = $('#featured-items .frame');
+        _self.frame = $('#recommended-items .frame');
         _self.wrap = _self.frame.parent();
 
         _self.initSly();
@@ -41,8 +41,8 @@ let featuredItems = {
             pauseOnHover: 1,
 
             // Buttons
-            prevPage: $('.featured-left'),
-            nextPage: $('.featured-right'),
+            prevPage: $('.recommended-left'),
+            nextPage: $('.recommended-right'),
         }).init();
     },
 }

@@ -1,61 +1,47 @@
-.header {width:100%;padding:20px 0;z-index:100;margin-bottom:22px;background:var(--c-white-smoky);}
-.header .menu-up-control {display:none;float:left;color:var(--c-blue-deep);font-size:21px;top:5px;position:relative;cursor:pointer;}
-.header .menu-up-control.menu-up-control-is-close .fa-times {display:none;}
-.header .menu-up-control.menu-up-control-is-open .fa-bars {display:none;}
-.header-logo {display:flex;align-items:center;gap:60px;}
-.header-logo .header-search {padding:20px 0 0 0;flex:1;}
-.header-logo .header-search input {background:var(--c-white) url(../img/search.svg) no-repeat 97% 50% !important;background-size:16px !important;padding-right:35px;box-shadow:none !important;}
-.header-logo .header-search .form-control {padding-top:8px;max-width:400px;color:var(--c-blue-deep);font-weight:350;font-size:16px;border:1px solid var(--c-blue-deep);border-radius:5px;}
-.header-logo .header-search input::placeholder {color:var(--c-blue-deep) !important;}
-.header-menu-right {padding:20px 0 0 0;display:flex;align-items:center;justify-content:end;gap:20px;}
-.header-menu-right img {width:20px;}
-.header-menu-right .header-phone {padding-right:20px;color:var(--c-blue-deep);font-weight:700;font-size:20px;text-decoration:none;}
-.header-menu-right .auth-item {padding:1px;background:linear-gradient(90deg, var(--c-violet-gray) 0%, var(--c-violet) 100%);border-radius:5px;}
-.header-menu-right .auth-item .sign-up {padding:5px 19px;color:var(--c-blue-deep);font-weight:700;font-size:20px;background:var(--c-white);}
-.header-menu-right .auth-item .sign-in {padding:5px 21px;color:var(--c-white);font-weight:700;font-size:20px;}
-.header-menu-bottom-line {background:var(--c-blue-deep);}
-.header-menu-bottom {margin-top:20px;display:flex;align-items:center;justify-content:start;gap:28px;}
-.header-menu-bottom .header-menu-item {font-weight:700;font-size:20px;color:var(--c-white);padding:6px 12px 6px 0}
+.header {width:100%;padding:10px 0;z-index:100;background:var(--c-light-violet);
+    box-shadow: 0px 0px 0px 0px var(--c-shadow-purple-1), 2px 3px 8px 0px var(--c-shadow-purple-1), 7px 13px 15px 0px var(--c-shadow-purple-2), 16px 29px 20px 0px var(--c-shadow-purple-3), 29px 51px 23px 0px var(--c-shadow-purple-4), 46px 79px 26px 0px var(--c-shadow-purple-5);}
+.header .menu-up-control {float:right;color:var(--c-new-blue);font-size:26px;top:3px;position:relative;cursor:pointer;padding:10px 0;}
+.header .menu-up-control-close {width:15px;}
+.header .menu-up-control-close i {color:var(--c-light-violet);font-size:40px;top:3px;position:relative;cursor:pointer;padding:10px 0px;margin:50px 0 0 50px;}
+.header .auth-items {display:flex;align-items:center;justify-content:flex-start;padding:10px 0;gap:10px;}
+.header .bransontickets-logo img {display:block;margin:0 auto;}
+.auth-items .auth-item {border-radius:5px;}
+.auth-items .auth-item .sign-up {padding:4px 20px;color:var(--c-white);font-weight:700;font-size:20px;background:var(--c-new-blue);transition:none;}
+.auth-items .auth-item .sign-up:hover {background:linear-gradient(90deg, var(--c-violet-gray) 60%, var(--c-violet-dark) 100%);}
+.auth-items .auth-item .sign-in {padding:4px 20px;color:var(--c-new-blue);font-weight:700;font-size:20px;}
+.auth-items .auth-item .sign-in:hover {border:1px solid var(--c-new-blue);}
+.header-menu-phone {display:flex;align-items:center;justify-content:center;gap:20px;padding:10px 0;}
+.header-menu-phone img {width:23px;}
+.header-menu-phone .header-phone {color:var(--c-new-blue);font-weight:700;font-size:26px;text-decoration:none;letter-spacing:1px;}
+.header-menu-phone.detail {justify-content:flex-start;}
 
-.menu-general.menu-general-control-is-close .search-up {display:none;}
-.menu-general.menu-general-control-is-close .menu-main {display:none;}
-.menu-general.menu-general-control-is-open .search-up {display:none;}
-.menu-general.menu-general-control-is-open .menu-main {display:none;}
-.menu-general.menu-general-control-is-open .menu-main-phone {display:none;}
-.menu-general.menu-general-control-is-close .menu-main-phone {display:none;}
+.menu-general {display:none;}
+.menu-general {position:fixed;width:350px;top:0;right:0;bottom:0;z-index:9999;padding:10px;background-color:var(--c-new-blue-1);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);}
 
-.search-up .header-search input {background:var(--c-white) url(../img/search.svg) no-repeat 97% 50% !important;background-size:16px !important;padding-right:35px;box-shadow:none !important;}
-.search-up .header-search .form-control {padding-top:6px;color:var(--c-blue-deep);font-weight:350;font-size:14px;border:1px solid var(--c-blue-deep);border-radius:5px;}
-.search-up .header-search input::placeholder {color:var(--c-blue-deep) !important;}
-
-.menu-main {display:none;padding:10px;margin:0 0 20px;border-radius:4px;}
+.menu-main {padding:10px;margin:0 0 20px;border-radius:4px;}
 .menu-main, .menu-main li {margin:0;padding:0;}
-.menu-main {padding:20px 0 10px;margin:0 0 10px;clear:both;overflow:hidden}
-.menu-main li {margin:0 0 10px;padding:0 20px;list-style:none;float:left;width:50%;text-align:center;}
+.menu-main {padding:30px 0 10px;margin:0 0 10px;clear:both;overflow:hidden}
+.menu-main li {margin:0 0 20px;padding:0 50px;list-style:none;width:100%;text-align:left;}
 .menu-main li:before {display:none;}
-.menu-main li, .menu-main li a {font-size:16px}
-.menu-main li a {font-weight:bold;color:var(--c-blue-deep);text-decoration:none;}
-.menu-main li a:hover {color:var(--c-blue-deep);}
-.menu-main-phone {text-align:center;font-weight:700;font-size:16px;color:var(--c-blue-deep);text-decoration:none;}
-.menu-main-phone:hover {color:var(--c-blue-deep);}
-.menu-main-phone img {width:17px;}
+.menu-main li, .menu-main li a {font-size:36px;font-weight:700;}
+.menu-main li a {font-weight:bold;color:var(--c-light-violet);text-decoration:none;}
+.menu-main li a:hover {color:var(--c-white);border-bottom:2px solid var(--c-violet-dark);}
+
+.menu-general .menu-footer {display:flex;align-items:center;gap:40px;flex-wrap:wrap;position:absolute;bottom:0;left:0;right:0;padding:40px 0 40px 60px;background:var(--c-light-violet);}
+.menu-general .menu-footer img {width:160px;}
 
 @media (max-width:991px) {
-    .header-logo .bransontickets-logo img {width:200px;}
-    .header-menu-right {gap:10px;}
-    .header-menu-right .header-phone {padding-right:0;font-size:16px;}
-    .header-menu-right .auth-item .sign-up, .header-menu-right .auth-item .sign-in {font-size:16px;}
+    .header .bransontickets-logo img {height:40px;}
+    .header .menu-up-control {font-size:22px;padding:4px 0 0 0;}
+    .header-menu-phone {gap:10px;padding:10px 0 0 0;}
+    .header-menu-phone img {width:18px;}
+    .header-menu-phone .header-phone {font-size:20px;}
+    .auth-items .auth-item .sign-up, .auth-items .auth-item .sign-in {font-size:16px;}
 }
 
 @media (max-width:767px) {
-    .header.header-menu-is-open {position:fixed;top:0;bottom:0;left:0;right:0;z-index:999;margin:0;}
+    .menu-general {position:fixed;width:100%;top:0;bottom:0;left:0;right:0;z-index:999;margin:0;}
+    .menu-general .menu-footer {justify-content:center;padding:40px 10px;}
     .header .menu-up-control {display:block;}
-    .header-logo {gap:15px;}
-    .header-logo .bransontickets-logo img {width:150px;}
-    .header-menu-right, .header-menu-bottom-line, .header-logo .header-search {display:none;}
-
-    .menu-general.menu-general-control-is-open {position:absolute;background:var(--c-white-smoky);top:75px;left:0;right:0;bottom:0;z-index:9999;padding:10px;}
-    .menu-general.menu-general-control-is-open .search-up {display:block;}
-    .menu-general.menu-general-control-is-open .menu-main {display:block;}
-    .menu-general.menu-general-control-is-open .menu-main-phone {display:block;}
+    .header .auth-items, .header-menu-phone {display:none;}
 }
