@@ -26,70 +26,48 @@
     <header class="header">
         <div class="fixed">
             <div class="row">
-                <div class="col">
-                    <div class="header-logo">
-                        <a id="menu-up-control" class="menu-up-control menu-up-control-is-close">
-                            <i class="fa fa-bars"></i>
-                            <i class="fa fa-times"></i>
-                        </a>
-                        <a href="#" class="bransontickets-logo">
-                            <img src="img/bransontickets-logo.png" alt="Branson Tickets">
-                        </a>
-                        <div class="header-search input-search">
-                            <input type="text" id="search" class="form-control" name="Search[name]" value="" aria-required="true" aria-invalid="false" placeholder="Search">
-                        </div>
+                <div class="col-4">
+                    <div class="header-menu-phone detail">
+                        <img src="img/phone.svg" alt="phone icon">
+                        <a href="tel:417-337-8455" class="header-phone">417-337-8455</a>
                     </div>
                 </div>
             
-                <div class="col">
-                    <div class="header-menu-right">
-                        <img src="img/phone.svg" alt="phone icon">
-                        <a href="tel:417-337-8455" class="header-phone">417-337-8455</a>
-                        <div class="auth-item">
-                            <a class="btn sign-up" href="#">Sign up</a>
-                        </div>
-                        <div class="auth-item">
-                            <a class=" btn sign-in" href="#">Sign in</a>
-                        </div>
-                    </div>
+                <div class="col-4">
+                    <a href="#" class="bransontickets-logo">
+                        <img src="img/bransontickets-logo.png" alt="Branson Tickets">
+                    </a>
+                </div>
+                
+                <div class="col-4">
+                    <a id="menu-up-control" class="menu-up-control">
+                        <i class="fa fa-bars"></i>
+                    </a>
                 </div>
             </div>
-            <div id="menu-general" class="menu-general menu-general-control-is-close">
-                <div class="search-up">
-                    <form action="#" method="get" data-hs-cf-bound="true">
-                        <div class="form-group header-search input-search">
-                            <input type="text" class="form-control" name="Search[name]" value="" aria-required="true" aria-invalid="false" placeholder="Search">
-                        </div>
-                    </form>
+            <div id="menu-general" class="menu-general">
+                <div id="menu-up-control-close" class="menu-up-control-close">
+                    <i class="fa fa-angle-right"></i>
                 </div>
                 <ul class="menu-main">
                     <li><a href="#">Shows</a></li>
                     <li><a href="#">Attractions</a></li>
                     <li><a href="#">Lodging</a></li>
                     <li><a href="#">Dining</a></li>
-                    <li><a href="#">Sign up</a></li>
-                    <li><a href="#">Sign in</a></li>
+                    <li><a href="#" class="d-md-none">Sign up</a></li>
+                    <li><a href="#" class="d-md-none">Sign in</a></li>
                 </ul>
-                <a class="menu-main-phone" href="tel:417-337-8455">
-                    <img src="img/phone.svg" alt="phone icon">
-                    417-337-8455
-                </a>
-            </div>
-        </div>
-        <div class="header-menu-bottom-line">
-            <div class="fixed">
-                <div class="header-menu-bottom">
-                    <a class="btn header-menu-item" href="#">Shows</a>
-                    <a class="btn header-menu-item" href="#">Attractions</a>
-                    <a class="btn header-menu-item" href="#">Lodging</a>
-                    <a class="btn header-menu-item" href="#">Dining</a>
+                <div class="menu-footer">
+                    <a href="https://bransonrestaurants.com/" target="_blank"><img src="img/branson-restaurants-logo.png" alt="branson restaurants logo"></a>
+                    <a href="https://ibranson.com/" target="_blank"><img src="img/ibranson-logo.png" alt="ibranson logo"></a>
                 </div>
             </div>
         </div>
     </header>
+
     <main>
         <div class="fixed">
-            <div class="row">
+            <div class="row mt-5">
                 <h1 class="h2"><strong>Not Found (#404)</strong></h1>
                 <div class="site-error">
                     <p>The above error occurred while the Web server was processing your request.</p>
