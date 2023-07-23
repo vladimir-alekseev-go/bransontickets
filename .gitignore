@@ -38,9 +38,11 @@ phpunit.phar
 /frontend/web/index.php
 /frontend/web/index-test.php
 /frontend/web/robots.txt
+/frontend/web/.htaccess
 /backend/web/index.php
 /backend/web/index-test.php
 /backend/web/robots.txt
+/backend/web/.htaccess
 
 # upload files
 /upload
