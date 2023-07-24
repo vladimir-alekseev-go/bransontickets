@@ -122,6 +122,7 @@ main {flex:1;}
 }
 
 .featured {padding:10px 0;font-weight:800;font-size:40px;color:var(--c-white);text-transform:uppercase;text-align:center;}
+.featured-items .frame.horizontal ul {max-height:750px;}
 .featured-items .frame.horizontal ul li {width:480px;background:var(--c-white);color:var(--c-new-blue);}
 .featured-items .frame.horizontal ul li img {width:480px;border-radius:10px 10px 0 0;}
 .featured-items .frame.horizontal ul li .about {padding:10px 16px 50px 16px;}
@@ -130,11 +131,11 @@ main {flex:1;}
 .featured-items .frame.horizontal ul li .about .location img {width:20px;}
 .featured-items .frame.horizontal ul li .about .location span {padding-top:4px;}
 .featured-items .frame.horizontal ul li .about .featured-line {position:relative;width:100%;height:1px;left:0;background:var(--c-new-blue);}
-.featured-items .frame.horizontal ul li .about .description {padding-top:20px;font-weight:400;font-size:18px;}
+.featured-items .frame.horizontal ul li .about .description {padding-top:20px;font-weight:400;font-size:18px;text-overflow:ellipsis;overflow:hidden;max-height:160px;}
 .featured-items .frame.horizontal ul li .more {position:absolute;bottom:0;right:0;left:0;padding:0 16px 10px;display:flex;align-items:center;justify-content:space-between;gap:10px;}
 .featured-items .frame.horizontal ul li .more .category {display:flex;align-items:center;justify-content:flex-start;gap:12px}
 .featured-items .frame.horizontal ul li .more .category img {width:30px;}
-.featured-items .frame.horizontal ul li .more .category span {padding-top:8px;font-weight:400;font-size:14px;}
+.featured-items .frame.horizontal ul li .more .category span {padding-top:8px;font-weight:400;font-size:14px;text-transform:uppercase;}
 .featured-items .frame.horizontal ul li .more .item-btn {padding:7px 10px;width:40%;font-size:20px;font-weight:700;text-align:center;color:var(--c-white);border-radius:5px;text-decoration:none;
     background:linear-gradient(90deg, var(--c-violet-gray) 0%, var(--c-violet) 100%);}
 .featured-items .frame.horizontal ul li .more .item-btn:hover {background:linear-gradient(90deg, var(--c-violet-gray) 60%, var(--c-violet-dark) 100%);}
@@ -181,16 +182,16 @@ main {flex:1;}
 .recommended {padding:30px 0 10px 0;font-weight:800;font-size:40px;color:var(--c-white);text-transform:uppercase;text-align:center;}
 .recommended-items .frame.horizontal ul li {width:355px;background:var(--c-white);color:var(--c-new-blue);}
 .recommended-items .frame.horizontal ul li img {width:355px;border-radius:10px 10px 0 0;}
-.recommended-items .frame.horizontal ul li .about {padding:10px 16px 21px 16px;}
+.recommended-items .frame.horizontal ul li .about {padding:10px 16px 116px 16px;}
 .recommended-items .frame.horizontal ul li .about .title {padding-bottom:10px;font-weight:800;font-size:20px;}
 .recommended-items .frame.horizontal ul li .about .location {padding-bottom:23px;font-weight:400;font-size:20px;display:flex;align-items:center;justify-content:flex-start;gap:10px;}
 .recommended-items .frame.horizontal ul li .about .location img {width:20px;}
 .recommended-items .frame.horizontal ul li .about .location span {padding-top:4px;}
 .recommended-items .frame.horizontal ul li .about .recommended-line {position:relative;width:100%;height:1px;left:0;background:var(--c-new-blue);}
-.recommended-items .frame.horizontal ul li .more {padding:0 16px 0;}
+.recommended-items .frame.horizontal ul li .more {position:absolute;bottom:0;right:0;left:0;padding:0 16px 10px;}
 .recommended-items .frame.horizontal ul li .more .category {padding-bottom:21px;display:flex;align-items:center;justify-content:flex-start;gap:12px}
 .recommended-items .frame.horizontal ul li .more .category img {width:30px;}
-.recommended-items .frame.horizontal ul li .more .category span {padding-top:8px;font-weight:400;font-size:14px;}
+.recommended-items .frame.horizontal ul li .more .category span {padding-top:8px;font-weight:400;font-size:14px;text-transform:uppercase;}
 .recommended-items .frame.horizontal ul li .more .item-btn {display:block;padding:7px 10px;width:100%;font-size:20px;font-weight:700;text-align:center;color:var(--c-white);border-radius:5px;text-decoration:none;
     background:linear-gradient(90deg, var(--c-violet-gray) 0%, var(--c-violet) 100%);}
 .recommended-items .frame.horizontal ul li .more .item-btn:hover {background:linear-gradient(90deg, var(--c-violet-gray) 60%, var(--c-violet-dark) 100%);}

@@ -11,6 +11,7 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use common\models\LoginForm;
+use common\models\TrShows;
 use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
@@ -75,7 +76,18 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        /**
+         * @var TrShows[] $shows_featured
+         */
+        $showsFeatured = TrShows::getActive()
+            ->groupBy(TrShows::tableName() . '.id')
+            ->all();
+
+        $showsRecommended = TrShows::getActive()
+            ->groupBy(TrShows::tableName() . '.id')
+            ->all();
+
+        return $this->render('index', compact('showsFeatured', 'showsRecommended'));
     }
 
     /**

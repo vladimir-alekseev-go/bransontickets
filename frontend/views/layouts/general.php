@@ -20,6 +20,8 @@ $this->beginPage() ?><!DOCTYPE html>
     <meta property="og:url" content="<?= Yii::$app->request->absoluteUrl ?>"/>
     <?= Html::csrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.css" 
+          rel="stylesheet"  type='text/css'>
     <link href="/favicon.ico" rel="shortcut icon" type="image/x-icon">
     <?php $this->head() ?>
 </head>

@@ -43,7 +43,7 @@
 }
 
 @media (max-width:767px) {
-    .menu-general {position:fixed;width:100%;top:0;bottom:0;left:0;right:0;z-index:999;margin:0;}
+    .menu-general {display:none;position:fixed;width:100%;top:0;bottom:0;left:0;right:0;z-index:999;margin:0;}
     .menu-general .menu-footer {justify-content:center;padding:40px 10px;}
     .header .menu-up-control {display:block;}
     .header .auth-items, .header-menu-phone {display:none;}
