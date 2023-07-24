@@ -2,7 +2,6 @@
 
 namespace frontend\assets;
 
-use yidas\yii\fontawesome\FontawesomeAsset;
 use yii\bootstrap\BootstrapAsset;
 use yii\web\AssetBundle;
 use yii\web\JqueryAsset;
@@ -22,12 +21,13 @@ class AppAsset extends AssetBundle
         '/css/footer.css'
     ];
     public $js = [
-        '/js/header.js'
+        '/js/header.js',
+        '/js/jquery.easing.1.3.js',
+        '/js/general.js',
     ];
     public $depends = [
         YiiAsset::class,
         BootstrapAsset::class,
-        JqueryAsset::class,
-        FontawesomeAsset::class
+        JqueryAsset::class
     ];
 }

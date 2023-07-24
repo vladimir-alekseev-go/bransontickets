@@ -6,5 +6,5 @@
 
 $this->beginContent('@app/views/layouts/general.php');
 ?>
-<div class="fixed"><?= $content ?></div>
+<?= $content ?>
 <?php $this->endContent();
