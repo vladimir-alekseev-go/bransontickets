@@ -39,7 +39,7 @@ use yii\web\JqueryAsset;
                                         <span><?= $show->theatre->name ?? '' ?></span>
                                     </div>
                                     <div class="featured-line"></div>
-                                    <div class="description"><?= $show->description ?></div>
+                                    <div class="description"><?= strip_tags((strlen($show->description) > 230) ? substr($show->description, 0, 230) . '...' : $show->description) ?></div>
                                 </div>
                                 <div class="more">
                                     <div class="category">

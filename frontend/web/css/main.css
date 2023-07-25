@@ -40,13 +40,13 @@ main {flex:1;}
 
 /* main-page */
 
-.main-banner {height:506px;background:url('/img/main-banner-image.png') repeat 50% 50%;background-size:cover;position: relative;}
+.main-banner {margin-top:80px;height:506px;background:url('/img/main-banner-image.png') repeat 50% 50%;background-size:cover;position:relative;}
 
 @media (max-width: 992px) {
-    .main-banner {height:406px;}
+    .main-banner {margin-top:74px;height:406px;}
 }
 @media (max-width: 768px) {
-    .main-banner {height:286px;}
+    .main-banner {margin-top:57px;height:286px;}
 }
 @media (max-width:575px) {
     .main-banner {height:206px;}
@@ -131,7 +131,7 @@ main {flex:1;}
 .featured-items .frame.horizontal ul li .about .location img {width:20px;}
 .featured-items .frame.horizontal ul li .about .location span {padding-top:4px;}
 .featured-items .frame.horizontal ul li .about .featured-line {position:relative;width:100%;height:1px;left:0;background:var(--c-new-blue);}
-.featured-items .frame.horizontal ul li .about .description {padding-top:20px;font-weight:400;font-size:18px;text-overflow:ellipsis;overflow:hidden;max-height:160px;}
+.featured-items .frame.horizontal ul li .about .description {padding-top:20px;font-weight:400;font-size:18px;max-height:190px;}
 .featured-items .frame.horizontal ul li .more {position:absolute;bottom:0;right:0;left:0;padding:0 16px 10px;display:flex;align-items:center;justify-content:space-between;gap:10px;}
 .featured-items .frame.horizontal ul li .more .category {display:flex;align-items:center;justify-content:flex-start;gap:12px}
 .featured-items .frame.horizontal ul li .more .category img {width:30px;}
@@ -238,6 +238,7 @@ main {flex:1;}
 
 /* detail page */
 
+.show-detail {padding-top:80px;}
 .show-detail .main-info {padding-top:60px;display:flex;align-items:center;justify-content:flex-start;gap:40px;}
 .show-detail .image-detail img {width:280px;border-radius:10px;
     box-shadow: 0px 0px 0px 0px var(--c-shadow-purple-1), 2px 3px 8px 0px var(--c-shadow-purple-1), 7px 13px 15px 0px var(--c-shadow-purple-2), 16px 29px 20px 0px var(--c-shadow-purple-3), 29px 51px 23px 0px var(--c-shadow-purple-4), 46px 79px 26px 0px var(--c-shadow-purple-5);}
@@ -257,6 +258,7 @@ main {flex:1;}
 }
 
 @media (max-width: 992px) {
+    .show-detail {padding-top:60px;}
     .show-detail h1 {font-size:26px;}
     .show-detail .theatre-info {margin:0;font-size:16px;}
     .show-detail .categories {margin:0 0 30px;}
