@@ -1,11 +1,6 @@
 .header {position:fixed;width:100%;padding:10px 0;z-index:100;background:var(--c-light-violet);
     box-shadow: 0px 0px 0px 0px var(--c-shadow-purple-1), 2px 3px 8px 0px var(--c-shadow-purple-1), 7px 13px 15px 0px var(--c-shadow-purple-2), 16px 29px 20px 0px var(--c-shadow-purple-3), 29px 51px 23px 0px var(--c-shadow-purple-4), 46px 79px 26px 0px var(--c-shadow-purple-5);}
 .header .menu-up-control {float:right;color:var(--c-new-blue);font-size:26px;top:3px;position:relative;cursor:pointer;padding:10px 0;}
-.header .menu-up-control-close {margin:60px 0 0 50px;cursor:pointer;border:1px solid transparent;border-radius:5px;position:relative;width:40px;height:40px;line-height:40px;font-size:40px;color:var(--c-white);}
-.header .menu-up-control-close:hover {border: 1px solid transparent;background:linear-gradient(var(--c-white), var(--c-white)) padding-box,
-    linear-gradient(to right, var(--c-violet), var(--c-violet-gray)) border-box;}
-.header .menu-up-control-close i {color:var(--c-light-violet);font-size:40px;left:12px;bottom:2px;position:relative;}
-.header .menu-up-control-close:hover i {color:var(--c-new-blue);}
 .header .auth-items {display:flex;align-items:center;justify-content:flex-start;padding:10px 0;gap:10px;}
 .header .bransontickets-logo img {display:block;margin:0 auto;}
 .auth-items .auth-item {border-radius:5px;}
@@ -18,7 +13,12 @@
 .header-menu-phone .header-phone {color:var(--c-new-blue);font-weight:700;font-size:26px;text-decoration:none;letter-spacing:1px;}
 .header-menu-phone.detail {justify-content:flex-start;}
 
-.menu-general {position:fixed;width:350px;top:0;right:-350px;bottom:0;z-index:9999;padding:10px;background-color:var(--c-new-blue-1);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);}
+.menu-general {position:fixed;width:350px;top:0;right:-350px;bottom:0;z-index:9999;padding:10px;background-color:var(--c-blue-deep-dark);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);}
+.menu-up-control-close {margin:60px 0 0 50px;cursor:pointer;border:1px solid transparent;border-radius:5px;position:relative;width:40px;height:40px;line-height:40px;font-size:40px;color:var(--c-white);}
+.menu-up-control-close:hover {border: 1px solid transparent;background:linear-gradient(var(--c-white), var(--c-white)) padding-box,
+    linear-gradient(to right, var(--c-violet), var(--c-violet-gray)) border-box;}
+.menu-up-control-close i {color:var(--c-light-violet);font-size:40px;left:12px;bottom:2px;position:relative;}
+.menu-up-control-close:hover i {color:var(--c-new-blue);}
 
 .menu-main, .menu-main li {margin:0;padding:0;}
 .menu-main {padding:30px 0 10px;margin:0 0 10px;clear:both;overflow:hidden}

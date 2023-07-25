@@ -4,7 +4,6 @@
     --c-gray-granite: #313844;
     --c-blue-deep: #252161;
     --c-new-blue: #373281;
-    --c-new-blue-1: rgba(55, 50, 129, .7);
     --c-blue-deep-dark: rgba(37, 33, 97, 0.7);
     --c-blue-deep-dark-2: rgba(37, 33, 97, 0.1);
     --c-shadow-purple-1: rgba(16, 14, 37, 0.20);
@@ -46,10 +45,7 @@ main {flex:1;}
     .main-banner {margin-top:74px;height:406px;}
 }
 @media (max-width: 768px) {
-    .main-banner {margin-top:57px;height:286px;}
-}
-@media (max-width:575px) {
-    .main-banner {height:206px;}
+    .main-banner {margin-top:57px;height:384px;}
 }
 
 .main-banner .main-logo img {display:block;width:398px;filter:brightness(0) invert(1);margin:0 auto;padding-top:105px;}
@@ -80,6 +76,10 @@ main {flex:1;}
 }
 
 @media (max-width: 992px) {
+    .main-banner .search .input-group {max-width:170px;}
+    .main-banner .search .input-search input, .main-banner .search .input-group input, 
+    .main-banner .search select {max-width:170px;}
+    .main-banner .search .btn-search {max-width:170px;}
     .main-banner .pros {padding:15px 10px;gap:15px;}
     .main-banner .pros .pros-item {font-size:18px;}
     .main-banner .pros .pros-item img {width:20px;margin:0 10px 5px 0;}
@@ -411,8 +411,8 @@ main {flex:1;}
 
 .gallery-panel {padding:20px 40px;background:var(--c-white);border-radius:0 0 10px 10px;
     box-shadow: 0px 0px 0px 0px var(--c-shadow-purple-1), 2px 3px 8px 0px var(--c-shadow-purple-1), 7px 13px 15px 0px var(--c-shadow-purple-2), 16px 29px 20px 0px var(--c-shadow-purple-3), 29px 51px 23px 0px var(--c-shadow-purple-4), 46px 79px 26px 0px var(--c-shadow-purple-5);}
-.gallery-panel .popup-gallery {text-align:center;}
-.gallery-panel .popup-gallery a {position:relative;display:inline-block;margin:0 20px 30px 0;}
+.gallery-panel .popup-gallery {display:flex;align-items:center;justify-content:flex-start;gap:20px;flex-wrap:wrap;}
+.gallery-panel .popup-gallery a {position:relative;display:inline-block;}
 .gallery-panel .popup-gallery a img {height:auto;max-width:280px;border-radius:10px;}
 .gallery-panel .popup-gallery a .play-video {position:absolute;top:50%;left:50%;transform:translate(-50%, -50%);padding:10px;background:var(--c-white);border-radius:5px;
     border:1px solid transparent;background:linear-gradient(var(--c-white), var(--c-white)) padding-box,linear-gradient(to right, var(--c-violet-gray), var(--c-violet)) border-box;text-decoration:none;}

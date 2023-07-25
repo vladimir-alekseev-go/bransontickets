@@ -27,6 +27,7 @@ $this->beginPage() ?><!DOCTYPE html>
 </head>
 <body>
 <?php $this->beginBody() ?>
+<?= $this->render('menu-general') ?>
 <div class="wrapper-main">
     <?= $this->render('header') ?>
     <main>
