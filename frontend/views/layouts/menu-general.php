@@ -8,8 +8,16 @@
         <li><a href="#">Lodging <div class="line"></div></a></li>
         <li><a href="#">Dining <div class="line"></div></a></li>
     </ul>
+    <div class="menu-phone">
+        <img src="img/phone.svg" alt="phone icon">
+        <a href="tel:417-337-8455" class="phone">417-337-8455</a>
+    </div>
     <div class="menu-footer">
-        <a href="https://bransonrestaurants.com/" target="_blank"><img src="img/branson-restaurants-logo.png" alt="branson restaurants logo"></a>
-        <a href="https://ibranson.com/" target="_blank"><img src="img/ibranson-logo.png" alt="ibranson logo"></a>
+        <div class="item">
+            <a href="https://bransonrestaurants.com/" target="_blank"><img src="img/branson-restaurants-logo.png" alt="branson restaurants logo"></a>
+        </div>
+        <div class="item">
+            <a href="https://ibranson.com/" target="_blank"><img src="img/ibranson-logo.png" alt="ibranson logo"></a>
+        </div>
     </div>
 </div>

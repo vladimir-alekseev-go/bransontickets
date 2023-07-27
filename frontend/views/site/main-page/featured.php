@@ -39,12 +39,12 @@ use yii\web\JqueryAsset;
                                         <span><?= $show->theatre->name ?? '' ?></span>
                                     </div>
                                     <div class="featured-line"></div>
-                                    <div class="description"><?= strip_tags((strlen($show->description) > 230) ? substr($show->description, 0, 230) . '...' : $show->description) ?></div>
+                                    <div class="description"><?= strip_tags((strlen($show->description) > 120) ? substr($show->description, 0, 120) . '...' : $show->description) ?></div>
                                 </div>
                                 <div class="more">
                                     <div class="category">
                                         <img src="img/category.svg" alt="category icon">
-                                        <span><?= implode(', ', array_column($show->categories, 'name')) ?? '' ?></span>
+                                        <span><?= implode(', ', array_slice(array_column($show->getCategories()->orderBy('rand()')->all(), 'name'), 0, 4)) ?? '' ?></span>
                                     </div>
                                     <a href="#" class="item-btn">Book now</a>
                                 </div>

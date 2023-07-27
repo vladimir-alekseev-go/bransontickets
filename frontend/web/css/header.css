@@ -14,7 +14,7 @@
 .header-menu-phone.detail {justify-content:flex-start;}
 
 .menu-general {position:fixed;width:350px;top:0;right:-350px;bottom:0;z-index:9999;padding:10px;background-color:var(--c-blue-deep-dark);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);}
-.menu-up-control-close {margin:60px 0 0 50px;cursor:pointer;border:1px solid transparent;border-radius:5px;position:relative;width:40px;height:40px;line-height:40px;font-size:40px;color:var(--c-white);}
+.menu-up-control-close {margin:60px 0 0 60px;cursor:pointer;border:1px solid transparent;border-radius:5px;position:relative;width:40px;height:40px;line-height:40px;font-size:40px;color:var(--c-white);}
 .menu-up-control-close:hover {border: 1px solid transparent;background:linear-gradient(var(--c-white), var(--c-white)) padding-box,
     linear-gradient(to right, var(--c-violet), var(--c-violet-gray)) border-box;}
 .menu-up-control-close i {color:var(--c-light-violet);font-size:40px;left:12px;bottom:2px;position:relative;}
@@ -22,7 +22,7 @@
 
 .menu-main, .menu-main li {margin:0;padding:0;}
 .menu-main {padding:30px 0 10px;margin:0 0 10px;clear:both;overflow:hidden}
-.menu-main li {margin:0 0 20px;padding:0 50px;;list-style:none;width:100%;text-align:left;border-bottom: 2px solid transparent}
+.menu-main li {margin:0 0 20px;padding:0 60px;list-style:none;width:100%;text-align:left;border-bottom: 2px solid transparent}
 .menu-main li:before {display:none;}
 .menu-main li, .menu-main li a {font-size:36px;font-weight:700;}
 .menu-main li a {font-weight:bold;color:var(--c-light-violet);text-decoration:none;}
@@ -30,21 +30,37 @@
 .menu-main li a:hover {color:var(--c-white);}
 .menu-main li a:hover .line {opacity:1;}
 
+.menu-general .menu-phone {display:none;}
 .menu-general .menu-footer {display:flex;align-items:center;gap:40px;flex-wrap:wrap;position:absolute;bottom:0;left:0;right:0;padding:40px 0 40px 60px;background:var(--c-light-violet);}
-.menu-general .menu-footer img {width:160px;}
+.menu-general .menu-footer .item img {width:160px;}
 
 @media (max-width:991px) {
     .header .bransontickets-logo img {height:40px;}
-    .header .menu-up-control {font-size:22px;padding:4px 0 0 0;}
-    .header-menu-phone {gap:10px;padding:10px 0 0 0;}
+    .header .menu-up-control {font-size:22px;padding:10px 0 0 0;}
+    .header-menu-phone {gap:10px;padding:13px 0 0 0;}
     .header-menu-phone img {width:18px;}
     .header-menu-phone .header-phone {font-size:20px;}
     .auth-items .auth-item .sign-up, .auth-items .auth-item .sign-in {font-size:16px;}
 }
 
 @media (max-width:767px) {
-    .menu-general {display:none;position:fixed;width:100%;top:0;bottom:0;left:0;right:0;z-index:999;margin:0;}
-    .menu-general .menu-footer {justify-content:center;padding:40px 10px;}
-    .header .menu-up-control {display:block;}
-    .header .auth-items, .header-menu-phone {display:none;}
+    .header {padding:12px 0 13px 0;}
+    .header .bransontickets-logo img {height:35px;margin:0;}
+    .menu-general {width:100vw;right:-100vw;}
+    .header .menu-up-control {display:block;padding:2px 0 0 0;}
+    .header-menu-phone {justify-content:flex-start;gap:10px;padding:5px 0 0 0;}
+
+    .menu-main li, .menu-main li a {font-size:32px;}
+    .menu-general .menu-phone {position:absolute;bottom:260px;padding:0 60px;display:flex;align-items:center;justify-content:flex-start;gap:10px;}
+    .menu-general .menu-phone img {width:16px;filter: brightness(0) invert(1);}
+    .menu-general .menu-phone .phone {color:var(--c-white);font-weight:700;font-size:20px;text-decoration:none;letter-spacing:0.4px;}
+    .menu-general .menu-footer {display:block;padding:20px 0 20px 60px;}
+    .menu-general .menu-footer .item {padding:20px 0;}
+}
+
+@media (max-width: 576px) {
+    .menu-general .menu-phone {bottom:168px;}
+    .menu-general .menu-footer {display:block;padding:10px 0 10px 60px;}
+    .menu-general .menu-footer .item {padding:10px 0;}
+    .menu-general .menu-footer .item img {width:80px;}
 }

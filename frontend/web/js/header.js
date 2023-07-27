@@ -7,7 +7,7 @@ $('#menu-up-control').click(function () {
     if ($(document).width() > 767) {
         menuGeneral.animate({ right: '0' }, 500);
     } else {
-        menuGeneral.css('display', 'block');
+        menuGeneral.animate({ right: '0' }, 500);
     }
 });
 
@@ -17,6 +17,6 @@ $('#menu-up-control-close').click(function () {
     if ($(document).width() > 767) {
         menuGeneral.animate({ right: '-350px' }, 500);
     } else {
-        menuGeneral.css('display', 'none');
+        menuGeneral.animate({ right: '-100vw' }, 500);
     }
 });
