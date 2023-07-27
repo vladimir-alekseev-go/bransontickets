@@ -41,7 +41,7 @@ use yii\web\JqueryAsset;
                                 <div class="more">
                                     <div class="category">
                                         <img src="img/category.svg" alt="category icon">
-                                        <span><?= implode(', ', array_column($show->categories, 'name')) ?? '' ?></span>
+                                        <span><?= implode(', ', array_slice(array_column($show->getCategories()->orderBy('rand()')->all(), 'name'), 0, 4)) ?? '' ?></span>
                                     </div>
                                     <a href="#" class="item-btn">See details</a>
                                 </div>

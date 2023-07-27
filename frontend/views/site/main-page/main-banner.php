@@ -17,7 +17,7 @@ $this->registerCssFile('/css/bootstrap-datepicker.min.css', ['depends' => [Boots
                 <input type="text" id="search" class="form-control" name="Search[name]" value="" aria-required="true" aria-invalid="false" placeholder="I'm looking for">
             </div>
             <div class="field form-group input-group date">
-                <input name="s[dateFrom]" type="text" class="form-control" autocomplete="off" placeholder="Event date">
+                <input type="text" id="date" class="form-control" name="s[dateFrom]" autocomplete="off" placeholder="Event date">
                 <div class="input-group-addon"></div>
             </div>
             <select id="shows-category" class="form-control" name="s[c][]">
@@ -30,9 +30,11 @@ $this->registerCssFile('/css/bootstrap-datepicker.min.css', ['depends' => [Boots
         </div>
     </form>
     <div class="pros">
-        <div class="pros-item"><img src="img/check.svg" alt="check icon">Satisfaction guaranteed</div>
-        <div class="pros-item"><img src="img/check.svg" alt="check icon">No additional requirements</div>
-        <div class="pros-item"><img src="img/check.svg" alt="check icon">Best seat available</div>
+        <div class="pros-items">
+            <div class="pros-item"><img src="img/check.svg" alt="check icon">Satisfaction guaranteed</div>
+            <div class="pros-item"><img src="img/check.svg" alt="check icon">No additional requirements</div>
+            <div class="pros-item"><img src="img/check.svg" alt="check icon">Best seat available</div>
+        </div>
     </div>
 </div>
 <?php $this->registerJsFile('/js/bootstrap-datepicker.min.js', ['depends' => [JqueryAsset::class]]); ?>
