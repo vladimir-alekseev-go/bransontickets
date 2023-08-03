@@ -15,7 +15,7 @@ class AppAsset extends AssetBundle
     public $basePath = '@webroot';
     public $baseUrl = '@web';
     public $css = [
-        'https://fonts.cdnfonts.com/css/circe',
+        '/css/font-circe/circe.css',
         '/css/main.css',
         '/css/header.css',
         '/css/footer.css'

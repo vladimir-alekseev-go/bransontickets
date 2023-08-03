@@ -12,7 +12,7 @@
                 <div class="main-info-call">
                     <div class="main-info-call-title">Have questions?</div>
                     <div class="main-info-call-text">Call us, we have your answers!</div>
-                    <a href="tel:417-337-8455" class="main-info-call-phone"><img src="img/phone-blue.svg" alt="phone icon">417-337-8455</a>
+                    <a href="tel:417-337-8455" class="main-info-call-phone"><span class="phone-icon"></span>417-337-8455</a>
                 </div>
             </div>
         </div>
