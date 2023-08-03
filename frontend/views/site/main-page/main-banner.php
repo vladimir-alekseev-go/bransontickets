@@ -20,12 +20,14 @@ $this->registerCssFile('/css/bootstrap-datepicker.min.css', ['depends' => [Boots
                 <input type="text" id="date" class="form-control" name="s[dateFrom]" autocomplete="off" placeholder="Event date">
                 <div class="input-group-addon"></div>
             </div>
-            <select id="shows-category" class="form-control" name="s[c][]">
-                <option value="">Select categories</option>
-                <option value="1">Category 1</option>
-                <option value="2">Category 2</option>
-                <option value="3">Category 3</option>
-            </select>
+            <div class="field form-group">
+                <select id="shows-category" class="form-control" name="s[c][]">
+                    <option value="">Select categories</option>
+                    <option value="1">Category 1</option>
+                    <option value="2">Category 2</option>
+                    <option value="3">Category 3</option>
+                </select>
+            </div>
             <button class="btn btn-search" value="search">Search</button>
         </div>
     </form>

@@ -28,7 +28,7 @@ let featuredItems = {
             touchDragging: 1,
             releaseSwing: 1,
             startAt: 0,
-            speed: 2000,
+            speed: 3000,
             elasticBounds: 1,
             easing: 'easeOutExpo',
             dragHandle: 1,
@@ -37,7 +37,7 @@ let featuredItems = {
 
             // Cycling
             cycleBy: 'items',
-            cycleInterval: 2000,
+            cycleInterval: 3000,
             pauseOnHover: 1,
 
             // Buttons
