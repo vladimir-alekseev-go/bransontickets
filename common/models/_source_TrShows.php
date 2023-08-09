@@ -38,7 +38,6 @@ use Yii;
  * @property string|null $photos
  * @property int|null $preview_id
  * @property int|null $image_id
- * @property int|null $seat_map_id
  * @property int $display_image
  * @property int|null $theatre_id
  * @property string|null $theatre_name
@@ -56,7 +55,6 @@ use Yii;
  *
  * @property ContentFiles $image
  * @property ContentFiles $preview
- * @property ContentFiles $seatMap
  * @property ShowsPhotoJoin[] $showsPhotoJoins
  * @property TrTheaters $theatre
  * @property TrPrices[] $trPrices
@@ -81,7 +79,7 @@ class _source_TrShows extends \yii\db\ActiveRecord
     {
         return [
             [['id_external', 'code', 'name'], 'required'],
-            [['id_external', 'status', 'show_in_footer', 'location_external_id', 'rank', 'marketing_level', 'weekly_schedule', 'seats', 'show_length', 'cut_off', 'preview_id', 'image_id', 'seat_map_id', 'display_image', 'theatre_id', 'call_us_to_book'], 'integer'],
+            [['id_external', 'status', 'show_in_footer', 'location_external_id', 'rank', 'marketing_level', 'weekly_schedule', 'seats', 'show_length', 'cut_off', 'preview_id', 'image_id', 'display_image', 'theatre_id', 'call_us_to_book'], 'integer'],
             [['description', 'directions'], 'string'],
             [['tax_rate', 'min_rate', 'min_rate_source'], 'number'],
             [['updated_at'], 'safe'],
@@ -94,11 +92,10 @@ class _source_TrShows extends \yii\db\ActiveRecord
             [['photos'], 'string', 'max' => 4096],
             [['amenities', 'videos', 'cancel_policy_text'], 'string', 'max' => 2048],
             [['tags'], 'string', 'max' => 256],
-            [['code'], 'unique'],
             [['id_external'], 'unique'],
+            [['code'], 'unique'],
             [['image_id'], 'exist', 'skipOnError' => true, 'targetClass' => ContentFiles::class, 'targetAttribute' => ['image_id' => 'id']],
             [['theatre_id'], 'exist', 'skipOnError' => true, 'targetClass' => TrTheaters::class, 'targetAttribute' => ['theatre_id' => 'id_external']],
-            [['seat_map_id'], 'exist', 'skipOnError' => true, 'targetClass' => ContentFiles::class, 'targetAttribute' => ['seat_map_id' => 'id']],
             [['preview_id'], 'exist', 'skipOnError' => true, 'targetClass' => ContentFiles::class, 'targetAttribute' => ['preview_id' => 'id']],
         ];
     }
@@ -140,7 +137,6 @@ class _source_TrShows extends \yii\db\ActiveRecord
             'photos' => 'Photos',
             'preview_id' => 'Preview ID',
             'image_id' => 'Image ID',
-            'seat_map_id' => 'Seat Map ID',
             'display_image' => 'Display Image',
             'theatre_id' => 'Theatre ID',
             'theatre_name' => 'Theatre Name',
@@ -176,16 +172,6 @@ class _source_TrShows extends \yii\db\ActiveRecord
     public function getPreview()
     {
         return $this->hasOne(ContentFiles::class, ['id' => 'preview_id']);
-    }
-
-    /**
-     * Gets query for [[SeatMap]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getSeatMap()
-    {
-        return $this->hasOne(ContentFiles::class, ['id' => 'seat_map_id']);
     }
 
     /**

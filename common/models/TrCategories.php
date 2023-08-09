@@ -20,7 +20,9 @@ class TrCategories extends _source_TrCategories
     }
 
     /**
-     * @deprecated Use getTrShowsCategories()
+     * Gets query for [[TrShowsCategories]].
+     *
+     * @return ActiveQuery
      */
     public function getShows()
 	{
@@ -28,7 +30,9 @@ class TrCategories extends _source_TrCategories
 	}
 	
 	/**
-     * @deprecated Use getTrAttractionsCategories()
+     * Gets query for [[TrAttractionsCategories]].
+     *
+     * @return ActiveQuery
      */
     /*public function getAttractions()
 	{
@@ -36,7 +40,9 @@ class TrCategories extends _source_TrCategories
 	}*/
 
     /**
-     * @return \yii\db\ActiveQuery
+     * Gets all [[TrAttractions]].
+     *
+     * @return ActiveQuery
      */
     /*public function getTrAttractions()
     {
@@ -44,7 +50,9 @@ class TrCategories extends _source_TrCategories
     }*/
 
     /**
-     * @return \yii\db\ActiveQuery
+     * Gets all [[TrShows]].
+     *
+     * @return ActiveQuery
      */
     public function getTrShows()
     {

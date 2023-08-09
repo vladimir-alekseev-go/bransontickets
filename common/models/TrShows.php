@@ -14,14 +14,9 @@ class TrShows extends _source_TrShows
     public const CALL_US_TO_BOOK_YES = 1;
     public const CALL_US_TO_BOOK_NO = 0;
     
-    /**
-     * @deprecated
-     */
     public const type = 'shows';
     public const TYPE = 'shows';
-    /**
-     * @deprecated
-     */
+
     public const name = 'Show';
     public const NAME = 'Show';
     public const NAME_PLURAL = 'Shows';
@@ -57,7 +52,6 @@ class TrShows extends _source_TrShows
             parent::attributeLabels(),
             [
                 'amenities' => 'Amenities',
-                'seat_map_id' => 'Seat Map ID',
                 'show_in_footer' => 'Display In Footer',
             ]
         );
@@ -116,7 +110,6 @@ class TrShows extends _source_TrShows
 
     /**
      * @return ActiveQuery
-     * @deprecated use getRelatedPhotos()
      */
     public function getItemsPhoto()
     {

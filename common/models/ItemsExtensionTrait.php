@@ -6,7 +6,6 @@ use common\helpers\Media;
 use common\models\upload\UploadItemsPhotos;
 use common\models\upload\UploadItemsPhotosPreview;
 use common\models\upload\UploadItemsPreview;
-use common\models\upload\UploadShowsSeatMap;
 use common\tripium\Tripium;
 use RuntimeException;
 use yii\behaviors\SluggableBehavior;
@@ -107,9 +106,6 @@ trait ItemsExtensionTrait
         }
         if (!empty($this->image)) {
             $this->image->delete();
-        }
-        if (!empty($this->seat_map)) {
-            $this->seat_map->delete();
         }
         foreach ($this->relatedPhotos as $itemPhoto) {
             if (!empty($itemPhoto->photo)) {
@@ -290,9 +286,6 @@ trait ItemsExtensionTrait
 
 				if ($Shows->save()) {
                     $Shows->updatePreview($show['cover']);
-				    if (isset($show['seatMap'])) {
-				        $Shows->updateSeatMap($show['seatMap']);
-				    }
 				    $Shows->setPhotoAndPreview();
 				    
 				    $setPlaceIds[] = $Shows->id;
@@ -321,9 +314,6 @@ trait ItemsExtensionTrait
 
 				if ($Shows->save() || $this->updateForce) {
                     $Shows->updatePreview($show['cover']);
-				    if (isset($show['seatMap'])) {
-				        $Shows->updateSeatMap($show['seatMap']);
-				    }
 				    $Shows->setPhotoAndPreview();
 				    if ($dirtyLocs) {
 				        $setPlaceIds[] = $Shows->id;
@@ -406,7 +396,8 @@ trait ItemsExtensionTrait
     }
     
     /**
-     * @deprecated use Media::getFileTime()
+     * Return file time
+     * @param string $url
      */
     public function getFileTime($url)
     {
@@ -414,45 +405,12 @@ trait ItemsExtensionTrait
     }
 
     /**
-     * @deprecated use Media::getRealUrl()
+     * Return real url
+     * @param string $url
      */
     public function getRealUrl($url)
     {
         return Media::getRealUrl($url);
-    }
-    
-    /**
-     * Updating Seat Map
-     * @param string $url
-     */
-    public function updateSeatMap($url)
-    {
-        $this->refresh();
-        $url = Media::getRealUrl($url);
-        $fileTime = Media::getFileTime($url);
-        if ($this->updateForceImages || ($fileTime > 0 && (empty($this->seatMap->id)
-                    || (!empty($this->seatMap->id) && $url != $this->seatMap->source_url && !empty($url))
-                    || (!empty($this->seatMap->id) && $url == $this->seatMap->source_url && $fileTime > $this->seatMap->source_file_time)
-                )) || ($fileTime == -1 && empty($this->seatMap->id) && !empty($url))
-        ) {
-            $UploadShowsSeatMap = new UploadShowsSeatMap;
-            $UploadShowsSeatMap->downloadByUrl($url);
-            
-            if ($UploadShowsSeatMap->id) {
-                if ($this->seatMap) {
-                    $this->seatMap->delete();
-                }
-                $this->seat_map_id = $UploadShowsSeatMap->id;
-                $this->save();
-            }
-            
-        } else if (!empty($this->seatMap->id) && empty($url)) {
-            if ($this->seatMap) {
-                $this->seatMap->delete();
-            }
-            $this->seat_map_id = null;
-            $this->save();
-        }
     }
     
     /**

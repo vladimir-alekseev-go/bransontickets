@@ -13,9 +13,6 @@ class TrPrices extends _source_TrPrices
 {
     use PricesExtensionTrait;
     
-    /**
-     * @deprecated Use TrPrices::TYPE
-     */
     public const type = 'shows';
     public const TYPE = 'shows';
     

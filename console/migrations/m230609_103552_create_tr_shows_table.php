@@ -50,7 +50,6 @@ class m230609_103552_create_tr_shows_table extends Migration
                 'photos'               => $this->string(4096)->null(),
                 'preview_id'           => $this->integer(11)->null(),
                 'image_id'             => $this->integer(11)->null(),
-                'seat_map_id'          => $this->integer(11)->null(),
                 'display_image'        => $this->tinyInteger(4)->notNull()->defaultValue(0),
                 'theatre_id'           => $this->integer(11)->null(),
                 'theatre_name'         => $this->string(128)->null(),
@@ -97,22 +96,6 @@ class m230609_103552_create_tr_shows_table extends Migration
             'theatre_id',
             'tr_theaters',
             'id_external',
-            'SET NULL',
-            'SET NULL'
-        );
-
-        $this->createIndex(
-            'seat_map_id',
-            'tr_shows',
-            'seat_map_id'
-        );
-
-        $this->addForeignKey(
-            'tr_shows_ibfk_2',
-            'tr_shows',
-            'seat_map_id',
-            'content_files',
-            'id',
             'SET NULL',
             'SET NULL'
         );
