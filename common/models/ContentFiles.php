@@ -42,10 +42,14 @@ class ContentFiles extends _source_ContentFiles
     }
 
     /**
-     * DEPRICATED
-     * @deprecated
+     * Return path to file.
+     * 
+     * @param string $data
+     * @param null   $domain
+     * 
+     * @return string
      */
-    public static function getPath($data, $domain = false)
+    public static function getPath($data, $domain = false): string
     {
     	if(!is_array($data) && (int)$data > 0)
     	{

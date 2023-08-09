@@ -152,6 +152,6 @@ class General
 
     public static function getConfigPhoneNumber(): string
     {
-        return self::formatPhoneNumber(Template::getProperty('phoneMain'));
+        return self::formatPhoneNumber('1-417-337-8455');
     }
 }

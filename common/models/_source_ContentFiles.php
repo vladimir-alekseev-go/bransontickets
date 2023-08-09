@@ -15,13 +15,12 @@ use Yii;
  * @property string|null $source_url
  * @property int $source_file_time
  * @property int|null $old
- * @property string|null $path_old
+ * @property string $path_old
  *
  * @property ShowsPhotoJoin[] $showsPhotoJoins
  * @property ShowsPhotoJoin[] $showsPhotoJoins0
  * @property TrShows[] $trShows
  * @property TrShows[] $trShows0
- * @property TrShows[] $trShows1
  */
 class _source_ContentFiles extends \yii\db\ActiveRecord
 {
@@ -39,7 +38,7 @@ class _source_ContentFiles extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['path', 'file_name', 'file_source_name', 'dir'], 'required'],
+            [['path', 'file_name', 'file_source_name', 'dir', 'path_old'], 'required'],
             [['source_file_time', 'old'], 'integer'],
             [['path', 'source_url', 'path_old'], 'string', 'max' => 256],
             [['file_name', 'file_source_name'], 'string', 'max' => 128],
@@ -101,16 +100,6 @@ class _source_ContentFiles extends \yii\db\ActiveRecord
      * @return \yii\db\ActiveQuery
      */
     public function getTrShows0()
-    {
-        return $this->hasMany(TrShows::class, ['seat_map_id' => 'id']);
-    }
-
-    /**
-     * Gets query for [[TrShows1]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getTrShows1()
     {
         return $this->hasMany(TrShows::class, ['preview_id' => 'id']);
     }

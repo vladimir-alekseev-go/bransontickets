@@ -106,14 +106,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             'attribute' => 'display_image',
                             'value' => $model->display_image ? 'Yes' : 'No',
                         ],
-                        [
-                            'label' => 'Seat Map',
-                            'value' => $model->seat_map_id ? Html::img(
-                                $model->seatMap->url,
-                                ['class' => 'shows-view-img', 'width' => '300px']
-                            ) : null,
-                            'format' => 'html',
-                        ],
                     ],
                 ]
             ) ?>
