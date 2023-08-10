@@ -2,7 +2,7 @@
 
 namespace console\controllers;
 
-/*use common\models\AttractionsPhotoJoin;*/
+use common\models\AttractionsPhotoJoin;
 use common\models\ContentFiles;
 /*use common\models\HotelsPhotoJoin;
 use common\models\LunchsPhotoJoin;
@@ -21,8 +21,8 @@ trait CleanControllerTrait
     {
         $ar = [
             ShowsPhotoJoin::class,
-            /*AttractionsPhotoJoin::class,
-            LunchsPhotoJoin::class,
+            AttractionsPhotoJoin::class,
+            /*LunchsPhotoJoin::class,
             RestaurantPhotoJoin::class,
             HotelsPhotoJoin::class,
             TrPosPlHotelsPhotoJoin::class,

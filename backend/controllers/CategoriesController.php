@@ -3,7 +3,7 @@
 namespace backend\controllers;
 
 use backend\models\search\TrCategoriesSearch;
-/*use common\models\TrAttractions;*/
+use common\models\TrAttractions;
 use common\models\TrCategories;
 /*use common\models\TrLunchs;
 use common\models\TrPosHotels;
@@ -32,8 +32,8 @@ class CategoriesController extends CrudController
         if (Yii::$app->request->post()) {
             $cache = Yii::$app->cache;
             $cache->delete(TrShows::TYPE . '.Categories');
-            /*$cache->delete(TrAttractions::TYPE . '.Categories');
-            $cache->delete(TrLunchs::TYPE . '.Categories');
+            $cache->delete(TrAttractions::TYPE . '.Categories');
+            /*$cache->delete(TrLunchs::TYPE . '.Categories');
             $cache->delete(TrPosHotels::TYPE . '.Categories');
             $cache->delete(TrPosPlHotels::TYPE . '.Categories');*/
         }

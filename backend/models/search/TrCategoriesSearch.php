@@ -2,8 +2,8 @@
 
 namespace backend\models\search;
 
-/*use common\models\TrAttractions;
-use common\models\TrAttractionsCategories;*/
+use common\models\TrAttractions;
+use common\models\TrAttractionsCategories;
 use common\models\TrCategories;
 /*use common\models\TrLunchs;
 use common\models\TrLunchsCategories;
@@ -37,7 +37,7 @@ class TrCategoriesSearch extends TrCategories
     public function search(array $params): ActiveDataProvider
     {
         $query = self::find()
-            ->joinWith(['trShowsCategories'/*, 'trAttractionsCategories', 'trLunchsCategories', 'trPosHotelsCategories'*/])
+            ->joinWith(['trShowsCategories', 'trAttractionsCategories'/*, 'trLunchsCategories', 'trPosHotelsCategories'*/])
             ->groupBy([self::tableName() . '.id'])
         ;
 
@@ -73,8 +73,8 @@ class TrCategoriesSearch extends TrCategories
                 'id'               => $this->id,
                 'id_external'      => $this->id_external,
                 'sort_shows'       => $this->sort_shows,
-                /*'sort_attractions' => $this->sort_attractions,
-                'sort_hotels'      => $this->sort_hotels,
+                'sort_attractions' => $this->sort_attractions,
+                /*'sort_hotels'      => $this->sort_hotels,
                 'sort_dining'      => $this->sort_dining,*/
             ]
         )
@@ -94,8 +94,8 @@ class TrCategoriesSearch extends TrCategories
     {
         return [
             TrShows::TYPE => TrShowsCategories::tableName(),
-            /*TrAttractions::TYPE => TrAttractionsCategories::tableName(),
-            TrLunchs::TYPE => TrLunchsCategories::tableName(),
+            TrAttractions::TYPE => TrAttractionsCategories::tableName(),
+            /*TrLunchs::TYPE => TrLunchsCategories::tableName(),
             TrPosHotels::TYPE => TrPosHotelsCategories::tableName(),*/
         ];
     }
@@ -104,8 +104,8 @@ class TrCategoriesSearch extends TrCategories
     {
         return [
             TrShows::TYPE => TrShows::NAME,
-            /*TrAttractions::TYPE => TrAttractions::NAME,
-            TrLunchs::TYPE => TrLunchs::NAME,
+            TrAttractions::TYPE => TrAttractions::NAME,
+            /*TrLunchs::TYPE => TrLunchs::NAME,
             TrPosHotels::TYPE => TrPosHotels::NAME,*/
         ];
     }

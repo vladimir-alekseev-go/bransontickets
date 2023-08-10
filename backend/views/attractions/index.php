@@ -1,11 +1,7 @@
 <?php
 
-use backend\models\search\TrCategoriesSearch;
-use common\models\TrAttractions;
-use common\models\TrCategories;
-/*use common\models\TrLunchs;
-use common\models\TrPosHotels;*/
-use common\models\TrShows;
+use common\models\attractions\AttractionsSearch;
+use webvimark\components\StatusColumn;
 use webvimark\extensions\GridPageSize\GridPageSize;
 use yii\data\ActiveDataProvider;
 use yii\grid\ActionColumn;
@@ -15,11 +11,11 @@ use yii\helpers\Html;
 use yii\widgets\Pjax;
 
 /**
- * @var TrCategoriesSearch  $searchModel
+ * @var AttractionsSearch  $searchModel
  * @var ActiveDataProvider $dataProvider
  */
 
-$this->title = 'Categories';
+$this->title = 'Attractions';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="attractions-index">
@@ -27,18 +23,18 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="panel-body">
             <div class="row">
                 <div class="col-sm-12 text-right">
-                    <?= GridPageSize::widget(['pjaxId' => 'categories-grid-pjax']) ?>
+                    <?= GridPageSize::widget(['pjaxId' => 'attractions-grid-pjax']) ?>
                 </div>
                 <div class="clear"><br><br></div>
             </div>
             <?php Pjax::begin(
                 [
-                    'id' => 'categories-grid-pjax',
+                    'id' => 'attractions-grid-pjax',
                 ]
             ) ?>
             <?= GridView::widget(
                 [
-                    'id' => 'categories-grid',
+                    'id' => 'attractions-grid',
                     'dataProvider' => $dataProvider,
                     'layout' => '{items}<div class="row"><div class="col-sm-8">{pager}</div><div class="col-sm-4 text-right">{summary}</div></div>',
                     'filterModel' => $searchModel,
@@ -61,35 +57,46 @@ $this->params['breadcrumbs'][] = $this->title;
                             'format' => 'raw',
                         ],
                         'id_external',
-                        [
-                            'attribute' => 'type',
-                            'filter' => TrCategoriesSearch::getTypes(),
-                            'value' => static function ($model) {
-                                /**
-                                 * @var TrCategories $model
-                                 */
-                                $ar = [];
-                                if ($model->getTrShowsCategories()->count()) {
-                                    $ar[] = TrShows::NAME;
-                                }
-                                if ($model->getTrAttractionsCategories()->count()) {
-                                    $ar[] = TrAttractions::NAME;
-                                }
-                                /*if ($model->getTrLunchsCategories()->count()) {
-                                    $ar[] = TrLunchs::NAME;
-                                }
-                                if ($model->getTrPosHotelsCategories()->count()) {
-                                    $ar[] = TrPosHotels::NAME;
-                                }*/
-                                return implode(', ', $ar);
-                            },
-                            'format' => 'raw',
-                        ],
+                        'code',
                         'name',
-                        'sort_shows',
-                        'sort_attractions',
-                        /*'sort_hotels',
-                        'sort_dining',*/
+                        [
+                            'label' => 'Image',
+                            'value' => static function ($model) {
+                                return $model->image_id ? Html::img(
+                                    $model->image->url,
+                                    ['width' => 50, 'height' => 50]
+                                ) : null;
+                            },
+                            'format' => 'html',
+                        ],
+                        [
+                            'label' => 'Items group order',
+                            'value' => static function ($model) {
+                                return /*$model->locationItem ? $model->locationItem->location_name : */null;
+                            }
+                        ],
+                        [
+                            'class' => StatusColumn::class,
+                            'attribute' => 'display_image',
+                        ],
+                        [
+                            'class' => StatusColumn::class,
+                            'attribute' => 'status',
+                            'optionsArray' => [
+                                [0, Yii::t('yii', $searchModel::getStatusValue(0)), 'warning'],
+                                [1, Yii::t('yii', $searchModel::getStatusValue(1)), 'success'],
+                            ],
+                        ],
+                        [
+                            'class' => StatusColumn::class,
+                            'attribute' => 'show_in_footer',
+                        ],
+                        'rank',
+                        'marketing_level',
+                        'cut_off',
+                        'min_rate',
+                        'min_rate_source',
+                        'tags',
                         [
                             'class' => ActionColumn::class,
                             'contentOptions' => ['style' => 'white-space:nowrap;text-align:center;'],

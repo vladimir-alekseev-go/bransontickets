@@ -241,6 +241,13 @@ class Tripium extends Model
         return null;
     }
 
+    public function getAttractions($ids = null)
+    {
+        $ids = !empty($ids) ? implode(',', $ids) : null;
+        $res = $this->request('/attractions?' . http_build_query(['status' => 'all', 'ids' => $ids]));
+        return $res ? $res['results'] : [];
+    }
+
     public function getCategories(): ?array
     {
         $res = $this->request('/provider/category');
@@ -264,6 +271,26 @@ class Tripium extends Model
             return !empty($res['results']) ? $res['results'] : [];
         }
         return null;
+    }
+
+    public function getAttractionsPrice($params)
+    {
+        $start = !empty($params['start']) ? $params['start'] : date('m/d/Y');
+        $end = !empty($params['end']) ? $params['end'] : date("m/d/Y", time() + 3600 * 24 * 60);
+        $res = $this->request(
+            "/attractions/price?start=" . $start . "&end=" . $end . (!empty($params['ids']) ? '&ids=' . implode(
+                    ',',
+                    $params['ids']
+                ) : '')
+        );
+        return !empty($res['results']) ? $res['results'] : [];
+    }
+
+    public function getAttractionsAvailability($params)
+    {
+        $start = $params['start'] ? $params['start'] : date("m/d/Y");
+        $end = $params['end'] ? $params['end'] : date("m/d/Y", time() + 3600 * 24 * 360);
+        return $this->request("/attractions/availability?start=" . $start . "&end=" . $end)["results"];
     }
 
     public function getShowslocation(): ?array

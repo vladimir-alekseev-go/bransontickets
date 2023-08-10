@@ -9,12 +9,13 @@ use Yii;
  *
  * @property int $id
  * @property int $id_external
- * @property string $name
- * @property string|null $hash_summ
+ * @property string|null $name
+ * @property string $hash_summ
  * @property int|null $sort_shows
  * @property int|null $sort_attractions
  * @property int|null $sort_hotels
  *
+ * @property TrAttractionsCategories[] $trAttractionsCategories
  * @property TrShowsCategories[] $trShowsCategories
  */
 class _source_TrCategories extends \yii\db\ActiveRecord
@@ -33,7 +34,7 @@ class _source_TrCategories extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id_external', 'name'], 'required'],
+            [['id_external', 'hash_summ'], 'required'],
             [['id_external', 'sort_shows', 'sort_attractions', 'sort_hotels'], 'integer'],
             [['name'], 'string', 'max' => 64],
             [['hash_summ'], 'string', 'max' => 32],
@@ -54,6 +55,16 @@ class _source_TrCategories extends \yii\db\ActiveRecord
             'sort_attractions' => 'Sort Attractions',
             'sort_hotels' => 'Sort Hotels',
         ];
+    }
+
+    /**
+     * Gets query for [[TrAttractionsCategories]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTrAttractionsCategories()
+    {
+        return $this->hasMany(TrAttractionsCategories::class, ['id_external_category' => 'id_external']);
     }
 
     /**

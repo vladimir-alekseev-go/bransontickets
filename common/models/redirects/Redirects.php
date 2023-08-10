@@ -12,6 +12,7 @@ use yii\db\Expression;
 class Redirects extends _source_Redirects
 {
     public const CATEGORY_SHOW = 'show';
+    public const CATEGORY_ATTRACTION = 'attraction';
 
     public function behaviors(): array
     {

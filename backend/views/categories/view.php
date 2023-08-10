@@ -30,8 +30,8 @@ $this->params['breadcrumbs'][] = $this->title;
                         'id_external',
                         'name',
                         'sort_shows',
-                        /*'sort_attractions',
-                        'sort_hotels',
+                        'sort_attractions',
+                        /*'sort_hotels',
                         'sort_dining',*/
                     ],
                 ]

@@ -3,11 +3,11 @@
 namespace console\controllers;
 
 /*use common\models\LocationServices;*/
-/*use common\models\priceLine\NewPriceLineHotels;
+/*use common\models\priceLine\NewPriceLineHotels;*/
 use common\models\TrAdmissions;
 use common\models\TrAttractions;
 use common\models\TrAttractionsPrices;
-use common\models\TrBasket;*/
+/*use common\models\TrBasket;*/
 use common\models\TrCategories;
 /*use common\models\TrLocations;*/
 /*use common\models\TrLunchs;
@@ -158,7 +158,7 @@ class TripiumController extends Controller
                     ],
                     ['class' => TrShows::class],
 
-                    /*['class' => TrAttractions::class],
+                    ['class' => TrAttractions::class],
                     ['class' => TrAdmissions::class],
                     [
                         'class' => TrAttractionsPrices::class,
@@ -169,7 +169,7 @@ class TripiumController extends Controller
                     ],
                     ['class' => TrAttractions::class],
 
-                    ['class' => TrLunchs::class],
+                    /*['class' => TrLunchs::class],
                     ['class' => TrLunchsCertificates::class],
                     [
                         'class' => TrLunchsPrices::class,
@@ -220,7 +220,7 @@ class TripiumController extends Controller
                         'class' => TrPrices::class,
                         'arg' => ["start" => date("m/d/Y"), "end" => date("m/d/Y", time() + 3600 * 24 * 540)]
                     ],
-                    /*['class' => TrAttractions::class],
+                    ['class' => TrAttractions::class],
                     ['class' => TrAdmissions::class],
                     [
                         'class' => TrAttractionsPrices::class,
@@ -231,7 +231,7 @@ class TripiumController extends Controller
                     ],
                     ['class' => TrAttractions::class],
 
-                    ['class' => TrLunchs::class],
+                    /*['class' => TrLunchs::class],
                     ['class' => TrLunchsCertificates::class],
                     [
                         'class' => TrLunchsPrices::class,
@@ -371,8 +371,8 @@ class TripiumController extends Controller
                     /*['class' => TrLocations::class],*/
                     /*['class' => LocationServices::class],*/
                     ['class' => TrShows::class, 'params' => ['updateForce' => true]],
-                    /*['class' => TrAttractions::class, 'params' => ['updateForce' => true]],
-                    ['class' => TrLunchs::class, 'params' => ['updateForce' => true]],
+                    ['class' => TrAttractions::class, 'params' => ['updateForce' => true]],
+                    /*['class' => TrLunchs::class, 'params' => ['updateForce' => true]],
                     ['class' => TrPosHotels::class, 'params' => ['updateForce' => true]],*/
                 ]
             ]

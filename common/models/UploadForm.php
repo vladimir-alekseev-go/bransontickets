@@ -7,6 +7,8 @@ use yii\web\UploadedFile;
 
 abstract class UploadForm extends ContentFiles
 {
+    public const IMG_EXTENSIONS = ['png', 'jpg', 'jpeg'];
+    
     public $pathImage = 'upload/';
     public $file;
 
