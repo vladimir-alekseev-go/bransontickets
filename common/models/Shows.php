@@ -7,5 +7,5 @@ namespace common\models;
  */
 class Shows extends TrShows
 {
-    // DEPRECATED use TrShows
+    
 }

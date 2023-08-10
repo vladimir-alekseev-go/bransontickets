@@ -14,8 +14,8 @@ class TrCategories extends _source_TrCategories
     {
         return array_merge(parent::attributeLabels(), [
             'sort_shows' => 'Sort in a shows section',
-            /*'sort_attractions' => 'Sort in an attractions section',
-            'sort_hotels' => 'Sort in a hotels section',*/
+            'sort_attractions' => 'Sort in an attractions section',
+            /*'sort_hotels' => 'Sort in a hotels section',*/
         ]);
     }
 

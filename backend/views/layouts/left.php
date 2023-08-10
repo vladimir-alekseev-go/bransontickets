@@ -18,6 +18,7 @@ use yii\widgets\Menu;
                     'visible' => true
                 ],
                 ['label' => '<span class="fa fa-television"></span> Shows', 'url' => ['/shows/index'], 'visible' => true],
+                ['label' => '<span class="fa fa-fort-awesome"></span> Attractions', 'url' => ['/attractions/index'], 'visible' => true],
             ]],
             [
                 'label'   => '<span class="fa fa-envelope"></span> Feedback <span class="caret"></span>',

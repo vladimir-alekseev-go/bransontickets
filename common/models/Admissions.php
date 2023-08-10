@@ -2,7 +2,7 @@
 
 namespace common\models;
 
-class Categories extends TrCategories
+class Admissions extends TrAdmissions
 {
     
 }

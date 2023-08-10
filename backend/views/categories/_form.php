@@ -19,7 +19,7 @@ use yii\helpers\Html;
         ]
     ); ?>
     <?= $form->field($model, 'sort_shows') ?>
-    <!-- $form->field($model, 'sort_attractions') -->
+    <?= $form->field($model, 'sort_attractions') ?>
     <!-- $form->field($model, 'sort_hotels') -->
     <!-- $form->field($model, 'sort_dining') --> 
 

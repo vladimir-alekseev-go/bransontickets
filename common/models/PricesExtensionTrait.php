@@ -68,10 +68,10 @@ trait PricesExtensionTrait
     {
 	    self::removeDuplicates();
 
-        /*if (self::TYPE === TrAttractionsPrices::TYPE || self::TYPE === TrLunchsPrices::TYPE) {
+        if (self::TYPE === TrAttractionsPrices::TYPE /*|| self::TYPE === TrLunchsPrices::TYPE*/) {
             self::deleteAll("end < start");
             self::deleteAll("end < '" . date("Y-m-d H:i:s") . "'");
-        }*/
+        }
         self::deleteAll("start < '" . date("Y-m-d") . "'");
 		
 		$start = !empty($params['start']) ? new DateTime($params['start']) : new DateTime();
@@ -146,11 +146,11 @@ trait PricesExtensionTrait
 
         /*if (new $classNamePath instanceof TrLunchsPrices) {
             $allotmentIds = TrLunchsCertificates::find()->select(['id_external'])->column();
-        }
+        }*/
         if (new $classNamePath instanceof TrAttractionsPrices) {
             $allotmentIds = TrAdmissions::find()->select(['id_external'])->column();
         }
-        if (new $classNamePath instanceof TrPosHotelsPriceExtra || new $classNamePath instanceof TrPosHotelsPriceRoom) {
+        /*if (new $classNamePath instanceof TrPosHotelsPriceExtra || new $classNamePath instanceof TrPosHotelsPriceRoom) {
             $allotmentIds = TrPosRoomTypes::find()->select(['id_external'])->column();
         }*/
 
@@ -158,15 +158,15 @@ trait PricesExtensionTrait
 
             foreach ($tripiumData as $d) {
 
-                /*if ((new $classNamePath instanceof TrLunchsPrices
-                        || new $classNamePath instanceof TrAttractionsPrices
-                        || new $classNamePath instanceof TrPosHotelsPriceRoom
-                        || new $classNamePath instanceof TrPosHotelsPriceExtra
+                if ((/*new $classNamePath instanceof TrLunchsPrices
+                        ||*/ new $classNamePath instanceof TrAttractionsPrices
+                        /*|| new $classNamePath instanceof TrPosHotelsPriceRoom
+                        || new $classNamePath instanceof TrPosHotelsPriceExtra*/
                     ) && !in_array($d["id"], $allotmentIds)) {
                     $mess = 'absent parent row with id_external: ' . $d["id"];
                     $this->errors_absent_parent_row[$mess] = $mess;
                     continue;
-                }*/
+                }
 
                 if ($d["time"] == self::ANY_TIME) {
                     $dateStart = new DateTime($d["start"]);

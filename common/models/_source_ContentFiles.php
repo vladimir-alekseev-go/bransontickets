@@ -17,8 +17,12 @@ use Yii;
  * @property int|null $old
  * @property string $path_old
  *
+ * @property AttractionsPhotoJoin[] $attractionsPhotoJoins
+ * @property AttractionsPhotoJoin[] $attractionsPhotoJoins0
  * @property ShowsPhotoJoin[] $showsPhotoJoins
  * @property ShowsPhotoJoin[] $showsPhotoJoins0
+ * @property TrAttractions[] $trAttractions
+ * @property TrAttractions[] $trAttractions0
  * @property TrShows[] $trShows
  * @property TrShows[] $trShows0
  */
@@ -65,6 +69,26 @@ class _source_ContentFiles extends \yii\db\ActiveRecord
     }
 
     /**
+     * Gets query for [[AttractionsPhotoJoins]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAttractionsPhotoJoins()
+    {
+        return $this->hasMany(AttractionsPhotoJoin::class, ['photo_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[AttractionsPhotoJoins0]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAttractionsPhotoJoins0()
+    {
+        return $this->hasMany(AttractionsPhotoJoin::class, ['preview_id' => 'id']);
+    }
+
+    /**
      * Gets query for [[ShowsPhotoJoins]].
      *
      * @return \yii\db\ActiveQuery
@@ -82,6 +106,26 @@ class _source_ContentFiles extends \yii\db\ActiveRecord
     public function getShowsPhotoJoins0()
     {
         return $this->hasMany(ShowsPhotoJoin::class, ['preview_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[TrAttractions]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTrAttractions()
+    {
+        return $this->hasMany(TrAttractions::class, ['image_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[TrAttractions0]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTrAttractions0()
+    {
+        return $this->hasMany(TrAttractions::class, ['preview_id' => 'id']);
     }
 
     /**
