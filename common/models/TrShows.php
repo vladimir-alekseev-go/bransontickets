@@ -2,14 +2,18 @@
 
 namespace common\models;
 
+use common\helpers\General;
 use common\models\theaters\TheatersShows;
 use common\tripium\Tripium;
 use yii\base\InvalidConfigException;
 use yii\db\ActiveQuery;
+use yii\db\Expression;
 
 class TrShows extends _source_TrShows
 {
     use ItemsExtensionTrait;
+
+    public const TAG_ORIGINAL_FEATURED = 'Featured';
 
     public const CALL_US_TO_BOOK_YES = 1;
     public const CALL_US_TO_BOOK_NO = 0;
@@ -141,6 +145,80 @@ class TrShows extends _source_TrShows
     {
         return self::find()
             ->andOnCondition(self::getConditionActive());
+    }
+
+    /**
+     * @return ActiveQuery
+     */
+    public function getActivePrices()
+    {
+        return $this->getPrices()
+            ->andOnCondition([TrPrices::tableName() . '.stop_sell' => 0])
+            ->andOnCondition(['>', TrPrices::tableName() . '.start', new Expression('NOW( )')]);
+    }
+
+    /**
+     * @return ActiveQuery
+     */
+    public function getActivePricesCutOff()
+    {
+        return $this->getActivePrices()
+            ->andOnCondition(
+                [
+                    '>',
+                    TrPrices::tableName() . '.start',
+                    new Expression(
+                        'NOW( ) + INTERVAL (main.cut_off) HOUR'
+                    )
+                ]
+            );
+    }
+
+    /**
+     * @return ActiveQuery
+     */
+    public static function getAvailable()
+    {
+        return self::getActive()
+            ->distinct()
+            ->joinWith('availablePrices', false, 'INNER JOIN');
+    }
+
+    /**
+     * @return ActiveQuery
+     * @throws Exception
+     */
+    public function getAvailablePricesByRange()
+    {
+        return $this->getAvailablePrices()
+            ->andOnCondition(
+                [
+                    '>=',
+                    TrPrices::tableName() . '.start',
+                    General::getDatePeriod()->start->format('Y-m-d')
+                ]
+            )
+            ->andOnCondition(
+                [
+                    '<=',
+                    TrPrices::tableName() . '.start',
+                    General::getDatePeriod()->end->format('Y-m-d 23:59:59')
+                ]
+            );
+    }
+
+    /**
+     * @return ActiveQuery
+     */
+    public function getAvailablePrices()
+    {
+        return $this->getActivePrices()->andOnCondition(
+            [
+                'or',
+                TrPrices::tableName() . '.available > 0',
+                TrPrices::tableName() . '.free_sell=1'
+            ]
+        );
     }
 
     /**
