@@ -549,6 +549,51 @@ trait ItemsExtensionTrait
 
 	    return implode(', ', $result);
 	}
+
+    /**
+     * @param bool $similarCategory
+     *
+     * @return ActiveQuery
+     */
+    public function getSimilar($similarCategory = true): ActiveQuery
+    {
+        $query = self::getAvailable()
+            ->joinWith('categories')
+            ->andOnCondition(self::tableName() . '.id_external != ' . $this->id_external)
+            ->andOnCondition(
+                [
+                    'or',
+                    [self::tableName() . '.marketing_level' => [1, 2, 3]],
+                    [
+                        'and',
+                        [self::tableName() . '.marketing_level' => [8, 9]],
+                        ['like', 'tags', self::TAG_ORIGINAL_FEATURED]
+                    ]
+                ]
+            )
+            ->orderBy(new Expression('rand()'));
+        if ($similarCategory) {
+            $query->andOnCondition(
+                ['id_external_category' => $this->getCategories()->select('id_external')->column()]
+            );
+        }
+        return $query;
+    }
+
+    /**
+     * @return ActiveQuery
+     */
+    public function getAvailableSimilar(): ActiveQuery
+    {
+        return self::getAvailable()
+            ->andOnCondition(
+                [
+                    self::tableName() . '.id_external' => $this->getTrSimilar()->select(
+                        ['similar_external_id']
+                    )->column()
+                ]
+            );
+    }
 	
     /**
      * Gets query for [[TrTheaters]].
