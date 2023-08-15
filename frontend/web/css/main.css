@@ -283,6 +283,18 @@ main {flex:1;}
     box-shadow: 0px 0px 0px 0px var(--c-shadow-purple-1), 2px 3px 8px 0px var(--c-shadow-purple-1), 7px 13px 15px 0px var(--c-shadow-purple-2), 16px 29px 20px 0px var(--c-shadow-purple-3), 29px 51px 23px 0px var(--c-shadow-purple-4), 46px 79px 26px 0px var(--c-shadow-purple-5);}
 .find-more a:hover {padding:7px 11px;border:none;background:linear-gradient(90deg, var(--c-violet-gray) 60%, var(--c-violet-dark) 100%);color:var(--c-white);}
 
+/* site error */
+
+.site-error {padding-top:80px;}
+
+@media (max-width: 992px) {
+    .site-error {padding-top:63px;}
+}
+
+@media (max-width: 768px) {
+    .site-error {padding-top:60px;}
+}
+
 /* detail page */
 
 .show-detail {padding-top:80px;}
@@ -314,6 +326,7 @@ main {flex:1;}
 }
 
 @media (max-width: 768px) {
+    .show-detail {padding-top:60px;}
     .show-detail .main-info {padding-top:30px;gap:10px;}
     .show-detail h1 {font-size:24px;}
     .show-detail .theatre-info {font-size:14px;}

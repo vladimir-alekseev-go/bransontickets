@@ -10,7 +10,9 @@ use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use yii\db\Expression;
 use common\models\LoginForm;
+use common\models\TrAttractions;
 use common\models\TrShows;
 use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
@@ -76,16 +78,29 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        /**
-         * @var TrShows[] $shows_featured
-         */
-        $showsFeatured = TrShows::getActive()
-            ->groupBy(TrShows::tableName() . '.id')
+        $showsAllF = TrShows::getActive()
+            ->orderBy(new Expression('rand()'))
+            ->limit(6)
+            ->all();
+        
+        $attractionsAllF = TrAttractions::getActive()
+            ->orderBy(new Expression('rand()'))
+            ->limit(6)
             ->all();
 
-        $showsRecommended = TrShows::getActive()
-            ->groupBy(TrShows::tableName() . '.id')
+        $showsFeatured = array_merge($showsAllF, $attractionsAllF);
+
+        $showsAllR = TrShows::getActive()
+            ->orderBy(new Expression('rand()'))
+            ->limit(6)
             ->all();
+        
+        $attractionsAllR = TrAttractions::getActive()
+            ->orderBy(new Expression('rand()'))
+            ->limit(6)
+            ->all();
+        
+        $showsRecommended = array_merge($showsAllR, $attractionsAllR);
 
         return $this->render('index', compact('showsFeatured', 'showsRecommended'));
     }

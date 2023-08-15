@@ -1,12 +1,14 @@
 <?php
 
+use common\models\AttractionsPhotoJoin;
 use common\models\ShowsPhotoJoin;
+use common\models\TrAttractions;
 use common\models\TrShows;
 use yii\helpers\Html;
 use yii\web\JqueryAsset;
 
 /**
- * @var TrShows[] $showsFeatured
+ * @var TrShows[]|TrAttractions[] $showsFeatured
  */
 ?>
 
@@ -21,7 +23,7 @@ use yii\web\JqueryAsset;
                             <li class="it">
                                 <?php
                                     /**
-                                     * @var ShowsPhotoJoin $photo
+                                     * @var ShowsPhotoJoin|AttractionsPhotoJoin $photo
                                      */
                                     $photo = $show->getRelatedPhotos()->orderBy('rand()')->one();
                                 ?>
@@ -46,7 +48,7 @@ use yii\web\JqueryAsset;
                                         <img src="img/category.svg" alt="category icon">
                                         <span><?= implode(', ', array_slice(array_column($show->getCategories()->orderBy('rand()')->all(), 'name'), 0, 4)) ?? '' ?></span>
                                     </div>
-                                    <a href="#" class="item-btn">Book now</a>
+                                    <a href="<?= $show->getUrl() ?>" class="item-btn">Book now</a>
                                 </div>
                             </li>
                         <?php } ?>

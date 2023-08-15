@@ -7,6 +7,7 @@ use common\models\upload\UploadItemsPhotos;
 use common\models\upload\UploadItemsPhotosPreview;
 use common\models\upload\UploadItemsPreview;
 use common\tripium\Tripium;
+use Exception;
 use RuntimeException;
 use yii\behaviors\SluggableBehavior;
 use yii\behaviors\TimestampBehavior;
@@ -340,6 +341,31 @@ trait ItemsExtensionTrait
             }
         }
     }
+
+    /**
+     * Return Cancellation Policy Text
+     *
+     * @return string
+     */
+    public function getCancellationPolicyText(): string
+    {
+        if (!empty($this->cancel_policy_text)) {
+            try {
+                $ar = Json::decode($this->cancel_policy_text);
+                if (!empty($ar) && is_array($ar)) {
+                    return implode('. ', $ar) . '.';
+                }
+
+                if (!empty($ar)) {
+                    return $ar;
+                }
+            } catch (Exception $e) {
+                return $this->cancel_policy_text;
+            }
+        }
+
+        return '';
+    }
     
     public function updateTheaters($item)
     {
@@ -613,5 +639,25 @@ trait ItemsExtensionTrait
     public function getLocationLng(): float
     {
         return $this->theatre->location_lng ?? $this->location_lng;
+    }
+
+    public function getDescriptionShort($len = 170)
+    {
+        $description = $this->description;
+
+        $ar = explode(' ', strip_tags(htmlspecialchars_decode($this->description)));
+        if ($ar) {
+            $description = '';
+            foreach ($ar as $k => $v) {
+                if (strlen($description) < $len) {
+                    $description .= ' ' . $v;
+                } else {
+                    $description .= '...';
+                    break;
+                }
+            }
+        }
+
+        return $description;
     }
 }

@@ -38,6 +38,16 @@ class General
 		return $phone;
 	}
 
+    public static function handleVideoLink($links): array
+    {
+	    $tmp = [];
+    	foreach ($links as $link) {
+    	    $_link = Media::prepareUrl($link);
+    	    $tmp[$_link] = $_link;
+    	}
+    	return $tmp;
+	}
+
     /**
      * Return period
      *
