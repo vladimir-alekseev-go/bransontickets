@@ -56,14 +56,20 @@ return [
                 ]
             ]
         ],
-        /*
         'urlManager' => [
             'enablePrettyUrl' => true,
-            'showScriptName' => false,
+        	'showScriptName'=>false,
+      		'suffix' => '/',
             'rules' => [
+                ['pattern' => 'favicon', 'route' => 'site/favicon', 'suffix' => '.ico'],
+                '/'													      => 'site/index',
+                'sign-up/'												  => 'site/signup',
+                'sign-in/'												  => 'site/login',
+                'logout/'												  => 'site/logout',
+                $params['sectionsUrl']['shows'].'/<code:[\d\w\-]+>'       => 'shows/detail',
+                $params['sectionsUrl']['attractions'].'/<code:[\d\w\-]+>' => 'attractions/detail',
             ],
         ],
-        */
     ],
     'params' => $params,
 ];

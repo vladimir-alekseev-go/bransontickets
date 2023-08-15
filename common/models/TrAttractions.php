@@ -4,6 +4,7 @@ namespace common\models;
 
 use common\helpers\General;
 use common\tripium\Tripium;
+use Yii;
 use yii\base\InvalidConfigException;
 use yii\db\ActiveQuery;
 use yii\helpers\ArrayHelper;
@@ -121,6 +122,23 @@ class TrAttractions extends _source_TrAttractions
         $res = $tripium->getAttractions($this->updateOnlyIdExternal);
         $this->statusCodeTripium = $tripium->statusCode;
         return $res;
+    }
+
+    /**
+     * Return item url.
+     *
+     * @param mixed $options
+     *
+     * @return string
+     */
+    public function getUrl($options = null): string
+    {
+        if (is_array($options)) {
+            return Yii::$app->urlManager->createUrl(
+                array_merge(['attractions/detail'], $options, ['code' => $this->code])
+            );
+        }
+        return Yii::$app->urlManager->createUrl(['attractions/detail', 'code' => $this->code]);
     }
 
     /**

@@ -5,6 +5,7 @@ namespace common\models;
 use common\helpers\General;
 use common\models\theaters\TheatersShows;
 use common\tripium\Tripium;
+use Yii;
 use yii\base\InvalidConfigException;
 use yii\db\ActiveQuery;
 use yii\db\Expression;
@@ -67,6 +68,23 @@ class TrShows extends _source_TrShows
         $res = $tripium->getShows($this->updateOnlyIdExternal);
         $this->statusCodeTripium = $tripium->statusCode;
         return $res;
+    }
+
+    /**
+     * Return item url.
+     *
+     * @param mixed $options
+     *
+     * @return string
+     */
+    public function getUrl($options = null): string
+    {
+        if (is_array($options)) {
+            return Yii::$app->urlManager->createUrl(
+                array_merge(['shows/detail'], $options, ['code' => $this->code])
+            );
+        }
+        return Yii::$app->urlManager->createUrl(['shows/detail', 'code' => $this->code]);
     }
 
     /**

@@ -1,18 +1,23 @@
 <?php
 
+use common\models\AttractionsPhotoJoin;
 use common\models\ShowsPhotoJoin;
+use common\models\TrAttractions;
 use common\models\TrShows;
 use yii\helpers\Html;
 use yii\web\JqueryAsset;
 
 /**
- * @var TrShows[] $showsRecommended
+ * @var TrShows[]|TrAttractions[] $showsRecommended
+ * @var boolean                   $recommended
  */
 ?>
 
 <?php if ($showsRecommended) { ?>
     <div class="fixed">
-        <div class="recommended">Recommended</div>
+        <?php if (isset($recommended)) { ?>
+            <div class="recommended">Recommended</div>
+        <?php } ?>
         <div class="recommended-items" id="recommended-items">
             <div class="week-wrap">
                 <div class="frame horizontal">
@@ -21,29 +26,29 @@ use yii\web\JqueryAsset;
                             <li class="it">
                                 <?php
                                     /**
-                                     * @var ShowsPhotoJoin $photo
+                                     * @var ShowsPhotoJoin|AttractionsPhotoJoin $photo
                                      */
                                     $photo = $show->getRelatedPhotos()->orderBy('rand()')->one();
                                 ?>
                                 <?php if (!empty($photo->preview)) { ?>
                                     <?= Html::img($photo->preview->url, ['alt' => $show->name]) ?>
                                 <?php } else { ?>
-                                    <img src="img/bransontickets-noimage.png">
+                                    <img src="/img/bransontickets-noimage.png">
                                 <?php } ?>
                                 <div class="about">
                                     <div class="title"><?= $show->name ?></div>
                                     <div class="location">
-                                        <img src="img/location.svg" alt="location icon">
+                                        <img src="/img/location.svg" alt="location icon">
                                         <span><?= $show->theatre->name ?? '' ?></span>
                                     </div>
                                     <div class="recommended-line"></div>
                                 </div>
                                 <div class="more">
                                     <div class="category">
-                                        <img src="img/category.svg" alt="category icon">
+                                        <img src="/img/category.svg" alt="category icon">
                                         <span><?= implode(', ', array_slice(array_column($show->getCategories()->orderBy('rand()')->all(), 'name'), 0, 4)) ?? '' ?></span>
                                     </div>
-                                    <a href="#" class="item-btn">See details</a>
+                                    <a href="<?= $show->getUrl() ?>" class="item-btn">See details</a>
                                 </div>
                             </li>
                         <?php } ?>
