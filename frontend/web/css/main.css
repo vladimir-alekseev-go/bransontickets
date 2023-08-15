@@ -152,7 +152,7 @@ main {flex:1;}
 .featured-items .frame.horizontal ul {max-height:650px;}
 .featured-items .frame.horizontal ul li {width:480px;background:var(--c-white);color:var(--c-new-blue);}
 .featured-items .frame.horizontal ul li img {width:480px;max-height:300px;border-radius:10px 10px 0 0;}
-.featured-items .frame.horizontal ul li .about {padding:10px 16px 70px 16px;}
+.featured-items .frame.horizontal ul li .about {padding:10px 16px 90px 16px;}
 .featured-items .frame.horizontal ul li .about .title {font-family:'Circe Extra';font-weight:800;font-size:32px;}
 .featured-items .frame.horizontal ul li .about .location {padding-bottom:10px;font-weight:400;font-size:20px;display:flex;align-items:center;justify-content:flex-start;gap:10px;}
 .featured-items .frame.horizontal ul li .about .location img {width:20px;}
