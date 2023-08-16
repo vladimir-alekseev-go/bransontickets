@@ -34,6 +34,7 @@ abstract class UploadForm extends ContentFiles
                     $this->path = $pathImage . $dir_name . '/';
                     $this->source_file_time = !empty($this->source_file_time) ? $this->source_file_time : 0;
                     $full_path_file = Yii::getAlias('@root') . '/' . $this->path . $this->file_name;
+                    var_dump($full_path_file);
 
                     if (!file_exists(Yii::getAlias('@root') . '/' . $this->path)) {
                         mkdir(Yii::getAlias('@root') . '/' . $this->path, 0775, true);
