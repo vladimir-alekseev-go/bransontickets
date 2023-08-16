@@ -34,11 +34,11 @@ abstract class UploadForm extends ContentFiles
                     $this->path = $pathImage . $dir_name . '/';
                     $this->source_file_time = !empty($this->source_file_time) ? $this->source_file_time : 0;
                     $full_path_file = Yii::getAlias('@root') . '/' . $this->path . $this->file_name;
-                    var_dump($full_path_file);
 
                     if (!file_exists(Yii::getAlias('@root') . '/' . $this->path)) {
                         mkdir(Yii::getAlias('@root') . '/' . $this->path, 0775, true);
                     }
+                    var_dump(!file_exists($full_path_file));
                     if (!file_exists($full_path_file)) {
                         try {
                             Yii::$app->imageProcessor->save(
@@ -46,10 +46,13 @@ abstract class UploadForm extends ContentFiles
                                 $full_path_file,
                                 $this->profile
                             );
+                            var_dump($this->profile);
                             $this->save();
                         } catch (Exception $e) {
                             return false;
                         }
+                        var_dump('true');
+                        exit();
                         return true;
                     }
 
@@ -60,9 +63,13 @@ abstract class UploadForm extends ContentFiles
                 }
             }
 
+            var_dump('false');
+            exit();
             return false;
         }
 
+        var_dump('false');
+        exit();
         return false;
     }
     
