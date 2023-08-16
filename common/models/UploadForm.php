@@ -49,12 +49,8 @@ abstract class UploadForm extends ContentFiles
                             exit();
                             $this->save();
                         } catch (Exception $e) {
-                            var_dump('false');
-                            exit();
                             return false;
                         }
-                        var_dump('true');
-                        exit();
                         return true;
                     }
 
@@ -65,13 +61,9 @@ abstract class UploadForm extends ContentFiles
                 }
             }
 
-            var_dump('false');
-            exit();
             return false;
         }
 
-        var_dump('false');
-        exit();
         return false;
     }
     
