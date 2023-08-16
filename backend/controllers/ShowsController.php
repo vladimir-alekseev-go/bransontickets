@@ -60,7 +60,9 @@ class ShowsController extends CrudController
 
             $uploadItemsBanner->file = UploadedFile::getInstance($uploadItemsBanner, 'file');
 
-            var_dump($uploadItemsBanner);
+            var_dump($uploadItemsBanner->validate());
+            var_dump($uploadItemsBanner->upload());
+            exit();
             if ($uploadItemsBanner->validate() && $uploadItemsBanner->upload()) {
                 if (!empty($model->image)) {
                     $model->image->delete();
