@@ -35,6 +35,6 @@ class AttractionsController extends Controller
             ->limit(6)
             ->all();
 
-        return $this->render('../shows/detail', compact('model', 'showsRecommended'));
+        return $this->render('@app/views/shows/detail', compact('model', 'showsRecommended'));
     }
 }
