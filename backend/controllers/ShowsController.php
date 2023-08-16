@@ -58,12 +58,9 @@ class ShowsController extends CrudController
             $cache = Yii::$app->cache;
             $cache->delete('popularShow');
 
-            var_dump(UploadedFile::getInstance($uploadItemsBanner, 'file'));
-            
             $uploadItemsBanner->file = UploadedFile::getInstance($uploadItemsBanner, 'file');
 
-            var_dump($uploadItemsBanner->file);
-
+            var_dump($uploadItemsBanner->upload());
             if ($uploadItemsBanner->validate() && $uploadItemsBanner->upload()) {
                 if (!empty($model->image)) {
                     $model->image->delete();
