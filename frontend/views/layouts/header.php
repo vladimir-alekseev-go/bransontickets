@@ -31,7 +31,7 @@ use yii\helpers\Url;
                         <a href="tel:417-337-8455" class="header-phone">417-337-8455</a>
                     </div>
                 <?php } else { ?>
-                    <a href="#" class="bransontickets-logo">
+                    <a href="<?= Url::to('/') ?>" class="bransontickets-logo">
                         <img src="/img/bransontickets-logo.png" alt="Branson Tickets">
                     </a>
                 <?php } ?>
