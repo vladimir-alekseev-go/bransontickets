@@ -45,7 +45,7 @@ abstract class UploadForm extends ContentFiles
                                 $full_path_file,
                                 $this->profile
                             );
-                            var_dump($this->save());
+                            var_dump($this);
                             exit();
                             $this->save();
                         } catch (Exception $e) {
