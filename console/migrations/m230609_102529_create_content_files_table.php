@@ -27,7 +27,7 @@ class m230609_102529_create_content_files_table extends Migration
                 'source_url'       => $this->string(256)->null(),
                 'source_file_time' => $this->integer(11)->notNull()->defaultValue(0),
                 'old'              => $this->integer(11)->null(),
-                'path_old'         => $this->string(256)->notNull(),
+                'path_old'         => $this->string(256)->null(),
             ],
             $tableOptions
         );
