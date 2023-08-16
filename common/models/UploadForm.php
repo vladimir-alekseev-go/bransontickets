@@ -40,13 +40,8 @@ abstract class UploadForm extends ContentFiles
                     }
                     if (!file_exists($full_path_file)) {
                         try {
-                            Yii::$app->imageProcessor->save(
-                                ['file' => $this->file->tempName],
-                                $full_path_file,
-                                $this->profile
-                            );
-                            var_dump($this);
-                            exit();
+                            
+                            
                             $this->save();
                         } catch (Exception $e) {
                             return false;
