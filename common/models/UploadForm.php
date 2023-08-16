@@ -38,7 +38,6 @@ abstract class UploadForm extends ContentFiles
                     if (!file_exists(Yii::getAlias('@root') . '/' . $this->path)) {
                         mkdir(Yii::getAlias('@root') . '/' . $this->path, 0775, true);
                     }
-                    var_dump(!file_exists($full_path_file));
                     if (!file_exists($full_path_file)) {
                         try {
                             Yii::$app->imageProcessor->save(
@@ -46,7 +45,6 @@ abstract class UploadForm extends ContentFiles
                                 $full_path_file,
                                 $this->profile
                             );
-                            var_dump($this->profile);
                             $this->save();
                         } catch (Exception $e) {
                             return false;
