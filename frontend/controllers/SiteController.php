@@ -80,24 +80,24 @@ class SiteController extends Controller
     {
         $showsAllF = TrShows::getActive()
             ->orderBy(new Expression('rand()'))
-            ->limit(6)
+            ->limit(3)
             ->all();
         
         $attractionsAllF = TrAttractions::getActive()
             ->orderBy(new Expression('rand()'))
-            ->limit(6)
+            ->limit(3)
             ->all();
 
         $showsFeatured = array_merge($showsAllF, $attractionsAllF);
 
         $showsAllR = TrShows::getActive()
             ->orderBy(new Expression('rand()'))
-            ->limit(6)
+            ->limit(3)
             ->all();
         
         $attractionsAllR = TrAttractions::getActive()
             ->orderBy(new Expression('rand()'))
-            ->limit(6)
+            ->limit(3)
             ->all();
         
         $showsRecommended = array_merge($showsAllR, $attractionsAllR);
