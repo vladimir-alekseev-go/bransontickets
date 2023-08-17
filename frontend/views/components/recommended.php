@@ -31,9 +31,11 @@ use yii\web\JqueryAsset;
                                     $photo = $show->getRelatedPhotos()->orderBy('rand()')->one();
                                 ?>
                                 <?php if (!empty($photo->preview)) { ?>
-                                    <?= Html::img($photo->preview->url, ['alt' => $show->name]) ?>
+                                    <div class="img-crop" style="background-image:url(<?= $photo->preview->url ?>)">
+                                        <?= Html::img($photo->preview->url, ['alt' => $show->name]) ?>
+                                    </div>
                                 <?php } else { ?>
-                                    <img src="/img/bransontickets-noimage.png">
+                                    <div class="img-crop img-crop-no-image"></div>
                                 <?php } ?>
                                 <div class="about">
                                     <div class="title"><?= $show->name ?></div>
