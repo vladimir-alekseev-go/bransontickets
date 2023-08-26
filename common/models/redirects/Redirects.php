@@ -13,6 +13,8 @@ class Redirects extends _source_Redirects
 {
     public const CATEGORY_SHOW = 'show';
     public const CATEGORY_ATTRACTION = 'attraction';
+    public const CATEGORY_HOTEL_POS = 'hotel-pos';
+    public const CATEGORY_HOTEL_PRICE_LINE = 'hotel-pl';
 
     public function behaviors(): array
     {

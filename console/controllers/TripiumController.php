@@ -3,21 +3,18 @@
 namespace console\controllers;
 
 /*use common\models\LocationServices;*/
-/*use common\models\priceLine\NewPriceLineHotels;*/
+use common\models\priceLine\NewPriceLineHotels;
 use common\models\TrAdmissions;
 use common\models\TrAttractions;
 use common\models\TrAttractionsPrices;
 /*use common\models\TrBasket;*/
 use common\models\TrCategories;
 /*use common\models\TrLocations;*/
-/*use common\models\TrLunchs;
-use common\models\TrLunchsCertificates;
-use common\models\TrLunchsPrices;
 use common\models\TrPosHotels;
 use common\models\TrPosHotelsPriceExtra;
 use common\models\TrPosHotelsPriceRoom;
 use common\models\TrPosPlHotels;
-use common\models\TrPosRoomTypes;*/
+use common\models\TrPosRoomTypes;
 use common\models\TrPrices;
 use common\models\TrShows;
 /*use common\models\VacationPackage;*/
@@ -31,7 +28,7 @@ class TripiumController extends Controller
 {
     use CleanControllerTrait;
 
-    /*public function actionPriceLine(array $ids = [], $updateForce = false, $date = null)
+    public function actionPriceLine(array $ids = [], $updateForce = false, $date = null)
     {
         $shouldUpdateExternalId = !empty($ids) ? $ids : null;
         $updateForce = (bool)$updateForce;
@@ -69,7 +66,7 @@ class TripiumController extends Controller
             ]
         );
         $TripiumUpdater->run();
-    }*/
+    }
 
 //    public function actionUpdateTest()
 //    {
@@ -106,7 +103,7 @@ class TripiumController extends Controller
 //        $TripiumUpdater->run();
 //    }
 
-    /*public function actionUpdatePosHotels()
+    public function actionUpdatePosHotels()
     {
         $TripiumUpdater = new TripiumUpdater(
             [
@@ -136,7 +133,7 @@ class TripiumController extends Controller
         );
 
         $TripiumUpdater->run();
-    }*/
+    }
 
     public function actionUpdate()
     {
@@ -169,18 +166,7 @@ class TripiumController extends Controller
                     ],
                     ['class' => TrAttractions::class],
 
-                    /*['class' => TrLunchs::class],
-                    ['class' => TrLunchsCertificates::class],
-                    [
-                        'class' => TrLunchsPrices::class,
-                        'arg' => [
-                            "start" => date("m/d/Y"),
-                            "end" => date("m/d/Y", time() + 3600 * 24 * 90)
-                        ]
-                    ],
-                    ['class' => TrLunchs::class],
-
-                    ['class' => VacationPackage::class],
+                    /*['class' => VacationPackage::class],*/
 
                     ['class' => TrPosHotels::class],
                     ['class' => TrPosRoomTypes::class],
@@ -197,7 +183,7 @@ class TripiumController extends Controller
                             "start" => date("m/d/Y"),
                             "end" => date("m/d/Y", time() + 3600 * 24 * 60)
                         ]
-                    ]*/
+                    ]
                 ]
             ]
         );
@@ -231,16 +217,6 @@ class TripiumController extends Controller
                     ],
                     ['class' => TrAttractions::class],
 
-                    /*['class' => TrLunchs::class],
-                    ['class' => TrLunchsCertificates::class],
-                    [
-                        'class' => TrLunchsPrices::class,
-                        'arg' => [
-                            "start" => date("m/d/Y"),
-                            "end" => date("m/d/Y", time() + 3600 * 24 * 360 * 2)
-                        ]
-                    ],
-                    ['class' => TrLunchs::class],
                     [
                         'class' => TrPosPlHotels::class,
                         'arg' => ['setStatus' => 1],
@@ -341,7 +317,7 @@ class TripiumController extends Controller
                     ],
 //    	        ['class'=>'common\models\TrHotels', 'params' =>['fullUpdate'=>false], 'arg' => ['arrivalDate'=>date("m/d/Y",time()+3600*24*25), 'departureDate'=>date("m/d/Y",time()+3600*24*50)]],
 //    	        ['class'=>'common\models\TrHotels', 'params' =>['fullUpdate'=>false], 'arg' => ['arrivalDate'=>date("m/d/Y",time()+3600*24*50), 'departureDate'=>date("m/d/Y",time()+3600*24*75)]],
-//    	        ['class'=>'common\models\TrHotels', 'params' =>['fullUpdate'=>false], 'arg' => ['arrivalDate'=>date("m/d/Y",time()+3600*24*75), 'departureDate'=>date("m/d/Y",time()+3600*24*100)]],*/
+//    	        ['class'=>'common\models\TrHotels', 'params' =>['fullUpdate'=>false], 'arg' => ['arrivalDate'=>date("m/d/Y",time()+3600*24*75), 'departureDate'=>date("m/d/Y",time()+3600*24*100)]],
                 ]
             ]
         );
@@ -372,8 +348,7 @@ class TripiumController extends Controller
                     /*['class' => LocationServices::class],*/
                     ['class' => TrShows::class, 'params' => ['updateForce' => true]],
                     ['class' => TrAttractions::class, 'params' => ['updateForce' => true]],
-                    /*['class' => TrLunchs::class, 'params' => ['updateForce' => true]],
-                    ['class' => TrPosHotels::class, 'params' => ['updateForce' => true]],*/
+                    ['class' => TrPosHotels::class, 'params' => ['updateForce' => true]],
                 ]
             ]
         );
@@ -412,7 +387,7 @@ class TripiumController extends Controller
     /**
      * Update new PL hotels. Runs every minutes.
      */
-    /*public function actionPriceLineAddNewItems(): void
+    public function actionPriceLineAddNewItems(): void
     {
         $newPriceLineHotels = NewPriceLineHotels::find()
             ->where(['status' => NewPriceLineHotels::STATUS_NEW])
@@ -439,5 +414,5 @@ class TripiumController extends Controller
             $item->setAttribute('status', NewPriceLineHotels::STATUS_UPLOADED);
             $item->save();
         }
-    }*/
+    }
 }

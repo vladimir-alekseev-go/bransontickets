@@ -16,6 +16,8 @@ use Yii;
  * @property int|null $sort_hotels
  *
  * @property TrAttractionsCategories[] $trAttractionsCategories
+ * @property TrPosHotelsCategories[] $trPosHotelsCategories
+ * @property TrPosPlHotelsCategories[] $trPosPlHotelsCategories
  * @property TrShowsCategories[] $trShowsCategories
  */
 class _source_TrCategories extends \yii\db\ActiveRecord
@@ -65,6 +67,26 @@ class _source_TrCategories extends \yii\db\ActiveRecord
     public function getTrAttractionsCategories()
     {
         return $this->hasMany(TrAttractionsCategories::class, ['id_external_category' => 'id_external']);
+    }
+
+    /**
+     * Gets query for [[TrPosHotelsCategories]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTrPosHotelsCategories()
+    {
+        return $this->hasMany(TrPosHotelsCategories::class, ['id_external_category' => 'id_external']);
+    }
+
+    /**
+     * Gets query for [[TrPosPlHotelsCategories]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTrPosPlHotelsCategories()
+    {
+        return $this->hasMany(TrPosPlHotelsCategories::class, ['id_external_category' => 'id_external']);
     }
 
     /**

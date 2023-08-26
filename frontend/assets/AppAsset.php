@@ -17,6 +17,7 @@ class AppAsset extends AssetBundle
     public $baseUrl = '@web';
     public $css = [
         '/css/font-circe/circe.css',
+        '/css/bootstrap-datepicker.min.css',
         '/css/main.css',
         '/css/header.css',
         '/css/footer.css'

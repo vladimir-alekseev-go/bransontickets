@@ -3,8 +3,6 @@
 use yii\bootstrap\BootstrapAsset;
 use yii\web\JqueryAsset;
 
-$this->registerCssFile('/css/bootstrap-datepicker.min.css', ['depends' => [BootstrapAsset::class]]);
-
 ?>
 
 <div class="main-banner">

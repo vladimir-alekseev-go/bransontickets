@@ -4,6 +4,7 @@ namespace common\tripium;
 
 use common\helpers\General;
 use common\helpers\MarketingItemHelper;
+use DateTime;
 use Exception;
 use Yii;
 use yii\base\Model;
@@ -64,12 +65,12 @@ class Tripium extends Model
         return isset($ar[$val]) ? $ar[$val] : $val;
     }
 
-    /*public static function getRequestHotelParams()
+    public static function getRequestHotelParams()
     {
         return [
             'apiExperience' => !empty(Yii::$app->params['siteType']) && Yii::$app->params['siteType'] === 'mobile' ? 'PARTNER_MOBILE_WEB' : 'PARTNER_WEBSITE',
         ];
-    }*/
+    }
 
     private function request($path, $params = [], $type = "get")
     {
@@ -298,6 +299,244 @@ class Tripium extends Model
         $res = $this->request('/provider/location');
         if ($this->statusCode === self::STATUS_CODE_SUCCESS) {
             return !empty($res['results']) ? $res['results'] : [];
+        }
+        return null;
+    }
+
+    /**
+     * @param $category
+     * @param $vendorId
+     * @param $types
+     * @param $tags
+     * @return array
+     */
+    function getContent($category, $vendorId, $types = null, $tags = null)
+    {
+        $url = "/content/vendor/{$category}/{$vendorId}";
+        $url .= '?' . http_build_query(['types' => $types, 'tags' => $tags]);
+        $res = $this->request($url);
+        return !empty($res) ? $res : [];
+    }
+
+    /**
+     * Gets hotels
+     * @param null $ids
+     * @param mixed $status
+     * @return array
+     */
+    function getPosHotels($ids = null, $status = 'all')
+    {
+        $ids = !empty($ids) ? implode(',', $ids) : null;
+        $res = $this->request("/hotel?" . http_build_query(['status' => $status, 'ids' => $ids]));
+        return !empty($res["results"]) ? $res["results"] : [];
+    }
+
+    /**
+     * @param $params
+     *
+     * @return array
+     */
+    function getPosHotelsPrice($params)
+    {
+        $start = !empty($params['start']) ? $params['start'] : date("m/d/Y");
+        $end = !empty($params['end']) ? $params['end'] : date("m/d/Y",time()+3600*24*60);
+        $res = $this->request("/hotel/price?start=".$start."&end=".$end.(!empty($params['ids']) ? '&ids='.implode(',',$params['ids']) : ''));
+        return !empty($res["results"]) ? $res["results"] : [];
+    }
+
+    /**
+     * @param array $query
+     * @param bool  $useParams
+     *
+     * @return null
+     */
+    public function getHotels($query = [], $useParams = true)
+    {
+        $params = self::getRequestHotelParams();
+
+        if ($useParams) {
+            $params = array_merge(
+                $params,
+                [
+                    'maxRatePlanCount' => 8,
+//                    'customerSessionId' => yii\web\Session::getId(),
+//                    'customerIpAddress' => yii\web\Request::getUserIP(),
+//                    'customerUserAgent' => yii\web\Request::getUserAgent(),
+                ]
+            );
+        }
+
+        $params = array_merge($params, $query);
+
+        $srt = '';
+        foreach ($params as $k => $v) {
+            $srt .= '&' . $k . '=' . $v;
+        }
+
+        $params = str_replace(' ', '%20', $srt);
+
+        $url = '/hotels?k=1' . $params;
+
+        $res = $this->request($url);
+
+        if (!empty($res['results'])) {
+            return $res;
+        }
+
+        return null;
+    }
+
+    public function getHotel($id)
+    {
+        $params = self::getRequestHotelParams();
+
+        $srt = '';
+        foreach ($params as $k => $v) {
+            $srt .= '&' . $k . '=' . $v;
+        }
+
+        $srt = trim($srt, ' &');
+        $params = str_replace(' ', '%20', $srt);
+        $url = '/hotels/' . $id . '?' . $params;
+
+        $res = $this->request($url);
+        if (!empty($res["results"])) {
+            return $res["results"];
+        }
+
+        return $res;
+    }
+
+    public function getGeoHotels()
+    {
+        $params = array_merge(
+            self::getRequestHotelParams(),
+            [
+//                'customerSessionId' => yii\web\Session::getId(),
+//                'customerIpAddress' => yii\web\Request::getUserIP(),
+//                'customerUserAgent' => yii\web\Request::getUserAgent(),
+            ]
+        );
+
+        $url = '/geo/hotels?' . http_build_query($params);
+
+        $res = $this->request($url);
+        if (!empty($res["results"])) {
+            return $res["results"];
+        }
+
+        return $res;
+    }
+
+    public function getHotelsPrice($query = [], $useParams = true)
+    {
+        $params = self::getRequestHotelParams();
+
+        if ($useParams) {
+            $params = array_merge(
+                $params,
+                [
+//                    'customerSessionId' => yii\web\Session::getId(),
+//                    'customerIpAddress' => yii\web\Request::getUserIP(),
+//                    'customerUserAgent' => yii\web\Request::getUserAgent(),
+                ]
+            );
+        }
+
+        if ($query) {
+            $params = array_merge($params, $query);
+        }
+
+        $srt = '';
+        foreach ($params as $k => $v) {
+
+            $srt .= '&' . $k . '=' . $v;
+        }
+
+        $params = str_replace(' ', '%20', $srt);
+
+        $url = '/hotels/price?k=1' . $params;
+
+        $res = $this->request($url);
+
+        if (!empty($res['results'])) {
+            return $res;
+        }
+
+        return null;
+    }
+
+    /**
+     * Gets Price Line hotels.
+     *
+     * @param DateTime $checkIn
+     * @param DateTime $checkOut
+     * @param int      $rooms
+     * @param int      $adults
+     * @param int      $children
+     * @param string   $sortBy
+     * @param array    $hotelIds
+     *
+     * @return array
+     */
+    public function getPLHotels(
+        DateTime $checkIn,
+        DateTime $checkOut,
+        int $rooms = 1,
+        int $adults = 2,
+        int $children = 0,
+        $sortBy = null,
+        array $hotelIds = []
+    ): array {
+        $query = http_build_query(
+            [
+                'check_in' => $checkIn->format('m/d/Y'),
+                'check_out' => $checkOut->format('m/d/Y'),
+                'rooms' => $rooms,
+                'adults' => $adults,
+                'children' => $children,
+                'sort_by' => $sortBy,
+                'hotel_ids' => !empty($hotelIds) ? implode(',', $hotelIds) : null
+            ]
+        );
+        $res = $this->request('/hotels?' . $query);
+
+        return !empty($res['results']) ? $res['results'] : [];
+    }
+
+    /**
+     * Gets a Price Line hotel detail.
+     *
+     * @param int $id
+     *
+     * @return array|null
+     */
+    public function getPLHotelDetail(int $id): ?array
+    {
+        $res = $this->request('/hotels/' . $id);
+
+        if ($this->statusCode === self::STATUS_CODE_SUCCESS) {
+            return is_array($res) ? $res : null;
+        }
+
+        return null;
+    }
+
+    /**
+     * Gets a price of Price Line hotel.
+     *
+     * @param string $ppnBundle
+     *
+     * @return array|null
+     */
+    public function getPLHotelPrice(string $ppnBundle): ?array
+    {
+        $query = http_build_query(['ppn_bundle' => $ppnBundle]);
+
+        $res = $this->request('/hotels/price?' . $query);
+
+        if ($this->statusCode === self::STATUS_CODE_SUCCESS) {
+            return is_array($res['results']) && !empty($res['results']) ? $res['results'][0] : null;
         }
         return null;
     }

@@ -144,24 +144,20 @@ trait PricesExtensionTrait
         $classNamePath = self::class;
         $allotmentIds = [];
 
-        /*if (new $classNamePath instanceof TrLunchsPrices) {
-            $allotmentIds = TrLunchsCertificates::find()->select(['id_external'])->column();
-        }*/
         if (new $classNamePath instanceof TrAttractionsPrices) {
             $allotmentIds = TrAdmissions::find()->select(['id_external'])->column();
         }
-        /*if (new $classNamePath instanceof TrPosHotelsPriceExtra || new $classNamePath instanceof TrPosHotelsPriceRoom) {
+        if (new $classNamePath instanceof TrPosHotelsPriceExtra || new $classNamePath instanceof TrPosHotelsPriceRoom) {
             $allotmentIds = TrPosRoomTypes::find()->select(['id_external'])->column();
-        }*/
+        }
 
         if (!empty($tripiumData)) {
 
             foreach ($tripiumData as $d) {
 
-                if ((/*new $classNamePath instanceof TrLunchsPrices
-                        ||*/ new $classNamePath instanceof TrAttractionsPrices
-                        /*|| new $classNamePath instanceof TrPosHotelsPriceRoom
-                        || new $classNamePath instanceof TrPosHotelsPriceExtra*/
+                if ((new $classNamePath instanceof TrAttractionsPrices
+                        || new $classNamePath instanceof TrPosHotelsPriceRoom
+                        || new $classNamePath instanceof TrPosHotelsPriceExtra
                     ) && !in_array($d["id"], $allotmentIds)) {
                     $mess = 'absent parent row with id_external: ' . $d["id"];
                     $this->errors_absent_parent_row[$mess] = $mess;
@@ -177,17 +173,17 @@ trait PricesExtensionTrait
                 }
 
                 foreach ($d["prices"] as $p) {
-                    /*if (self::TYPE === TrPosHotelsPriceRoom::TYPE || self::TYPE === TrPosHotelsPriceExtra::TYPE) {
+                    if (self::TYPE === TrPosHotelsPriceRoom::TYPE || self::TYPE === TrPosHotelsPriceExtra::TYPE) {
                         $hash = md5($d["id"] . "_" . $p["id"] . "_" . $dateStart->format('Y-m-d H:i:s') . $d["time"]);
-                    } else {*/
+                    } else {
                         $hash = md5($d["id"] . "_" . $p["id"] . "_" . $dateStart->format('Y-m-d H:i:s') . "_" . $dateEnd->format('Y-m-d H:i:s') . $d["time"]);
-                    /*}*/
-                    /*if (self::TYPE === TrPosHotelsPriceRoom::TYPE && $p['supplementary']) {
+                    }
+                    if (self::TYPE === TrPosHotelsPriceRoom::TYPE && $p['supplementary']) {
                         continue;
                     }
                     if (self::TYPE === TrPosHotelsPriceExtra::TYPE && !$p['supplementary']) {
                         continue;
-                    }*/
+                    }
                     $dataNew = [
                         "id_external" => $d["id"],
                         "hash" => $hash,
@@ -209,9 +205,9 @@ trait PricesExtensionTrait
                         "rank" => !empty($p["rank"]) ? $p["rank"] : 999999,
                     ];
 
-                    /*if (in_array(self::TYPE, [TrPosHotelsPriceRoom::TYPE, TrPosHotelsPriceExtra::TYPE])) {
+                    if (in_array(self::TYPE, [TrPosHotelsPriceRoom::TYPE, TrPosHotelsPriceExtra::TYPE])) {
                         $dataNew['capacity'] = $p['capacity'];
-                    }*/
+                    }
 
                     $dataNew["hash_summ"] = md5(Json::encode($dataNew));
 
