@@ -129,4 +129,15 @@ class TrPrices extends _source_TrPrices
 		}
 		self::removeByHash(array_keys($data));
     }
+
+	/**
+     * @return ActiveQuery
+     */
+    public static function getActive(): ActiveQuery
+    {
+        return self::find()
+            ->andOnCondition(['stop_sell'=>0])
+            ->andOnCondition('start >= NOW( )')
+        ;
+    }
 }

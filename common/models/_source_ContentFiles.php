@@ -15,7 +15,7 @@ use Yii;
  * @property string|null $source_url
  * @property int $source_file_time
  * @property int|null $old
- * @property string $path_old
+ * @property string|null $path_old
  *
  * @property AttractionsPhotoJoin[] $attractionsPhotoJoins
  * @property AttractionsPhotoJoin[] $attractionsPhotoJoins0
@@ -23,6 +23,15 @@ use Yii;
  * @property ShowsPhotoJoin[] $showsPhotoJoins0
  * @property TrAttractions[] $trAttractions
  * @property TrAttractions[] $trAttractions0
+ * @property TrHotels[] $trHotels
+ * @property TrPosHotels[] $trPosHotels
+ * @property TrPosHotels[] $trPosHotels0
+ * @property TrPosHotelsPhotoJoin[] $trPosHotelsPhotoJoins
+ * @property TrPosHotelsPhotoJoin[] $trPosHotelsPhotoJoins0
+ * @property TrPosPlHotels[] $trPosPlHotels
+ * @property TrPosPlHotels[] $trPosPlHotels0
+ * @property TrPosPlHotelsPhotoJoin[] $trPosPlHotelsPhotoJoins
+ * @property TrPosPlHotelsPhotoJoin[] $trPosPlHotelsPhotoJoins0
  * @property TrShows[] $trShows
  * @property TrShows[] $trShows0
  */
@@ -42,7 +51,7 @@ class _source_ContentFiles extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['path', 'file_name', 'file_source_name', 'dir', 'path_old'], 'required'],
+            [['path', 'file_name', 'file_source_name', 'dir'], 'required'],
             [['source_file_time', 'old'], 'integer'],
             [['path', 'source_url', 'path_old'], 'string', 'max' => 256],
             [['file_name', 'file_source_name'], 'string', 'max' => 128],
@@ -126,6 +135,96 @@ class _source_ContentFiles extends \yii\db\ActiveRecord
     public function getTrAttractions0()
     {
         return $this->hasMany(TrAttractions::class, ['preview_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[TrHotels]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTrHotels()
+    {
+        return $this->hasMany(TrHotels::class, ['preview_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[TrPosHotels]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTrPosHotels()
+    {
+        return $this->hasMany(TrPosHotels::class, ['image_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[TrPosHotels0]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTrPosHotels0()
+    {
+        return $this->hasMany(TrPosHotels::class, ['preview_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[TrPosHotelsPhotoJoins]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTrPosHotelsPhotoJoins()
+    {
+        return $this->hasMany(TrPosHotelsPhotoJoin::class, ['photo_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[TrPosHotelsPhotoJoins0]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTrPosHotelsPhotoJoins0()
+    {
+        return $this->hasMany(TrPosHotelsPhotoJoin::class, ['preview_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[TrPosPlHotels]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTrPosPlHotels()
+    {
+        return $this->hasMany(TrPosPlHotels::class, ['image_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[TrPosPlHotels0]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTrPosPlHotels0()
+    {
+        return $this->hasMany(TrPosPlHotels::class, ['preview_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[TrPosPlHotelsPhotoJoins]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTrPosPlHotelsPhotoJoins()
+    {
+        return $this->hasMany(TrPosPlHotelsPhotoJoin::class, ['photo_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[TrPosPlHotelsPhotoJoins0]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTrPosPlHotelsPhotoJoins0()
+    {
+        return $this->hasMany(TrPosPlHotelsPhotoJoin::class, ['preview_id' => 'id']);
     }
 
     /**

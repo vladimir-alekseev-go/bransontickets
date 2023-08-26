@@ -2,13 +2,15 @@
 
 use common\models\TrAttractions;
 use common\models\TrShows;
+use common\models\TrPosHotels;
+use common\models\TrPosPlHotels;
 use yii\helpers\Html;
 use yii\helpers\Json;
 
 /**
- * @var TrShows|TrAttractions     $model
- * @var TrShows[]|TrAttractions[] $similar
- * @var string                    $content
+ * @var TrShows|TrAttractions|TrPosHotels|TrPosPlHotels $model
+ * @var TrShows[]|TrAttractions[]                       $similar
+ * @var string                                          $content
  */
 
 $this->beginContent('@app/views/layouts/main.php');
@@ -49,13 +51,13 @@ if (!empty($theatreAddress)) {
                         </span>
                     </div>
                     <div class="item">
-                        <img src="/img/phone.svg" class="phone-img" alt="phone icon"><span class="phone">417-332-2529</span>
+                        <img src="/img/phone.svg" class="phone-img" alt="phone icon"><span class="phone"><?= $model->phone ?></span>
                     </div>
-                    <div class="item">
-                        <img src="/img/time.svg" alt="time icon">
-                            <span class="time">
-                                <?php if (isset($model->show_length) || (isset($model->intermissions) && $model->intermissions !==
-                                    'null')) { ?>
+                    <?php if (isset($model->show_length) || (isset($model->intermissions) && $model->intermissions !==
+                        'null')) { ?>
+                        <div class="item">
+                            <img src="/img/time.svg" alt="time icon">
+                                <span class="time">
                                     <?php if ($model->show_length) { ?>
                                         <?= $model->show_length ?> min.
                                     <?php } ?>
@@ -63,11 +65,27 @@ if (!empty($theatreAddress)) {
                                     <b><?php if (!empty($intermissions['count'])) { ?>
                                         (<?= $intermissions['count'] ?> Intermission for <?= $intermissions['length'] ?>min)
                                     <?php } ?></b>
-                                <?php } ?>
-                            </span>
-                    </div>
-                </div>   
-                <?php if (!empty($model->categories)) { ?>
+                                </span>
+                        </div>
+                    <?php } ?>
+                </div>
+                <?php if ($model instanceof TrPosHotels || $model instanceof TrPosPlHotels) { ?>
+                    <?php if (!empty($model->check_in) || !empty($model->check_out)) { ?>
+                        <div class="check-time">
+                            <?php if (!empty($model->check_in)) { ?>
+                                <div class="item">
+                                    <img src="/img/time.svg" alt="time icon"> Check In: <?= $model->getCheckIn() ?>
+                                </div>
+                            <?php } ?> 
+                            <span> - </span>
+                            <?php if (!empty($model->check_out)) { ?>
+                                <div class="item">
+                                    <img src="/img/time.svg" alt="time icon"> Check Out: <?= $model->getCheckOut() ?>
+                                </div>
+                            <?php } ?>
+                        </div>
+                    <?php } ?>
+                <?php } elseif (!empty($model->categories)) { ?>
                     <div class="categories">
                         <?php foreach ($model->categories as $category) {
                             echo Html::a(

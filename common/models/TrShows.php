@@ -29,6 +29,8 @@ class TrShows extends _source_TrShows
     public const STATUS_ACTIVE = 1;
     public const STATUS_INACTIVE = 0;
 
+    public static $actualMinPriceCash;
+
     /**
      * {@inheritdoc}
      */
@@ -261,5 +263,48 @@ class TrShows extends _source_TrShows
     public function getTrSimilar(): ActiveQuery
     {
         return $this->getTrShowsSimilars();
+    }
+
+    /**
+     * @return ActiveQuery
+     */
+    public static function actualMinPrice()
+    {
+        $queryNoAdult = TrPrices::find()
+            ->select(TrPrices::tableName() . '.id_external')
+            ->groupby(TrPrices::tableName() . '.id_external')
+            ->where(
+                [
+                    'not in',
+                    'id_external',
+                    TrPrices::find()
+                        ->select(TrPrices::tableName() . '.id_external')
+                        ->groupby(TrPrices::tableName() . '.id_external')
+                        ->where(['name' => 'ADULT'])
+                ]
+            );
+
+        if (self::$actualMinPriceCash === null) {
+            self::$actualMinPriceCash = $queryNoAdult->asArray()->column();
+        }
+
+        return TrPrices::getActive()
+            ->joinWith('main')
+            ->select(
+                [
+                    self::tableName() . '.id',
+                    'min_rate' => 'MIN(IF( IF( alternative_rate <> 0, alternative_rate, special_rate ) <> 0, IF( alternative_rate <> 0, alternative_rate, special_rate ), retail_rate ))',
+                    'min_rate_source' => 'MIN(retail_rate)',
+                ]
+            )
+            ->andWhere('retail_rate > 0')
+            ->andWhere(
+                [
+                    'or',
+                    [TrPrices::tableName() . '.name' => 'ADULT'],
+                    [self::tableName() . '.id_external' => self::$actualMinPriceCash]
+                ]
+            )
+            ->groupby(self::tableName() . '.id_external');
     }
 }

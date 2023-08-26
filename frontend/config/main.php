@@ -68,6 +68,8 @@ return [
                 'logout/'                                                 => 'site/logout',
                 $params['sectionsUrl']['shows'].'/<code:[\d\w\-]+>'       => 'shows/detail',
                 $params['sectionsUrl']['attractions'].'/<code:[\d\w\-]+>' => 'attractions/detail',
+                $params['sectionsUrl']['hotelsPL'].'/<code:[\d\w\-]+>'    => 'pl-hotel/detail',
+                $params['sectionsUrl']['hotels'].'/<code:[\d\w\-]+>'      => 'hotel/detail',
             ],
         ],
     ],

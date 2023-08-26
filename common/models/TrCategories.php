@@ -15,7 +15,7 @@ class TrCategories extends _source_TrCategories
         return array_merge(parent::attributeLabels(), [
             'sort_shows' => 'Sort in a shows section',
             'sort_attractions' => 'Sort in an attractions section',
-            /*'sort_hotels' => 'Sort in a hotels section',*/
+            'sort_hotels' => 'Sort in a hotels section',
         ]);
     }
 
@@ -34,20 +34,20 @@ class TrCategories extends _source_TrCategories
      *
      * @return ActiveQuery
      */
-    /*public function getAttractions()
+    public function getAttractions()
 	{
 	    return $this->hasOne(TrAttractionsCategories::class, ['id_external_category' => 'id_external']);
-	}*/
+	}
 
     /**
      * Gets all [[TrAttractions]].
      *
      * @return ActiveQuery
      */
-    /*public function getTrAttractions()
+    public function getTrAttractions()
     {
         return $this->hasMany(TrAttractions::class, ['id_external' => 'id_external_show'])->viaTable(TrAttractionsCategories::tableName(), ['id_external_category' => 'id_external']);
-    }*/
+    }
 
     /**
      * Gets all [[TrShows]].

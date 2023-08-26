@@ -9,5 +9,7 @@ return [
     'sectionsUrl' => [
         'shows' => 'shows-in-branson-missouri',
         'attractions' => 'branson-mo-attractions',
+        'hotelsPL' => 'hotels',
+        'hotels' => 'hotel',
     ],
 ];

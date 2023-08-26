@@ -4,12 +4,9 @@ namespace console\controllers;
 
 use common\models\AttractionsPhotoJoin;
 use common\models\ContentFiles;
-/*use common\models\HotelsPhotoJoin;
-use common\models\LunchsPhotoJoin;
-use common\models\RestaurantPhotoJoin;*/
 use common\models\ShowsPhotoJoin;
-/*use common\models\TrPosHotelsPhotoJoin;
-use common\models\TrPosPlHotelsPhotoJoin;*/
+use common\models\TrPosHotelsPhotoJoin;
+use common\models\TrPosPlHotelsPhotoJoin;
 use Yii;
 
 trait CleanControllerTrait
@@ -22,11 +19,8 @@ trait CleanControllerTrait
         $ar = [
             ShowsPhotoJoin::class,
             AttractionsPhotoJoin::class,
-            /*LunchsPhotoJoin::class,
-            RestaurantPhotoJoin::class,
-            HotelsPhotoJoin::class,
             TrPosPlHotelsPhotoJoin::class,
-            TrPosHotelsPhotoJoin::class,*/
+            TrPosHotelsPhotoJoin::class,
         ];
         $query = Yii::$app->db->createCommand(
             "UPDATE " . ContentFiles::tableName() . " SET old = null"

@@ -9,6 +9,7 @@ use common\models\upload\UploadItemsPreview;
 use common\tripium\Tripium;
 use Exception;
 use RuntimeException;
+use Yii;
 use yii\behaviors\SluggableBehavior;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveQuery;
@@ -231,10 +232,57 @@ trait ItemsExtensionTrait
             $minRateSource = isset($shows[$show['id']]) && $shows[$show['id']]['min_rate_source'] !== null ?
                 $shows[$show['id']]['min_rate_source'] * 1 : null;
 
+            if ($this instanceof TrPosPlHotels) {
+                $TrPosPlHotels = new TrPosPlHotels();
+                $TrPosPlHotels->setPriceLineData($show);
+                $minRate = $minRateSource = $TrPosPlHotels->avgNightlyRate();
+                $show['status'] = 1;
+                $show['theatre'] = [
+                    'id' => '10000' . $show['id'],
+                    'address' => [
+                        'name' => $show['name'],
+                        'address1' => $show['address'] ?? null,
+                        'address2' => $show['address'] ?? null,
+                        'city' => $show['city'] ?? null,
+                        'state' => $show['state'] ?? null,
+                        'zipCode' => $show['zipCode'] ?? null,
+                    ],
+                    'directions' => $show['directions'] ?? null,
+                    'image' => $show['image'] ?? null,
+                    'additionalPhone' => $show['additionalPhone'] ?? null,
+                    'status' => 1,
+                    'contacts' => [
+                        'phone' => $show['phone'] ?? null,
+                        'email' => $show['email'] ?? null,
+                        'fax' => $show['fax'] ?? null,
+                    ]
+                ];
+            }
+
             $show['cover'] = !empty($show['cover']) ? $show['cover'] : (isset($photos[0]) ? $photos[0] : '');
 
             $strPhotos = null;
-            $strPhotos = implode(',', $photos);
+            if ($this instanceof TrPosPlHotels) {
+                $hotel = null;
+                if ($this->updatePlHotelDetail) {
+                    $tripium = new Tripium();
+                    $hotel = $tripium->getPLHotelDetail($show['id']);
+                    $show['checkIn'] = $hotel['checkIn'];
+                    $show['checkOut'] = $hotel['checkOut'];
+                }
+                if ($hotel) {
+                    $strPhotos = isset($hotel['photos']) ? implode(',', $hotel['photos']) : null;
+                } else {
+                    $photosCurrent = self::find()
+                        ->select(['photos'])
+                        ->where(['id_external' => (int)$show['id']])
+                        ->asArray()
+                        ->one();
+                    $strPhotos = $photosCurrent['photos'] ?? null;
+                }
+            } else {
+                $strPhotos = implode(',', $photos);
+            }
 
 			$dataShow = [
 				'id_external' => (int)$show['id'],
@@ -242,7 +290,7 @@ trait ItemsExtensionTrait
  				'description' => $show['description'],
 				'status' => $params['setStatus'] ?? ($show['status'] ? 1 : 0),
 				'location_external_id' => (
-                    $this instanceof TrShows)
+                    $this instanceof TrShows || $this instanceof TrAttractions || $this instanceof TrPosHotels)
                     && !empty($show['theatre']['locationId']) ? $show['theatre']['locationId'] : $show['location'],
 				'rank' => $show['rank'],
 				'marketing_level' => (int)$show['marketingLevel'],
@@ -265,7 +313,23 @@ trait ItemsExtensionTrait
 				'hours' => $show['hours'] ?? null,
 			    'call_us_to_book' => !empty($show['callUsToBook']) && ($show['callUsToBook'] === true || $show['callUsToBook'] == 'true') ? self::CALL_US_TO_BOOK_YES : self::CALL_US_TO_BOOK_NO,
 			    'external_service' => !empty($show['externalService']) ? $show['externalService'] : null,
+                'rating' => $show['hotelRating'] ?? null, // Price Line Hotels
+                'review_rating' => $show['reviewRating'] ?? null, // Price Line Hotels
+                'review_rating_desc' => $show['reviewRatingDesc'] ?? null, // Price Line Hotels
+			    'address' => $show['address'] ?? null, // Price Line Hotels
+			    'city' => $show['city'] ?? null, // Price Line Hotels
+			    'state' => $show['state'] ?? null, // Price Line Hotels
+			    'zip_code' => !empty($show['zipCode']) ? trim($show['zipCode']) : null, // Price Line Hotels
+			    'phone' => $show['phone'] ?? null, // Price Line Hotels
+			    'fax' => $show['fax'] ?? null, // Price Line Hotels
+			    'min_age' => (int)($show['minAge'] ?? 0), // Price Line Hotels
+                'check_in' => !empty($show['checkIn']) ? date("H:i", strtotime($show['checkIn'])) : '', //All Hotels
+                'check_out' => !empty($show['checkOut']) ? date("H:i", strtotime($show['checkOut'])) : '', //All Hotels
 			];
+
+            if (!($this instanceof TrPosHotels)) {
+                $dataShow['videos'] = implode(';', $videos);
+            }
 
 			$dataShow['hash_summ'] = md5(Json::encode($dataShow));
 
@@ -286,7 +350,11 @@ trait ItemsExtensionTrait
 				$Shows->setAttributes($dataShow);
 
 				if ($Shows->save()) {
-                    $Shows->updatePreview($show['cover']);
+                    if ($this instanceof TrPosHotels) {
+                        $Shows->setVideo();
+                    } else {
+                        $Shows->updatePreview($show['cover']);
+                    }
 				    $Shows->setPhotoAndPreview();
 				    
 				    $setPlaceIds[] = $Shows->id;
@@ -314,7 +382,12 @@ trait ItemsExtensionTrait
 				}
 
 				if ($Shows->save() || $this->updateForce) {
-                    $Shows->updatePreview($show['cover']);
+                    if ($this instanceof TrPosHotels) {
+                        $Shows->updateVideo = $this->updateVideo;
+                        $Shows->setVideo();
+                    } else {
+                        $Shows->updatePreview($show['cover']);
+                    }
 				    $Shows->setPhotoAndPreview();
 				    if ($dirtyLocs) {
 				        $setPlaceIds[] = $Shows->id;
@@ -340,6 +413,14 @@ trait ItemsExtensionTrait
                 $model->save();
             }
         }
+
+        if (!($this instanceof TrPosPlHotels)) {
+		    self::updateMinPrice();
+        }
+
+       //have to find out why status can be 0, this is hot fix
+        $query = Yii::$app->db->createCommand('UPDATE '.TrPosPlHotels::tableName().' SET status = 1 WHERE id > 0;');
+        $query->execute();
     }
 
     /**
@@ -620,6 +701,12 @@ trait ItemsExtensionTrait
                 ]
             );
     }
+
+    public static function updateMinPrice()
+    {
+        $query = Yii::$app->db->createCommand('UPDATE '.self::tableName().' SET min_rate = NULL, min_rate_source = NULL; UPDATE '.self::tableName().' LEFT JOIN ('.self::actualMinPrice()->createCommand()->getRawSql().') as minprice ON '.self::tableName().'.id = minprice.id SET '.self::tableName().'.min_rate = minprice.min_rate, '.self::tableName().'.min_rate_source = minprice.min_rate_source');
+        $query->execute();
+    }
 	
     /**
      * Gets query for [[TrTheaters]].
@@ -629,6 +716,36 @@ trait ItemsExtensionTrait
     public function getTheatre(): ActiveQuery
     {
         return $this->hasOne(TrTheaters::class, ['id_external' => 'theatre_id']);
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getCheckIn(): ?string
+    {
+        return self::getCheckTime($this->check_in);
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getCheckOut(): ?string
+    {
+        return self::getCheckTime($this->check_out);
+    }
+
+    /**
+     * @param $time
+     *
+     * @return string|null
+     */
+    private static function getCheckTime($time): ?string
+    {
+        if (!empty($time)) {
+            $str = date('h:i&\nb\sp;A', strtotime($time));
+            return $str === false ? null : $str;
+        }
+        return null;
     }
 
     public function getLocationLat(): float
