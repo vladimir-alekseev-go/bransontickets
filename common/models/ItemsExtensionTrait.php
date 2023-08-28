@@ -2,11 +2,13 @@
 
 namespace common\models;
 
+use common\helpers\General;
 use common\helpers\Media;
 use common\models\upload\UploadItemsPhotos;
 use common\models\upload\UploadItemsPhotosPreview;
 use common\models\upload\UploadItemsPreview;
 use common\tripium\Tripium;
+use DateTime;
 use Exception;
 use RuntimeException;
 use Yii;
@@ -36,7 +38,18 @@ trait ItemsExtensionTrait
     public $updateImages = false;
     public $statusCodeTripium = null;
 
+    public $buynowUrl;
     public $maxCountItemUpdate = 0;
+
+    public function getBuyNowUrl(): ?string
+    {
+        return $this->buynowUrl;
+    }
+
+    public function setBuyNowUrl($url): ?string
+    {
+        return $this->buynowUrl = $url;
+    }
 
     /**
      * This method have to be redefined
@@ -501,6 +514,46 @@ trait ItemsExtensionTrait
     	    }
     	}
     }
+
+    /**
+     * @return array
+     */
+    public static function getActualCategoriesCash()
+    {
+        $cache = Yii::$app->cache;
+        $cacheData = $cache->get(self::TYPE . '.Categories');
+
+        if ($cacheData === false) {
+            $cacheData = self::getActualCategories()->orderBy(
+                'sort_' . (self::TYPE === TrPosHotels::TYPE ? TrPosPlHotels::TYPE : self::TYPE)
+            )->all();
+            $cache->set(self::TYPE . '.Categories', $cacheData, 60 * 15);
+        }
+        return $cacheData;
+    }
+
+    public function getIsFeatured()
+    {
+        return strpos($this->tags, 'Featured') !== false;
+    }
+
+    public function getIsOnSale()
+    {
+        $range = General::getDatePeriod();
+        $isOnSale = false;
+
+        if (isset($this->availablePrices)) {
+            foreach ($this->availablePrices as $price) {
+                $dtStart = new DateTime($price->start);
+                $dtEnd = new DateTime($price->end);
+                if ($dtStart >= $range->start && $dtStart <= new DateTime($range->end->format('Y-m-d 23:59:59')) && !empty($price->special_rate)) {
+                    $isOnSale = $price->retail_rate != $price->special_rate ? true : $isOnSale;
+                }
+            }
+        }
+
+        return $isOnSale;
+    }
     
     /**
      * Return file time
@@ -656,6 +709,90 @@ trait ItemsExtensionTrait
 
 	    return implode(', ', $result);
 	}
+
+    public static function getTagsValue($val)
+    {
+        $ar = self::getTagsList();
+
+        return isset( $ar[$val] ) ? $ar[$val] : $val;
+    }
+
+    public static function getAliasMinPrice()
+    {
+        return 'min_price';
+    }
+
+    /**
+     * Build query by $Search
+     *
+     * @param null|\common\models\form\Search $Search
+     * @return ActiveQuery
+     */
+    public static function getByFilterAll($Search = null)
+    {
+        $select = [
+            self::tableName().'.id',
+            self::tableName().'.id_external',
+            self::tableName().'.code',
+            self::tableName().'.name',
+            self::tableName().'.description',
+            self::tableName().'.location_external_id',
+            self::tableName().'.preview_id',
+            self::tableName().'.theatre_id',
+            self::tableName().'.tags',
+            self::tableName().'.rank',
+            'IF('.self::getAliasMinPrice().'.min_rate > 0, '.self::getAliasMinPrice().'.min_rate, '.self::tableName().'.min_rate) as min_rate',
+            'IF('.self::getAliasMinPrice().'.min_rate_source > 0, '.self::getAliasMinPrice().'.min_rate_source, '.self::tableName().'.min_rate_source) as min_rate_source'
+        ];
+
+        $query = self::getByFilter($Search);
+        $select['status'] = '(1)';
+        $query->select($select);
+
+        $select['status'] = '(0)';
+        $SearchClone = clone $Search;
+        $SearchClone->without_availability = 1;
+        $queryClone = self::getByFilter($SearchClone);
+        $queryClone->select($select);
+
+        $query->union($queryClone);
+
+        $query = self::find()->select('*')->from(['r' => $query])->groupBy('code');
+
+        $query ->orderby($Search->getOrderby());
+
+        return $query;
+    }
+
+    /**
+     * Resort items within tag
+     *
+     * @param array $items
+     *
+     * @return array
+     */
+    public static function reSort($items = [])
+    {
+        $groupList = [];
+        $list = [];
+        foreach ($items as $item) {
+            $featured = in_array(self::TAG_ORIGINAL_FEATURED, explode(';', $item->tags), true);
+            $premium = in_array(self::TAG_ORIGINAL_PREMIUM, explode(';', $item->tags), true);
+            $k = '0'
+            . '_' . $item->status
+            . '_' . (! $premium ? '' : self::TAG_ORIGINAL_PREMIUM)
+            . '_' . (! $featured ? '' : self::TAG_ORIGINAL_FEATURED);
+            $groupList[$k][] = $item;
+        }
+        foreach ($groupList as $key => $group) {
+            if (substr($key, -2) !== '__') {
+                shuffle($group);
+            }
+            $ar = array_merge($list, $group);
+            $list = $ar;
+        }
+        return $list;
+    }
 
     /**
      * @param bool $similarCategory

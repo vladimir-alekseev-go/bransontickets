@@ -34,7 +34,7 @@ $roomsCount = 0;
             $roomsCount++;
             ?>
             <?php foreach ($rooms as $room) { ?>
-                <div class="it white-block shadow-block js-room" data-room-price="<?= $room->price ?>"
+                <div class="it white-block js-room" data-room-price="<?= $room->price ?>"
                      data-days-count="<?= $HotelReservationForm->getDaysCount() ?>">
                     <div class="row">
                         <div class="col-12 col-md-7 mb-3 mb-md-0">
@@ -74,7 +74,7 @@ $roomsCount = 0;
                                         <?= $HotelReservationForm->packageId ? 'Modify' : 'Book now' ?>
                                     </a>
                                     <a class="js-reservation-cancel btn btn-link reservation-cancel">
-                                        <span class="icon ib-x"></span> Cancel
+                                        <i class="fa fa-xmark"></i> Cancel
                                     </a>
                                 </div>
                             </div>

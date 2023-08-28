@@ -14,7 +14,7 @@ use yii\web\JqueryAsset;
 
 <?php if ($showsFeatured) { ?>
     <div class="fixed">
-        <div class="featured">Featured</div>
+        <div class="featured-slider">Featured</div>
         <div class="featured-items" id="featured-items">
             <div class="week-wrap">
                 <div class="frame horizontal">

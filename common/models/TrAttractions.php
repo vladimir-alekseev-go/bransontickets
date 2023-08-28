@@ -4,6 +4,7 @@ namespace common\models;
 
 use common\helpers\General;
 use common\tripium\Tripium;
+use DateTime;
 use Yii;
 use yii\base\InvalidConfigException;
 use yii\db\ActiveQuery;
@@ -116,6 +117,15 @@ class TrAttractions extends _source_TrAttractions
         return $this->hasMany(AttractionsPhotoJoin::class, ['item_id' => 'id']);
     }
 
+    public static function getTagsList()
+    {
+        return array(
+            self::TAG_USD => self::TAG_ORIGINAL_ON_SALE,
+            self::TAG_PREMIUM => self::TAG_ORIGINAL_PREMIUM,
+            self::TAG_LIMITED => self::TAG_ORIGINAL_LIMITED,
+        );
+    }
+
     public function getSourceData()
     {
         $tripium = new Tripium;
@@ -219,6 +229,107 @@ class TrAttractions extends _source_TrAttractions
         }
 
         return $query;
+    }
+
+    /**
+     * Return Original Tags Title
+     *
+     * @return array
+     */
+    public static function getOriginalTagTitleList()
+    {
+        return [
+            self::TAG_ORIGINAL_ON_SALE => 'On Sale',
+            self::TAG_ORIGINAL_PREMIUM => 'Premium',
+            self::TAG_ORIGINAL_FEATURED => 'Featured',
+            self::TAG_ORIGINAL_FAMILY_PASS => 'Family Pass',
+            self::TAG_ORIGINAL_LIMITED => 'Limited Engagement',
+        ];
+    }
+
+    public static function getPriceByFilter(\common\models\form\Search $Search)
+    {
+        $dateTimeFromMax = clone $Search->getDateTimeFrom();
+        $dateTimeFromMax->add(new \DateInterval('P7D'));
+
+        $query = self::getActualPrices()
+            ->select(
+                [
+                    //'price.id',
+                    'price.start',
+                    'price.price',
+                    'price.any_time',
+                    'pricegroup.name',
+                    'pricegroup.id_external',
+                    'price_min' => 'MIN(price.price)',
+                    'price_max' => 'MAX(price.price)',
+                    'main.id_external as main_id_external',
+                    'special_rate',
+                    'retail_rate',
+                    'price.name',
+                    'price.description',
+                    'pricegroup.name as price_group_name',
+                ]
+            )
+            ->groupby('price.id')
+            ->andFilterWhere(['>=', 'price.start', $Search->getDateTimeFrom()->format('Y-m-d 00:00:00')])
+            ->andFilterWhere(['<=', 'price.start', $dateTimeFromMax->format('Y-m-d 23:59:59')]);
+        if (!empty($Search->externalIds)) {
+            $query->andWhere(['main.id_external' => $Search->externalIds]);
+        }
+        return $query->asArray()->all();
+    }
+
+    public static function preparePriceForList($priceAll): array
+    {
+        $tmp = [];
+        usort(
+            $priceAll,
+            static function ($a, $b) {
+                if ($a['start'] === $b['start']) {
+                    return 0;
+                }
+                return ($a['start'] < $b['start']) ? -1 : 1;
+            }
+        );
+        foreach ($priceAll as $p) {
+            $date = new DateTime($p['start']);
+            if ((int)$p['any_time'] === 1) {
+                $tmp[$p['main_id_external']][$p['price_group_name']]['list'][$date->format('Md')][$p['any_time']][] = $p;
+            } else if (
+                !empty($p['special_rate']) ||
+                empty($tmp[$p['main_id_external']][$p['price_group_name']]['list'][$date->format('Md')][$p['any_time']][$date->format('h:iA')])
+            ) {
+                $tmp[$p['main_id_external']][$p['price_group_name']]['list'][$date->format('Md')][$p['any_time']][$date->format('h:iA')] = $p;
+            }
+            $tmp[$p['main_id_external']][$p['price_group_name']]['id_external'] = $p['id_external'];
+        }
+        foreach ($tmp as $k => $p) {
+            ksort($p);
+            $tmp[$k] = $p;
+        }
+        foreach ($tmp as &$itemData) {
+            foreach ($itemData as &$data) {
+                if (!empty($data['list'])) {
+                    $min = 9999999999999;
+                    $max = 0;
+
+                    foreach ($data['list'] as $types) {
+                        foreach ($types as $price) {
+                            foreach ($price as $p) {
+                                $min = $p['price_min'] < $min ? $p['price_min'] : $min;
+                                $max = $p['price_max'] > $max ? $p['price_max'] : $max;
+                            }
+                        }
+                    }
+                    $data['min'] = $min;
+                    $data['max'] = $max;
+                }
+            }
+        }
+        unset($itemData, $data);
+        $priceAll = $tmp;
+        return $priceAll;
     }
 
     /**
@@ -362,6 +473,91 @@ class TrAttractions extends _source_TrAttractions
                 'INNER JOIN'
             )
             ->andOnCondition(self::getConditionActive());
+    }
+
+    /**
+     * Build query by $Search
+     *
+     * @param null|\common\models\form\Search $Search
+     *
+     * @return ActiveQuery
+     */
+    public static function getByFilter($Search = null)
+    {
+        if (!$Search) {
+            return self::getAvailable();
+        }
+
+        $tags = [];
+        if ($Search->tags) {
+            foreach ($Search->tags as $tag) {
+                if (self::TAG_ORIGINAL_ON_SALE !== self::getTagsValue($tag)) {
+                    $tags[] = self::getTagsValue($tag);
+                }
+            }
+        }
+
+        if ($Search->without_availability) {
+            $query = self::getActive()
+                ->distinct()
+                ->joinWith('prices', false, 'INNER JOIN');
+        } else {
+            $query = self::getAvailable()
+                ->andFilterWhere(['>=', 'start', $Search->getDateTimeFrom()->format('Y-m-d 00:00:00')])
+                ->andFilterWhere(['<=', 'start', $Search->getDateTimeTo()->format('Y-m-d 23:59:59')]);
+        }
+
+        if (in_array(self::TAG_USD, $Search->tags ? $Search->tags : [], true)) {
+            $query->andFilterWhere(['not', ['special_rate' => false]]);
+        }
+
+        if (in_array(self::TAG_USD, $Search->tags ?: [], true)
+            || in_array(self::TAG_ORIGINAL_ON_SALE, $Search->tags ?: [], true)) {
+            $query->andFilterWhere(['not', ['special_rate' => false]]);
+        }
+
+        if (!empty($Search->c) && !empty($Search->c[0])) {
+            $query->joinWith('categories')->andWhere(['id_external_category' => $Search->c]);
+        }
+
+        if ($Search->title) {
+            $query->joinWith('theatre')->andFilterWhere(
+                [
+                    'or',
+                    ['like', self::tableName() . '.name', $Search->title],
+                    ['like', TrTheaters::tableName() . '.name', $Search->title]
+                ]
+            );
+        }
+
+        if (!empty($Search->externalIds)) {
+            $query->andWhere([self::tableName() . '.id_external' => $Search->externalIds]);
+        }
+
+        if (isset($Search->statusWl)) {
+            $query->andWhere([self::tableName() . '.status_wl' => $Search->statusWl]);
+        }
+        if (!empty($Search->alternativeRate)) {
+            $query->andWhere(['>', TrAttractionsPrices::tableName() . '.alternative_rate', 0]);
+        }
+
+        $query->leftJoin(
+            '(' . self::actualMinPrice()
+                ->andWhere(['>', 'start', $Search->getDateTimeFrom()->format('Y-m-d 00:00:00')])
+                ->andWhere(['<=', 'start', $Search->getDateTimeTo()->format('Y-m-d 23:59:59')])
+                ->createCommand()
+                ->getRawSql() . ') as ' . self::getAliasMinPrice(),
+            self::getAliasMinPrice() . '.id = ' . self::tableName() . '.id'
+        );
+
+        $query
+            ->andFilterWhere(['or like', self::tableName() . '.location_external_id', $Search->l])
+            ->andFilterWhere(['>=', TrAttractionsPrices::tableName() . '.price', $Search->priceFrom])
+            ->andFilterWhere(['<=', TrAttractionsPrices::tableName() . '.price', $Search->priceTo])
+            ->andFilterWhere(['or like', self::tableName() . '.tags', $tags])
+            ->orderby($Search->orderby);
+
+        return $query;
     }
 
     /**

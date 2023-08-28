@@ -18,13 +18,18 @@ class AppAsset extends AssetBundle
     public $css = [
         '/css/font-circe/circe.css',
         '/css/bootstrap-datepicker.min.css',
+        '/css/jquery-ui.min.css',
+        '/css/jquery-ui.structure.min.css',
+        '/css/jquery.scrollbar.css',
         '/css/main.css',
         '/css/header.css',
         '/css/footer.css'
     ];
     public $js = [
         '/js/header.js',
+        '/js/jquery-ui.min.js',
         '/js/jquery.easing.1.3.js',
+        '/js/jquery.scrollbar.min.js',
         '/js/general.js',
     ];
     public $depends = [
