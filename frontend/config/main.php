@@ -16,9 +16,10 @@ return [
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'controllerNamespace' => 'frontend\controllers',
+    'timeZone' => 'America/Chicago',
     'components' => [
         'request' => [
-            'csrfParam' => '_csrf-frontend',
+            'enableCookieValidation'=>true,
         ],
         'user' => [
             'identityClass' => 'common\models\User',
@@ -66,9 +67,13 @@ return [
                 'sign-up/'                                                => 'site/signup',
                 'sign-in/'                                                => 'site/login',
                 'logout/'                                                 => 'site/logout',
+                $params['sectionsUrl']['shows'].'/'                       => 'shows/index',
                 $params['sectionsUrl']['shows'].'/<code:[\d\w\-]+>'       => 'shows/detail',
+                $params['sectionsUrl']['attractions'].'/'                 => 'attractions/index',
                 $params['sectionsUrl']['attractions'].'/<code:[\d\w\-]+>' => 'attractions/detail',
+                $params['sectionsUrl']['hotelsPL'].'/'                    => 'pl-hotel/index',
                 $params['sectionsUrl']['hotelsPL'].'/<code:[\d\w\-]+>'    => 'pl-hotel/detail',
+                $params['sectionsUrl']['hotels'].'/'                      => 'hotel/index',
                 $params['sectionsUrl']['hotels'].'/<code:[\d\w\-]+>'      => 'hotel/detail',
             ],
         ],

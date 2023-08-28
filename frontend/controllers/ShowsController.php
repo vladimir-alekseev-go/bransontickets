@@ -2,14 +2,159 @@
 
 namespace frontend\controllers;
 
+use common\models\Compare;
+use common\models\TrPrices;
 use common\models\TrShows;
+use DateInterval;
+use DateTime;
+use common\models\form\Search;
+use Yii;
+use yii\data\Pagination;
 use yii\db\ActiveQuery;
 use yii\db\Expression;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\web\Response;
 
 class ShowsController extends Controller
 {
+    public const mainClass = TrShows::class;
+
+    /**
+     * @var string $searchClass
+     */
+    protected $searchClass = Search::class;
+
+    /**
+     * @var $priceListInterval
+     */
+    public $priceListInterval;
+
+    /**
+     * {@inheritDoc}
+     * @throws Exception
+     */
+    public function init(): void
+    {
+        parent::init();
+        $this->setPriceListInterval();
+    }
+
+    /**
+     * @throws Exception
+     */
+    protected function setPriceListInterval(): void
+    {
+        $this->priceListInterval = new DateInterval('P7D');
+    }
+
+    /**
+     * @return array|string
+     * @throws Exception
+     */
+    public function actionIndex()
+    {
+        /**
+         * @var TrShows[] $items
+         */
+
+        $Search = new $this->searchClass(['model' => new TrShows]);
+        $Search->load(Yii::$app->getRequest()->get());
+
+        if (Yii::$app->request->isAjax) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            $this->layout = 'empty';
+        }
+
+        $query = TrShows::getByFilterAll($Search);
+
+        $query->with(['preview', 'theatre']);
+
+        $itemCount = $query->count();
+
+        $pagination = new Pagination(['totalCount' => $itemCount, 'pageSize' => 21]);
+
+        $items = $query->offset($pagination->offset)->limit($pagination->limit)->all();
+        if ($Search->fieldSort === Search::FIELD_SORT_MARKETING_LEVEL) {
+            $items = TrShows::reSort($items);
+        }
+
+        $cache = Yii::$app->cache;
+        $cacheKey = TrShows::TYPE . 'priceAll' . 'from' . $Search->dateTimeFrom->format(
+                'Y-m-d'
+            ) . 'to' . $Search->dateTimeTo->format('Y-m-d')
+            . 'timeFrom' . $Search->timeFrom . 'timeTo' . $Search->timeTo;
+        $priceAll = $cache->get($cacheKey);
+        if ($priceAll === false) {
+            $priceAll = TrShows::getPriceByFilter($Search, $this->priceListInterval);
+            $priceAll = TrShows::preparePriceForList($priceAll);
+            $cache->set($cacheKey, $priceAll, 60 * 15);
+        }
+
+        $NearestDates = TrPrices::getNearestAvailable(
+            new DateTime($Search->dateFrom),
+            ArrayHelper::getColumn($items, 'id_external')
+        )
+            ->andWhere(
+                ['<', 'start', (new DateTime($Search->dateFrom))->add(new DateInterval('P7D'))->format('Y-m-d H:i:s')]
+            )
+            ->asArray()->all();
+        $NearestDates = ArrayHelper::index($NearestDates, 'id_external');
+
+        foreach ($items as &$item) {
+            if (!empty($NearestDates[$item->id_external])) {
+                $item->setBuyNowUrl(
+                    $item->getUrl(
+                        [
+                            'tickets-on-date' => $NearestDates[$item->id_external]['start'],
+                            '#' => 'availability',
+                        ]
+                    )
+                );
+            }
+        }
+        unset($item);
+
+        if (!Yii::$app->request->isAjax) {
+            $categories = ArrayHelper::index(TrShows::getActualCategoriesCash(), 'id_external');
+        }
+
+        $rangePrice = $Search->getSliderPriceRange();
+
+        Yii::$app->view->params['view']['search'] = $Search;
+
+        if (Yii::$app->request->isAjax) {
+            return [
+                'listHtml' => $this->render(
+                    '@app/views/shows/items',
+                    compact(
+                        'items',
+                        'pagination',
+                        'rangePrice',
+                        'priceAll',
+                        'Search'
+                    )
+                ),
+                'sliderPriceRange' => $rangePrice,
+                'itemCount' => $itemCount,
+            ];
+        }
+
+        return $this->render(
+            'index',
+            compact(
+                'items',
+                'pagination',
+                'categories',
+                'rangePrice',
+                'priceAll',
+                'Search',
+                'itemCount',
+            )
+        );
+    }
+
     /**
      * @param $code
      *
@@ -39,5 +184,32 @@ class ShowsController extends Controller
             ->all();
 
         return $this->render('detail', compact('model', 'showsRecommended'));
+    }
+
+    /**
+     * @return string|Response
+     * @throws Exception
+     */
+    public function actionPopupCompare()
+    {
+        if (!Yii::$app->request->isAjax) {
+            return $this->redirect(['index']);
+        }
+        $Compare = new Compare();
+        $model = new TrShows;
+        $ids = $Compare->getIDsByType($model::TYPE);
+        if (empty($ids)) {
+            return $this->redirect(['index']);
+        }
+        $Search = new $this->searchClass(['model' => $model, 'externalIds' => $ids]);
+        $Search->load([]);
+        $items = TrShows::getByFilterAll($Search)->all();
+        $priceAll = TrShows::getPriceByFilter($Search, new DateInterval('P5D'));
+        $priceAll = TrShows::preparePriceForList($priceAll);
+
+        return $this->renderAjax(
+            '@app/views/components/popup-compare-data',
+            compact('model', 'items', 'Search', 'priceAll')
+        );
     }
 }

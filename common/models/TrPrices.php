@@ -16,7 +16,13 @@ class TrPrices extends _source_TrPrices
     public const type = 'shows';
     public const TYPE = 'shows';
     
+	public const PRICE_TYPE_FAMILY_PASS = 'FAMILY PASS';
+    public const PRICE_TYPE_FAMILY_PASS_4_PACK = 'FAMILY PASS 4 PACK';
+    public const PRICE_TYPE_FAMILY_PASS_8_PACK = 'FAMILY PASS 8 PACK';
+
     public const MAIN_CLASS = TrShows::class;
+
+    public const NAME_ADULT = 'ADULT';
     
 	public function init()
 	{
@@ -138,6 +144,46 @@ class TrPrices extends _source_TrPrices
         return self::find()
             ->andOnCondition(['stop_sell'=>0])
             ->andOnCondition('start >= NOW( )')
+        ;
+    }
+
+	/**
+     * @return ActiveQuery
+     */
+    public static function getAvailable(): ActiveQuery
+    {
+        return self::getActive()
+            ->andOnCondition(['or','available > 0','free_sell=1'])
+        ;
+    }
+
+	/**
+     * @param DateTime $date
+     * @param array    $ids
+     *
+     * @return ActiveQuery
+     */
+    public static function getNearestAvailable(DateTime $date, array $ids): ActiveQuery
+    {
+        return self::getAvailable()
+            ->joinWith(['show'], false)
+            ->select([
+                TrShows::tableName().'.id',
+                TrShows::tableName().'.id_external',
+                self::tableName().'.price_external_id',
+                'start',
+                'code',
+                'delta' => 'ABS(UNIX_TIMESTAMP(start) - '.$date->getTimestamp().')'
+            ])
+            ->distinct()
+    	    ->orderby('delta')
+    	    ->groupby([
+    	        TrShows::tableName().'.id',
+    	        TrShows::tableName().'.id_external',
+    	        self::tableName().'.price_external_id',
+    	        'start',
+    	        'delta'])
+            ->where([TrShows::tableName().'.id_external' => $ids])
         ;
     }
 }
