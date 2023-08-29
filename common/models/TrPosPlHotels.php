@@ -2,6 +2,8 @@
 
 namespace common\models;
 
+use common\models\form\SearchPlHotel;
+use common\models\priceLine\NewPriceLineHotels;
 use common\tripium\Tripium;
 use DateInterval;
 use DateTime;
@@ -9,6 +11,8 @@ use Exception;
 use Yii;
 use yii\base\InvalidConfigException;
 use yii\db\ActiveQuery;
+use yii\helpers\ArrayHelper;
+use yii\helpers\Json;
 
 class TrPosPlHotels extends _source_TrPosPlHotels
 {
@@ -178,6 +182,158 @@ class TrPosPlHotels extends _source_TrPosPlHotels
         } catch (Exception $e) {
             return null;
         }
+    }
+
+    /**
+     * Build query by $Search
+     *
+     * @param SearchPlHotel|null $Search
+     *
+     * @return ActiveQuery
+     */
+    public static function getByFilter(SearchPlHotel $Search = null): ActiveQuery
+    {
+        if (!$Search) {
+            return self::getAvailable();
+        }
+
+        $query = self::getActive()->distinct();
+
+        if ($Search->title) {
+            $query->andWhere(['like', self::tableName() . '.name', $Search->title]);
+        }
+
+        if (isset($Search->statusWl)) {
+            $query->andWhere([self::tableName() . '.status_wl' => $Search->statusWl]);
+        }
+
+        return $query;
+    }
+
+    /**
+     * @param SearchPlHotel $Search
+     *
+     * @return array
+     */
+    public static function withPriceLine(SearchPlHotel $Search): array
+    {
+        $Tripium = new Tripium;
+        $plHotels = $Tripium->getPLHotels(
+            $Search->getArrivalDate(),
+            $Search->getDepartureDate(),
+            count($Search->room),
+            $Search->getAdultsCount(),
+            $Search->getChildrenCount(),
+            $Search->fieldSort,
+            $Search->externalIds
+        );
+
+        if ($Search->amenities) {
+            foreach ($plHotels as $k => $item) {
+                foreach ($item['amenities'] as $i => &$v) {
+                    $v = strtolower($v);
+                }
+                unset($v);
+                $has = false;
+                foreach ($Search->amenities as $amenity) {
+                    if (in_array($amenity, $item['amenities'], true)) {
+                        $has = true;
+                    }
+                }
+                if (!$has) {
+                    unset($plHotels[$k]);
+                }
+            }
+        }
+
+        if (!empty($Search->city)) {
+            foreach ($plHotels as $k => $item) {
+                if (!in_array($item['city'], $Search->city, false)) {
+                    unset($plHotels[$k]);
+                }
+            }
+        }
+        $externalIds = ArrayHelper::getColumn($plHotels, 'id');
+
+        /**
+         * @var TrPosPlHotels[] $items
+         */
+        $items = self::find()
+            ->andWhere(['id_external' => $externalIds])
+            ->with(['preview'])
+            ->all();
+        $items = ArrayHelper::index($items, 'id_external');
+        $results = [];
+        $shouldUpdateExternalId = [];
+        foreach ($plHotels as $hotel) {
+            $TrPosPlHotels = $items[$hotel['id']] ?? null;
+            if (!empty($TrPosPlHotels)) {
+                $TrPosPlHotels->setPriceLineData($hotel);
+                if (($Search->priceFrom === null || $TrPosPlHotels->avgNightlyRate() >= $Search->priceFrom)
+                    && ($Search->priceTo === null || $TrPosPlHotels->avgNightlyRate() <= $Search->priceTo)) {
+                    $results[] = $TrPosPlHotels;
+                }
+            } else {
+                $shouldUpdateExternalId[] = $hotel['id'];
+            }
+        }
+
+        if ($shouldUpdateExternalId) {
+            foreach ($shouldUpdateExternalId as $external_id) {
+                $newPriceLineHotels = new NewPriceLineHotels(
+                    [
+                        'external_id' => $external_id,
+                        'status' => NewPriceLineHotels::STATUS_NEW,
+                        'query' => Json::encode([
+                            'setStatus' => 1,
+                            'check_in' => $Search->getArrivalDate(),
+                            'check_out' => $Search->getDepartureDate(),
+                            'rooms' => count($Search->room),
+                            'adults' => $Search->getAdultsCount(),
+                            'children' => $Search->getChildrenCount(),
+                            'sort_by' => $Search->fieldSort
+                        ]),
+                    ]
+                );
+                $newPriceLineHotels->save();
+            }
+        }
+        $idsByFilter = self::getByFilter($Search)->select('id')->column();
+        foreach ($results as $k => $item) {
+            if (!in_array($item->id, $idsByFilter, false)) {
+                unset($results[$k]);
+            }
+        }
+        if ($Search->starRating) {
+            foreach ($results as $k => $item) {
+                if (!in_array((int)$item->rating, $Search->starRating, false)) {
+                    unset($results[$k]);
+                }
+            }
+        }
+        if (in_array(
+            $Search->fieldSort,
+            [
+                SearchPlHotel::FIELD_SORT_STAR_RATING,
+                SearchPlHotel::FIELD_SORT_STAR_RATING_DESC
+            ],
+            true
+        )) {
+            usort(
+                $results,
+                static function ($a, $b) use ($Search) {
+                    if ($a->rating === $b->rating) {
+                        return 0;
+                    }
+                    if ($Search->fieldSort === SearchPlHotel::FIELD_SORT_STAR_RATING_DESC) {
+                        return ($a->rating > $b->rating) ? -1 : 1;
+                    }
+                    return ($a->rating < $b->rating) ? -1 : 1;
+                }
+            );
+        }
+
+        return $results;
     }
 
     /**
