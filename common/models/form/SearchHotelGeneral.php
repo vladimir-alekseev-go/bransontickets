@@ -369,34 +369,38 @@ class SearchHotelGeneral extends Model
         for ($i = 5; $i > 0; $i--) {
             if ($new) {
                 $res[$i] = '<span class="star-rating"><span class="star-rating-box">
-				<span class="fon"><span 
-				class="icon ib-star-solid"></span><span 
-				class="icon ib-star-solid"></span><span 
-				class="icon ib-star-solid"></span><span 
-				class="icon ib-star-solid"></span><span 
-				class="icon ib-star-solid"></span></span>
-				<span class="val" style="width:' . ($i * 20) . '%;"><span 
-				class="icon ib-star-solid"></span><span 
-				class="icon ib-star-solid"></span><span 
-				class="icon ib-star-solid"></span><span 
-				class="icon ib-star-solid"></span><span 
-				class="icon ib-star-solid"></span></span>
+				<span class="fon">
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                </span>
+				<span class="val" style="width:' . ($i * 20) . '%;">
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                </span>
 			</span></span>
 		    <span><b>' . $i . ' stars</b></span> <i></i>';
             } else {
                 $res[$i] = '<span class="rates">
-                    <span class="fon"><span 
-                    class="icon ibranson-star"></span><span 
-                    class="icon ibranson-star"></span><span 
-                    class="icon ibranson-star"></span><span 
-                    class="icon ibranson-star"></span><span 
-                    class="icon ibranson-star"></span></span>
-                    <span class="val" style="width:' . ($i * 20) . '%;"><span 
-                    class="icon ibranson-star"></span><span 
-                    class="icon ibranson-star"></span><span 
-                    class="icon ibranson-star"></span><span 
-                    class="icon ibranson-star"></span><span 
-                    class="icon ibranson-star"></span></span>
+                    <span class="fon">
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                    </span>
+                    <span class="val" style="width:' . ($i * 20) . '%;">
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                    </span>
                 </span>
                 <span><b>' . $i . ' stars</b></span> <i></i>';
             }

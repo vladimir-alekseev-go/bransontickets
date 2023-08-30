@@ -2,6 +2,7 @@
     --c-white: #FFFFFF;
     --c-white-smoky: #F5F5F5;
     --c-gray-granite: #313844;
+    --c-gray-light: #d3d3d3;
     --c-blue-deep: #252161;
     --c-new-blue: #373281;
     --c-blue-deep-dark: rgba(37, 33, 97, 0.7);
@@ -17,9 +18,10 @@
     --c-violet-gray: #7F00FF;
     --c-violet: #E100FF;
     --c-violet-dark: #A700FF;
-    --c-light-yellow: #e6e605;
+    --c-yellow: #FF9C01;
     --c-light-red: #f0416c;
-    --c-light-green: #42f56f;
+    --c-green: #6BAE05;
+    --c-light-green: #F1F8E6;
     --c-turquoise: #05BFBB;
 }
 
@@ -39,6 +41,9 @@ main {flex:1;}
 .margin-block {margin:0 0 60px;}
 .margin-block-small {margin:0 0 40px;}
 
+ul, li {margin:0;padding:0;}
+ul li {list-style:none;padding:0 0 0 20px;position:relative;}
+
 .frame.horizontal {overflow: hidden;}
 .frame.horizontal ul {list-style:none;margin:0 0 10px;padding:0;height:100%;display:flex;flex-direction:row;overflow:hidden;position:relative;}
 .frame.horizontal ul li {width:480px;display:block;margin:0 0 0 20px;padding:0 0 15px;list-style:none;text-align:left;background:var(--c-white);border-radius:10px;position:relative;}
@@ -50,8 +55,8 @@ main {flex:1;}
 .img-crop-no-image {background-image:url(/img/bransontickets-noimage.png)}
 
 input[type=checkbox], input[type=radio] {border-radius:0;border:none;position:absolute;left:-9999px}
-input[type=checkbox]+label:before, input[type=radio]+label:before {display:inline-block;color:var(--c-white);background:var(--c-white);line-height:20px!important;font-size:16px!important;content:"✔";width:20px;height:20px;border:2px solid var(--c-white);border-radius:4px;position:relative;top:1px;padding-left:2px;margin-right:5px;}
-input[type=checkbox]:checked+label:before, input[type=radio]:checked+label:before {color:var(--c-new-blue);border-color:var(--c-white);}
+input[type=checkbox]+label:before, input[type=radio]+label:before {display:inline-block;color:var(--c-white);background:var(--c-white);line-height:20px!important;font-size:16px!important;content:url('/img/check-white.svg');width:20px;height:20px;border:2px solid var(--c-white);border-radius:4px;position:relative;top:1px;padding:1px;margin-right:5px;}
+input[type=checkbox]:checked+label:before, input[type=radio]:checked+label:before {color:var(--c-new-blue);border-color:var(--c-white);content:url('/img/check-blue.svg');}
 input[type=radio]+label:before {border-radius:20px;content:"";}
 input[type=radio]:checked+label:before {background:var(--c-white);border-width:5px;}
 input[type=checkbox]:disabled+label:before, input[type=radio]:disabled+label:before {background:var(--c-new-blue);border-color:var(--c-new-blue);color:var(--c-new-blue);}
@@ -66,6 +71,21 @@ input[type=radio]:checked:disabled+label:before {background:var(--c-light-violet
 @media (max-width:835px) {
     .modal-dialog .close {border-radius:0 8px 0 8px;right:0;top:0;}
 }
+
+.load-progress {position:relative;min-height:80px;}
+.load-progress:after {position:absolute;display:block;content:"";top:0;right:0;bottom:0;left:0;background:rgba(255,255,255,0.7);z-index:990;}
+.load-progress:before {position:absolute;display:block;content:"";width:32px;top:25px;left:50%;margin:0 0 0 -15px;height:30px;background:url('/img/25.svg') no-repeat 50% 50%;z-index:999;
+    filter: brightness(0) opacity(0.5) drop-shadow(0 0 0 rgb(21, 43, 63));
+}
+.load-progress.load-progress-page {min-height:70px;margin:-20px 0 0;}
+
+.blue {color:var(--c-new-blue);}
+
+.star-rating .star-rating-box {position:relative;display:inline-block;font-size:18px;line-height:18px;}
+.star-rating .fon, .star-rating .val {white-space:nowrap;display:inline-block;}
+.star-rating .fon i {color:var(--c-gray-light);}
+.star-rating .val {position:absolute;top:0;left:0;overflow:hidden;}
+.star-rating .val i {color:var(--c-violet-dark);}
 
 /* main-page */
 
@@ -421,6 +441,7 @@ input[type=radio]:checked:disabled+label:before {background:var(--c-light-violet
 .overview-calendar-block .ticket .buy-btn {display:block;max-width:114px;margin:0 auto 20px;padding:8px 10px 4px;color:var(--c-white);font-weight:700;font-size:20px;
     background:linear-gradient(90deg, var(--c-violet-gray) 0%, var(--c-violet) 100%);border-radius:5px;text-align:center;border:none;}
 .overview-calendar-block .ticket .buy-btn:hover {background:linear-gradient(90deg, var(--c-violet-gray) 60%, var(--c-violet-dark) 100%);}
+.overview-calendar-block .ticket .buy-btn:focus {box-shadow:none;}
 .overview-calendar-block .availability {display:flex;align-items:center;justify-content:space-between;margin-left:10px;border-bottom:1px solid var(--c-blue-deep);}
 .overview-calendar-block .availability .head {font-weight:700;font-size:24px;color:var(--c-blue-deep);}
 .overview-calendar-block .availability .more-available-dates-head {margin-bottom:7px;font-weight:700;font-size:16px;color:var(--c-blue-deep);text-decoration:none;}
@@ -443,20 +464,13 @@ input[type=radio]:checked:disabled+label:before {background:var(--c-light-violet
 .overview-calendar-block .label {font-weight:700;font-size:18px;color:var(--c-blue-deep);}
 .overview-calendar-block  .input-daterange input {width:220px;padding:11px 14px 7px;text-align:left;color:var(--c-blue-deep-dark-3);font-weight:350;font-size:16px;border:1px solid var(--c-blue-deep);border-radius:5px;box-shadow:none !important;}
 .overview-calendar-block .filter-rooms-description {font-weight:700;font-size:18px;color:var(--c-blue-deep);}
-.overview-calendar-block .open-detail-room, .overview-calendar-block .filter-rooms-add {font-weight:400;font-size:16px;color:var(--c-blue-deep);text-decoration:none;}
-.overview-calendar-block .filter-rooms-add {display:block;padding:10px;}
-.overview-calendar-block .filter-room {display:none;overflow:hidden;width:254px;padding:20px 20px 0;position:absolute;z-index:999;background:var(--c-white);box-shadow:0 1px 20px 0 var(--c-shadow-purple-1);border-radius:5px;}
-.overview-calendar-block .filter-room .rooms .item {clear:both;margin:0 0 15px;overflow:hidden;}
-.overview-calendar-block .filter-room .rooms .item .remove {float:right;padding:10px 0 0;display:inline-block;}
-.overview-calendar-block .filter-room .remove {font-size:12px;line-height:10px;color:var(--c-blue-deep);text-transform:uppercase;display:block;text-decoration:none;}
-.overview-calendar-block label.room {font-weight:700;font-size:18px;color:var(--c-blue-deep);}
-.overview-calendar-block label {font-weight:400;font-size:16px;color:var(--c-blue-deep);}
 .overview-calendar-block button.search-room {margin-top:34px;}
 .overview-calendar-block .search-room {width:100%;padding:7px 10px 3px;font-size:20px;font-weight:700;border:1px solid var(--c-new-blue);border-radius:5px;background:var(--c-new-blue);text-decoration:none;color:var(--c-white);}
 .overview-calendar-block .search-room:hover {border:none;padding:8px 12px 4px;background:linear-gradient(90deg, var(--c-violet-gray) 60%, var(--c-violet-dark) 100%);color:var(--c-white);}
 
 @media (max-width: 1600px) {
     .overview-calendar-block .search-room {padding:9px 10px 5px;font-size:18px;}
+    .overview-calendar-block .search-room:hover {padding:10px 12px 6px;}
 }
 
 @media (max-width: 1200px) {
@@ -489,6 +503,16 @@ input[type=radio]:checked:disabled+label:before {background:var(--c-light-violet
     .overview-calendar-block .calendar-slider .calendar-slider-items .w {padding:0 0 10px 0;font-size:14px;}
     .overview-calendar-block .calendar-slider .calendar-slider-items .tag {font-size:16px;}
 }
+
+.rooms-type .it {position:relative;margin-top:20px;padding:24px;background:var(--c-white);border-radius:10px;color:var(--c-new-blue);}
+.rooms-type .img {float:left;margin:0 10px 0 0;}
+.rooms-type .img img {width:100px;border-radius:8px;}
+.rooms-type .title {font-weight:bold;margin:0 0 5px;}
+.rooms-type .cost {font-weight:bold;font-size:18px;white-space:nowrap;}
+.rooms-type .buy-btn {display:block;padding:8px 10px 4px;color:var(--c-white);font-weight:700;font-size:16px;background:linear-gradient(90deg, var(--c-violet-gray) 0%, var(--c-violet) 100%);border-radius:5px;text-align:center;border:none;}
+.rooms-type .buy-btn:hover {background:linear-gradient(90deg, var(--c-violet-gray) 60%, var(--c-violet-dark) 100%);}
+.rooms-type .buy-btn:focus {box-shadow:none;}
+.rooms-type .it .reservation-cancel {display:none;}
 
 .overview-description {padding:20px 0 0 0;}
 .overview-description .title {padding:20px 0 0 0;font-weight:700;font-size:24px;color:var(--c-white);}
@@ -719,6 +743,15 @@ input[type=radio]:checked:disabled+label:before {background:var(--c-light-violet
     .packages-panel .item .package-name .save-up {width:100%;margin:0 0 20px 0;text-align:center;font-size:14px;}
 }
 
+.open-detail-room, .filter-rooms-add {font-weight:400;font-size:16px;color:var(--c-new-blue);text-decoration:none;}
+.filter-rooms-add {display:block;padding:10px;}
+.filter-room {display:none;overflow:hidden;width:254px;padding:20px 20px 0;position:absolute;z-index:999;background:var(--c-white);box-shadow:0 1px 20px 0 var(--c-shadow-purple-1);border-radius:5px;}
+.filter-room .rooms .item {clear:both;margin:0 0 15px;overflow:hidden;}
+.filter-room .rooms .item .remove {float:right;padding:10px 0 0;display:inline-block;}
+.filter-room .remove {font-size:12px;line-height:10px;color:var(--c-new-blue);text-transform:uppercase;display:block;text-decoration:none;}
+.filter-room .rooms label {font-weight:400;font-size:16px;color:var(---c-new-blue);}
+.filter-room label.room {font-weight:700;font-size:18px;color:var(--c-new-blue);}
+
 /* list page */
 
 .filter-up {padding-top:120px;}
@@ -748,7 +781,6 @@ input[type=radio]:checked:disabled+label:before {background:var(--c-light-violet
 .list-filter .it {margin:0 0 15px;}
 .list-filter .it a {font-size:18px;color:var(--c-white);text-decoration:none;}
 .list-filter .it a:focus {box-shadow:none;}
-.list-filter .it a i {margin-right:5px;}
 .list-filter label {font-size:18px;}
 .list-filter .big {font-weight:bold;}
 .list-filter input {padding:11px 14px 7px;text-align:left;color:var(--c-blue-deep-dark-3);font-weight:350;font-size:16px;border:1px solid var(--c-blue-deep);box-shadow:none !important}
@@ -759,6 +791,13 @@ input[type=radio]:checked:disabled+label:before {background:var(--c-light-violet
 .list-filter .timerange .time {float:right;}
 .list-filter .price-range-info {float:right;font-weight:bold;}
 .list-filter label {display:block;margin-top:5px;}
+.list-filter .it-filter-rooms, .detail-hotel-filter-rooms {background:var(--c-white);border-radius:10px;border:1px solid var(--c-new-blue);padding:10px 14px;color:var(--c-new-blue);}
+.list-filter .it-filter-rooms .filter-rooms-description, .detail-hotel-filter-rooms .filter-rooms-description {font-weight:bold;}
+.list-filter .it-filter-rooms .open-detail-room, .detail-hotel-filter-rooms .open-detail-room {color:var(--c-new-blue);}
+.list-filter .it.it-filter-rooms .filter-room a {font-size:16px;color:var(--c-new-blue);}
+.list-filter .more-elem-filter {display:none;}
+.list-filter .show-more-filter {margin-left:20px;margin-top:5px;cursor:pointer;display:inline-block;font-weight:bold;}
+.list-filter .txt-filter.less {display:none;}
 
 @media (max-width: 1200px) {
     .list-filter label {font-size:16px;}
@@ -809,6 +848,7 @@ input[type=radio]:checked:disabled+label:before {background:var(--c-light-violet
 .line-title {clear:both;text-align:center;padding:15px 0 0;color:var(--c-new-blue);}
 .line-title:before {display:block;content:"";border-top:1px solid var(--c-new-blue);margin:0 0 -12px;}
 .line-title span {display:inline;padding:0 10px;position:relative;z-index:5;color:var(--c-new-blue);font-size:16px;font-weight:900;text-transform:uppercase;background:var(--c-white);}
+.line-title + .it {border-top:none;}
 .show-list-list .it.featured {padding-top:65px;}
 .show-list-list .tags {float:right;white-space:nowrap;}
 .show-list-list .tags span {margin-left:5px;}
@@ -820,13 +860,14 @@ input[type=radio]:checked:disabled+label:before {background:var(--c-light-violet
 .tag-featured:before {content:'';position:relative;top:4px;display:inline-block;filter:brightness(0) invert(1);width:18px;height:18px;background-image:url('/img/star.svg');background-repeat:no-repeat, repeat;}
 .tag-premium {background:var(--c-violet);color:var(--c-white);}
 .tag-premium:before {content:'';position:relative;top:4px;display:inline-block;filter:brightness(0) invert(1);width:18px;height:18px;background-image:url('/img/gem.svg');background-repeat:no-repeat, repeat;}
-.tag-family-pass {background:var(--c-light-yellow);color:var(--c-white);}
+.tag-family-pass {background:var(--c-yellow);color:var(--c-white);}
 .tag-family-pass:before {content:'';position:relative;top:4px;display:inline-block;filter:brightness(0) invert(1);width:18px;height:18px;background-image:url('/img/users.svg');background-repeat:no-repeat, repeat;}
 .tag-non-refundable {background:var(--c-light-red);color:var(--c-white);}
-.tag-on-sale {background:var(--c-light-green);color:var(--c-white);}
+.tag-on-sale {background:var(--c-green);color:var(--c-white);}
 .tag-on-sale:before {content:'';position:relative;top:4px;display:inline-block;filter:brightness(0) invert(1);width:18px;height:18px;background-image:url('/img/tag.svg');background-repeat:no-repeat, repeat;}
 .tag-limited {background:var(--c-turquoise);color:var(--c-white);}
 .tag-limited:before {content:'';position:relative;top:4px;display:inline-block;filter:brightness(0) invert(1);width:18px;height:18px;background-image:url('/img/clock.svg');background-repeat:no-repeat, repeat;}
+.tag-refundable {background:var(--c-light-green);color:var(--c-green);}
 .show-list-list .left {width:200px;float:left;margin:0 15px 0 0;}
 .show-list-list .img {display:block;margin:0 0 10px;}
 .show-list-list .img img {width:100%;border-radius:4px;}
@@ -848,6 +889,7 @@ input[type=radio]:checked:disabled+label:before {background:var(--c-light-violet
 .show-list-list .cost {font-weight:bold;font-size:20px;white-space:nowrap;color:var(--c-new-blue);}
 .show-list-list .buy-btn {display:block;padding:8px 10px 4px;color:var(--c-white);font-weight:700;font-size:20px;background:linear-gradient(90deg, var(--c-violet-gray) 0%, var(--c-violet) 100%);border-radius:5px;text-align:center;border:none;}
 .show-list-list .buy-btn:hover {background:linear-gradient(90deg, var(--c-violet-gray) 60%, var(--c-violet-dark) 100%);}
+.show-list-list .buy-btn:focus {box-shadow:none;}
 .show-list-list .data {margin-left:213px;}
 .show-list-list .dates b {font-size:16px;font-weight:700;margin:0 0 3px;}
 .show-list-list .dates b, .show-list-list .dates span {color:var(--c-new-blue);display:block;width:100px;text-align:center;}
@@ -857,6 +899,11 @@ input[type=radio]:checked:disabled+label:before {background:var(--c-light-violet
 .show-list-list .time a.tag {border:1px solid var(--c-new-blue);background:var(--c-new-blue);text-decoration:none;color:var(--c-white);}
 .show-list-list .time a.tag:hover {border:none;padding:4px 7px 2px;background:linear-gradient(90deg, var(--c-violet-gray) 60%, var(--c-violet-dark) 100%);color:var(--c-white);}
 .show-list-list .time .tag-n-a {color:var(--c-new-blue);}
+.show-list-list .review-rating * {line-height:10px;}
+.show-list-list .amenities {overflow:hidden;}
+.show-list-list ul li:before {display:inline-block;content:url('/img/check-blue.svg');width:18px;height:18px;position:absolute;top:1px;left:0;}
+.show-list-list .amenities li {width:33.33333%;float:left;padding:0 30px 0 25px;color:var(--c-new-blue);font-size:18px;}
+.show-list-list .type-hotels .star-rating {float:right;}
 
 .show-list-list input[type=checkbox]+label:before, input[type=radio]+label:before {border:2px solid var(--c-new-blue);}
 .show-list-list input[type=checkbox]:checked+label:before, input[type=radio]:checked+label:before {color:var(--c-new-blue);border-color:var(--c-new-blue);}
@@ -911,6 +958,9 @@ input[type=radio]:checked:disabled+label:before {background:var(--c-light-violet
     .show-list-list .tags .tag {margin:0 5px 10px 0;}
     .show-list-list .tags .tag-featured {position:static;width:auto;}
     .show-list-list .data .date-block:nth-child(7), .show-list-list .data .tag-block:nth-child(7) {display:none;}
+    .show-list-list .type-hotels .star-rating {float:none;}
+    .show-list-list ul li:before {width:16px;height:16px;}
+    .show-list-list .amenities li {padding:0 30px 0 20px;width:50%;font-size:16px;}
 }
 
 @media (max-width: 470px) {
@@ -936,6 +986,7 @@ input[type=radio]:checked:disabled+label:before {background:var(--c-light-violet
 .compare-list .data .date-block:nth-child(7), .compare-list .data .tag-block:nth-child(7) {display:none;}
 .compare-list .dates b, .compare-list .dates span {width:80px;}
 .compare-list .time .tag, .compare-list .tag-block {width:80px;}
+.compare-list .links a {font-size:16px;}
 
 @media (max-width: 991px) {
     .modal-dialog.popup-compare {

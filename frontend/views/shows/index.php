@@ -23,6 +23,7 @@ use yii\widgets\LinkPager;
 $this->context->layout = 'main-list';
 $this->title = constant(get_class($Search->model) . '::NAME_PLURAL');
 
+$this->registerJsFile('/js/page-nav.js', ['depends' => [JqueryAsset::class]]);
 $this->registerJsFile('/js/bootstrap-datepicker.min.js', ['depends' => [JqueryAsset::class]]);
 $this->registerJsFile('/js/datepicker.js', ['depends' => [JqueryAsset::class]]);
 $this->registerJsFile('/js/data-list.js', ['depends' => [JqueryAsset::class]]);

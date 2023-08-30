@@ -481,9 +481,6 @@ class TrShows extends _source_TrShows
             $query->andWhere([self::tableName() . '.id_external' => $Search->externalIds]);
         }
 
-        if (isset($Search->statusWl)) {
-            $query->andWhere([self::tableName() . '.status_wl' => $Search->statusWl]);
-        }
         if (!empty($Search->alternativeRate)) {
             $query->andWhere(['>', TrPrices::tableName() . '.alternative_rate', 0]);
         }

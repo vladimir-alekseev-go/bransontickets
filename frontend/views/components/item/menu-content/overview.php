@@ -27,7 +27,7 @@ use yii\web\JqueryAsset;
                                     Tickets from
                                 <?php } ?>
                             </div>
-                        <div class="price">$ 46.39</div>
+                        <div class="price">$ <?= $model->min_rate ?></div>
                         <a href="#" class="btn buy-btn">
                             <?php if ($model instanceof TrPosHotels || $model instanceof TrPosPlHotels) { ?>
                                 Book now
@@ -56,10 +56,6 @@ use yii\web\JqueryAsset;
                             $HotelReservationForm->model->code . '")'
                         ); ?>
                         <?php $this->registerJs('hotelDetail.init()'); ?>
-
-                        <div id="show-list" class="rooms-type-list">
-                            <?= $this->render('@app/views/components/item/menu-content/hotel-rooms', compact('HotelReservationForm')) ?>
-                        </div>
                     <?php } else { ?>
                         <div class="availability">
                             <div class="head">Availability</div>
@@ -126,6 +122,13 @@ use yii\web\JqueryAsset;
             </div>
         </div>
     </div>
+    <?php if ($model instanceof TrPosHotels || $model instanceof TrPosPlHotels) { ?>
+        <div class="fixed">
+            <div id="show-list" class="rooms-type-list">
+                <?php //$this->render('@app/views/components/item/menu-content/hotel-rooms', compact('HotelReservationForm')) ?>
+            </div>
+        </div>
+    <?php } ?>
     <div class="fixed">
         <div class="overview-description">
             <div class="row">

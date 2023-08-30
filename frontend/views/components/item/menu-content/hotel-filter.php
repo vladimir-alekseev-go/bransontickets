@@ -26,7 +26,7 @@ $form = $form ?? ActiveForm::begin(
         <div class="row input-daterange default-range">
             <div class="col-12 col-lg-6 it js-it">
                 <div class="row">
-                    <div class="col-6 label gray mb-1">Check in</div>
+                    <div class="col-6 label mb-1">Check in</div>
                 </div>
                 <?= $form->field(
                     $Search,
@@ -40,7 +40,7 @@ $form = $form ?? ActiveForm::begin(
             </div>
             <div class="col-12 col-lg-6 it js-it">
                 <div class="row">
-                    <div class="col-6 label gray mb-1">Check out</div>
+                    <div class="col-6 label mb-1">Check out</div>
                 </div>
                 <?= $form->field(
                     $Search,

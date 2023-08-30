@@ -1,9 +1,11 @@
 <?php
 
+use common\models\form\HotelReservationForm;
 use common\models\TrPosHotels;
 
 /**
- * @var TrPosHotels $model
+ * @var TrPosHotels          $model
+ * @var HotelReservationForm $HotelReservationForm
  */
 
 $model = $HotelReservationForm->model;

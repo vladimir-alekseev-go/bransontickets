@@ -1,6 +1,5 @@
 <?php
 
-use common\helpers\Template;
 use common\models\TrPosPlHotels;
 use common\models\TrShows;
 
@@ -32,7 +31,7 @@ $currentCity = null;
         <?php }
         if ($model instanceof TrPosPlHotels && $currentCity !== $model->city) {?>
         <?php $currentCity = $model->city?>
-        <div class="city-line-title line-title"><span><?= $model->city?></span></div>
+        <?php /* ?><div class="city-line-title line-title"><span><?= $model->city?></span></div><?php } */ ?>
     <?php }
         echo $this->render(
             '@app/views/components/list-item',

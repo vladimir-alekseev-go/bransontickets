@@ -3,7 +3,6 @@
 namespace common\models\form;
 
 use common\models\priceLine\PriceLine;
-use common\models\TrBasket;
 use common\models\TrPosPlHotels;
 use common\tripium\Tripium;
 use Exception;
@@ -42,21 +41,12 @@ class PlHotelReservationForm extends GeneralReservationForm
      */
     public $agreeOverwriteOrder = false;
 
-    /**
-     * @var TrBasket
-     */
-    public $basket;
-
     public function __construct(array $attributes = [], $config = [])
     {
-        $this->basket = TrBasket::build();
         $this->setModel($attributes['model']);
 //        if (isset($attributes['packageId'])) {
 //            $this->packageId = $attributes['packageId'];
 //        }
-        if (!empty($this->basket->hasHotel())) {
-            $this->packageId = $this->basket->hasHotel();
-        }
 
         if (isset($attributes['roomId'])) {
             $this->roomId = $attributes['roomId'];
@@ -77,10 +67,6 @@ class PlHotelReservationForm extends GeneralReservationForm
         $this->rooms = $this->searchHotel->room;
         $this->arrivalDate = $this->searchHotel->arrivalDate;
         $this->departureDate = $this->searchHotel->departureDate;
-
-        if (!$this->loadFromPackage()) {
-            $this->initRooms();
-        }
     }
 
     /**
@@ -117,46 +103,6 @@ class PlHotelReservationForm extends GeneralReservationForm
     private function setModel(TrPosPlHotels $model): void
     {
         $this->model = $model;
-    }
-
-    /**
-     * @return bool
-     */
-    public function loadFromPackage(): bool
-    {
-        if ($this->getPackage() === null || empty($this->getPackage()->getTickets())) {
-            return false;
-        }
-
-//        $this->rooms = [];
-//        foreach ($this->getPackage()->getTickets() as $k => $ticket) {
-//            $this->rooms[] = [
-//                'adult' => $ticket->qty,
-//                'age' => $ticket->child_ages,
-//                'children' => $ticket->child_ages ? count($ticket->child_ages) : 0,
-//            ];
-//        }
-        $this->initRooms();
-
-        foreach ($this->getPackage()->getTickets() as $k => $ticket) {
-            $this->setAttributes(
-                [
-                    self::attributeFirstName($k) => $ticket->first_name,
-                    self::attributeLastName($k) => $ticket->last_name,
-                    self::attributeSmoking($k) => $ticket->smoking_preference
-                ]
-            );
-        }
-        $this->setAttributes(
-            [
-                'packageId' => $this->getPackage()->package_id,
-                'special_requests' => $this->getPackage()->getComments(),
-            ]
-        );
-//        $this->arrivalDate = $this->getPackage()->getStartDataTime()->format('m/d/Y');
-//        $this->departureDate = $this->getPackage()->getEndDataTime()->format('m/d/Y');
-
-        return true;
     }
 
     public function load($data, $formName = null)
@@ -216,70 +162,10 @@ class PlHotelReservationForm extends GeneralReservationForm
 
     public function isNonRefundable()
     {
-        if ($this->getPackage()) {
-            return $this->getPackage()->isNonRefundable();
-        }
         if (!$this->getRoomType()) {
             return null;
         }
         return $this->getRoomType()['prices'][0]['nonRefundable'];
-    }
-
-    /**
-     * @return bool
-     * @throws Throwable
-     */
-    public function addToCart(): bool
-    {
-        if (!$this->validate()) {
-            return false;
-        }
-
-        try {
-            $this->basket = TrBasket::build(true);
-            if ($packageId = $this->basket->hasHotel()) {
-                $this->basket->removePackage($packageId, false);
-            }
-            if ($this->basket->set(TrPosPlHotels::TYPE, $this)) {
-                return true;
-            }
-            $this->addErrors($this->basket->getErrors());
-        } catch (Exception $e) {
-            $this->addErrors(['addToCart' => $e->getMessage()]);
-        }
-
-        return false;
-    }
-
-    /**
-     * @return array
-     */
-    public function requestAddToBasket(): array
-    {
-        $request = [
-            'id' => $this->model->id_external,
-            'date' => $this->getArrivalDate() ? $this->getArrivalDate()->format('m/d/Y') : null,
-            'endDate' => $this->getDepartureDate() ? $this->getDepartureDate()->format('m/d/Y') : null,
-            'category' => TrPosPlHotels::TYPE,
-            'comments' => $this->special_requests,
-            'tickets' => [],
-            'ppnBundle' => $this->ppnBundle
-        ];
-        foreach ($this->rooms as $k => $room) {
-            $request['tickets'][] = [
-                'firstName' => $this->{self::attributeFirstName($k)},
-                'lastName' => $this->{self::attributeLastName($k)},
-                'smokingPreference' => $this->{self::attributeSmoking($k)},
-                'qty' => $this->rooms[$k]['adult'],
-                'childAges' => !empty($room['age']) ? $room['age'] : null,
-                'coupon' => ['type' => '$', 'value' => 0],
-            ];
-        }
-//        if (!empty($this->packageId)) {
-//            $request['packageId'] = $this->packageId;
-//        }
-
-        return $request;
     }
 
     /**
@@ -290,15 +176,5 @@ class PlHotelReservationForm extends GeneralReservationForm
         $priceLine = new PriceLine();
         $priceLine->loadData($this->roomType['prices'][0]['priceline']);
         return $priceLine;
-    }
-
-    /**
-     * @param array $roomType
-     *
-     * @return bool
-     */
-    public function inBasket(array $roomType): bool
-    {
-        return $this->basket->hasRoomType($roomType);
     }
 }

@@ -12,6 +12,11 @@ abstract class UploadForm extends ContentFiles
     public $pathImage = 'upload/';
     public $file;
 
+    public function loadInstance(): void
+    {
+        $this->file = UploadedFile::getInstance($this, 'file');
+    }
+
     public function rules()
     {
         return [

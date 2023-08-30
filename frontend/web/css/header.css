@@ -1,4 +1,4 @@
-.header {position:fixed;width:100%;padding:10px 0;z-index:100;background:var(--c-light-violet);
+.header {position:fixed;width:100%;padding:10px 0;z-index:9990;background:var(--c-light-violet);
     box-shadow: 0px 0px 0px 0px var(--c-shadow-purple-1), 2px 3px 8px 0px var(--c-shadow-purple-1), 7px 13px 15px 0px var(--c-shadow-purple-2), 16px 29px 20px 0px var(--c-shadow-purple-3), 29px 51px 23px 0px var(--c-shadow-purple-4), 46px 79px 26px 0px var(--c-shadow-purple-5);}
 .header .menu-up-control {float:right;color:var(--c-new-blue);font-size:26px;top:3px;position:relative;cursor:pointer;padding:10px 0;}
 .header .auth-items {display:flex;align-items:center;justify-content:flex-start;padding:10px 0;gap:10px;}
