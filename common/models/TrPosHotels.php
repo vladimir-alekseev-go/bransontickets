@@ -5,6 +5,9 @@ namespace common\models;
 use common\models\upload\UploadItemsPhotosHotel;
 use common\models\upload\UploadItemsPhotosPreviewHotel;
 use common\tripium\Tripium;
+use DateInterval;
+use DatePeriod;
+use common\models\form\SearchPlHotel;
 use Throwable;
 use Yii;
 use yii\base\InvalidConfigException;
@@ -22,9 +25,6 @@ class TrPosHotels extends _source_TrPosHotels
 
     public const STATUS_ACTIVE = 1;
     public const STATUS_INACTIVE = 0;
-
-    public const STATUS_WL_ACTIVE = 1;
-    public const STATUS_WL_INACTIVE = 0;
 
     public const DISPLAY_IN_WHERE_TO_STAY_YES = 1;
     public const DISPLAY_IN_WHERE_TO_STAY_NO = 0;
@@ -414,6 +414,87 @@ class TrPosHotels extends _source_TrPosHotels
         return self::getActive()
             ->distinct()
             ->joinWith('activePrices', false, 'INNER JOIN');
+    }
+
+    /**
+     * @param SearchPlHotel $Search
+     *
+     * @return ActiveQuery
+     */
+    public static function getByFilterAll(SearchPlHotel $Search): ActiveQuery
+    {
+        if (!$Search) {
+            return self::getAvailable();
+        }
+
+        $query = self::getAvailable();
+
+        if ($Search->title) {
+            $query->andFilterWhere(['like', self::tableName() . '.name', $Search->title]);
+        }
+
+        if (isset($Search->statusWl)) {
+            $query->andWhere([self::tableName() . '.status_wl' => $Search->statusWl]);
+        }
+
+        if (!empty($Search->c) && !empty($Search->c[0])) {
+            $query->joinWith('categories')->andWhere(['id_external_category' => $Search->c]);
+        }
+
+        if (!empty($Search->externalIds)) {
+            $query->andWhere([self::tableName() . '.id_external' => $Search->externalIds]);
+        }
+
+        if (!empty($Search->c) && !empty($Search->c[0])) {
+            $query->joinWith('categories')->andWhere(['id_external_category' => $Search->c]);
+        }
+
+        $dateFormat = [];
+
+        $range = new DatePeriod($Search->getArrivalDate(), new DateInterval('P1D'), $Search->getDepartureDate());
+        foreach ($range as $d) {
+            $dateFormat[] = $d->format('Y-m-d');
+        }
+        $subQuery = TrPosHotelsPriceRoom::find()
+            ->select(['id_external', 'count' => 'count(id_external)'])
+            ->where(['start' => $dateFormat])
+            ->groupBy('id_external, name')
+            ->having(['count' => count($dateFormat)]);
+
+        $query->innerJoin(
+            '(' . $subQuery->createCommand()->getRawSql() . ') as priceActual',
+            'priceActual.id_external = ' . TrPosRoomTypes::tableName() . '.id_external'
+        );
+
+        $query
+            ->andFilterWhere(['>=', TrPosHotelsPriceRoom::tableName() . '.price', $Search->priceFrom])
+            ->andFilterWhere(['<=', TrPosHotelsPriceRoom::tableName() . '.price', $Search->priceTo])
+            ->orderby($Search->getOrderby())
+        ;
+
+        if ($Search->amenities) {
+            $filterAmenities = ['and'];
+            foreach ($Search->amenities as $amenity) {
+                $filterAmenities[] = [
+                    'like',
+                    'amenities',
+                    $amenity
+                ];
+            }
+            $query->andFilterWhere($filterAmenities);
+        }
+
+        if ($Search->city) {
+            $filterCities = ['or'];
+            foreach ($Search->city as $city) {
+                $filterCities[] = [
+                    'city' => $city
+                ];
+            }
+            $query->andFilterWhere($filterCities);
+        }
+
+        return $query;
     }
 
     /**

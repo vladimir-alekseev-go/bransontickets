@@ -34,7 +34,7 @@ $roomsCount = 0;
             $roomsCount++;
             ?>
             <?php foreach ($rooms as $room) { ?>
-                <div class="it white-block js-room" data-room-price="<?= $room->price ?>"
+                <div class="it js-room" data-room-price="<?= $room->price ?>"
                      data-days-count="<?= $HotelReservationForm->getDaysCount() ?>">
                     <div class="row">
                         <div class="col-12 col-md-7 mb-3 mb-md-0">
@@ -44,7 +44,7 @@ $roomsCount = 0;
                                 </div>
                             <?php } ?>
                             <div class="title"><?= $roomType['name'] ?> - <?= $room->name ?></div>
-                            <span class="icon ib-users-alt"></span> x <?= $room->capacity ?>
+                            <i class="fa fa-users"></i> x <?= $room->capacity ?>
                             <span class="tag tag-refundable">Refundable</span>
                         </div>
                         <div class="col-12 col-md-5">
@@ -58,7 +58,7 @@ $roomsCount = 0;
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-6">
-                                    <a href="#" class="btn btn-primary w-100 js-reservation-url reservation-url" data-url="<?=
+                                    <a href="#" class="btn buy-btn w-100 js-reservation-url reservation-url" data-url="<?=
                                     Url::to(
                                         [
                                             'hotel/reservation',

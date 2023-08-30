@@ -27,9 +27,6 @@ use Yii;
  * @property string|null $location_lat
  * @property string|null $location_lng
  * @property string|null $location_updated_at
- *
- * @property TrAttractions[] $trAttractions
- * @property TrShows[] $trShows
  */
 class _source_TrTheaters extends \yii\db\ActiveRecord
 {
@@ -89,25 +86,5 @@ class _source_TrTheaters extends \yii\db\ActiveRecord
             'location_lng' => 'Location Lng',
             'location_updated_at' => 'Location Updated At',
         ];
-    }
-
-    /**
-     * Gets query for [[TrAttractions]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getTrAttractions()
-    {
-        return $this->hasMany(TrAttractions::class, ['theatre_id' => 'id_external']);
-    }
-
-    /**
-     * Gets query for [[TrShows]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getTrShows()
-    {
-        return $this->hasMany(TrShows::class, ['theatre_id' => 'id_external']);
     }
 }

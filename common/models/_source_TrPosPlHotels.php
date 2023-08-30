@@ -76,7 +76,7 @@ class _source_TrPosPlHotels extends \yii\db\ActiveRecord
         return [
             [['id_external', 'code', 'name', 'hash_summ'], 'required'],
             [['id_external', 'status', 'show_in_footer', 'location_external_id', 'rank', 'marketing_level', 'weekly_schedule', 'call_us_to_book', 'preview_id', 'image_id', 'display_image', 'theatre_id', 'update_preview'], 'integer'],
-            [['description', 'directions'], 'string'],
+            [['description', 'directions', 'photos'], 'string'],
             [['min_rate', 'min_rate_source', 'rating', 'review_rating'], 'number'],
             [['updated_at'], 'safe'],
             [['code', 'name', 'address', 'email'], 'string', 'max' => 128],
@@ -85,7 +85,7 @@ class _source_TrPosPlHotels extends \yii\db\ActiveRecord
             [['phone', 'fax'], 'string', 'max' => 64],
             [['voucher_procedure', 'on_special_text'], 'string', 'max' => 1024],
             [['tags'], 'string', 'max' => 256],
-            [['photos', 'videos', 'amenities', 'cancel_policy_text'], 'string', 'max' => 2048],
+            [['videos', 'amenities', 'cancel_policy_text'], 'string', 'max' => 2048],
             [['location_lat', 'location_lng', 'external_service', 'review_rating_desc'], 'string', 'max' => 16],
             [['hash_summ', 'hash_image_content'], 'string', 'max' => 32],
             [['id_external'], 'unique'],

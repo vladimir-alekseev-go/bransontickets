@@ -36,8 +36,6 @@ class TrPosPlHotels extends _source_TrPosPlHotels
     public const NAME_PLURAL = 'Lodging';
     public const STATUS_ACTIVE = 1;
     public const STATUS_INACTIVE = 0;
-    public const STATUS_WL_ACTIVE = 1;
-    public const STATUS_WL_INACTIVE = 0;
 
     public const CALL_US_TO_BOOK_YES = 1;
     public const CALL_US_TO_BOOK_NO = 0;
@@ -201,10 +199,6 @@ class TrPosPlHotels extends _source_TrPosPlHotels
 
         if ($Search->title) {
             $query->andWhere(['like', self::tableName() . '.name', $Search->title]);
-        }
-
-        if (isset($Search->statusWl)) {
-            $query->andWhere([self::tableName() . '.status_wl' => $Search->statusWl]);
         }
 
         return $query;

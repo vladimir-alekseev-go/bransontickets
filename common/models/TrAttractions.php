@@ -47,9 +47,6 @@ class TrAttractions extends _source_TrAttractions
     public const STATUS_ACTIVE = 1;
     public const STATUS_INACTIVE = 0;
 
-    public const STATUS_WL_ACTIVE = 1;
-    public const STATUS_WL_INACTIVE = 0;
-
     public const EXTERNAL_SERVICE_SDC = 'SDC';
     
     public static $type = 'attractions';
@@ -534,9 +531,6 @@ class TrAttractions extends _source_TrAttractions
             $query->andWhere([self::tableName() . '.id_external' => $Search->externalIds]);
         }
 
-        if (isset($Search->statusWl)) {
-            $query->andWhere([self::tableName() . '.status_wl' => $Search->statusWl]);
-        }
         if (!empty($Search->alternativeRate)) {
             $query->andWhere(['>', TrAttractionsPrices::tableName() . '.alternative_rate', 0]);
         }

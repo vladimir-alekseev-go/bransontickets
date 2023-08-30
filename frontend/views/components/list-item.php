@@ -55,7 +55,7 @@ use yii\helpers\Html;
             <?php if ($model instanceof TrPosHotels || $model instanceof TrPosPlHotels) { ?>
                 <div class="rows">
                     <div class="row">
-                        <div class="col-7 col-sm-5 pt-3 compare-block">
+                        <div class="col-7 col-sm-5 pt-1 compare-block">
                             <span class="compare-add">
                                 <input id="it-<?= $model->id_external ?>" type="checkbox" name="compare[]"
                                        value="<?= $model->id_external ?>" data-type="<?= $model::TYPE ?>"/>
@@ -64,8 +64,8 @@ use yii\helpers\Html;
                         </div>
                         <?php if ($model instanceof TrPosPlHotels && !empty($model->rating)) { ?>
                             <div class="col-5 col-sm-4 review-rating">
-                                <small class="gray"><span class="icon ib-thumbs-up"></span> Review Rating</small>
-                                <div><small class="ms-3">
+                                <small class="blue"><i class="fa fa-thumbs-up"></i> Review Rating</small>
+                                <div><small class="ms-3 blue">
                                         <?= $model->rating ?> <?= $model->review_rating_desc ?>
                                     </small></div>
                             </div>
