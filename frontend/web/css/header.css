@@ -8,6 +8,8 @@
 .auth-items .auth-item .sign-up:hover {background:linear-gradient(90deg, var(--c-violet-gray) 60%, var(--c-violet-dark) 100%);}
 .auth-items .auth-item .sign-in {padding:4px 20px;color:var(--c-new-blue);font-weight:700;font-size:20px;}
 .auth-items .auth-item .sign-in:hover {border:1px solid var(--c-new-blue);}
+.auth-items .auth-item i {font-size:32px;color:var(--c-new-blue);padding-top:4px;}
+.auth-items .auth-item a {text-decoration:none;color:var(--c-new-blue);padding-top:3px;font-size:18px;}
 .header-menu-phone {display:flex;align-items:center;justify-content:center;gap:20px;padding:10px 0;}
 .header-menu-phone img {width:23px;}
 .header-menu-phone .header-phone {color:var(--c-new-blue);font-weight:700;font-size:26px;text-decoration:none;letter-spacing:1px;}

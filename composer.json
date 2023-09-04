@@ -26,7 +26,9 @@
         "vladimir-alekseev-go/yii2-image-processor": ">=v1.1.2",
         "2amigos/yii2-file-upload-widget": "*",
         "2amigos/yii2-file-input-widget": "~1.0",
-        "2amigos/yii2-ckeditor-widget" : "*"
+        "2amigos/yii2-ckeditor-widget" : "*",
+        "yiisoft/yii2-authclient": "^2.1.8",
+        "yiisoft/yii2-swiftmailer": "*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",

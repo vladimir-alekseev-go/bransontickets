@@ -1,9 +1,10 @@
 <?php
-
-namespace common\models;
+namespace common\models\auth;
 
 use Yii;
 use yii\base\Model;
+
+use common\models\Users;
 
 /**
  * Login form
@@ -18,13 +19,17 @@ class LoginForm extends Model
 
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function rules()
     {
         return [
             // username and password are both required
             [['username', 'password'], 'required'],
+        	['username', 'email'],
+            // the regular expression to check email address
+            ['username', 'match', 'pattern' => '/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/'],
+        	['username', 'validateEmail'],
             // rememberMe must be a boolean value
             ['rememberMe', 'boolean'],
             // password is validated by validatePassword()
@@ -48,19 +53,26 @@ class LoginForm extends Model
             }
         }
     }
+    
+    public function validateEmail($attribute, $params)
+    {
+        if (!filter_var($this->$attribute, FILTER_VALIDATE_EMAIL)) {
+        	$this->addError($attribute, 'Username is not a valid email address.');
+        }
+    }
 
     /**
      * Logs in a user using the provided username and password.
      *
-     * @return bool whether the user is logged in successfully
+     * @return boolean whether the user is logged in successfully
      */
     public function login()
     {
         if ($this->validate()) {
             return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600 * 24 * 30 : 0);
+        } else {
+            return false;
         }
-        
-        return false;
     }
 
     /**
@@ -71,7 +83,7 @@ class LoginForm extends Model
     protected function getUser()
     {
         if ($this->_user === null) {
-            $this->_user = User::findByUsername($this->username);
+            $this->_user = Users::findByUsername($this->username);
         }
 
         return $this->_user;
