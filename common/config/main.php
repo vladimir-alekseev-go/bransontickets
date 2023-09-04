@@ -19,6 +19,19 @@ return [
             'class' => FileCache::class,
             'cachePath' => '@common/runtime/cache',
         ],
+        'mailer' => [
+            'class' => 'yii\swiftmailer\Mailer',
+	    	'useFileTransport' => false,
+            'viewPath' => '@common/mail',
+	    	/*'transport' => [
+	            'class' => 'Swift_SmtpTransport',
+	            'host' => 'smtp.mandrillapp.com',
+	            'username' => 'Tripium',
+	            'password' => 'myxA2oC35Av6AzVY00Z2qw',
+	            'port' => '587',
+	            'encryption' => 'tls',
+	        ],*/
+        ],
         'imageProcessor' => [
             'class'          => Component::class,
             'jpegQuality'    => 70,

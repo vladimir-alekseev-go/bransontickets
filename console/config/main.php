@@ -34,6 +34,18 @@ return [
                 ],
             ],
         ],
+        'mailer' => [
+            'class' => 'yii\swiftmailer\Mailer',
+	    	'useFileTransport' => false,
+	    	'transport' => [
+	            'class' => 'Swift_SmtpTransport',
+	            'host' => 'smtp.mandrillapp.com',
+	            'username' => 'Tripium',
+	            'password' => 'myxA2oC35Av6AzVY00Z2qw',
+	            'port' => '587',
+	            'encryption' => 'tls',
+	        ],
+        ],
     ],
     'params' => $params,
 ];

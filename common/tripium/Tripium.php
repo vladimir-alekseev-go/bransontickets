@@ -540,4 +540,25 @@ class Tripium extends Model
         }
         return null;
     }
+
+    public function postCustomer($data)
+    {
+        if (!empty($data['id'])) {
+            $res = $this->request('/customer/' . $data['id'], $data, 'put');
+        } else {
+            $res = $this->request('/customer', $data, 'post');
+        }
+        return $res ? $res : false;
+    }
+
+    public function getCustomer($id)
+    {
+        if (!$id) {
+            return false;
+        }
+
+        $res = $this->request('/customer/' . $id);
+
+        return $this->statusCode === self::STATUS_CODE_SUCCESS ? $res : false;
+    }
 }
