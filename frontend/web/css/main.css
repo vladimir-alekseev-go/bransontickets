@@ -868,7 +868,7 @@ input, .form-control {padding:11px 14px 7px;text-align:left;color:var(--c-blue-d
     .list-filter {display:none;}
 
     .body-list-filter-opened {overflow:hidden;}
-    .list-filter-opened {display:block;position:absolute;top:0;bottom:0;left:0;right:0;z-index:999;background:url('/img/main-background.png'), var(--c-new-blue) repeat;overflow:hidden;z-index:1000;}
+    .list-filter-opened {display:block;position:absolute;top:0;bottom:0;left:0;right:0;z-index:9999;background:url('/img/main-background.png'), var(--c-new-blue) repeat;overflow:hidden;}
     .list-filter-opened .it {padding:0 25px;}
     .list-filter-opened .it-filter-rooms {margin-left:20px;margin-right:20px;padding:10px 25px;}
 
