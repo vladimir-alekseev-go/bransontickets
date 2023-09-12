@@ -409,6 +409,16 @@ class TrAttractions extends _source_TrAttractions
      * @return ActiveQuery
      * @throws InvalidConfigException
      */
+    public function getVacationPackages()
+    {
+        return $this->hasMany(VacationPackage::class, ['vp_external_id' => 'vp_external_id'])
+            ->viaTable(VacationPackageAttraction::tableName(), ['item_external_id' => 'id_external']);
+    }
+
+    /**
+     * @return ActiveQuery
+     * @throws InvalidConfigException
+     */
     public function getAvailablePricesByRange()
     {
         $query = $this->getAvailablePrices();

@@ -13,5 +13,5 @@ Yii::$app->view->params['model'] = $model;
 $this->title = $model->name;
 ?>
 
-<?= $this->render('@app/views/components/item/menu-content', compact('model', 'showsRecommended')) ?>
+<?= $this->render('@app/views/components/item/menu-content', compact('model', 'showsRecommended', 'VPLWidget')) ?>
 

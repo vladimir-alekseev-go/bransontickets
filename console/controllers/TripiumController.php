@@ -17,7 +17,7 @@ use common\models\TrPosPlHotels;
 use common\models\TrPosRoomTypes;
 use common\models\TrPrices;
 use common\models\TrShows;
-/*use common\models\VacationPackage;*/
+use common\models\VacationPackage;
 use common\tripium\TripiumUpdater;
 use DateInterval;
 use DateTime;
@@ -166,7 +166,7 @@ class TripiumController extends Controller
                     ],
                     ['class' => TrAttractions::class],
 
-                    /*['class' => VacationPackage::class],*/
+                    ['class' => VacationPackage::class],
 
                     ['class' => TrPosHotels::class],
                     ['class' => TrPosRoomTypes::class],

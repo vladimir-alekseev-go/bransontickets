@@ -326,6 +326,8 @@ class Search extends Model
             $title = 'Attraction';
         } elseif ($this->model instanceof TrPosHotels) {
             $title = 'Hotel';
+        } elseif ($this->model instanceof VacationPackage) {
+            $title = 'Vacation Package';
         } else {
             $title = '';
         }

@@ -1,0 +1,242 @@
+<?php
+
+use common\models\TrAttractions;
+use common\models\TrLunchs;
+use common\models\TrShows;
+use common\models\form\Search;
+use yii\bootstrap\ActiveForm;
+use yii\helpers\ArrayHelper;
+use yii\helpers\Html;
+use yii\helpers\Url;
+
+/**
+ * @var array  $rangePrice
+ * @var Search $Search
+ */
+
+$model = $Search->model ? $Search->model->className() : null;
+
+?>
+<div class="col-left">
+
+	<div class="filter-left">
+
+		<?php $form = ActiveForm::begin([
+            'options' => ['class' => 'list-filter'],
+            'id' => 'list-filter',
+        	'validateOnSubmit' => false,
+        ]);?>
+        <?= $form->field($Search, "fieldSort")->hiddenInput()->label(false)?>
+        <?= $form->field($Search, "display")->hiddenInput()->label(false)?>
+        <?= $form->field($Search, "priceFrom")->hiddenInput()->label(false)?>
+        <?= $form->field($Search, "priceTo")->hiddenInput()->label(false)?>
+        <?= $form->field($Search, "timeFrom")->hiddenInput()->label(false)?>
+        <?= $form->field($Search, "timeTo")->hiddenInput()->label(false)?>
+
+		<div class="it">
+			<?= $form->field($Search, "title")->textInput(['placeholder'=>'Start typing '.$Search->searchName().' name'])?>
+		</div>
+
+		<div class="input-daterange row row-small-padding">
+			<div class="it js-it col-xs-6">
+				<label class="control-label">Start Date</label>
+				<?= $form->field($Search, "dateFrom", [
+				    'template' => '{label}{input}<span class="icon ibranson-fontawesome-webfont"></span>{error}{hint}',
+				    'inputOptions' => ['class' => 'form-control datepicker text-left', 'autocomplete' => 'off'],
+				    'options'=>['class'=>'field field-datepicker']
+				])->textInput(['placeholder'=>'Select start date'])->label(false)?>
+			</div>
+			<div class="it js-it col-xs-6">
+				<label class="control-label">End Date</label>
+				<?= $form->field($Search, "dateTo", [
+				    'template' => '{label}{input}<span class="icon ibranson-fontawesome-webfont"></span>{error}{hint}',
+				    'inputOptions' => ['class' => 'form-control datepicker text-left', 'autocomplete' => 'off'],
+				    'options'=>['class'=>'field field-datepicker']
+				])->textInput(['placeholder'=>'Select start date'])->label(false)?>
+			</div>
+		</div>
+		<?php if ($Search->model && $Search->model instanceOf TrShows) {?>
+		<div class="timerange">
+			<?= $model::name?> times: <b id="time-from">11:00 AM</b> - <b id="time-to">9:00 PM</b>
+			<div id="time-range" data-value-from="<?= $Search->timeFrom?>" data-value-to="<?= $Search->timeTo?>" data-min="8" data-max="23"></div>
+			<div class="slider-range-grid">
+				<div class="slider-mark-left">8:00 AM</div>
+				<div>1:00 PM</div>
+				<div>6:00 PM</div>
+				<div class="slider-mark-right">11:00 PM</div>
+			</div>
+		</div>
+		<?php }?>
+
+		<div class="it">
+			Price range: <span class="cost cost-small">$ <span id="range-from">0</span> - <span id="range-to">0</span></span>
+		</div>
+
+		<div class="it" id="container-slider-price-range">
+			<?= $this->render('slider-range', ['rangePrice' => $rangePrice])?>
+		</div>
+
+		<div class="it">
+		<?= $form->field($Search, 'alternativeRate', [])->checkbox([
+		    'template' => '<label for="s-alternativerate"> {input} <span class="icon ibranson-usd"></span> Non-refundable ticket</label>'
+		])?>
+		<?php if ($Search->model && ($Search->model instanceOf TrShows)) {?>
+		<?= $form->field($Search, "tags",['template' => '{label}{input}<span class="icon ibranson-fontawesome-webfont"></span>{error}{hint}',])
+			->inline(true)
+			->label(false)
+			->checkboxList($model::getOriginalTagTitleList(),[
+				'item' => static function($index, $label, $name, $checked, $value) {
+                    return '<label for="type'.($index + 1) . '"> <input type="checkbox" id="type' . ($index + 1) . '" name="' . $name . '" value="' . $value . '" ' . ($checked ? 'checked' : '') . ' /> <span class="icon ibranson-'.$value.'"></span> ' . $label . '</label>';
+            	},
+			])
+		?>
+		<?php }?>
+		</div>
+
+		<?php if (!empty($categories)) {?>
+		<div class="it">
+		<?= $form->field($Search, "c")
+			->inline(true)
+			->label("Category",['class' => 'big', 'for'=>null])
+			->checkboxList($categories,[
+				'item' => static function($index, $label, $name, $checked, $value) {
+					$html = "";
+                    if ($index === 7) {
+                        $html .= '<div class="more-elem-filter">';
+                    }
+					$html .= Html::checkbox($name, $checked, [
+				       'value' => $value,
+				       'label' => '<span>'.$label.'</span>',
+				       'class' => '',
+				    ]);
+					return $html;
+            	},
+			])
+		?>
+		<?php if (count($categories) > 7) {echo '<a class="show-more-filter">Show <span class="txt-filter more">more <span class="icon ibranson-fontawesome-webfont-14"></span></span><span class="txt-filter less">less <span class="icon ibranson-fontawesome-webfont-13"></span></span></a></div>';}?>
+		</div>
+		<?php }?>
+
+		<?php if (!empty($locations)) {?>
+		<div class="it">
+		<?= $form->field($Search, "l")
+			->inline(true)
+			->label("Locations",['class' => 'big', 'for'=>null])
+			->checkboxList(ArrayHelper::map($locations,'external_id', 'name'),[
+				'item' => static function($index, $label, $name, $checked, $value) {
+					$html = "";
+                    if ($index === 7) {
+                        $html .= '<div class="more-elem-filter">';
+                    }
+					$html .= Html::checkbox($name, $checked, [
+				       'value' => $value,
+				       'label' => '<span>'.$label.'</span>',
+				       'class' => '',
+				    ]);
+				    return $html;
+            	},
+			])
+		?>
+		<?php if (count($locations) > 7) { echo '<a class="show-more-filter">Show <span class="txt-filter more">more <span class="icon ibranson-fontawesome-webfont-14"></span></span><span class="txt-filter less">less <span class="icon ibranson-fontawesome-webfont-13"></span></span></a></div>';}?>
+		</div>
+		<?php }?>
+
+
+		<?php if (!empty($RestaurantCuisine)) {?>
+		<div class="it">
+		<?= $form->field($Search, "cuisine")
+			->inline(true)
+			->label("Cuisine",['class' => 'big', 'for'=>null])
+			->checkboxList(ArrayHelper::map($RestaurantCuisine,'id', 'name'),[
+				'item' => static function($index, $label, $name, $checked, $value) {
+					$html = "";
+                    if ($index === 7) {
+                        $html .= '<div class="more-elem-filter">';
+                    }
+					$html .= Html::checkbox($name, $checked, [
+				       'value' => $value,
+				       'label' => '<span>'.$label.'</span>',
+				       'class' => '',
+				    ]);
+					return $html;
+            	},
+			])
+		?>
+		<?php if (count($RestaurantCuisine) >= 7) { echo '<a class="show-more-filter">Show <span class="txt-filter more">more <span class="icon ibranson-fontawesome-webfont-14"></span></span><span class="txt-filter less">less <span class="icon ibranson-fontawesome-webfont-13"></span></span></a></div>';}?>
+		</div>
+		<?php }?>
+
+		<?php if (!empty($RestaurantCategory)) {?>
+		<div class="it">
+		<?= $form->field($Search, "cr")
+			->inline(true)
+			->label("Categories",['class' => 'big', 'for'=>null])
+			->checkboxList(ArrayHelper::map($RestaurantCategory,'id', 'name'),[
+				'item' => static function($index, $label, $name, $checked, $value) {
+					$html = "";
+                    if ($index === 7) {
+                        $html .= '<div class="more-elem-filter">';
+                    }
+					$html .= Html::checkbox($name, $checked, [
+				       'value' => $value,
+				       'label' => '<span>'.$label.'</span>',
+				       'class' => '',
+				    ]);
+					return $html;
+            	},
+			])
+		?>
+		<?php if (count($RestaurantCategory) >= 7) { echo '<a class="show-more-filter">Show <span class="txt-filter more">more <span class="icon ibranson-fontawesome-webfont-14"></span></span><span class="txt-filter less">less <span class="icon ibranson-fontawesome-webfont-13"></span></span></a></div>';}?>
+		</div>
+		<?php }?>
+
+		<?php if (!empty($RestaurantAmenity)) {?>
+		<div class="it">
+		<?= $form->field($Search, "amenity")
+			->inline(true)
+			->label("Amenities",['class' => 'big', 'for'=>null])
+			->checkboxList(ArrayHelper::map($RestaurantAmenity,'id', 'name'),[
+				'item' => static function($index, $label, $name, $checked, $value) {
+					$html = "";
+                    if ($index === 7) {
+                        $html .= '<div class="more-elem-filter">';
+                    }
+					$html .= Html::checkbox($name, $checked, [
+				       'value' => $value,
+				       'label' => '<span>'.$label.'</span>',
+				       'class' => '',
+				    ]);
+					return $html;
+            	},
+			])
+		?>
+		<?php if (count($RestaurantAmenity) >= 7) { echo '<a class="show-more-filter">Show <span class="txt-filter more">more <span class="icon ibranson-fontawesome-webfont-14"></span></span><span class="txt-filter less">less <span class="icon ibranson-fontawesome-webfont-13"></span></span></a></div>';}?>
+		</div>
+		<?php }?>
+
+		<?php if (!empty($restMeals)) {?>
+		<div class="it">
+		<?= $form->field($Search, "meals")
+			->inline(true)
+			->label("Good for",['class' => 'big', 'for'=>null])
+			->checkboxList($restMeals,[
+				'item' => static function($index, $label, $name, $checked, $value) {
+					return Html::checkbox($name, $checked, [
+				       'value' => $value,
+				       'label' => '<span>'.$label.'</span>',
+				       'class' => '',
+				    ]);
+            	},
+			])
+		?>
+		</div>
+		<?php }?>
+		<div class="it">
+			<a href="<?= Url::to(['index'])?>" class="btn btn-primary">Clear filters</a>
+		</div>
+		<?php if (!$Search->model || ($Search->model instanceOf TrShows || $Search->model instanceOf TrAttractions)) {?>
+		<?= $this->render('@app/views/site/small-list-item-map', ['name'=> 'View '.($model ? $model::NAME_PLURAL : TrLunchs::NAME_PLURAL).' on map'])?>
+		<?php }?>
+		<?php ActiveForm::end(); ?>
+	</div>
+</div>

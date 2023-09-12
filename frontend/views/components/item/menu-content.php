@@ -34,11 +34,11 @@ $images = $model->relatedPhotos;
                     <a href="#gallery" id="gallery-tab" data-bs-toggle="tab" data-bs-target="#gallery" role="tab" aria-controls="gallery" aria-selected="false" class="">Gallery</a>
                 </li>
             <?php } ?>
-            <?php /* ?>
-            <li role="presentation">
-                <a href="#packages" id="packages-tab" data-bs-toggle="tab" data-bs-target="#packages" role="tab" aria-controls="packages" aria-selected="false" class="">Packages</a>
-            </li>
-            */ ?>
+            <?php if (!empty($model->vacationPackages)) { ?>
+                <li role="presentation">
+                    <a href="#packages" id="packages-tab" data-bs-toggle="tab" data-bs-target="#packages" role="tab" aria-controls="packages" aria-selected="false" class="">Packages</a>
+                </li>
+            <?php } ?>
         </ul>
     </div>
     <div class="tab-content">
@@ -54,9 +54,9 @@ $images = $model->relatedPhotos;
         <?php if (count($images) + count($videos) > 1) { ?>
             <?= $this->render('@app/views/components/item/menu-content/gallery', compact('model', 'videos', 'images')) ?>
         <?php } ?>
-        <?php /* ?>
-        <?= $this->render('@app/views/components/item/menu-content/packages') ?>
-        */ ?>
+        <?php if (!empty($model->vacationPackages)) { ?>
+            <?= $this->render('@app/views/components/item/menu-content/packages', compact('VPLWidget')) ?>
+        <?php } ?>
     </div>
 </div>
 

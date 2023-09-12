@@ -1,0 +1,41 @@
+<?php
+
+use yii\bootstrap\Modal;
+use yii\helpers\Url;
+use yii\widgets\LinkPager;
+
+$Search = $this->context->search;
+$rangePrice = $this->context->rangePrice;
+?>
+
+<div class="fixed">
+    <?php $categories = $this->context->categories; ?>
+    <?= $this->render('filter', compact('Search', 'categories', 'rangePrice')) ?>
+    <div class="col-center col-center-with-col-left">
+        <div id="show-list" class="packages-list-new">
+            <?= $this->render('items') ?>
+        </div>
+        <?php LinkPager::widget(['pagination' => $this->context->pagination]); ?>
+    </div>
+</div>
+<?= $this->render('@common/views/pagination-btn', ['pagination' => $this->context->pagination]) ?>
+
+<?php $this->beginBlock('footer-end-body') ?>
+<?= $this->blocks['footer-end-body'] ?? '' ?>
+<?= $this->render('@app/views/site/link-to-up.php') ?>
+<?php $this->endBlock() ?>
+
+<?php Modal::begin(
+    [
+        'header' => '<h2 id="modalHeaderTitle" class="modalHeaderTitle"></h2>',
+        'headerOptions' => ['id' => 'modalHeader'],
+        'id' => 'modalVacationPackage',
+        'size' => 'modal-lg',
+        'clientOptions' => ['show' => false, 'backdrop' => 'static', 'keyboard' => false]
+    ]
+);
+?>
+<div id="modalContent"></div>
+<?php Modal::end(); ?>
+<?php $this->context->assetRegister(); ?>
+<?php $this->registerJs("VacationPackageBuy.init('" . Url::to(['packages/selected-info']) . "');"); ?>

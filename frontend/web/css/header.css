@@ -15,8 +15,8 @@
 .header-menu-phone .header-phone {color:var(--c-new-blue);font-weight:700;font-size:26px;text-decoration:none;letter-spacing:1px;}
 .header-menu-phone.detail {justify-content:flex-start;}
 
-.menu-general {position:fixed;width:350px;top:0;right:-350px;bottom:0;z-index:9999;padding:10px;background-color:var(--c-blue-deep-dark);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);}
-.menu-up-control-close {margin:60px 0 0 60px;cursor:pointer;border:1px solid transparent;border-radius:5px;position:relative;width:40px;height:40px;line-height:40px;font-size:40px;color:var(--c-white);}
+.menu-general {position:fixed;width:400px;top:0;right:-400px;bottom:0;z-index:9999;padding:10px;background-color:var(--c-blue-deep-dark);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);}
+.menu-up-control-close {margin:60px 0 0 40px;cursor:pointer;border:1px solid transparent;border-radius:5px;position:relative;width:40px;height:40px;line-height:40px;font-size:40px;color:var(--c-white);}
 .menu-up-control-close:hover {border: 1px solid transparent;background:linear-gradient(var(--c-white), var(--c-white)) padding-box,
     linear-gradient(to right, var(--c-violet), var(--c-violet-gray)) border-box;}
 .menu-up-control-close i {color:var(--c-light-violet);font-size:40px;left:12px;bottom:2px;position:relative;}
@@ -24,11 +24,11 @@
 
 .menu-main, .menu-main li {margin:0;padding:0;}
 .menu-main {padding:30px 0 10px;margin:0 0 10px;clear:both;overflow:hidden}
-.menu-main li {margin:0 0 20px;padding:0 60px;list-style:none;width:100%;text-align:left;border-bottom: 2px solid transparent}
+.menu-main li {margin:0 0 20px;padding:0 40px;list-style:none;width:100%;text-align:left;border-bottom: 2px solid transparent}
 .menu-main li:before {display:none;}
 .menu-main li, .menu-main li a {font-size:36px;font-weight:700;}
 .menu-main li a {font-weight:bold;color:var(--c-light-violet);text-decoration:none;}
-.menu-main .line {opacity:0;position:relative;width:90%;left:0;height:2px;background:linear-gradient(90deg, var(--c-violet-gray) 0%, var(--c-violet) 100%);}
+.menu-main .line {opacity:0;position:relative;width:100%;left:0;height:2px;background:linear-gradient(90deg, var(--c-violet-gray) 0%, var(--c-violet) 100%);}
 .menu-main li a:hover {color:var(--c-white);}
 .menu-main li a:hover .line {opacity:1;}
 

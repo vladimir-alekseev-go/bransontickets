@@ -220,6 +220,16 @@ class TrShows extends _source_TrShows
 
     /**
      * @return ActiveQuery
+     * @throws InvalidConfigException
+     */
+    public function getVacationPackages()
+    {
+        return $this->hasMany(VacationPackage::class, ['vp_external_id' => 'vp_external_id'])
+            ->viaTable(VacationPackageShow::tableName(), ['item_external_id' => 'id_external']);
+    }
+
+    /**
+     * @return ActiveQuery
      */
     public static function getAvailable()
     {
