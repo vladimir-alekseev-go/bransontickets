@@ -1,4 +1,4 @@
 <?php
 return [
-    'adminEmail' => 'admin@example.com',
+    'vacation_package_channel_type' => 'desktop',
 ];

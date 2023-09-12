@@ -84,6 +84,8 @@ return [
                 $params['sectionsUrl']['hotels'].'/<code:[\d\w\-]+>'      => 'hotel/detail',
                 'lodging'                                                 => 'lodging/index',
                 'lodging/popup-compare'                                   => 'lodging/popup-compare',
+                'vacation-packages/'                                        => 'packages/index',
+                'vacation-packages/<code:[\d\w\-]+>'                        => 'packages/detail',
             ],
         ],
     ],

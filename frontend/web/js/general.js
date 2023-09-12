@@ -1,3 +1,39 @@
+function number_format(number, decimals, dec_point, thousands_sep) {	// Format a number with grouped thousands
+    //
+    // +   original by: Jonas Raoni Soares Silva (http://www.jsfromhell.com)
+    // +   improved by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
+    // +	 bugfix by: Michael White (http://crestidg.com)
+
+    var i, j, kw, kd, km;
+
+    // input sanitation & defaults
+    if (isNaN(decimals = Math.abs(decimals))) {
+        decimals = 2;
+    }
+    if (dec_point === undefined) {
+        dec_point = ",";
+    }
+    if (thousands_sep === undefined) {
+        thousands_sep = ".";
+    }
+
+    i = parseInt(number = (+number || 0).toFixed(decimals)) + "";
+
+    if ((j = i.length) > 3) {
+        j = j % 3;
+    } else {
+        j = 0;
+    }
+
+    km = (j ? i.substr(0, j) + thousands_sep : "");
+    kw = i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + thousands_sep);
+    //kd = (decimals ? dec_point + Math.abs(number - i).toFixed(decimals).slice(2) : "");
+    kd = (decimals ? dec_point + Math.abs(number - i).toFixed(decimals).replace(/-/, 0).slice(2) : "");
+
+
+    return km + kw + kd;
+}
+
 function removeA(arr) {
     let what, a = arguments, L = a.length, ax;
     while (L > 1 && arr.length) {
@@ -7,6 +43,26 @@ function removeA(arr) {
         }
     }
     return arr;
+}
+
+function inputFactorControl(ob) {
+    let block = ob.closest('.with-input-field');
+    let count = ob.val() * 1;
+    let max = ob.attr('max');
+    let min = ob.attr('min');
+
+    if (min === undefined) {
+        min = 0;
+    }
+
+    block.find('.js-input-factor').removeClass('in-active');
+
+    if (count <= min) {
+        block.find('.js-input-factor.fa-minus').addClass('in-active');
+    }
+    if (count >= max) {
+        block.find('.js-input-factor.fa-plus').addClass('in-active');
+    }
 }
 
 let commonSly = {

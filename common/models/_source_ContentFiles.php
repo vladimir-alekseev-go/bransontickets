@@ -34,6 +34,8 @@ use Yii;
  * @property TrPosPlHotelsPhotoJoin[] $trPosPlHotelsPhotoJoins0
  * @property TrShows[] $trShows
  * @property TrShows[] $trShows0
+ * @property VacationPackage[] $vacationPackages
+ * @property VacationPackage[] $vacationPackages0
  */
 class _source_ContentFiles extends \yii\db\ActiveRecord
 {
@@ -245,5 +247,25 @@ class _source_ContentFiles extends \yii\db\ActiveRecord
     public function getTrShows0()
     {
         return $this->hasMany(TrShows::class, ['preview_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[VacationPackages]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getVacationPackages()
+    {
+        return $this->hasMany(VacationPackage::class, ['image_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[VacationPackages0]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getVacationPackages0()
+    {
+        return $this->hasMany(VacationPackage::class, ['preview_id' => 'id']);
     }
 }

@@ -561,4 +561,78 @@ class Tripium extends Model
 
         return $this->statusCode === self::STATUS_CODE_SUCCESS ? $res : false;
     }
+
+    /**
+     * Return List of All Available Vacation Packages.
+     *
+     * @see https://pos23.docs.apiary.io/#reference/0/vacation-packages/list-of-all-available-vacation-packages
+     */
+    public function getVacationPackages()
+    {
+        $res = $this->request('/vacation/list?currentChannel=true');
+        if (!empty($res["results"])) {
+            return $res["results"];
+        }
+
+        return [];
+    }
+
+    /**
+     * Add to Cart.
+     *
+     * @param string $session
+     * @param string $packageId
+     * @param array  $items
+     *
+     * @return null|array
+     * @see https://pos23.docs.apiary.io/#reference/0/vacation-packages/add-vacation-package-to-itinerary
+     */
+    public function addPackageToCart($session, $packageId, array $items): ?array
+    {
+        $request = [
+            'configId' => $packageId,
+            'items' => $items
+        ];
+        $res = $this->request('/vacation/itinerary/' . $session, $request, 'post');
+
+        if (!empty($res["results"])) {
+            return $res["results"];
+        }
+
+        return null;
+    }
+
+    /**
+     * Delete Vacation Package in cart.
+     *
+     * @param string $session
+     * @param string $packageId
+     *
+     * @return boolean
+     * @see https://pos23.docs.apiary.io/#reference/0/vacation-packages/delete-vacation-package-from-itinerary
+     */
+    public function deleteVacationPackages($session, $packageId)
+    {
+        $this->request('/vacation/itinerary/' . $session . '/' . $packageId, [], 'delete');
+        return empty($this->errors);
+    }
+
+    /**
+     * Cancel Vacation Package in order.
+     *
+     * @param string $orderNumber
+     * @param string $packageId
+     *
+     * @return boolean
+     * @see https://pos23.docs.apiary.io/#reference/0/vacation-packages/cancel-vacation-package
+     */
+    public function cancelVacationPackage($orderNumber, $packageId)
+    {
+        $this->request(
+            '/vacation/order/' . $orderNumber . '/cancel/' . $packageId . '?generateTransactions=true',
+            ["transactions" => [], "vacationPackages" => []],
+            'post'
+        );
+        return empty($this->errors);
+    }
 }

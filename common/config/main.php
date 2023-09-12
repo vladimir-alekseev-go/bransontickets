@@ -64,6 +64,20 @@ return [
 			            ['crop', 'width' => 260, 'height' => 190, 'x' => 'center - ' . floor(260/2), 'y' => 'center - ' . floor(190/2)],
 			        ],
 			    ],
+				'vacationPackageImage' => [
+			        'process' => [
+			            ['autorotate'],
+			            ['resize', 'width' => 840, 'height' => 380, 'scaleTo' => 'cover'],
+			            ['crop', 'width' => 840, 'height' => 380, 'x' => 'center - ' . floor(840/2), 'y' => 'center - ' . floor(380/2)],
+			        ],
+			    ],
+			    'vacationPackagePreview' => [
+			        'process' => [
+			            ['autorotate'],
+			            ['resize', 'width' => 260, 'height' => 180, 'scaleTo' => 'cover'],
+			            ['crop', 'width' => 260, 'height' => 180, 'x' => 'center - ' . floor(260/2), 'y' => 'center - ' . floor(180/2)],
+			        ],
+			    ],
             ]
         ],
     ],

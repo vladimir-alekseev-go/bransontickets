@@ -15,7 +15,7 @@ $('#menu-up-control-close').click(function () {
     $('.wrapper-main').css('opacity', '1');
 
     if ($(document).width() > 767) {
-        menuGeneral.animate({ right: '-350px' }, 500);
+        menuGeneral.animate({ right: '-400px' }, 500);
     } else {
         menuGeneral.animate({ right: '-100vw' }, 500);
     }

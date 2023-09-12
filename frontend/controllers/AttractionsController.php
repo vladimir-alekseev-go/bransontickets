@@ -6,6 +6,7 @@ use common\models\Compare;
 use common\models\form\Search;
 use common\models\TrAttractions;
 use common\models\TrAttractionsPrices;
+use frontend\widgets\vacationPackagesList\VacationPackagesListWidget;
 use DateInterval;
 use DateTime;
 use Yii;
@@ -167,7 +168,16 @@ class AttractionsController extends Controller
             ->limit(6)
             ->all();
 
-        return $this->render('@app/views/shows/detail', compact('model', 'showsRecommended'));
+        $VPLWidget = new VacationPackagesListWidget(
+            [
+                'layout' => VacationPackagesListWidget::LAYOUT_LIST,
+                'attraction_external_id' => $model->id_external,
+                'pageSize' => 0,
+                'useSearchFilter' => false,
+            ]
+        );
+
+        return $this->render('@app/views/shows/detail', compact('model', 'showsRecommended', 'VPLWidget'));
     }
 
     /**

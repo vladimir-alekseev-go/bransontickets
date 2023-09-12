@@ -5,6 +5,7 @@ namespace frontend\controllers;
 use common\models\Compare;
 use common\models\TrPrices;
 use common\models\TrShows;
+use frontend\widgets\vacationPackagesList\VacationPackagesListWidget;
 use DateInterval;
 use DateTime;
 use common\models\form\Search;
@@ -183,7 +184,16 @@ class ShowsController extends Controller
             ->limit(6)
             ->all();
 
-        return $this->render('detail', compact('model', 'showsRecommended'));
+        $VPLWidget = new VacationPackagesListWidget(
+            [
+                'layout' => VacationPackagesListWidget::LAYOUT_LIST,
+                'show_external_id' => $model->id_external,
+                'pageSize' => 0,
+                'useSearchFilter' => false,
+            ]
+        );
+
+        return $this->render('detail', compact('model', 'showsRecommended', 'VPLWidget'));
     }
 
     /**
