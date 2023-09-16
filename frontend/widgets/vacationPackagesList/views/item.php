@@ -21,7 +21,7 @@ $items = $item->getItems();
         <?php } ?>
     </div>
     <div class="row">
-        <div class="col-md-7 order-3 order-md-0 js-package-1">
+        <div class="col-md-7 order-3 order-md-0 js-package">
             <div class="info">
                 <div class="info-item">
                 <div class="info-title">Available Dates:</div>
@@ -71,17 +71,17 @@ $items = $item->getItems();
             <div class="description"><?= $item->description ?></div>
         </div>
         <div class="col-12 order-2">
-            <div class="package-<?= $item->id?>-show">
+            <div class="package-show">
                 View all details <i class="fa fa-angle-down"></i>
             </div>
-            <div class="package-<?= $item->id?>-hide">
+            <div class="package-hide">
                 Hide details <i class="fa fa-angle-up"></i>
             </div>
         </div>
         <div class="col-md-4 order-5 order-md-4">
             <a href="<?= Url::to(['packages/detail', 'code' => $item->code])?>" class="btn buy-package">Buy Package</a>
         </div>
-        <div class="col-12 order-4 order-md-5 js-package-1">
+        <div class="col-12 order-4 order-md-5 js-package">
             <div class="items-in row">
                 <?php foreach ($items as $it) { ?>
                     <?php $itemExternal = $it->itemExternal; ?>
@@ -102,3 +102,20 @@ $items = $item->getItems();
         </div>
     </div>
  </div>
+
+ <?php $this->registerJs(
+    "
+    $('.package-show').click(function () {
+        $(this).closest('.item').find('.js-package').css('display', 'block');
+        $(this).css('display', 'none');
+        $(this).siblings('.package-hide').css('display', 'block');
+    });
+      
+    $('.package-hide').click(function () {
+        $(this).closest('.item').find('.js-package').css('display', 'none');
+        $(this).css('display', 'none');
+        $(this).siblings('.package-show').css('display', 'block');
+    });
+    "
+);
+?>
