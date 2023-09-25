@@ -28,6 +28,8 @@ use Yii;
  * @property string|null $city
  * @property string|null $zip_code
  * @property string|null $state
+ *
+ * @property TrBasket[] $trBaskets
  */
 class _source_Users extends \yii\db\ActiveRecord
 {
@@ -85,5 +87,15 @@ class _source_Users extends \yii\db\ActiveRecord
             'zip_code' => 'Zip Code',
             'state' => 'State',
         ];
+    }
+
+    /**
+     * Gets query for [[TrBaskets]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTrBaskets()
+    {
+        return $this->hasMany(TrBasket::class, ['user_id' => 'id']);
     }
 }

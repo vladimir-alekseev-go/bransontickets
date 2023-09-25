@@ -12,6 +12,7 @@ use DateTime;
 use Exception;
 use RuntimeException;
 use Yii;
+use yii\base\InvalidConfigException;
 use yii\behaviors\SluggableBehavior;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveQuery;
@@ -837,6 +838,18 @@ trait ItemsExtensionTrait
                     )->column()
                 ]
             );
+    }
+
+    /**
+     * @return array|string
+     */
+    public function getCancelPolicyText()
+    {
+        try {
+            return Json::decode($this->cancel_policy_text);
+        } catch (InvalidArgumentException $e) {
+            return $this->cancel_policy_text;
+        }
     }
 
     public static function updateMinPrice()

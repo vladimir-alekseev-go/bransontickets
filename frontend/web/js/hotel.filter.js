@@ -331,7 +331,7 @@ let hotelFilter =
             html += '<div class="item js-item">';
             html += '<div class="row row-middle-padding">';
             html += '<div class="col-xs-12">';
-            html += '<a href="#" class="remove js-remove-room" ' + (room === 0 ? 'style="display:none;"' : '') + '><span class="icon ibranson-fontello-2"></span> remove</a>';
+            html += '<a href="#" class="remove js-remove-room" ' + (room === 0 ? 'style="display:none;"' : '') + '>remove</a>';
             html += '<label class="room">Room ' + (room + 1) + '</label>';
             html += '</div>';
             html += '<div class="col-xs-4">';

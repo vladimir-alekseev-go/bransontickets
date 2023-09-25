@@ -307,7 +307,7 @@ class Package extends Model
     }
 
     /**
-     * @return TrShows|TrAttractions|TrLunchs|TrPosHotels|TrPosPlHotels|null
+     * @return TrShows|TrAttractions|TrPosHotels|TrPosPlHotels|null
      */
     public function getItem()
     {
@@ -419,24 +419,6 @@ class Package extends Model
     public function getTicketsSdc()
     {
         return $this->sdc_voucher['tickets'];
-    }
-
-    /**
-     * Get url of barcode
-     *
-     * @param $barCode
-     *
-     * @return string|null
-     */
-    public function getBarcodeUrl($barCode): ?string
-    {
-        if ($this->getItem() !== null) {
-            $object = $this->item;
-            if ($object->external_service === $object::EXTERNAL_SERVICE_SDC) {
-                return Tripium::getBarcodeUrl($this->category, $this->package_id, $barCode);
-            }
-        }
-        return null;
     }
 
     /**

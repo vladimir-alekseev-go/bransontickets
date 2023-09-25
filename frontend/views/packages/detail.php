@@ -71,7 +71,7 @@ $DateValidStart = $VacationPackage->getValidStart() > new DateTime ? $VacationPa
                         <span class="cost fs-4">$ <?= $VacationPackage->getSaveUpTo() ?></span>
                     </div>
                     <div class="mb-3">
-                        <div class="gray"><i class="fa fa-calendar"></i> <small>Available Dates:</small></div>
+                        <div><i class="fa fa-calendar"></i> <small>Available Dates:</small></div>
                         <div>
                             <?= $DateValidStart->format('M d, Y') ?> - <?= $VacationPackage->getValidEnd()->format(
                                 'M d, Y'
@@ -80,7 +80,7 @@ $DateValidStart = $VacationPackage->getValidStart() > new DateTime ? $VacationPa
                     </div>
                     <?php if (!empty($VacationPackage->getTypes())) { ?>
                         <div class="mb-3">
-                            <div class="gray"><i class="fa fa-list-alt"></i> <small>Category:</small></div>
+                            <div><i class="fa fa-list-alt"></i> <small>Category:</small></div>
                             <?php foreach ($VacationPackage->getTypes() as $type) { ?>
                                 <span class="tag">
                                     <?= Html::a($type, ['packages/index', 's[c][]' => $type]) ?>
@@ -114,13 +114,13 @@ $DateValidStart = $VacationPackage->getValidStart() > new DateTime ? $VacationPa
 
                             <div class="vp-small-order-info white-block shadow-block mb-3">
                                 <div class="js-selected-info"></div>
-                                <div class="gray"><small>Package options:</small></div>
+                                <div><small>Package options:</small></div>
                                 <?php foreach ($VacationPackage->vacationPackagePrices as $price) { ?>
                                     <div class="row js-price-item" data-count="<?= $price->count ?>">
                                         <div class="col-8">
                                             <small>Select <?= $price->count ?> <?= $VacationPackage->getCountMax(
                                                 ) ? 'of ' . $VacationPackage->getCountMax() : '' ?> items</small></div>
-                                        <div class="col-4 text-end cost cost-small">$ <?= $price->price ?></div>
+                                        <div class="col-4 text-end cost">$ <?= $price->price ?></div>
                                     </div>
                                 <?php } ?>
                                 <div class="line"></div>

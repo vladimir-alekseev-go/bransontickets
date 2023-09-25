@@ -118,14 +118,12 @@ use yii\helpers\Html;
                                 <div class="cost">$ <?= number_format($model->avgNightlyRate(), 2, '.', '') ?></div>
                             </div>
                         <?php } else { ?>
-                            <div class="col-6<?php if ($model->min_rate !== $model->min_rate_source) {
-                                echo ' green';
-                            } ?>">
+                            <div class="col-6">
                                 <div class="cost">$ <?= number_format($model->min_rate, '2', '.', '') ?></div>
                             </div>
                             <?php if ($model->min_rate !== $model->min_rate_source) { ?>
                                 <div class="col-6 text-end">
-                                    <div class="cost cost-old">$ <?= number_format(
+                                    <div class="cost">$ <?= number_format(
                                             $model->min_rate_source,
                                             '2',
                                             '.',

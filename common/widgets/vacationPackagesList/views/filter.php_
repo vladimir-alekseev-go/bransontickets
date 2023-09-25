@@ -1,7 +1,6 @@
 <?php
 
 use common\models\TrAttractions;
-use common\models\TrLunchs;
 use common\models\TrShows;
 use common\models\form\Search;
 use yii\bootstrap\ActiveForm;
@@ -41,7 +40,7 @@ $model = $Search->model ? $Search->model->className() : null;
 			<div class="it js-it col-xs-6">
 				<label class="control-label">Start Date</label>
 				<?= $form->field($Search, "dateFrom", [
-				    'template' => '{label}{input}<span class="icon ibranson-fontawesome-webfont"></span>{error}{hint}',
+				    'template' => '{label}{input}{error}{hint}',
 				    'inputOptions' => ['class' => 'form-control datepicker text-left', 'autocomplete' => 'off'],
 				    'options'=>['class'=>'field field-datepicker']
 				])->textInput(['placeholder'=>'Select start date'])->label(false)?>
@@ -49,7 +48,7 @@ $model = $Search->model ? $Search->model->className() : null;
 			<div class="it js-it col-xs-6">
 				<label class="control-label">End Date</label>
 				<?= $form->field($Search, "dateTo", [
-				    'template' => '{label}{input}<span class="icon ibranson-fontawesome-webfont"></span>{error}{hint}',
+				    'template' => '{label}{input}{error}{hint}',
 				    'inputOptions' => ['class' => 'form-control datepicker text-left', 'autocomplete' => 'off'],
 				    'options'=>['class'=>'field field-datepicker']
 				])->textInput(['placeholder'=>'Select start date'])->label(false)?>
@@ -69,7 +68,7 @@ $model = $Search->model ? $Search->model->className() : null;
 		<?php }?>
 
 		<div class="it">
-			Price range: <span class="cost cost-small">$ <span id="range-from">0</span> - <span id="range-to">0</span></span>
+			Price range: <span class="cost">$ <span id="range-from">0</span> - <span id="range-to">0</span></span>
 		</div>
 
 		<div class="it" id="container-slider-price-range">
@@ -78,15 +77,15 @@ $model = $Search->model ? $Search->model->className() : null;
 
 		<div class="it">
 		<?= $form->field($Search, 'alternativeRate', [])->checkbox([
-		    'template' => '<label for="s-alternativerate"> {input} <span class="icon ibranson-usd"></span> Non-refundable ticket</label>'
+		    'template' => '<label for="s-alternativerate"> {input} Non-refundable ticket</label>'
 		])?>
 		<?php if ($Search->model && ($Search->model instanceOf TrShows)) {?>
-		<?= $form->field($Search, "tags",['template' => '{label}{input}<span class="icon ibranson-fontawesome-webfont"></span>{error}{hint}',])
+		<?= $form->field($Search, "tags",['template' => '{label}{input}{error}{hint}',])
 			->inline(true)
 			->label(false)
 			->checkboxList($model::getOriginalTagTitleList(),[
 				'item' => static function($index, $label, $name, $checked, $value) {
-                    return '<label for="type'.($index + 1) . '"> <input type="checkbox" id="type' . ($index + 1) . '" name="' . $name . '" value="' . $value . '" ' . ($checked ? 'checked' : '') . ' /> <span class="icon ibranson-'.$value.'"></span> ' . $label . '</label>';
+                    return '<label for="type'.($index + 1) . '"> <input type="checkbox" id="type' . ($index + 1) . '" name="' . $name . '" value="' . $value . '" ' . ($checked ? 'checked' : '') . ' /> ' . $label . '</label>';
             	},
 			])
 		?>
@@ -113,7 +112,7 @@ $model = $Search->model ? $Search->model->className() : null;
             	},
 			])
 		?>
-		<?php if (count($categories) > 7) {echo '<a class="show-more-filter">Show <span class="txt-filter more">more <span class="icon ibranson-fontawesome-webfont-14"></span></span><span class="txt-filter less">less <span class="icon ibranson-fontawesome-webfont-13"></span></span></a></div>';}?>
+		<?php if (count($categories) > 7) {echo '<a class="show-more-filter">Show <span class="txt-filter more">more</span><span class="txt-filter less">less</span></a></div>';}?>
 		</div>
 		<?php }?>
 
@@ -137,7 +136,7 @@ $model = $Search->model ? $Search->model->className() : null;
             	},
 			])
 		?>
-		<?php if (count($locations) > 7) { echo '<a class="show-more-filter">Show <span class="txt-filter more">more <span class="icon ibranson-fontawesome-webfont-14"></span></span><span class="txt-filter less">less <span class="icon ibranson-fontawesome-webfont-13"></span></span></a></div>';}?>
+		<?php if (count($locations) > 7) { echo '<a class="show-more-filter">Show <span class="txt-filter more">more</span><span class="txt-filter less">less</span></a></div>';}?>
 		</div>
 		<?php }?>
 
@@ -162,7 +161,7 @@ $model = $Search->model ? $Search->model->className() : null;
             	},
 			])
 		?>
-		<?php if (count($RestaurantCuisine) >= 7) { echo '<a class="show-more-filter">Show <span class="txt-filter more">more <span class="icon ibranson-fontawesome-webfont-14"></span></span><span class="txt-filter less">less <span class="icon ibranson-fontawesome-webfont-13"></span></span></a></div>';}?>
+		<?php if (count($RestaurantCuisine) >= 7) { echo '<a class="show-more-filter">Show <span class="txt-filter more">more</span><span class="txt-filter less">less</span></a></div>';}?>
 		</div>
 		<?php }?>
 
@@ -186,7 +185,7 @@ $model = $Search->model ? $Search->model->className() : null;
             	},
 			])
 		?>
-		<?php if (count($RestaurantCategory) >= 7) { echo '<a class="show-more-filter">Show <span class="txt-filter more">more <span class="icon ibranson-fontawesome-webfont-14"></span></span><span class="txt-filter less">less <span class="icon ibranson-fontawesome-webfont-13"></span></span></a></div>';}?>
+		<?php if (count($RestaurantCategory) >= 7) { echo '<a class="show-more-filter">Show <span class="txt-filter more">more</span><span class="txt-filter less">less</span></a></div>';}?>
 		</div>
 		<?php }?>
 
@@ -210,7 +209,7 @@ $model = $Search->model ? $Search->model->className() : null;
             	},
 			])
 		?>
-		<?php if (count($RestaurantAmenity) >= 7) { echo '<a class="show-more-filter">Show <span class="txt-filter more">more <span class="icon ibranson-fontawesome-webfont-14"></span></span><span class="txt-filter less">less <span class="icon ibranson-fontawesome-webfont-13"></span></span></a></div>';}?>
+		<?php if (count($RestaurantAmenity) >= 7) { echo '<a class="show-more-filter">Show <span class="txt-filter more">more</span><span class="txt-filter less">less</span></a></div>';}?>
 		</div>
 		<?php }?>
 
@@ -235,7 +234,7 @@ $model = $Search->model ? $Search->model->className() : null;
 			<a href="<?= Url::to(['index'])?>" class="btn btn-primary">Clear filters</a>
 		</div>
 		<?php if (!$Search->model || ($Search->model instanceOf TrShows || $Search->model instanceOf TrAttractions)) {?>
-		<?= $this->render('@app/views/site/small-list-item-map', ['name'=> 'View '.($model ? $model::NAME_PLURAL : TrLunchs::NAME_PLURAL).' on map'])?>
+		<?= $this->render('@app/views/site/small-list-item-map', ['name'=> 'View '.($model::NAME_PLURAL).' on map'])?>
 		<?php }?>
 		<?php ActiveForm::end(); ?>
 	</div>

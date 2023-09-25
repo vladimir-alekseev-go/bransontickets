@@ -7,7 +7,7 @@ use common\models\priceLine\NewPriceLineHotels;
 use common\models\TrAdmissions;
 use common\models\TrAttractions;
 use common\models\TrAttractionsPrices;
-/*use common\models\TrBasket;*/
+use common\models\TrBasket;
 use common\models\TrCategories;
 /*use common\models\TrLocations;*/
 use common\models\TrPosHotels;
@@ -190,7 +190,7 @@ class TripiumController extends Controller
 
         $TripiumUpdater->run();
 
-        /*TrBasket::removeOld();*/
+        TrBasket::removeOld();
     }
 
     public function actionUpdateOnDay()
@@ -356,33 +356,10 @@ class TripiumController extends Controller
         $TripiumUpdater->run();
     }
 
-    /*public function actionBasketClean()
+    public function actionBasketClean()
     {
         TrBasket::removeOld();
-    }*/
-
-//    public function actionUpdateImages()
-//    {
-//        $TripiumUpdater = new TripiumUpdater([
-//            'models' => [
-//                ['class'=> TrShows::class, 'params' =>['__updateForce'=>true, 'updateForceImages'=>true]],
-//                ['class'=> TrAttractions::class, 'params' =>['__updateForce'=>true, 'updateForceImages'=>true]],
-//                ['class'=> TrLunchs::class, 'params' =>['__updateForce'=>true, 'updateForceImages'=>true]],
-//            ]
-//        ]);
-//
-//        $TripiumUpdater->run();
-//    }
-
-//    public function actionUpdateTheatersLocations()
-//    {
-//        $items = TrTheaters::find()->where(['location_lat'=>0])->all();
-//        foreach ($items as $item) {
-//            $item->updateLocation(1);
-//            echo "<pre>"; var_dump(TrTheaters::find()->where(['location_lat'=>0])->count()); echo "</pre>";
-//            sleep(1);
-//        }
-//    }
+    }
 
     /**
      * Update new PL hotels. Runs every minutes.

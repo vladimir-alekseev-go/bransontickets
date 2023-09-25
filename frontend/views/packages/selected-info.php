@@ -12,7 +12,7 @@ $selectedItems = $packageForm->getSelectedItems();
 ?>
 <?php if (!empty($selectedItems)) { ?>
     <div class="selected-info">
-        <div class="gray"><small>Selected items:</small></div>
+        <div><small>Selected items:</small></div>
         <?php foreach ($selectedItems as $item) { ?>
             <div class="js-vp-item-remove float-end" data-id="<?= $item['id'] ?>">
                 <span class="icon ib-x fs-5 cursor-pointer blue"></span>

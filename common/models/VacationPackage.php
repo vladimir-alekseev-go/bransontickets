@@ -424,9 +424,6 @@ class VacationPackage extends _source_VacationPackage
             if (!empty($item->itemExternal->trAttractionsCategories)) {
                 return ArrayHelper::getColumn($item->itemExternal->trAttractionsCategories, 'id_external_category');
             }
-            if (!empty($item->itemExternal->trLunchsCategories)) {
-                return ArrayHelper::getColumn($item->itemExternal->trLunchsCategories, 'id_external_category');
-            }
             return null;
         });
         $categories = [];
@@ -466,7 +463,7 @@ class VacationPackage extends _source_VacationPackage
      *
      * @param VacationPackageShow|VacationPackageAttraction $vacationPackageItem
      *
-     * @return ActiveQuery TrPrices|TrAttractionsPrices|TrLunchsPrices
+     * @return ActiveQuery TrPrices|TrAttractionsPrices
      * @throws InvalidConfigException
      */
     public function getItemPrices($vacationPackageItem)

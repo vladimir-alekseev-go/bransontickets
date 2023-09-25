@@ -29,6 +29,12 @@ class TrShows extends _source_TrShows
 
     public const CALL_US_TO_BOOK_YES = 1;
     public const CALL_US_TO_BOOK_NO = 0;
+
+    public const priceClass = TrPrices::class;
+    public const joinCategoriesClass = ShowsCategories::class;
+    public const photoJoinClass = ShowsPhotoJoin::class;
+
+    public const TYPE_ID = 2;
     
     public const type = 'shows';
     public const TYPE = 'shows';
@@ -39,6 +45,14 @@ class TrShows extends _source_TrShows
 
     public const STATUS_ACTIVE = 1;
     public const STATUS_INACTIVE = 0;
+
+    public static $type = 'shows';
+
+    public static $name = 'Show';
+
+    public $categoriesClass = ShowsCategories::class;
+
+    public $categoriesClassName = 'ShowsCategories';
 
     public static $actualMinPriceCash;
 
@@ -138,6 +152,14 @@ class TrShows extends _source_TrShows
     function getRelatedCategories()
     {
         return $this->getTrShowsCategories();
+    }
+
+    /**
+     * @return string
+     */
+    public static function getType()
+    {
+        return self::TYPE;
     }
 
     /**
@@ -281,6 +303,11 @@ class TrShows extends _source_TrShows
     public function getTheatersShows()
     {
         return $this->hasOne(TheatersShows::class, ['id_external' => 'id_external']);
+    }
+
+    public static function getPriceClass()
+    {
+        return self::priceClass;
     }
 
     /**

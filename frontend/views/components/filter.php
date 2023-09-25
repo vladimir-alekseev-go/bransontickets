@@ -3,7 +3,6 @@
 use common\helpers\ActiveForm;
 use common\models\form\SearchPlHotel;
 use common\models\TrAttractions;
-use common\models\TrLunchs;
 use common\models\TrPosPlHotels;
 use common\models\TrShows;
 use common\models\form\Search;
@@ -47,7 +46,7 @@ $model = $Search->model ? $Search->model->className() : null;
                 <?= $form->field($Search, "timeTo")->hiddenInput()->label(false) ?>
             <?php } ?>
             <?= $form->field($Search, "title")->hiddenInput()->label(false) ?>
-            <?php if ($Search->model && !($Search->model instanceof TrLunchs)) { ?>
+            <?php if ($Search->model) { ?>
     <div class="input-daterange row row-small-padding">
         <div class="it js-it col-xs-6">
             <label class="control-label"><?= $Search->model instanceof TrPosPlHotels
@@ -56,7 +55,7 @@ $model = $Search->model ? $Search->model->className() : null;
                 $Search,
                 $Search->model instanceof TrPosPlHotels ? 'arrivalDate' : 'dateFrom',
                 [
-                    'template' => '{label}{input}<span class="icon ibranson-fontawesome-webfont"></span>{error}{hint}',
+                    'template' => '{label}{input}{error}{hint}',
                     'inputOptions' => ['class' => 'form-control datepicker text-left', 'autocomplete' => 'off'],
                     'options' => ['class' => 'field field-datepicker input-calendar form-group']
                 ]
@@ -69,7 +68,7 @@ $model = $Search->model ? $Search->model->className() : null;
                 $Search,
                 $Search->model instanceof TrPosPlHotels ? 'departureDate' : 'dateTo',
                 [
-                    'template' => '{label}{input}<span class="icon ibranson-fontawesome-webfont"></span>{error}{hint}',
+                    'template' => '{label}{input}{error}{hint}',
                     'inputOptions' => ['class' => 'form-control datepicker text-left', 'autocomplete' => 'off'],
                     'options' => ['class' => 'field field-datepicker input-calendar form-group']
                 ]
@@ -94,7 +93,7 @@ $model = $Search->model ? $Search->model->className() : null;
 
             <?php if (!($Search instanceof SearchPlHotel)) { ?>
                 <div class="it">
-                    Price range: <span class="cost cost-small price-range-info">
+                    Price range: <span class="cost price-range-info">
                         $ <span id="range-from">0</span> - <span id="range-to">0</span>
                     </span>
                 </div>
@@ -134,7 +133,7 @@ $model = $Search->model ? $Search->model->className() : null;
         ?>
     </div>
     <div class="it">
-        Price range: <span class="cost cost-small price-range-info">
+        Price range: <span class="cost price-range-info">
                         $ <span id="range-from">0</span> - <span id="range-to">0</span>
                     </span>
     </div>

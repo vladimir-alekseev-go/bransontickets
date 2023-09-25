@@ -69,8 +69,7 @@ $form = $form ?? ActiveForm::begin(
                     <div class="rows scrollbar-inner filter-rooms js-rooms-list" id="filter-rooms"></div>
                 </div>
                 <?php if (!$ReservationForm->packageId) { ?>
-                    <a href="#" id="filter-rooms-add" class="filter-rooms-add"><span
-                            class="icon ibranson-fontawesome-webfont-9"></span> Add Room</a>
+                    <a href="#" id="filter-rooms-add" class="filter-rooms-add">Add Room</a>
                 <?php } ?>
 
             </div>

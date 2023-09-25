@@ -6,6 +6,8 @@ use common\models\Compare;
 use common\models\form\Search;
 use common\models\TrAttractions;
 use common\models\TrAttractionsPrices;
+use common\models\TrBasket;
+use frontend\widgets\scheduleSlider\ScheduleSliderWidget;
 use frontend\widgets\vacationPackagesList\VacationPackagesListWidget;
 use DateInterval;
 use DateTime;
@@ -20,6 +22,8 @@ use yii\web\Response;
 
 class AttractionsController extends Controller
 {
+    use TicketsControllerTrait;
+    
     public const mainClass = TrAttractions::class;
 
     /**
@@ -168,6 +172,14 @@ class AttractionsController extends Controller
             ->limit(6)
             ->all();
 
+        $d = new DateTime();
+        $d->setTime(0, 0);
+        $ScheduleSlider = new ScheduleSliderWidget(['model' => $model, 'date' => $d]);
+
+        $basket = TrBasket::build();
+        $package = $basket->getPackage(Yii::$app->getRequest()->get('OrderForm')['package_modify'] ?? null);
+        $ScheduleSlider->setPackage($package);
+
         $VPLWidget = new VacationPackagesListWidget(
             [
                 'layout' => VacationPackagesListWidget::LAYOUT_LIST,
@@ -177,7 +189,7 @@ class AttractionsController extends Controller
             ]
         );
 
-        return $this->render('@app/views/shows/detail', compact('model', 'showsRecommended', 'VPLWidget'));
+        return $this->render('@app/views/shows/detail', compact('model', 'showsRecommended', 'ScheduleSlider', 'VPLWidget'));
     }
 
     /**

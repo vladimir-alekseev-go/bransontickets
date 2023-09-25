@@ -141,6 +141,17 @@ class GeneralReservationForm extends DynamicModel
     }
 
     /**
+     * Return Package
+     *
+     * @return Package|null
+     */
+    public function getPackage(): ?Package
+    {
+        $Basket = TrBasket::build();
+        return $Basket->getPackage($this->packageId);
+    }
+
+    /**
      * @return array
      */
     public static function getSmokingList(): array

@@ -1,7 +1,7 @@
 <?php
 namespace common\controllers;
 
-//use common\models\TrBasket;
+use common\models\TrBasket;
 use common\models\form\PackageForm;
 use common\models\VacationPackage;
 use Yii;
@@ -43,13 +43,13 @@ trait PackagesControllerTrait
         if (!$VacationPackage) {
             throw new NotFoundHttpException;
         }
-        //$Basket = TrBasket::build();
+        $Basket = TrBasket::build();
         
         $PackageForm = new PackageForm();
         $PackageForm->setVacationPackage($VacationPackage);
         $PackageForm->setPackage_modify_id($packageModifyId);
         
-        return $this->render('buy', compact('VacationPackage', 'PackageForm'));
+        return $this->render('buy', compact('VacationPackage', 'PackageForm', 'Basket'));
     }
 
     public function actionAddToCart()

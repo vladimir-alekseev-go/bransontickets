@@ -2,10 +2,13 @@
 
 namespace common\models\form;
 
+use common\models\TrBasket;
 use common\models\TrPosHotels;
 use common\models\TrPosHotelsPriceExtra;
 use common\models\TrPosHotelsPriceRoom;
+use Exception;
 use frontend\models\SearchHotel;
+use Throwable;
 use Yii;
 use yii\db\ActiveQuery;
 
@@ -43,6 +46,8 @@ class HotelReservationForm extends GeneralReservationForm
         $this->rooms = $this->searchHotel->room;
         $this->arrivalDate = $this->searchHotel->arrivalDate;
         $this->departureDate = $this->searchHotel->departureDate;
+
+        $this->loadFromPackage();
 
         parent::__construct($attributes, $config);
     }
@@ -129,6 +134,63 @@ class HotelReservationForm extends GeneralReservationForm
     }
 
     /**
+     * @return bool
+     */
+    public function loadFromPackage(): bool
+    {
+        if ($this->getPackage() === null || empty($this->getPackage()->getTickets())) {
+            return false;
+        }
+
+        if (!$this->isChange) {
+            $this->rooms = [];
+            foreach ($this->getPackage()->getTickets() as $k => $ticket) {
+                if (!$ticket->supplementary) {
+                    $this->rooms[] = [
+                        'adult' => $ticket->qty,
+                        'age' => $ticket->child_ages,
+                        'children' => count($ticket->child_ages),
+                    ];
+                }
+            }
+        }
+
+        $this->initRooms();
+
+        foreach ($this->getPackage()->getTickets() as $ticket) {
+            if (!$ticket->supplementary) {
+                $this->setAttributes(
+                    [
+                        self::attributeFirstName(0) => $ticket->first_name,
+                        self::attributeLastName(0) => $ticket->last_name,
+                    ]
+                );
+            } else {
+                $this->setAttributes([self::attributeNameExtra($ticket->id, 0) => $ticket->qty]);
+            }
+        }
+        $this->setAttributes(
+            [
+                'packageId' => $this->getPackage()->package_id,
+                'special_requests' => $this->getPackage()->getComments(),
+            ]
+        );
+
+        if (!$this->isChange) {
+            $this->arrivalDate = $this->getPackage()->getStartDataTime()->format('m/d/Y');
+            $this->departureDate = $this->getPackage()->getEndDataTime()->format('m/d/Y');
+        }
+
+        if (!$this->isChange) {
+            $this->searchHotel->room = $this->rooms;
+            $this->searchHotel->arrivalDate = $this->arrivalDate;
+            $this->searchHotel->departureDate = $this->departureDate;
+        }
+
+        return true;
+    }
+
+    /**
      * @return ActiveQuery
      */
     public function getRoomTypes(): ActiveQuery
@@ -211,6 +273,30 @@ class HotelReservationForm extends GeneralReservationForm
     public function getTotalPrice(): float
     {
         return $this->getDays()->sum('price');
+    }
+
+    /**
+     * @return bool
+     */
+    public function addToCart(): bool
+    {
+        if (!$this->validate()) {
+            return false;
+        }
+
+        try {
+            $Basket = TrBasket::build(true);
+            if ($Basket->set(TrPosHotels::TYPE, $this)) {
+                return true;
+            }
+            $this->addErrors($Basket->getErrors());
+        } catch (Exception $e) {
+            $this->addErrors(['addToCart' => $e->getMessage()]);
+        } catch (Throwable $e) {
+            $this->addErrors(['addToCart' => $e->getMessage()]);
+        }
+
+        return false;
     }
 
     /**
