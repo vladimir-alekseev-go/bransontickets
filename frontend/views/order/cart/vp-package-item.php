@@ -32,7 +32,7 @@ use yii\helpers\Url;
                         <?php if (!empty($item->preview_id)) { ?>
                             <a class="img" href="<?= $item->getUrl() ?>"><img src="<?= $item->preview->url ?>" alt=""/></a>
                         <?php } else { ?>
-                            <a class="img img-empty" href="<?= $item->getUrl() ?>"></a>
+                            <a class="img img-empty" href="<?= $item->getUrl() ?>"><img class="preview" width="260" src="/img/bransontickets-noimage.png" alt=""></a>
                         <?php } ?>
                         <a href="<?= $item->getUrl() ?>" class="title"><?= $package->name ?></a>
                         <div>
@@ -109,7 +109,7 @@ use yii\helpers\Url;
                             'orderNumber'       => $Order->order_number,
                             'vacationPackageId' => $vacationPackage->id
                         ]
-                    ) ?>');"><span class="icon ib-x"></span>&nbsp;<strong>Cancel item</strong></a>
+                    ) ?>');"><img src="/img/xmark-blue.svg" alt="xmark icon">&nbsp;<strong>Cancel item</strong></a>
                 <?php } ?>
             <?php } else { ?>
 
@@ -117,7 +117,7 @@ use yii\helpers\Url;
                    data-url="<?= Url::to(
                        ['order/cancellation-policy-vacation-package', 'id' => $vacationPackage->id]
                    ) ?>">
-                    <span class="icon ib-book-open"></span>&nbsp;<strong>Read policy</strong>
+                    <i class="fa fa-book"></i>&nbsp;<strong>Read policy</strong>
                 </a>
                 <?php if ($vacationPackage->vacationPackage) { ?>
                     <a class="me-3" href="<?= Url::to(
@@ -127,12 +127,12 @@ use yii\helpers\Url;
                             'packageModifyId' => $vacationPackage->id
                         ]
                     ) ?>">
-                        <span class="icon ib-edit"></span>&nbsp;<strong>Modify</strong>
+                        <i class="fa fa-edit"></i>&nbsp;<strong>Modify</strong>
                     </a>
                 <?php } ?>
                 <a class="me-3" href="<?= Url::to(['order/delete-vatation-package', 'uniqueHash' => $uniqueHash]) ?>"
                    onclick="return confirm('Do you want to remove?')">
-                    <span class="icon ib-trash-alt"></span>&nbsp;<strong>Remove</strong>
+                   <i class="fa fa-trash"></i>&nbsp;<strong>Remove</strong>
                 </a>
             <?php } ?>
         </div>
