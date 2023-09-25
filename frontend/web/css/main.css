@@ -988,6 +988,8 @@ input, .form-control {padding:11px 14px 7px;text-align:left;color:var(--c-blue-d
 .calendar-slider-block .date {width:130px;padding:0 0 5px 0;font-weight:700;font-size:18px;color:var(--c-new-blue);text-align:center;}
 .calendar-slider-block .w {width:130px;padding: 0 0 14px 0;font-weight:350;font-size:16px;color:var(--c-new-blue);text-align:center;opacity:0.7;}
 .calendar-slider-block .tag {display:inline-block;width:100%;text-align:center;font-weight:700;font-size:20px;}
+.calendar-slider-block a.tag {display:inline-block;padding:7px 10px 3px;font-size:20px;font-weight:700;border:1px solid var(--c-new-blue);border-radius:5px;background:var(--c-new-blue);text-decoration:none;margin:0 0 7px 0;color:var(--c-white);}
+.calendar-slider-block a.tag:hover {border:none;padding:8px 12px 4px;background:linear-gradient(90deg, var(--c-violet-gray) 60%, var(--c-violet-dark) 100%);color:var(--c-white);}
 
 .vp-overview-list .it {border-top:1px solid var(--c-new-blue);margin:0 -24px;padding:24px;overflow:hidden;}
 .vp-overview-list .it:first-child {border-top:none;padding-top:0;}
@@ -1287,6 +1289,7 @@ input, .form-control {padding:11px 14px 7px;text-align:left;color:var(--c-blue-d
 .cart-item a {color:var(--c-new-blue);text-decoration:none;}
 .cart-item .name {font-size:18px;font-weight:bold;}
 .cart-item .ticket {background:var(--c-light-violet);border-radius:10px;margin:0 0 10px;padding:15px;}
+.cart-item .vp-tickets .title, .cart-item .vp-tickets .get-more-tickets {font-weight:bold;}
 
 .cart-item .total-info {display:inline-block;position:relative;z-index:9;}
 .cart-item .total-info .cost {white-space:nowrap;}
