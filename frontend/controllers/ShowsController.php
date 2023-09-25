@@ -5,6 +5,7 @@ namespace frontend\controllers;
 use common\models\Compare;
 use common\models\TrPrices;
 use common\models\TrShows;
+use frontend\widgets\scheduleSlider\ScheduleSliderWidget;
 use frontend\widgets\vacationPackagesList\VacationPackagesListWidget;
 use DateInterval;
 use DateTime;
@@ -20,6 +21,8 @@ use yii\web\Response;
 
 class ShowsController extends Controller
 {
+    use TicketsControllerTrait;
+    
     public const mainClass = TrShows::class;
 
     /**
@@ -184,6 +187,10 @@ class ShowsController extends Controller
             ->limit(6)
             ->all();
 
+        $d = new DateTime();
+        $d->setTime(0, 0);
+        $ScheduleSlider = new ScheduleSliderWidget(['model' => $model, 'date' => $d]);
+
         $VPLWidget = new VacationPackagesListWidget(
             [
                 'layout' => VacationPackagesListWidget::LAYOUT_LIST,
@@ -193,7 +200,7 @@ class ShowsController extends Controller
             ]
         );
 
-        return $this->render('detail', compact('model', 'showsRecommended', 'VPLWidget'));
+        return $this->render('detail', compact('model', 'showsRecommended', 'ScheduleSlider', 'VPLWidget'));
     }
 
     /**

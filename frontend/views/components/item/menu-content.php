@@ -45,7 +45,7 @@ $images = $model->relatedPhotos;
         <?php if ($model instanceof TrPosHotels || $model instanceof TrPosPlHotels) { ?>
             <?= $this->render('@app/views/components/item/menu-content/overview', compact('model', 'HotelReservationForm', 'showsRecommended', 'videos', 'images')) ?>
         <?php } else { ?>
-            <?= $this->render('@app/views/components/item/menu-content/overview', compact('model', 'showsRecommended', 'videos', 'images')) ?>
+            <?= $this->render('@app/views/components/item/menu-content/overview', compact('model', 'showsRecommended', 'ScheduleSlider', 'videos', 'images')) ?>
         <?php } ?>
         <?= $this->render('@app/views/components/item/menu-content/description', compact('model')) ?>
         <?php if ($model instanceof TrShows || $model instanceof TrAttractions) { ?>

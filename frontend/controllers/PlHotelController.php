@@ -67,4 +67,44 @@ class PlHotelController extends Controller
 
         return $this->render('@app/views/components/item/menu-content/hotel-pl-rooms', compact('ReservationForm'));
     }
+
+    /**
+     * @param string $code
+     * @param int    $id
+     *
+     * @return mixed
+     * @throws NotFoundHttpException|\Throwable
+     */
+    public function actionReservation($code, $id)
+    {
+        $this->layout = false;
+
+        /**
+         * @var $model TrPosPlHotels
+         */
+        $model = TrPosPlHotels::getActive()->where(['code' => $code])->one();
+
+        if (!$model) {
+            throw new NotFoundHttpException;
+        }
+
+        $HotelReservationForm = new PlHotelReservationForm(
+            [
+                'roomId' => $id,
+                'model' => $model,
+                'packageId' => Yii::$app->getRequest()->get('packageId'),
+                'ppnBundle' => Yii::$app->getRequest()->get('ppnBundle'),
+            ]
+        );
+
+        if (!$HotelReservationForm->getRoomType()) {
+            throw new NotFoundHttpException;
+        }
+
+        if ($HotelReservationForm->load(Yii::$app->getRequest()->post()) && $HotelReservationForm->addToCart()) {
+            return $this->redirect(['order/cart'], 302);
+        }
+
+        return $this->render('reservation', compact('HotelReservationForm'));
+    }
 }

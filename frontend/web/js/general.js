@@ -129,6 +129,63 @@ let popupSizer = {
     // }
 }
 
+let loaderInButton = {
+    btn: null,
+    form: null,
+    init: function () {
+        let _self = this;
+        $(document).on("click", ".btn-loading-need", function () {
+            _self.form = $(this).closest("form");
+            _self.btn = $(this);
+            _self.showLoader();
+            return true;
+        })
+    },
+    submit: function (form, btn) {
+        let _self = this;
+        _self.form = form;
+        _self.btn = btn;
+        _self.showLoader();
+        _self.form.submit();
+
+        return false;
+    },
+    showLoader: function () {
+        let _self = this;
+
+        if (!_self.btn) {
+            return false;
+        }
+
+        if ($(_self.form).find(".has-error").length === 0) {
+            _self.btn.addClass("btn-loading");
+
+            setTimeout(function () {
+                _self.showLoader();
+            }, 100);
+        } else {
+            _self.form.removeAttr("onsubmit");
+            _self.btn.removeClass("btn-loading");
+        }
+
+    }
+}
+
+let hideShowBlockNew = {
+    init: function () {
+        $(document).on('click', '.hide-show-block .toggle, .hide-show-block .title', function () {
+            if (!$(this).parent().hasClass("open")) {
+                $(this).parent().addClass('open');
+                $(this).parent().find('.data').show('slow');
+            } else {
+                $(this).parent().removeClass('open');
+                $(this).parent().find('.data').hide('slow');
+            }
+            return false;
+        });
+    }
+}
+
 $(function () {
     try {
         $('.scrollbar-inner').scrollbar()
@@ -141,4 +198,6 @@ $(function () {
     listFilterBody.resize($('.list-filter-body'), 66);
 
     popupSizer.init();
+    loaderInButton.init();
+    hideShowBlockNew.init();
 });

@@ -5,6 +5,7 @@ use common\models\auth\LoginForm;
 use common\models\auth\PasswordResetRequestForm;
 use common\models\auth\ResetPasswordForm;
 use common\models\auth\SignupForm;
+use common\models\TrBasket;
 use common\models\User;
 use InvalidArgumentException;
 use Yii;
@@ -53,6 +54,8 @@ trait SiteControllerTrait
      */
     public function actionLogout()
     {
+        TrBasket::removeSessionID(null, false);
+        
         Yii::$app->user->logout();
 
         return $this->goHome();

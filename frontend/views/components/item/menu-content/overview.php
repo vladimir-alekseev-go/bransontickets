@@ -12,6 +12,8 @@ use yii\web\JqueryAsset;
  * @var HotelReservationForm                            $HotelReservationForm
  */
 
+$this->registerJsFile('/js/order.js', ['depends' => [JqueryAsset::class]]);
+$this->registerJs('order.init()');
 ?>
 
 <div id="overview" role="tabpanel" aria-labelledby="overview-tab" class="tab-pane active">
@@ -57,66 +59,7 @@ use yii\web\JqueryAsset;
                         ); ?>
                         <?php $this->registerJs('hotelDetail.init()'); ?>
                     <?php } else { ?>
-                        <div class="availability">
-                            <div class="head">Availability</div>
-                            <a href="#" class="more-available-dates-head">More Available Dates <i class="fa fa-angle-right fa-gradient"></i></a>
-                        </div>
-                        <div class="week-wrap calendar-slider calendar-slider-in-order">
-                            <div class="frame horizontal calendar-slider-items" id="basic">
-                                <ul>
-                                    <li class="it has-ticket act active" data-date="2023-04-26">
-                                        <div class="date">Apr 26</div>
-                                        <div class="w">Wed</div>
-                                        <a class="show-over-info tag tag-discount" href="#" data-href="#" data-date="2023-04-26 19:30:00">07:30 pm</a>
-                                    </li>
-                                    <li class="it" data-date="2023-04-27">
-                                        <div class="date">Apr 27</div>
-                                        <div class="w">Thu</div>
-                                        <div class="tag na">N/A</div>
-                                    </li>
-                                    <li class="it has-ticket" data-date="2023-04-28">
-                                        <div class="date">Apr 28</div>
-                                        <div class="w">Fri</div>
-                                        <a class="show-over-info tag tag-discount" href="#" data-href="#" data-date="2023-04-28 19:30:00">07:30 pm</a>
-                                    </li>
-                                    <li class="it" data-date="2023-04-29">
-                                        <div class="date">Apr 29</div>
-                                        <div class="w">Sat</div>
-                                        <div class="tag na">N/A</div>
-                                    </li>
-                                    <li class="it has-ticket" data-date="2023-04-30">
-                                        <div class="date">Apr 30</div>
-                                        <div class="w">Sun</div>
-                                        <a class="show-over-info tag tag-discount" href="#" data-href="#" data-date="2023-04-30 19:30:00">07:30 pm</a>
-                                    </li>
-                                    <li class="it" data-date="2023-05-01">
-                                        <div class="date">May 01</div>
-                                        <div class="w">Mon</div>
-                                        <div class="tag na">N/A</div>
-                                    </li>
-                                    <li class="it has-ticket" data-date="2023-05-02">
-                                        <div class="date">May 02</div>
-                                        <div class="w">Tue</div>
-                                        <a class="show-over-info tag tag-discount" href="#" data-href="#" data-date="2023-05-02 19:30:00">07:30 pm</a>
-                                    </li>
-                                    <li class="it" data-date="2023-05-03">
-                                        <div class="date">May 03</div>
-                                        <div class="w">Wed</div>
-                                        <div class="tag na">N/A</div>
-                                    </li>
-                                    <li class="it has-ticket" data-date="2023-05-04">
-                                        <div class="date">May 04</div>
-                                        <div class="w">Thu</div>
-                                        <a class="show-over-info tag tag-discount" href="#" data-href="#" data-date="2023-05-04 19:30:00">07:30 pm</a>
-                                    </li>
-                                    <li class="it" data-date="2023-05-05">
-                                        <div class="date">May 05</div>
-                                        <div class="w">Fri</div>
-                                        <div class="tag na">N/A</div>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
+                        <?= $ScheduleSlider->run() ?>
                     <?php } ?>
                 </div>
             </div>
@@ -127,6 +70,10 @@ use yii\web\JqueryAsset;
             <div id="show-list" class="rooms-type-list">
                 <?php //$this->render('@app/views/components/item/menu-content/hotel-rooms', compact('HotelReservationForm')) ?>
             </div>
+        </div>
+    <?php } else { ?>
+        <div class="fixed">
+            <?= $this->render('@app/widgets/scheduleSlider/views/container', compact('model')) ?>
         </div>
     <?php } ?>
     <div class="fixed">

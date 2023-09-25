@@ -2,6 +2,9 @@
 
 namespace common\helpers;
 
+use common\models\TrAttractions;
+use common\models\TrPosPlHotels;
+use common\models\TrPosHotels;
 use common\models\TrShows;
 use Yii;
 use yii\data\ActiveDataProvider;
@@ -14,12 +17,15 @@ class MarketingItemHelper
     public static function getItemTypes(): array
     {
         return [
-            TrShows::class => TrShows::TYPE
+            TrPosPlHotels::class => TrPosPlHotels::TYPE,
+            TrAttractions::class => TrAttractions::TYPE,
+            TrShows::class => TrShows::TYPE,
+            TrPosHotels::class => TrPosHotels::TYPE,
         ];
     }
 
     /**
-     * @return TrPosPlHotels[]|TrPosHotels[]|TrAttractions[]|TrShows[]|TrLunchs[]|Restaurant[]
+     * @return TrPosPlHotels[]|TrPosHotels[]|TrAttractions[]|TrShows[]
      * The array keys are the item types, and the array values are the corresponding class names.
      */
     public static function getItemClassNames(): array

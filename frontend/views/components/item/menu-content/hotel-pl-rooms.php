@@ -4,8 +4,6 @@ use common\models\form\PlHotelReservationForm;
 use yii\helpers\Url;
 
 /**
- * Inherited by @wlfrontend
- *
  * @var PlHotelReservationForm $ReservationForm
  */
 
@@ -16,7 +14,7 @@ $model = $ReservationForm->model;
     <div class="rooms-type">
         <?php foreach ($ReservationForm->getRoomTypes() as $roomType) {
             foreach ($roomType['prices'] as $key => $price) { ?>
-                <div class="it js-room" data-room-price="<?= $price['retailRate'] ?>"
+                <div class="it white-block shadow-block js-room" data-room-price="<?= $price['retailRate'] ?>"
                      data-days-count="<?= $ReservationForm->getDaysCount()  ?>">
                     <div class="row">
                         <div class="col-12 col-md-7 mb-3 mb-md-0">
@@ -50,12 +48,28 @@ $model = $ReservationForm->model;
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-6">
-                                    <a href="#" class="btn buy-btn w-100 js-reservation-url reservation-url disabled"
-                                       data-url="">
-                                        Book now
+                                    <a href="#" class="btn buy-btn w-100 js-reservation-url reservation-url <?=
+                                    $ReservationForm->basket->hasHotel() && $ReservationForm->inBasket($roomType)
+                                        ? 'reservation-in-basket' : ''?>"
+                                       data-url="<?= Url::to(
+                                           [
+                                               'pl-hotel/reservation',
+                                               'code' => $model->code,
+                                               'id' => $roomType['id'],
+                                               'ppnBundle' => $price['ppnBundle'],
+                                               $ReservationForm->formName() => [
+                                                   'packageId' => $ReservationForm->packageId,
+                                               ]
+                                           ]
+                                       ) ?>">
+                                        <?php if ($ReservationForm->basket->hasHotel()) { ?>
+                                            <?= $ReservationForm->inBasket($roomType) ? 'Modify' : 'Change room' ?>
+                                        <?php } else { ?>
+                                            Book now
+                                        <?php } ?>
                                     </a>
                                     <a class="js-reservation-cancel btn btn-link reservation-cancel">
-                                        <span class="icon ib-x"></span> Cancel
+                                        <img src="/img/xmark-blue.svg" alt="xmark icon"></span> Cancel
                                     </a>
                                 </div>
                             </div>

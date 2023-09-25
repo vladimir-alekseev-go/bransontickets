@@ -34,7 +34,7 @@ $roomsCount = 0;
             $roomsCount++;
             ?>
             <?php foreach ($rooms as $room) { ?>
-                <div class="it js-room" data-room-price="<?= $room->price ?>"
+                <div class="it white-block shadow-block js-room" data-room-price="<?= $room->price ?>"
                      data-days-count="<?= $HotelReservationForm->getDaysCount() ?>">
                     <div class="row">
                         <div class="col-12 col-md-7 mb-3 mb-md-0">

@@ -4,6 +4,12 @@ namespace common\tripium;
 
 use common\helpers\General;
 use common\helpers\MarketingItemHelper;
+use common\helpers\StrHelper;
+use common\models\Coupon;
+use common\models\Itinerary;
+use common\models\Package;
+use common\models\TrBasket;
+use common\models\TrOrders;
 use DateTime;
 use Exception;
 use Yii;
@@ -541,6 +547,155 @@ class Tripium extends Model
         return null;
     }
 
+    public function getItinerary($session)
+    {
+        if (!$session) {
+            return false;
+        }
+
+        $res = $this->request('/itinerary/' . $session);
+        return $res ? $res : false;
+    }
+
+    /**
+     * Add/modify a product in a cart
+     *
+     * @param string $session
+     * @param array  $data
+     * @param Coupon $coupon
+     *
+     * @return Itinerary|null
+     */
+    public function postPackage($session, $data, Coupon $coupon = null): ?Itinerary
+    {
+        if (empty($session)) {
+            return null;
+        }
+
+        $queryData = ['info' => self::getSiteType()];
+        if ($coupon) {
+            $queryData['discountCode'] = $coupon->code;
+        }
+        $query = '?' . http_build_query($queryData);
+
+        if (!empty($data['packageId'])) {
+            $result = $this->request(
+                '/ext/itinerary/' . $session . '/package/' . $data['packageId'] . $query,
+                $data,
+                'put'
+            );
+        } else {
+            $result = $this->request('/ext/itinerary/' . $session . $query, $data, 'post');
+        }
+
+        if (empty($this->getErrors())) {
+            $itinerary = new Itinerary();
+            return $itinerary->loadData($result);
+        }
+
+        try {
+            Yii::$app->mailer->compose('basket/basket-add-edit', ['data' => $data, 'errors' => $this->getErrors()])
+                ->setFrom(Yii::$app->params['subscriptionEmailFrom'])
+                ->setTo(Yii::$app->params['technicalNotificationEmail'])
+                ->setSubject('Adding/modify items in a basket. ' . Yii::$app->name)
+                ->send();
+        } catch (Exception $e) {
+        }
+
+        return null;
+    }
+
+    /**
+     * @return string
+     */
+    private static function getSiteType(): string
+    {
+        return !empty(Yii::$app->params['siteType']) ? Yii::$app->params['siteType'] : self::SITE_TYPE_DESKTOP;
+    }
+
+    /**
+     * @param $session
+     * @param $packageId
+     *
+     * @return mixed|string[]|null
+     */
+    public function removePackage($session, $packageId)
+    {
+        $query = '?' . http_build_query(['info' => self::getSiteType()]);
+        $res = $this->request('/ext/itinerary/' .$session. '/package/' .$packageId . $query, [], 'delete');
+        return isset($res['itinerary']) ? $res : null;
+    }
+
+    /**
+     * @param $session
+     *
+     * @return mixed|string[]|null
+     */
+    public function clearItinerary($session)
+    {
+        $query = '?' . http_build_query(['info' => self::getSiteType()]);
+        $res = $this->request('/ext/itinerary/' .$session . $query, [], 'delete');
+        return isset($res['itinerary']) ? $res : null;
+    }
+
+    public function reserve($session)
+    {
+        $res = $this->request('/itinerary/' .$session. '/reserve', [], 'post');
+        return $res ? $res : false;
+    }
+
+    public function addOrder($data)
+    {
+        $res = $this->request('/order', $data, 'post');
+        return $res ? $res : false;
+    }
+
+    public function getOrder($orderNumber)
+    {
+        $res = $this->request("/order/$orderNumber");
+        return $res ? $res : null;
+    }
+
+    /**
+     * @param DateTime|null $startDate
+     * @param DateTime|null $endDate
+     * @param null          $search
+     * @param string        $sort
+     * @param int           $page
+     * @param int           $size
+     *
+     * @return array|null
+     */
+    public function getOrders(
+        DateTime $startDate = null,
+        DateTime $endDate = null,
+        $search = null,
+        int $page = 0,
+        int $size = 20,
+        $sort = 'orderDate,desc'
+    ): ?array {
+        $query = http_build_query(
+            [
+                'startDate' => $startDate ? $startDate->format('m/d/Y') : null,
+                'endDate' => $endDate ? $endDate->format('m/d/Y') : null,
+                'search' => $search,
+                'sort' => $sort,
+                'page' => $page,
+                'size' => $size,
+            ]
+        );
+        $res = $this->request("/order?" . $query);
+        if (!isset($res['results'])) {
+            return null;
+        }
+        $results = [];
+        foreach ($res['results'] as $order) {
+            $results[] = TrOrders::build($order);
+        }
+        $res['results'] = $results;
+        return $res;
+    }
+
     public function postCustomer($data)
     {
         if (!empty($data['id'])) {
@@ -560,6 +715,230 @@ class Tripium extends Model
         $res = $this->request('/customer/' . $id);
 
         return $this->statusCode === self::STATUS_CODE_SUCCESS ? $res : false;
+    }
+
+    /**
+     * @param $data
+     *
+     * @return Itinerary|null
+     */
+    public function postItinerary($data): ?Itinerary
+    {
+        $result = $this->request('/ext/itinerary', $data, 'post');
+
+        if (empty($this->getErrors())) {
+            $itinerary = new Itinerary();
+            return $itinerary->loadData($result);
+        }
+        return null;
+    }
+
+    /**
+     * @param string $session
+     * @param Coupon $coupon
+     *
+     * @return Itinerary|null
+     */
+    public function getItineraryByCoupon($session, Coupon $coupon): ?Itinerary
+    {
+        if (!$session) {
+            return null;
+        }
+
+        $result = $this->request(
+            '/ext/itinerary/' . $session . '/?' . http_build_query(['discountCode' => $coupon->code])
+        );
+
+        if (empty($this->getErrors())) {
+            $itinerary = new Itinerary();
+            return $itinerary->loadData($result);
+        }
+        return null;
+    }
+
+    public function getCustomerOrders($id, $past = true)
+    {
+        if (!$id) {
+            return false;
+        }
+
+        return $this->request("/customer/" . $id . "/orders?size=2000&page=0&past=" . ($past ? "true" : "false"));
+    }
+
+    /**
+     * @param $sessionId
+     * @param $type
+     * @param $auto
+     *
+     * @return Coupon[]
+     * */
+    public function getCoupons($sessionId, $type, $auto = null): array
+    {
+        $url = "/discount/itinerary/$sessionId";
+        $res = $this->request($url);
+
+        return isset($res['results']) ? self::filterCoupons($res['results'], $type, $auto) : [];
+    }
+
+    /**
+     * @param array|null $list
+     * @param string     $type
+     * @param null       $auto
+     *
+     * @return Coupon[]
+     */
+    public static function filterCoupons($list, $type, $auto = null): array
+    {
+        $result = [];
+
+        if (!empty($list)) {
+            foreach ($list as $data) {
+                $Coupon = new Coupon;
+                $Coupon->loadData($data);
+                if (($auto === null || $Coupon->auto === $auto) && $Coupon->isTypeOf($type)) {
+                    $result[$Coupon->code] = $Coupon;
+                }
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param array|null $list
+     * @param string     $type
+     * @param null       $auto
+     *
+     * @return Coupon|null
+     */
+    public static function getTheBestCoupon($list, $type, $auto = null): ?Coupon
+    {
+        if (empty($list)) {
+            return null;
+        }
+
+        $list = self::filterCoupons($list, $type, $auto);
+
+        usort(
+            $list,
+            static function ($a, $b) {
+                if ($a->discount === $b->discount) {
+                    return 0;
+                }
+                return ($a->discount > $b->discount) ? -1 : 1;
+            }
+        );
+        $list = array_values($list);
+        return $list[0];
+    }
+
+	/**
+	 * @param $code
+	 * @param $siteType
+	 * 
+	 * @return Coupon|null
+	 * */
+	public function getCouponByCode($code, $siteType = null): ?Coupon
+    {
+	    if (empty($code)) {
+	        return null;
+	    }
+	    
+	    if (!$siteType) {
+	        $siteType = Yii::$app->params['siteType'] === Coupon::COUPON_TYPE_MOBILE ? Coupon::COUPON_TYPE_MOBILE : Coupon::COUPON_TYPE_DESKTOP;
+	    } else if (!in_array($siteType, [Coupon::COUPON_TYPE_DESKTOP, Coupon::COUPON_TYPE_MOBILE], true)) {
+	        return null;
+	    }
+	    
+	    $Basket = TrBasket::find()->where(['session_id' => TrBasket::getSessionID()])->one();
+	    $Coupons = $this->getCoupons($Basket->sessionId, $siteType);
+
+	    foreach ($Coupons as $Coupon) {
+	        if (StrHelper::strtolower($Coupon->code) === StrHelper::strtolower($code)) {
+	            return $Coupon;
+	        }
+	    }
+	    
+	    return null;
+	}
+
+	/**
+	 * @param $orderNumber
+	 * @param $packageId
+	 * @param $params
+	 *
+	 * @return Coupon[]
+	 * */
+	public function getCouponsForOrder($orderNumber, $packageId, $params): array
+    {
+	    $res = $this->request("/discount/order/$orderNumber/package/$packageId", $params, "post");
+	    
+	    $result = [];
+	    
+	    if (!empty($res["results"])) {
+	        foreach ($res["results"] as $data) {
+	            $Coupon = new Coupon;
+	            $Coupon->loadData($data);
+	            $result[] = $Coupon;
+	        }
+	    }
+	    
+	    return $result;
+	}
+
+    /**
+     * @param string $orderNumber
+     * @param string $discountCode
+     * @param array  $request
+     *
+     * @return Package[]
+     */
+    public function getRecalculatingPackagesInOrder($orderNumber, $discountCode, array $request): array
+    {
+        $res = $this->request("/discount/order/$orderNumber/$discountCode", $request, "post");
+
+        $result = [];
+
+        if (!empty($res["results"])) {
+            foreach ($res["results"] as $data) {
+                $package = new Package;
+                $package->loadData($data);
+                $result[] = $package;
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * Gets the terms and conditions of Price Line hotel.
+     *
+     * @return array|null
+     */
+    public function getPLTermsConditions(): ?array
+    {
+        $res = $this->request('/priceline/policy?category=terms_and_conditions');
+
+        if ($this->statusCode === self::STATUS_CODE_SUCCESS) {
+            return is_array($res['results']) ? $res['results'] : null;
+        }
+        return null;
+    }
+
+    /**
+     * Gets the privacy policy of Price Line hotel.
+     *
+     * @return array|null
+     */
+    public function getPLPrivacyPolicy(): ?array
+    {
+        $res = $this->request('/priceline/policy?category=privacy_policy');
+
+        if ($this->statusCode === self::STATUS_CODE_SUCCESS) {
+            return is_array($res['results']) ? $res['results'] : null;
+        }
+
+        return null;
     }
 
     /**

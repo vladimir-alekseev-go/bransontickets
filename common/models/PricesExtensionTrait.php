@@ -68,7 +68,7 @@ trait PricesExtensionTrait
     {
 	    self::removeDuplicates();
 
-        if (self::TYPE === TrAttractionsPrices::TYPE /*|| self::TYPE === TrLunchsPrices::TYPE*/) {
+        if (self::TYPE === TrAttractionsPrices::TYPE) {
             self::deleteAll("end < start");
             self::deleteAll("end < '" . date("Y-m-d H:i:s") . "'");
         }

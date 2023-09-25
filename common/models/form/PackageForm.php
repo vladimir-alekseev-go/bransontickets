@@ -4,7 +4,7 @@ namespace common\models\form;
 
 use common\models\TrAttractions;
 use common\models\TrAttractionsPrices;
-//use common\models\TrBasket;
+use common\models\TrBasket;
 use common\models\TrShows;
 use common\models\VacationPackage;
 use common\models\VacationPackageOrder;
@@ -169,10 +169,10 @@ class PackageForm extends DynamicModel
      */
     public function getVacationPackageModify()
     {
-        /*if ($this->package_modify_id) {
+        if ($this->package_modify_id) {
             $Basket = TrBasket::build();
             return $Basket->getVacationPackage($this->package_modify_id);
-        }*/
+        }
         return null;
     }
 
@@ -210,7 +210,7 @@ class PackageForm extends DynamicModel
             }
         	$items[] = $item;
         }
-        /*$Basket = TrBasket::build(true);
+        $Basket = TrBasket::build(true);
 
         if ($this->package_modify_id) {
             $Basket->removeVacationPackage($Basket->getGroupHashVacationPackageById($this->package_modify_id));
@@ -229,7 +229,7 @@ class PackageForm extends DynamicModel
             return true;
         }
 
-        $this->addErrors($Tripium->errors);*/
+        $this->addErrors($Tripium->errors);
         return false;
     }
 
@@ -408,7 +408,7 @@ class PackageForm extends DynamicModel
      */
     public function initOrderVacationPackage()
     {
-        /*$Basket = TrBasket::build();
+        $Basket = TrBasket::build();
         if ($this->package_modify_id && $hash = $Basket->getGroupHashVacationPackageById($this->package_modify_id)) {
             if (!empty($Basket->getUniqueVacationPackages()[$hash])) {
                 $VacationPackageOrder = $Basket->getUniqueVacationPackages()[$hash];
@@ -420,7 +420,7 @@ class PackageForm extends DynamicModel
                     }
                 }
             }
-        }*/
+        }
     }
 
     /**

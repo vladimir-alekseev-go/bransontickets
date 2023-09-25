@@ -3,7 +3,6 @@
 namespace common\widgets\vacationPackagesList;
 
 use common\models\TrAttractions;
-use common\models\TrLunchs;
 use common\models\TrShows;
 use common\models\VacationPackage;
 use common\models\VacationPackageAttraction;

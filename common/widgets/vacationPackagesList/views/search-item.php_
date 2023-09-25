@@ -18,7 +18,7 @@ $items = $item->getItems();
         <?php if (!empty($item->description)) { ?>
             <div class="description"><?= $item->description ?></div><?php } ?>
     </div>
-    <div class="gray-light mb-2"><small>Items in Package</small></div>
+    <div class="mb-2"><small>Items in Package</small></div>
     <div class="items-in row">
         <?php foreach ($items as $it) { ?>
             <?php $itemExternal = $it->itemExternal; ?>

@@ -91,8 +91,8 @@ $warning = Yii::$app->session->getFlash('warning');
 
     <div class="hide-show-block">
         <a href="#" class="toggle">
-            <span class="icon ib-minus up"></span>
-            <span class="icon ib-plus down"></span>
+            <i class="fa fa-minus up"></i>
+            <i class="fa fa-plus down"></i>
         </a>
         <a href="#" class="title">Special/Accessibility requests</a>
         <div class="data">
@@ -108,8 +108,8 @@ $warning = Yii::$app->session->getFlash('warning');
         <?php foreach ($roomType['prices'][0]['policy'] as $policy) { ?>
             <div class="hide-show-block">
                 <a href="#" class="toggle">
-                    <span class="icon ib-minus up"></span>
-                    <span class="icon ib-plus down"></span>
+                    <i class="fa fa-minus up"></i>
+                    <i class="fa fa-plus down"></i>
                 </a>
                 <a href="#" class="title"><?= $policy['title'] ?></a>
                 <div class="data">
@@ -138,7 +138,7 @@ $warning = Yii::$app->session->getFlash('warning');
                     ) ?></span>
             </div>
             <div class="col-5 col-sm-3 col-lg-2">
-                <button class="btn btn-primary btn-loading-need w-100">Book Now</button>
+                <button class="btn buy-btn btn-loading-need w-100">Book Now</button>
             </div>
         </div>
     </div>
