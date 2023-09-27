@@ -201,3 +201,33 @@ $(function () {
     loaderInButton.init();
     hideShowBlockNew.init();
 });
+
+$(document).ready(function() {
+    $("#full-description").click(function () {
+        $("#description-tab").tab("show");
+    });
+});
+
+$(document).ready(function() {
+    $("#more-available").click(function () {
+        $("#schedule-tab").tab("show");
+        
+        setTimeout(function () {
+			var calendarEl = document.getElementById('calendar');
+
+			var calendar = new FullCalendar.Calendar(calendarEl, {
+				initialView: 'dayGridMonth',
+				headerToolbar: {
+					left: 'prev',
+					center: 'title',
+					right: 'next'
+				},
+				editable: false,
+				contentHeight: 705,
+				events: data
+			});
+
+			calendar.render();
+		}, 1); 
+    });
+});

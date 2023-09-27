@@ -38,7 +38,7 @@
 
 @media (max-width:991px) {
     .header .bransontickets-logo img {height:40px;}
-    .header .menu-up-control {font-size:22px;padding:10px 0 0 0;}
+    .header .menu-up-control {top:0;font-size:22px;padding:10px 0 0 0;}
     .header-menu-phone {gap:10px;padding:13px 0 0 0;}
     .header-menu-phone img {width:18px;}
     .header-menu-phone .header-phone {font-size:20px;}
@@ -49,7 +49,7 @@
     .header {padding:12px 0 13px 0;}
     .header .bransontickets-logo img {height:35px;margin:0;}
     .menu-general {width:100vw;right:-100vw;}
-    .header .menu-up-control {display:block;padding:2px 0 0 0;}
+    .header .menu-up-control {top:5px;display:block;padding:2px 0 0 0;}
     .header-menu-phone {justify-content:flex-start;gap:10px;padding:5px 0 0 0;}
 
     .menu-main li, .menu-main li a {font-size:32px;}
@@ -60,9 +60,14 @@
     .menu-general .menu-footer .item {padding:20px 0;}
 }
 
-@media (max-width: 576px) {
+@media (max-width:576px) {
     .menu-general .menu-phone {bottom:168px;}
     .menu-general .menu-footer {display:block;padding:10px 0 10px 60px;}
     .menu-general .menu-footer .item {padding:10px 0;}
     .menu-general .menu-footer .item img {width:80px;}
+}
+
+@media (max-height:650px) {
+    .menu-general {overflow-y:scroll;padding:0;}
+    .menu-general .menu-footer {position:relative;}
 }

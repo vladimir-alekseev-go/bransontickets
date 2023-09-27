@@ -51,7 +51,11 @@ $this->registerJs(
             <div class="rows">
                 <div class="masonry-grid" data-ma-sonry="{ 'itemSelector': '.grid-item'}">
                     <?php foreach ($videos as $video) { ?>
-                        <iframe src="<?= $video ?>" allowfullscreen="allowfullscreen"></iframe>
+                        <div class="grid-item grid-item--width2">
+                            <div>
+                                <iframe src="<?= $video ?>" allowfullscreen="allowfullscreen"></iframe>
+                            </div>
+                        </div>
                     <?php } ?>
                     <?php foreach ($images as $img) { ?>
                         <div class="grid-item">
