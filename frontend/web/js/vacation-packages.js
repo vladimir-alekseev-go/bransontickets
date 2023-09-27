@@ -352,7 +352,7 @@ let VPDetail = {
         let column = $('.js-column-to-scroll-block');
         let columnAdd = $('.js-column-to-scroll-block-additional');
         let sp = $(".js-static-position");
-        let topDelta = 20;
+        let topDelta = 100;
         let top = topDelta;
 
         if (column.position().top + column.height() + columnAdd.height() - sp.height() < $(document).scrollTop() + topDelta) {

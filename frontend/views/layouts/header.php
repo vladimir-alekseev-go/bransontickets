@@ -1,7 +1,10 @@
 <?php
 
+use common\models\TrBasket;
 use common\models\User;
 use yii\helpers\Url;
+
+$basket = TrBasket::build();
 
 ?>
 <header class="header">
@@ -43,7 +46,7 @@ use yii\helpers\Url;
                 <?php } ?>
             </div>
             
-            <div class="col-10 col-md-4 order-0 order-md-1">
+            <div class="col-8 col-md-4 order-0 order-md-1">
                 <?php if (Yii::$app->request->url === Url::to('/')) { ?>
                     <div class="header-menu-phone">
                         <img src="/img/phone.svg" alt="phone icon">
@@ -56,10 +59,15 @@ use yii\helpers\Url;
                 <?php } ?>
             </div>
                 
-            <div class="col-2 col-md-4 order-2">
+            <div class="col-4 col-md-4 order-2">
                 <a id="menu-up-control" class="menu-up-control">
                     <i class="fa fa-bars"></i>
                 </a>
+                <?php if ($basket->getTotalCount()) {?>
+                    <a href="<?= Url::to(['order/cart']) ?>" class="btn-basket">
+                        <i class="fa fa-shopping-cart"></i><span class="count"><?= $basket->getTotalCount() ?></span>
+                    </a>
+                <?php }?>
             </div>
         </div>
     </div>

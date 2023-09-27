@@ -82,7 +82,7 @@ $this->registerJs('order.init()');
                 <div class="col-sm-6">
                     <div class="title">Description</div>
                     <div class="description"><?= $model->getDescriptionShort(300) ?></div>
-                    <a href="#" class="view-full-description">View full Description <i class="fa fa-angle-right"></i></a>
+                    <a href="#" class="view-full-description" id="full-description">View full Description <i class="fa fa-angle-right"></i></a>
                 </div>
                 <div class="col-sm-6">
                     <?php if (!empty($model->voucher_procedure)) { ?>

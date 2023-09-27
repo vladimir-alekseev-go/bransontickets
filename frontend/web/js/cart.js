@@ -16,7 +16,7 @@ let cart = {
             let rp = $(".js-real-position");
             let column = rp.parent();
             let sp = $(".js-static-position");
-            let topDelta = 20;
+            let topDelta = 100;
             let top = topDelta;
 
             if (column.position().top + column.height() - sp.height() < $(document).scrollTop() + topDelta) {

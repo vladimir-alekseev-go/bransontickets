@@ -84,13 +84,20 @@ $remove = Yii::$app->session->getFlash('remove');
                 <?= $this->render('cart/resume', compact('CartForm', 'Basket')) ?>
                 <?php $itemsMenu = [
                     [
-                        'label'   => TrShows::NAME_PLURAL,
-                        'url'     => ['/shows/index'],
+                        'label' => TrShows::NAME_PLURAL,
+                        'url'   => ['/shows/index'],
                     ],
-                    ['label' => TrAttractions::NAME_PLURAL, 'url' => ['/attractions/index']],
                     [
-                        'label'   => TrPosHotels::NAME_PLURAL,
-                        'url'     => ['pl-hotel/index'],
+                        'label' => TrAttractions::NAME_PLURAL, 
+                        'url'   => ['/attractions/index'],
+                    ],
+                    [
+                        'label' => TrPosHotels::NAME_PLURAL,
+                        'url'   => ['pl-hotel/index'],
+                    ],
+                    [
+                        'label' => 'Packages',
+                        'url'   => ['packages/index'],
                     ],
                 ];?>
                 <button type="button" class="shadow-block add-more-btn w-100 mb-3"
