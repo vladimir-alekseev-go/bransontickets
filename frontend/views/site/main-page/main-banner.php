@@ -1,5 +1,6 @@
 <?php
 
+use frontend\widgets\search\SearchWidget;
 use yii\bootstrap\BootstrapAsset;
 use yii\web\JqueryAsset;
 
@@ -9,26 +10,9 @@ use yii\web\JqueryAsset;
     <div class="main-logo">
         <img src="img/bransontickets-logo.png" alt="Branson Tickets logo">
     </div>
-    <form action="#">
-        <div class="search">
-            <div class="field form-group input-search">
-                <input type="text" id="search" class="form-control" name="Search[name]" value="" aria-required="true" aria-invalid="false" placeholder="I'm looking for">
-            </div>
-            <div class="field form-group input-group date">
-                <input type="text" id="date" class="form-control" name="s[dateFrom]" autocomplete="off" placeholder="Event date">
-                <div class="input-group-addon"></div>
-            </div>
-            <div class="field form-group">
-                <select id="shows-category" class="form-control" name="s[c][]">
-                    <option value="">Select categories</option>
-                    <option value="1">Category 1</option>
-                    <option value="2">Category 2</option>
-                    <option value="3">Category 3</option>
-                </select>
-            </div>
-            <button class="btn btn-search" value="search">Search</button>
-        </div>
-    </form>
+    <div class="search">
+        <?= SearchWidget::widget() ?>
+    </div>
     <div class="pros">
         <div class="pros-items">
             <div class="pros-item"><img src="img/check.svg" alt="check icon">Satisfaction guaranteed</div>
