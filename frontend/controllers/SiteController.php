@@ -98,6 +98,11 @@ class SiteController extends Controller
         return $this->render('index', compact('showsFeatured', 'showsRecommended'));
     }
 
+    public function actionSearch(): string
+    {
+        return $this->render('search');
+    }
+
     /**
      * Displays contact page.
      *

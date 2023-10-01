@@ -64,6 +64,7 @@ return [
             'rules' => [
                 ['pattern' => 'favicon', 'route' => 'site/favicon', 'suffix' => '.ico'],
                 '/'                                                                                => 'site/index',
+                'search/'                                                                          => 'site/search',
                 'sign-up/'                                                                         => 'site/signup',
                 'sign-in/'                                                                         => 'site/login',
                 'logout/'                                                                          => 'site/logout',
