@@ -10,7 +10,7 @@ use yii\helpers\Html;
 $this->title = $name;
 ?>
 <div class="fixed">
-    <div class="site-error header-padding mt-5">
+    <div class="site-error">
 
     <h1><?= Html::encode($this->title) ?></h1>
 

@@ -22,7 +22,7 @@ $items = $VacationPackage->getItems();
 $DateValidStart = $VacationPackage->getValidStart() > new DateTime ? $VacationPackage->getValidStart() : new DateTime;
 ?>
 <div class="fixed">
-    <div class="mb-1 mt-4 header-padding">
+    <div class="mb-1">
         <div class="back">
             <a href="<?= Url::to(['packages/index']) ?>">
                 <strong><i class="fa fa-arrow-left"></i> Back to Vacation Packages list</strong>

@@ -1,8 +1,11 @@
-.header {position:fixed;width:100%;padding:10px 0;z-index:9990;background:var(--c-light-violet);
-    box-shadow: 0px 0px 0px 0px var(--c-shadow-purple-1), 2px 3px 8px 0px var(--c-shadow-purple-1), 7px 13px 15px 0px var(--c-shadow-purple-2), 16px 29px 20px 0px var(--c-shadow-purple-3), 29px 51px 23px 0px var(--c-shadow-purple-4), 46px 79px 26px 0px var(--c-shadow-purple-5);}
+.header {height:80px;position:fixed;width:100%;padding:10px 0;z-index:9990;background:var(--c-light-violet);
+    box-shadow: 0 0 0 0 var(--c-shadow-purple-1), 2px 3px 8px 0 var(--c-shadow-purple-1), 7px 13px 15px 0 var(--c-shadow-purple-2), 16px 29px 20px 0 var(--c-shadow-purple-3), 29px 51px 23px 0 var(--c-shadow-purple-4), 46px 79px 26px 0 var(--c-shadow-purple-5);}
 .header .menu-up-control {float:right;color:var(--c-new-blue);font-size:26px;top:3px;position:relative;cursor:pointer;padding:10px 0;}
 .header .auth-items {display:flex;align-items:center;justify-content:flex-start;padding:10px 0;gap:10px;}
 .header .bransontickets-logo img {display:block;margin:0 auto;}
+
+.header-height-fixed-block {height: 120px;}
+
 .auth-items .auth-item {border-radius:5px;}
 .auth-items .auth-item .sign-up {padding:4px 20px;color:var(--c-white);font-weight:700;font-size:20px;background:var(--c-new-blue);transition:none;}
 .auth-items .auth-item .sign-up:hover {background:linear-gradient(90deg, var(--c-violet-gray) 60%, var(--c-violet-dark) 100%);}
@@ -37,8 +40,12 @@
 .menu-general .menu-footer .item img {width:160px;}
 
 @media (max-width:991px) {
+    .header {height:70px;}
     .header .bransontickets-logo img {height:40px;}
     .header .menu-up-control {top:0;font-size:22px;padding:10px 0 0 0;}
+
+    .header-height-fixed-block {height: 110px;}
+
     .header-menu-phone {gap:10px;padding:13px 0 0 0;}
     .header-menu-phone img {width:18px;}
     .header-menu-phone .header-phone {font-size:20px;}
@@ -46,10 +53,14 @@
 }
 
 @media (max-width:767px) {
+    .header {height:60px;}
     .header {padding:12px 0 13px 0;}
     .header .bransontickets-logo img {height:35px;margin:0;}
-    .menu-general {width:100vw;right:-100vw;}
     .header .menu-up-control {top:5px;display:block;padding:2px 0 0 0;}
+
+    .header-height-fixed-block {height: 100px;}
+
+    .menu-general {width:100vw;right:-100vw;}
     .header-menu-phone {justify-content:flex-start;gap:10px;padding:5px 0 0 0;}
 
     .menu-main li, .menu-main li a {font-size:32px;}

@@ -22,13 +22,11 @@ $emailConfirmation = Yii::$app->session->getFlash('emailConfirmation');
 $warnings = $emailConfirmation . (strlen($emailConfirmation) > 0 && strlen($warnings) > 0 ? '<br>' : '') . $warnings;
 ?>
     <div class="fixed">
-        <div class="header-padding">
-            <h1 class="text-center fw-bold pt-4">Modify information</h1>
-            <div class="text-center mb-3">
-                <a href="<?= Url::to(['profile/index']) ?>" class="back">
-                    <i class="fa fa-arrow-left"></i> <strong>Back to profile</strong>
-                </a>
-            </div>
+        <h1 class="text-center fw-bold">Modify information</h1>
+        <div class="text-center mb-3">
+            <a href="<?= Url::to(['profile/index']) ?>" class="back">
+                <i class="fa fa-arrow-left"></i> <strong>Back to profile</strong>
+            </a>
         </div>
 
         <div class="row">

@@ -18,11 +18,11 @@ $error = Yii::$app->session->getFlash('error');
 ?>
 <div class="fixed">
     <div class="row">
-        <div class="col-12 col-lg-8 offset-lg-2 header-padding">
-            <a href="#" onclick="history.go(-1);return false;" class="position-absolute mt-4 back">
+        <div class="col-12 col-lg-8 offset-lg-2">
+            <a href="#" onclick="history.go(-1);return false;" class="position-absolute back">
                 <i class="fa fa-arrow-left"></i> <strong>Back</strong>
             </a>
-            <h1 class="text-center fw-bold h2 mb-4 pt-4"><?= Html::encode($this->title) ?></h1>
+            <h1 class="text-center fw-bold h2 mb-4"><?= Html::encode($this->title) ?></h1>
             <div class="white-block shadow-block site-signup border-block margin-block-small">
                 <div class="row">
                     <div class="col-12 col-sm-5 mb-5 mb-sm-0">

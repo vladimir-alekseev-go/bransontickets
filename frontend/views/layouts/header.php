@@ -11,7 +11,7 @@ $basket = TrBasket::build();
     <div class="fixed">
         <div class="row">
             <div class="col-4 order-1 order-md-0 d-none d-md-block">
-                <?php if (Yii::$app->request->url === Url::to('/') || Yii::$app->request->url === Url::to(['profile/index']) || 
+                <?php if (Yii::$app->request->url === Url::to('/') || Yii::$app->request->url === Url::to(['profile/index']) ||
                     Yii::$app->request->url === Url::to(['profile/change-password']) || Yii::$app->request->url === Url::to(['profile/edit'])) { ?>
                     <div class="auth-items">
                         <?php if (Yii::$app->user->isGuest) { ?>
@@ -45,7 +45,7 @@ $basket = TrBasket::build();
                     </div>
                 <?php } ?>
             </div>
-            
+
             <div class="col-8 col-md-4 order-0 order-md-1">
                 <?php if (Yii::$app->request->url === Url::to('/')) { ?>
                     <div class="header-menu-phone">
@@ -58,7 +58,7 @@ $basket = TrBasket::build();
                     </a>
                 <?php } ?>
             </div>
-                
+
             <div class="col-4 col-md-4 order-2">
                 <a id="menu-up-control" class="menu-up-control">
                     <i class="fa fa-bars"></i>

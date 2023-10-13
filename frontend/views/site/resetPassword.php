@@ -14,14 +14,12 @@ $success = Yii::$app->session->getFlash('success');
 ?>
 <div class="fixed">
 <?php if ($success) {?>
-	<div class="header-padding mt-4">
-        <div class="alert-success success-block">
-            <?= $success?>
-        </div>
-	</div>
+    <div class="alert-success success-block">
+        <?= $success?>
+    </div>
 <?php } else {?>
-<div class="site-reset-password header-padding">
-    <div class="white-block shadow-block mt-4">
+<div class="site-reset-password">
+    <div class="white-block shadow-block">
         <h1><?= Html::encode($this->title) ?></h1>
 
         <p>Please choose your new password:</p>
