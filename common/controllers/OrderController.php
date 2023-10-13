@@ -40,21 +40,21 @@ trait OrderController
     {
         $get = Yii::$app->request->get();
     	$backurl = isset($get["backurl"]) ? $get["backurl"] : ['order/cart', 'changed'=>true];
-    	
+
     	$Basket = TrBasket::build();
-    	
+
     	$CartForm = new CartForm;
-    	
+
     	$CartCouponForm = new CartCouponForm(['coupon'=>$Basket->getCoupon() ? $Basket->getCoupon()->code : null]);
 
     	if (Yii::$app->request->isPost) {
-    	    
+
     	    if ($CartCouponForm->load(Yii::$app->request->post()) && $CartCouponForm->send()) {
     	        return $this->redirect($backurl);
     	    }
-    	    
+
     	    if ($CartForm->load(Yii::$app->request->post()) && $CartForm->validate()) {
-    		    
+
     		    $Basket->accept_terms = $CartForm->agree;
     		    $resultReservation = $Basket->reserve();
 
@@ -67,7 +67,7 @@ trait OrderController
     		    if ($resultReservation) {
     		        return $this->redirect(['order/payment', 'isAuth' => true]);
 	    		}
-	    		
+
 	    		if(!empty($Basket->getErrors())) {
                     Yii::$app->session->setFlash('errors', array_values($Basket->getFirstErrors()));
                 }
@@ -79,12 +79,12 @@ trait OrderController
                 }
     		}
     	}
-    	
+
     	if (!empty($get["remove_id"])) {
     		$Basket->removePackage($get["remove_id"]);
-    		
+
     		Yii::$app->session->setFlash('remove', true);
-    		
+
     		if(!empty($Basket->getErrors())) {
                 Yii::$app->session->setFlash('errors', array_values($Basket->getFirstErrors()));
             }
@@ -94,17 +94,17 @@ trait OrderController
     		if(!empty($Basket->messages)) {
                 Yii::$app->session->setFlash('messages', $Basket->messages);
             }
-    		
+
     		if (empty($Basket->getErrors())) {
     			return $this->redirect($backurl);
     		}
     	}
-    	
+
     	if (!empty($get["remove_all"])) {
     	    $Basket->removeAll();
-    		
+
     		Yii::$app->session->setFlash('remove', true);
-    		
+
     		if(!empty($Basket->getErrors())) {
                 Yii::$app->session->setFlash('errors', array_values($Basket->getFirstErrors()));
             }
@@ -114,15 +114,15 @@ trait OrderController
     		if(!empty($Basket->messages)) {
                 Yii::$app->session->setFlash('messages', $Basket->messages);
             }
-    			
+
     		return $this->redirect($backurl);
     	}
-    	
+
     	if (!empty($get["remove_package_id"])) {
     	    $Basket->removePackage($get["remove_package_id"]);
-    		
+
     		Yii::$app->session->setFlash('remove', true);
-    		
+
     		if(!empty($Basket->getErrors())) {
                 Yii::$app->session->setFlash('errors', array_values($Basket->getFirstErrors()));
             }
@@ -132,23 +132,23 @@ trait OrderController
     		if(!empty($Basket->messages)) {
                 Yii::$app->session->setFlash('messages', $Basket->messages);
             }
-    			
+
     		return $this->redirect($backurl);
     	}
-    	
+
     	if (!empty($Basket->getPackages())) {
             $AnalyticsData = [];
 
             foreach ($Basket->getPackages() as $package) {
                 $AnalyticsData[] = ['package' => $package];
             }
-    		
+
     		Analytics::addEvent(Analytics::EVENT_CHECKOUT, $AnalyticsData, ['step' => 1, 'option' => 'checkout']);
     	}
-    	
+
     	return $this->render('cart', compact('Basket', 'CartForm', 'CartCouponForm'));
     }
-    
+
     /**
      * Delete VP in cart
      *
@@ -159,19 +159,19 @@ trait OrderController
     function actionDeleteVatationPackage($uniqueHash)
     {
         $backurl = isset($get["backurl"]) ? $get["backurl"] : ['order/cart', 'changed'=>true];
-        
+
         $Basket = TrBasket::build();
         $Basket->removeVacationPackage($uniqueHash);
-        
+
         Yii::$app->session->setFlash('remove', true);
-        
+
         if (!empty($Basket->getErrors())) {
             Yii::$app->session->setFlash('errors', array_values($Basket->getFirstErrors()));
         }
-        
+
         return $this->redirect($backurl);
     }
-    
+
     function actionCheckout()
     {
         $basket = TrBasket::build();
@@ -206,8 +206,8 @@ trait OrderController
 
     	return $this->render('auth', compact('basket', 'custumerForm'));
     }
-    
-    function actionPayment()	
+
+    function actionPayment()
     {
         $Basket = TrBasket::build();
 
@@ -220,7 +220,7 @@ trait OrderController
             Yii::$app->session->setFlash('errors', array_values($Basket->getFirstErrors()));
             return $this->redirect(['order/cart']);
         }
-        
+
         if (empty($Basket->packages) && empty($Basket->getVacationPackages())) {
     	    return $this->redirect(['order/cart']);
     	}
@@ -284,14 +284,14 @@ trait OrderController
         }
 
     	$tripium = new Tripium();
-    	$cards = $tripium->getCustomerCars($tripium_id);
+    	$cards = $tripium->getCustomerCards($tripium_id);
     	if (!empty($cards)) {
     		$cards = ArrayHelper::map($cards, 'id', 'cardNumber');
     	}
     	$model = new PaymentForm();
     	$modelAddCard = new PaymentFormAddCard();
     	$post = Yii::$app->request->post();
-    	
+
     	if (isset(Yii::$app->params["tripium_info"]) && Yii::$app->params["tripium_info"] === "mobile") {
     		if (Yii::$app->user->isGuest) {
 	    		$successMsg = "Your order was successfully completed. An email has been sent to you with links to your voucher(s) or you can view voucher(s) below and download image.";
@@ -303,7 +303,7 @@ trait OrderController
         } else {
             $successMsg = "Your order was successfully completed. Your order is available in your profile. An email has been sent to you with links to your voucher(s).";
         }
-    	
+
     	if (!empty($post["PaymentForm"]) && $model->load($post) && $order = $model->pay()) {
     		Yii::$app->session->setFlash('success', $successMsg);
     		return $this->redirect(['order/detail', 'orderNumber' => $order["orderNumber"], 'id' => $tripium_id]);
@@ -331,7 +331,7 @@ trait OrderController
         }
 
     	Analytics::addEvent(Analytics::EVENT_CHECKOUT, $AnalyticsData, ['step' => 3, 'option' => 'payment']);
-        
+
         return $this->render('payment', compact('model', 'modelAddCard', 'cards', 'user', 'Basket'));
     }
 
@@ -340,7 +340,7 @@ trait OrderController
      *
      * @return TrOrders|null
      */
-    protected function getOrder($orderNumber) 
+    protected function getOrder($orderNumber)
     {
         if (Yii::$app->user->identity && Yii::$app->user->identity->tripium_id) {
             $tripium_id = Yii::$app->user->identity->tripium_id;
@@ -355,13 +355,13 @@ trait OrderController
          * @var $order TrOrders
          */
         $order = TrOrders::find()->where(["tripium_user_id"=>$tripium_id, "order_number"=>$orderNumber])->one();
-        
+
         if ($order === null) {
             return null;
         }
-        
+
         $order->updateByTripium();
-        
+
         return $order;
     }
 
@@ -371,7 +371,7 @@ trait OrderController
      * @return mixed
      * @throws NotFoundHttpException
      */
-    public function actionDetail($orderNumber) 
+    public function actionDetail($orderNumber)
     {
         $Order = $this->getOrder($orderNumber);
 
@@ -383,7 +383,7 @@ trait OrderController
     		throw new NotFoundHttpException;
     	}
 
-		return $this->render('detail', compact('Order')); 
+		return $this->render('detail', compact('Order'));
     }
 
     /**
@@ -397,20 +397,20 @@ trait OrderController
     public function actionPrintVoucherVacationPackage($orderNumber, $vacationPackageId, $packageId)
     {
         $this->layout = "print";
-        
+
         $Order = $this->getOrder($orderNumber);
-        
+
         if (!$Order) {
             throw new NotFoundHttpException;
         }
-        
+
         $vacationPackage = $Order->getUniqueVacationPackageById($vacationPackageId);
         $package = $vacationPackage->getPackage($packageId);
-        
+
         if (!$package) {
             throw new NotFoundHttpException;
         }
-        
+
         return $this->render('print-voucher-vacation-package', [
             'order' => $Order,
             'vacationPackage' => $vacationPackage,
@@ -427,17 +427,17 @@ trait OrderController
     public function actionPrintAllVoucher($orderNumber)
     {
     	$this->layout = "print";
-        
+
     	$Order = $this->getOrder($orderNumber);
-    	
+
     	if (!$Order) {
     	    throw new NotFoundHttpException;
     	}
-        
+
     	if (empty($Order->getValidPackages())) {
             throw new NotFoundHttpException;
         }
-        
+
         return $this->render('print-voucher-all', ['order' => $Order]);
     }
 
@@ -451,19 +451,19 @@ trait OrderController
     public function actionPrintVoucher($orderNumber, $packageId)
     {
     	$this->layout = "print";
-        
+
     	$Order = $this->getOrder($orderNumber);
-    	
+
     	if (!$Order) {
     	    throw new NotFoundHttpException;
     	}
-        
+
     	$package = $Order->getPackageById($packageId);
-        
+
         if (empty($package) || (!empty($package) && $package->cancelled)) {
             throw new NotFoundHttpException;
         }
-        
+
         return $this->render('print-voucher', ['order' => $Order, 'package' => $package]);
     }
 
@@ -476,15 +476,15 @@ trait OrderController
     public function actionPrint($orderNumber)
     {
     	$this->layout = "print";
-    	
+
     	$Order = $this->getOrder($orderNumber);
-    	
+
     	if (!$Order) {
     	    throw new NotFoundHttpException;
     	}
-    	    
+
 		$locationServices = LocationServices::find()->where(['id_external'=>$Order->getDataByKey('location')])->one();
-	    
+
 		return $this->render('print', ['order' => $Order, 'locationServices' => $locationServices]);
     }
 
@@ -497,56 +497,56 @@ trait OrderController
     public function actionPrintItinerary($orderNumber)
     {
     	$this->layout = "print";
-    	
+
     	$Order = $this->getOrder($orderNumber);
-    	
+
     	if (!$Order) {
     	    throw new NotFoundHttpException;
     	}
-    	
+
 		$locationServices = LocationServices::find()->where(['id_external'=>$Order->getDataByKey('location')])->one();
-		
+
 		$shows = TrShows::getAvailable()
 		    ->with('preview')
 		    ->andWhere(["not",["photos"=>""]])
 	    	->andWhere(["marketing_level" => 1])
-	    	->limit(3)->orderby("rand()")->all(); 
+	    	->limit(3)->orderby("rand()")->all();
 
     	return $this->render('print-itinerary', compact('Order', 'locationServices', 'shows'));
-    } 
+    }
 
     public function actionCancellation($orderNumber, $packageNumber = null, $vacationPackageId = null)
 	{
 	    if (Yii::$app->user->isGuest) {
 			return '<script>document.location.reload()</script>';
 		}
-		
+
 		$tripium_id = User::getCustomerTripiumID();
-    	
+
     	$order = TrOrders::findOne(["tripium_user_id"=>$tripium_id, "order_number"=>$orderNumber]);
-    	
+
     	if (!$order) {
 	    	throw new NotFoundHttpException;
     	}
-    	
+
     	$Tripium = new Tripium();
 	    $cards = $Tripium->orderCards($orderNumber);
-			    
+
 		return $this->renderAjax('cancellation', compact('order', 'packageNumber', 'cards', 'vacationPackageId'));
 	}
-	
+
 	public function actionCancel($orderNumber)
 	{
 	    Yii::$app->response->format = Response::FORMAT_JSON;
-	    
+
 		$tripium_id = User::getCustomerTripiumID();
-    	
+
     	$order = TrOrders::find()->where(["tripium_user_id"=>$tripium_id, "order_number"=>$orderNumber])->one();
-    	
+
     	if (!$order) {
 	    	throw new NotFoundHttpException("The order hasn't found");
     	}
-    	
+
 	    if ($order->cancel()) {
 	        $order->updateByTripium(true);
 	        return ["status" => "ok"];
@@ -566,15 +566,15 @@ trait OrderController
 	public function actionCancelPackage($orderNumber, $packageNumber)
 	{
 	    Yii::$app->response->format = Response::FORMAT_JSON;
-	    
+
 	    $tripium_id = User::getCustomerTripiumID();
-    	
+
     	$order = TrOrders::find()->where(["tripium_user_id"=>$tripium_id, "order_number"=>$orderNumber])->one();
-    	
+
     	if (!$order) {
 	    	throw new NotFoundHttpException;
     	}
-    	
+
     	if ($order->cancelPackage($packageNumber)) {
     	    $order->updateByTripium(true);
     	    return ["status" => "ok"];
@@ -594,15 +594,15 @@ trait OrderController
 	public function actionCancelVacationPackage($orderNumber, $vacationPackageId)
 	{
 	    Yii::$app->response->format = Response::FORMAT_JSON;
-	    
+
 	    $tripium_id = User::getCustomerTripiumID();
-	    
+
 	    $order = TrOrders::find()->where(["tripium_user_id"=>$tripium_id, "order_number"=>$orderNumber])->one();
-	    
+
 	    if (!$order) {
 	        throw new NotFoundHttpException;
 	    }
-	        
+
 	    if ($order->cancelUniqueVacationPackage($vacationPackageId)) {
 	        $order->updateByTripium(true);
 	        return ["status" => "ok"];
@@ -623,15 +623,15 @@ trait OrderController
 		if (Yii::$app->user->isGuest) {
 			return '<script>document.location.reload()</script>';
 		}
-		
+
 		$tripium_id = User::getCustomerTripiumID();
-    	
+
     	$Order = TrOrders::find()->where(["tripium_user_id"=>$tripium_id, "order_number"=>$orderNumber])->one();
-    	
+
     	if (!$Order) {
 	    	throw new NotFoundHttpException;
     	}
-		
+
     	$package = $Order->getPackage($packageNumber);
 
     	if (!$package) {
@@ -646,7 +646,7 @@ trait OrderController
                 'scheduleIsShow' => false
             ]
         );
-	    
+
 	    $OrderForm = new OrderModifyForm();
 	    $OrderForm->coupon_code = $Order->getCoupon() ? $Order->getCoupon()->code : null;
 
@@ -666,23 +666,23 @@ trait OrderController
 	public function actionModificationForm($orderNumber, $packageNumber, $date)
 	{
 	    $date = new DateTime($date);
-	    
+
 		$this->layout = "empty";
-		
+
 		$tripium_id = User::getCustomerTripiumID();
-    	
+
 		$Order = TrOrders::find()->where(['order_number'=>$orderNumber, 'tripium_user_id'=>$tripium_id])->one();
-		
+
 		if (!$Order) {
 		    throw new NotFoundHttpException;
 		}
-		
+
 		$package = $Order->getPackage($packageNumber);
-		
+
 		if (!$package) {
 		    throw new NotFoundHttpException;
 		}
-		
+
 	    $OrderForm = new OrderModifyForm();
 	    //$OrderForm->load(Yii::$app->request->get());
 	    $OrderForm->load(Yii::$app->request->post());
@@ -692,9 +692,9 @@ trait OrderController
     	$OrderForm->initPrice();
     	$OrderForm->initPackage();
     	$OrderForm->initPriceByCoupon();
-    	
+
     	$OrderForm->updatePricesByPackages([$package]);
-    	
+
 		return $this->render('order-form', compact('OrderForm'));
 	}
 
@@ -710,25 +710,25 @@ trait OrderController
 	public function actionModificationProceed($orderNumber, $packageNumber, $process = false)
 	{
 	    $post = Yii::$app->request->post();
-		
+
 		$user = User::getCurrentUser();
-		
+
 		$tripium_id = User::getCustomerTripiumID();
-    	
+
 		$Order = TrOrders::find()->where(['order_number'=>$orderNumber, 'tripium_user_id'=>$tripium_id])->one();
-		
+
 		if (!$Order) {
 		    throw new NotFoundHttpException;
 		}
-		
+
 		$packageOld = $Order->getPackage($packageNumber);
-		
+
 		if (!$packageOld) {
 		    throw new NotFoundHttpException;
 		}
-		
+
 	    $date = $packageOld->startDataTime;
-		
+
 	    $OrderForm = new OrderModifyForm();
 	    $OrderForm->setAttributes(['date'=>$date, 'model'=>$packageOld->item]);
 	    $OrderForm->setPackageOrder($packageOld);
@@ -746,10 +746,10 @@ trait OrderController
 	    }
 	    $result['prices'] = $OrderForm->prices;
 	    $result['totalPrice'] = $OrderForm->totalPrice;
-	    
+
 	    $PackageNew = new Package;
 	    $PackageNew->loadData($result);
-	    
+
 	    if ($PackageNew->category === TrShows::TYPE || $PackageNew->category === TrAttractions::TYPE) {
 		    $result['datePackepgeFormat'] = $PackageNew->getStartDataTime()->format("l, M d, h:i A");
         } else if ($PackageNew->category === TrLunchs::TYPE){
@@ -757,25 +757,25 @@ trait OrderController
                 $PackageNew->getStartDataTime()->format("l, M d, h:i A") . ' - ' . $PackageNew->getEndDataTime()
                     ->format("l, M d, h:i A");
 		}
-	    
+
 	    if ($OrderForm->getErrors('check')) {
     		$result['globalErrors'] = $OrderForm->getErrors('check');
     	}
-	    
+
 	    if ((int)$process === 1) {
 	    	$this->layout = "empty";
 	    	$PaymentModifyForm = new PaymentModifyForm(['coupon_code'=>$OrderForm->coupon_code]);
 	    	$PaymentModifyFormAddCard = new PaymentModifyFormAddCard(['coupon_code'=>$OrderForm->coupon_code]);
-    		
+
 			$PaymentModifyForm->setModifyRequest($OrderForm->createRequest());
 			$PaymentModifyFormAddCard->setModifyRequest($OrderForm->createRequest());
-			
+
 			$Tripium = new Tripium;
 			$result['order_modify_info'] = $this->render('order-modify-info', ['result'=>$result, 'model'=>$packageOld->item, 'package'=>$PackageNew, 'packageOld'=>$packageOld, 'OrderForm'=>$OrderForm]);
-			
+
 	    	//if ($result['fullTotal'] - $package['fullTotal'] > 0) {
 	    	if ($result['modifyAmount'] > 0) {
-	    		$cards = $Tripium->getCustomerCars($tripium_id);
+	    		$cards = $Tripium->getCustomerCards($tripium_id);
 		    	if ($cards) {
 		    		$cards = ArrayHelper::map($cards, 'id', 'cardNumber');
 		    	}
@@ -784,9 +784,9 @@ trait OrderController
 	    	    $cards = $Tripium->orderCards($orderNumber);
 	    		$result['html'] = $this->render('order-form-refund', compact('result', 'cards'));
 	    	}
-	    	
+
 	    } else if ((int)$process === 2) {
-	        
+
 	    	if ($OrderForm->run()) {
 		    	$Order->updateByTripium(true);
 		    	Yii::$app->session->setFlash('success', "Item has changed");
@@ -797,7 +797,7 @@ trait OrderController
 	        	}
 	    	}
 	    }
-	    
+
 	    return Json::encode($result);
 	}
 
@@ -811,49 +811,49 @@ trait OrderController
 	public function actionModificationPayment($orderNumber, $packageNumber)
 	{
 		$post = Yii::$app->request->post();
-		
+
 		$tripium_id = User::getCustomerTripiumID();
-    	
+
 		$Order = TrOrders::find()->where(['order_number'=>$orderNumber, 'tripium_user_id'=>$tripium_id])->one();
-		
+
 		if (!$Order) {
 		    throw new NotFoundHttpException;
 		}
-		
+
 		$package = $Order->getPackage($packageNumber);
-		
+
 		if (!$package) {
 		    throw new NotFoundHttpException;
 		}
-		
+
 	    $PaymentModifyForm = new PaymentModifyForm();
 		$PaymentModifyFormAddCard = new PaymentModifyFormAddCard();
-		
+
 		$result = [];
-		
+
 		if (isset($post["PaymentForm"]) && $PaymentModifyForm->load($post) && $res = $PaymentModifyForm->pay()) {
-		    
+
 		    $Order->updateByTripium(true);
     		Yii::$app->session->setFlash('success', "Item has changed");
-        
+
 		} else if(isset($post["PaymentFormAddCard"]) && $PaymentModifyFormAddCard->load($post) && $res = $PaymentModifyFormAddCard->pay()) {
-		    
+
 		    $Order->updateByTripium(true);
         	Yii::$app->session->setFlash('success', "Item has changed");
-        	
+
         } else {
-            
+
         	$err = $PaymentModifyForm->getFirstErrors();
         	if ($err) {
         		$result['error'] = is_array($err) ? array_shift($err) : $err;
         	}
-        	
+
         	$err = $PaymentModifyFormAddCard->getFirstErrors();
         	if ($err) {
         		$result['error'] = is_array($err) ? array_shift($err) : $err;
         	}
         }
-        
+
 		return Json::encode($result);
 	}
 
@@ -892,9 +892,9 @@ trait OrderController
 	/*protected function getItemsCancellationPolicy($itemType = null, $itemId = null)
     {
         $basket = Yii::$app->controller->basket;
-        
+
         $items = [];
-        
+
         if (empty($itemType) && empty($itemId)) {
             foreach ($basket->getUniqueVacationPackages() as $VacationPackage) {
                 $items[$VacationPackage::className()][] = $VacationPackage;
@@ -912,7 +912,7 @@ trait OrderController
                 }
             }
         }
-        
+
         return $items;
 	}*/
 

@@ -14,6 +14,7 @@ use DateTime;
 use Exception;
 use Yii;
 use yii\base\Model;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
 
 class Tripium extends Model
@@ -64,11 +65,10 @@ class Tripium extends Model
         ];
     }
 
-    public static function getStatusValue($val)
+    public static function getStatusValue($val): string
     {
         $ar = self::getStatusList();
-
-        return isset($ar[$val]) ? $ar[$val] : $val;
+        return $ar[$val] ?? $val;
     }
 
     public static function getRequestHotelParams()
@@ -133,7 +133,7 @@ class Tripium extends Model
 
         if ($this->statusCode !== self::STATUS_CODE_SUCCESS) {
             try {
-                self::requestSendMail($server_output);
+                $this->requestSendMail($server_output);
             } catch (Exception $e) {
             }
         }
@@ -185,11 +185,11 @@ class Tripium extends Model
             if (!empty($this->errorCode) && $this->errorCode == self::STATUS_ONE_HOTEL_PER_ORDER) {
                 $this->addErrors([self::getStatusValue(self::STATUS_ONE_HOTEL_PER_ORDER)]);
             }
-			
+
 			curl_close ($this->ch);
-			
+
 			return $res;
-			
+
 		}
 
 //        Yii::error('request statusCode: '.$this->statusCode, 'tripium-request');
@@ -709,12 +709,12 @@ class Tripium extends Model
     public function getCustomer($id)
     {
         if (!$id) {
-            return false;
+            return null;
         }
-
         $res = $this->request('/customer/' . $id);
-
-        return $this->statusCode === self::STATUS_CODE_SUCCESS ? $res : false;
+        if ($this->statusCode === self::STATUS_CODE_SUCCESS) {
+            return $res;
+        }
     }
 
     /**
@@ -835,7 +835,7 @@ class Tripium extends Model
 	/**
 	 * @param $code
 	 * @param $siteType
-	 * 
+	 *
 	 * @return Coupon|null
 	 * */
 	public function getCouponByCode($code, $siteType = null): ?Coupon
@@ -843,13 +843,13 @@ class Tripium extends Model
 	    if (empty($code)) {
 	        return null;
 	    }
-	    
+
 	    if (!$siteType) {
 	        $siteType = Yii::$app->params['siteType'] === Coupon::COUPON_TYPE_MOBILE ? Coupon::COUPON_TYPE_MOBILE : Coupon::COUPON_TYPE_DESKTOP;
 	    } else if (!in_array($siteType, [Coupon::COUPON_TYPE_DESKTOP, Coupon::COUPON_TYPE_MOBILE], true)) {
 	        return null;
 	    }
-	    
+
 	    $Basket = TrBasket::find()->where(['session_id' => TrBasket::getSessionID()])->one();
 	    $Coupons = $this->getCoupons($Basket->sessionId, $siteType);
 
@@ -858,7 +858,7 @@ class Tripium extends Model
 	            return $Coupon;
 	        }
 	    }
-	    
+
 	    return null;
 	}
 
@@ -872,9 +872,9 @@ class Tripium extends Model
 	public function getCouponsForOrder($orderNumber, $packageId, $params): array
     {
 	    $res = $this->request("/discount/order/$orderNumber/package/$packageId", $params, "post");
-	    
+
 	    $result = [];
-	    
+
 	    if (!empty($res["results"])) {
 	        foreach ($res["results"] as $data) {
 	            $Coupon = new Coupon;
@@ -882,7 +882,7 @@ class Tripium extends Model
 	            $result[] = $Coupon;
 	        }
 	    }
-	    
+
 	    return $result;
 	}
 
@@ -1013,5 +1013,30 @@ class Tripium extends Model
             'post'
         );
         return empty($this->errors);
+    }
+
+    public function getCustomerCards($id)
+    {
+        $customer = $this->getCustomer($id);
+
+        if (empty($customer['axiaId'])) {
+            return null;
+        }
+
+        $res = $this->request('/customer/axia/' . $customer['axiaId']);
+        if ($this->statusCode === self::STATUS_CODE_SUCCESS) {
+            if (empty($res['results'])) {
+                return null;
+            }
+
+            $res['results'] = ArrayHelper::index($res['results'], 'id');
+            foreach ($res['results'] as &$it) {
+                $ar = array_merge($it, $it["card"]);
+                $it = $ar;
+            }
+
+            return $res['results'];
+        }
+        return null;
     }
 }
