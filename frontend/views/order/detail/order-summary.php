@@ -9,7 +9,7 @@ use yii\helpers\Url;
  * @var TrOrders $order
  */
 
-$phone = !empty(Template::getProperty('phone')) ? Template::getProperty('phone') : '1-877-368-3782';
+$phone = '1-877-368-3782';
 
 $packageIds = [];
 

@@ -8,7 +8,7 @@ use common\models\CartForm;
 use common\models\Custumer;
 use common\models\CustumerForm;
 use common\models\form\CartCouponForm;
-use common\models\LocationServices;
+//use common\models\LocationServices;
 use common\models\Mailchimp;
 use common\models\OrderModifyForm;
 use common\models\Package;
@@ -254,34 +254,34 @@ trait OrderController
             Yii::$app->session->setFlash('message', "You need to fill in the required fields");
             return $this->redirect("/profile/edit/");
         }
-
-        if ($customerTripium && Yii::$app->request->post('subscribe')) {
-            if (!empty(Yii::$app->params['hubSpot']['hApiKey'])) {
-                try {
-                    $hubSpot = new HubSpot(Yii::$app->params['hubSpot']['hApiKey']);
-                    $hubSpot->updateContactByEmail(
-                        $customerTripium->email,
-                        [
-                            'firstname' => $customerTripium->first_name,
-                            'lastname' => $customerTripium->last_name,
-                            'phone' => $customerTripium->phone,
-                        ]
-                    );
-                } catch (Exception $e) {
-                }
-            }
-            if (!empty(Yii::$app->siteSettings->data->mailchimp_key) && !empty(Yii::$app->siteSettings->data->mailchimp_list_id)) {
-                $mailchimp = new Mailchimp([
-                    'apikey' => Yii::$app->siteSettings->data->mailchimp_key,
-                    'listID' => Yii::$app->siteSettings->data->mailchimp_list_id
-                ]);
-                $mailchimp->email = $customerTripium->email;
-                $mailchimp->subscribe([
-                    "FNAME" => $customerTripium->first_name,
-                    "LNAME" => $customerTripium->last_name,
-                ]);
-            }
-        }
+//
+//        if ($customerTripium && Yii::$app->request->post('subscribe')) {
+//            if (!empty(Yii::$app->params['hubSpot']['hApiKey'])) {
+//                try {
+//                    $hubSpot = new HubSpot(Yii::$app->params['hubSpot']['hApiKey']);
+//                    $hubSpot->updateContactByEmail(
+//                        $customerTripium->email,
+//                        [
+//                            'firstname' => $customerTripium->first_name,
+//                            'lastname' => $customerTripium->last_name,
+//                            'phone' => $customerTripium->phone,
+//                        ]
+//                    );
+//                } catch (Exception $e) {
+//                }
+//            }
+//            if (!empty(Yii::$app->siteSettings->data->mailchimp_key) && !empty(Yii::$app->siteSettings->data->mailchimp_list_id)) {
+//                $mailchimp = new Mailchimp([
+//                    'apikey' => Yii::$app->siteSettings->data->mailchimp_key,
+//                    'listID' => Yii::$app->siteSettings->data->mailchimp_list_id
+//                ]);
+//                $mailchimp->email = $customerTripium->email;
+//                $mailchimp->subscribe([
+//                    "FNAME" => $customerTripium->first_name,
+//                    "LNAME" => $customerTripium->last_name,
+//                ]);
+//            }
+//        }
 
     	$tripium = new Tripium();
     	$cards = $tripium->getCustomerCards($tripium_id);
@@ -483,9 +483,9 @@ trait OrderController
     	    throw new NotFoundHttpException;
     	}
 
-		$locationServices = LocationServices::find()->where(['id_external'=>$Order->getDataByKey('location')])->one();
+//		$locationServices = LocationServices::find()->where(['id_external'=>$Order->getDataByKey('location')])->one();
 
-		return $this->render('print', ['order' => $Order, 'locationServices' => $locationServices]);
+		return $this->render('print', ['order' => $Order]);
     }
 
     /**
@@ -504,7 +504,7 @@ trait OrderController
     	    throw new NotFoundHttpException;
     	}
 
-		$locationServices = LocationServices::find()->where(['id_external'=>$Order->getDataByKey('location')])->one();
+//		$locationServices = LocationServices::find()->where(['id_external'=>$Order->getDataByKey('location')])->one();
 
 		$shows = TrShows::getAvailable()
 		    ->with('preview')
@@ -512,7 +512,7 @@ trait OrderController
 	    	->andWhere(["marketing_level" => 1])
 	    	->limit(3)->orderby("rand()")->all();
 
-    	return $this->render('print-itinerary', compact('Order', 'locationServices', 'shows'));
+    	return $this->render('print-itinerary', compact('Order', 'shows'));
     }
 
     public function actionCancellation($orderNumber, $packageNumber = null, $vacationPackageId = null)

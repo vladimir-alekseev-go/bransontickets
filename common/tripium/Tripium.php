@@ -1039,4 +1039,29 @@ class Tripium extends Model
         }
         return null;
     }
+
+    /**
+     * Get link for Voucher file.
+     *
+     * @param string $orderNumber
+     * @param null   $packageId
+     *
+     * @return string|null url
+     */
+    public function getVoucherLink($orderNumber, $packageId = null): ?string
+    {
+        $res = $this->request('/voucher/' . $orderNumber . ($packageId ? '/' . $packageId : ''));
+        if (!empty($res["url"])) {
+            if (!empty(Yii::$app->params['replaceDownlowUrlFile']) && is_array(
+                    Yii::$app->params['replaceDownlowUrlFile']
+                )) {
+                foreach (Yii::$app->params['replaceDownlowUrlFile'] as $search => $replace) {
+                    $res["url"] = str_replace($search, $replace, $res["url"]);
+                }
+            }
+            return $res["url"];
+        }
+
+        return null;
+    }
 }
