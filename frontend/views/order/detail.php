@@ -25,7 +25,7 @@ foreach ($Order->getPackages() as $package) {
 ?>
 <div class="fixed">
     <?php if (!Yii::$app->user->isGuest) { ?>
-        <a href="<?= Url::to(['profile/index']) ?>" class="back-page d-inline-block mb-2">
+        <a href="<?= Url::to(['profile/index']) ?>" class="back-page d-inline-block mb-2 text-white">
             <strong><span class="icon ib-arrow-left"></span>Back to profile / Orders list</strong>
         </a>
     <?php } ?>

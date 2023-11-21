@@ -1043,7 +1043,7 @@ class Tripium extends Model
     /**
      * Get link for Voucher file.
      *
-     * @param string $orderNumber
+     * @param $orderNumber
      * @param null   $packageId
      *
      * @return string|null url
@@ -1051,7 +1051,7 @@ class Tripium extends Model
     public function getVoucherLink($orderNumber, $packageId = null): ?string
     {
         $res = $this->request('/voucher/' . $orderNumber . ($packageId ? '/' . $packageId : ''));
-        if (!empty($res["url"])) {
+        if ($this->statusCode === self::STATUS_CODE_SUCCESS) {
             if (!empty(Yii::$app->params['replaceDownlowUrlFile']) && is_array(
                     Yii::$app->params['replaceDownlowUrlFile']
                 )) {
@@ -1060,6 +1060,44 @@ class Tripium extends Model
                 }
             }
             return $res["url"];
+        }
+
+        return null;
+    }
+
+    public function orderCards($orderNumber): ?array
+    {
+        $res = $this->request('/order/' . $orderNumber . '/cards');
+        if ($this->statusCode === self::STATUS_CODE_SUCCESS) {
+            return $res['results'];
+        }
+
+        return null;
+    }
+
+    public function orderCancel($orderNumber)
+    {
+        $res = $this->request(
+            '/order/' . $orderNumber . '/cancel?generateTransactions=true',
+            ["transactions" => []],
+            "post"
+        );
+        if ($this->statusCode === self::STATUS_CODE_SUCCESS) {
+            return $res;
+        }
+
+        return null;
+    }
+
+    public function orderCancelPackage($orderNumber, $packageId)
+    {
+        $res = $this->request(
+            '/order/' . $orderNumber . '/cancel/' . $packageId . '?generateTransactions=true',
+            ["transactions" => []],
+            "post"
+        );
+        if ($this->statusCode === self::STATUS_CODE_SUCCESS) {
+            return $res;
         }
 
         return null;

@@ -45,7 +45,7 @@ main {flex:1;}
 
 .hide {display:none!important;}
 
-.row-small-padding, .row-small-padding .row {margin:0 -5px;}
+.rows {overflow: hidden;}
 
 .row-small-padding, .row-small-padding .row {margin:0 -5px;}
 .row-small-padding .col-xs-1, .row-small-padding .col-md-1, .row-small-padding .col-1, .row-small-padding .col-lg-1,
@@ -1283,6 +1283,10 @@ input, .form-control {padding:11px 14px 7px;text-align:left;color:var(--c-blue-d
 .modal-dialog .modal-content .compare-clear {font-size:18px;font-weight:bold;text-decoration:none;color:var(--c-new-blue);}
 .modal-dialog .modal-content .compare-clear img {width:15px;height:15px;padding-bottom:3px;}
 .modal-dialog .modal-content .compare-remove img {width:15px;height:15px;}
+
+.modal-modification, .modal-cancel {
+    max-width: 1200px;
+}
 
 @media (max-width: 767px) {
     .popup-compare .show-list-list .compare-remove {top:17px;left:-1px;}

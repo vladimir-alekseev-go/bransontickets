@@ -134,10 +134,11 @@ $user = User::getCurrentUser();
                                         'packageNumber' => $package->package_id
                                     ]
                                 ) ?>');">
-                                    <img src="/img/xmark-blue.svg" alt="xmark icon"> <strong>Cancel item</strong>
+                                    <i class="fa fa-close"></i>
+                                    <strong>Cancel item</strong>
                                 </a>
                             <?php } ?>
-                            <?php if ($package->canModify()) { ?>
+                            <?php /*if ($package->canModify()) { ?>
                                 <a class="me-3" href="#"
                                    onclick="return modification.open('<?= $order->order_number ?>', '<?=
                                    $package->package_id ?>', '<?= $package->getStartDataTime()->format(
@@ -145,7 +146,7 @@ $user = User::getCurrentUser();
                                    ) ?>');">
                                     <i class="fa fa-edit"></i> <strong>Modify item</strong>
                                 </a>
-                            <?php } ?>
+                            <?php }*/ ?>
                         <?php } ?>
                     <?php } ?>
                 <?php } else { ?>

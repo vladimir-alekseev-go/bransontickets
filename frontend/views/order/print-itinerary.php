@@ -4,11 +4,10 @@ use common\models\TrOrders;
 use common\models\TrPosHotels;
 use common\models\TrShows;
 use common\models\TrAttractions;
-use common\models\TrLunchs;
 
 /**
  * @var TrOrders                                           $Order
- * @var TrShows[]|TrPosHotels[]|TrLunchs[]|TrAttractions[] $shows
+ * @var TrShows[]|TrPosHotels[]|TrAttractions[] $shows
  */
 
 $this->title = 'Print Page';
@@ -63,11 +62,7 @@ $tickets = $Order->getValidTicketsByGroupData();
 							<?php if ($package->category === TrShows::TYPE) {?>
                     			<div class="date"><?= $package->item::NAME ?> date: <?= $package->getStartDataTime()
                     			->format('l m/d/Y h:iA')?></div>
-                    		<?php } else if (!$package->isAnyTime && in_array(
-                                    $package->getItem()::TYPE,
-                                    [TrAttractions::TYPE, TrLunchs::TYPE],
-                                    true
-                                )) {?>
+                    		<?php } else if (!$package->isAnyTime && $package->getItem()::TYPE === TrAttractions::TYPE) {?>
                     			<div class="date">Tickets on <?= $package->getStartDataTime()->format('l, M d, h:i A')?></div>
                             <?php } elseif (in_array($package['category'], [TrPosPlHotels::TYPE, TrPosHotels::TYPE], true)) {?>
                                 <p>
