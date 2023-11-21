@@ -943,14 +943,14 @@ class TrBasket extends _source_TrBasket
         }
     }
 
-    public function setForUser($user_id): bool
+    public static function setForUser($user_id): bool
     {
         $session_id = self::getSessionID(true);
 
         if (!$session_id) {
             return false;
         }
-
+        /** @var TrBasket $b */
         $b = self::find()->where(["session_id" => $session_id, "user_id" => null])->one();
 
         if ($b) {

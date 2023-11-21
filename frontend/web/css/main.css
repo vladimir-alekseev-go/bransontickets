@@ -552,8 +552,9 @@ input, .form-control {padding:11px 14px 7px;text-align:left;color:var(--c-blue-d
 .menu-content .nav>li>a .icon {font-size:24px;}
 .menu-content .nav-tabs {position:relative;border:none;}
 .menu-content .nav-tabs>li {position:relative;z-index:10;}
-.menu-content .nav-tabs>li>a {font-weight:700;font-size:24px;border:none;color:var(--c-white);text-decoration:none;transition:color 0.5s ease;}
+.menu-content .nav-tabs>li>a, .menu-content.menu-content-control .nav>li>a {font-weight:700;font-size:24px;border:none;color:var(--c-white);text-decoration:none;transition:color 0.5s ease;}
 .menu-content .nav-tabs>li>a.active {margin-top:10px;color:var(--c-blue-deep);}
+.menu-content.menu-content-control .nav>li>a.active {color:var(--c-blue-deep);background:var(--c-white);border-radius:10px 10px 0 0;}
 .menu-content .nav-tabs>.active-highlight {display:block;position:absolute;background:var(--c-white);border-radius:10px 10px 0 0;}
 
 @media (max-width: 1200px) {

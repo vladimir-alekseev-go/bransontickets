@@ -1,5 +1,7 @@
 <?php
 
+use common\events\UserEvents;
+use common\models\User;
 use yii\bootstrap\BootstrapAsset;
 use yii\bootstrap\BootstrapPluginAsset;
 use yii\web\AssetManager;
@@ -22,9 +24,10 @@ return [
             'enableCookieValidation'=>true,
         ],
         'user' => [
-            'identityClass' => 'common\models\User',
+            'identityClass' => User::class,
             'enableAutoLogin' => true,
             'identityCookie' => ['name' => '_identity-frontend', 'httpOnly' => true],
+            'on ' . \yii\web\User::EVENT_AFTER_LOGIN => [UserEvents::class, 'handleAfterLogin'],
         ],
         'session' => [
             // this is the name of the session cookie used for login on the frontend
