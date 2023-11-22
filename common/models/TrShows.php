@@ -35,7 +35,7 @@ class TrShows extends _source_TrShows
     public const photoJoinClass = ShowsPhotoJoin::class;
 
     public const TYPE_ID = 2;
-    
+
     public const type = 'shows';
     public const TYPE = 'shows';
 
@@ -45,6 +45,8 @@ class TrShows extends _source_TrShows
 
     public const STATUS_ACTIVE = 1;
     public const STATUS_INACTIVE = 0;
+
+    public const EXTERNAL_SERVICE_SDC = 'SDC';
 
     public static $type = 'shows';
 

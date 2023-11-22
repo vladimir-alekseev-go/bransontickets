@@ -3,6 +3,7 @@
 namespace frontend\controllers;
 
 use common\models\auth\ChangePasswordForm;
+use common\models\TrOrders;
 use common\models\User;
 use Yii;
 use yii\db\StaleObjectException;
@@ -51,18 +52,23 @@ class ProfileController extends Controller
             return $this->redirect(['profile/edit'], 302);
         }
 
-        $model = User::getCurrentUser();
+        $user = User::getCurrentUser();
 
-        if (!$model) {
+        if (!$user) {
             return $this->redirect('/');
         }
 
         $User = new User;
-        $User->updateFromTripium($model->id, true);
+        $User->updateFromTripium($user->id, true);
 
-        $model = User::getCurrentUser(true);
+        $user = User::getCurrentUser(true);
 
-        return $this->render('profile', compact('model'));
+        $orders = TrOrders::find()
+            ->where(['tripium_user_id' => $user->tripium_id])
+            ->orderBy(['created_at' => SORT_DESC])
+            ->all();
+
+        return $this->render('profile', compact('user', 'orders'));
     }
 
     public function actionEdit()

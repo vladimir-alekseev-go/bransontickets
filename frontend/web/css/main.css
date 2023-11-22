@@ -74,6 +74,25 @@ main {flex:1;}
 .row-small-padding .col-xl-12, .row-small-padding .col-sm-12
 {padding-right:5px;padding-left:5px;}
 
+.mb-n3 {margin-bottom: -1rem !important;}
+@media (max-width:575px) {
+    .ms-n15 {margin-left: -15px !important;}
+    .me-n15 {margin-right: -15px !important;}
+}
+
+@media (max-width:991px) {
+    .margin-block {margin:0 0 40px;}
+    .margin-block-small {margin:0 0 35px;}
+}
+@media (max-width:767px) {
+    .margin-block {margin:0 0 30px;}
+    .margin-block-small {margin:0 0 27px;}
+}
+@media (max-width:575px) {
+    .margin-block {margin:0 0 25px;}
+    .margin-block-small {margin:0 0 25px;}
+}
+
 ul, li {margin:0;padding:0;}
 ul li {list-style:none;padding:0 0 0 20px;position:relative;}
 
@@ -87,9 +106,11 @@ ul li {list-style:none;padding:0 0 0 20px;position:relative;}
 .img-crop img {display:block;width:100%;height:180px;opacity:0;}
 .img-crop-no-image {background-image:url(/img/bransontickets-noimage.png)}
 
-input[type=checkbox], input[type=radio] {border-radius:0;border:none;position:absolute;left:-9999px}
-input[type=checkbox]+label:before, input[type=radio]+label:before {display:inline-block;color:var(--c-white);background:var(--c-white);line-height:20px!important;font-size:16px!important;content:url('/img/check-white.svg');width:20px;height:20px;border:2px solid var(--c-white);border-radius:4px;position:relative;top:1px;padding:1px;margin-right:5px;}
-input[type=checkbox]:checked+label:before, input[type=radio]:checked+label:before {color:var(--c-new-blue);border-color:var(--c-white);content:url('/img/check-blue.svg');}
+input[type=checkbox], input[type=radio] {position:absolute;left:-9999px}
+input[type=checkbox]+label:before, input[type=radio]+label:before {position:relative;top:3px;display:inline-block;color:var(--c-white);background:var(--c-white);content:url('/img/check-white.svg');width:20px;height:20px;border:2px solid var(--c-new-blue);border-radius:4px;padding:1px;margin-right:5px;}
+.list-filter input[type=checkbox]+label:before, .list-filter input[type=radio]+label:before {border-color:#fff!important;}
+input[type=checkbox]:checked+label:before, input[type=radio]:checked+label:before {color:var(--c-new-blue);border-color:var(--c-new-blue);content:url('/img/check-blue.svg');}
+
 input[type=radio]+label:before {border-radius:20px;content:"";}
 input[type=radio]:checked+label:before {background:var(--c-white);border-width:5px;}
 input[type=checkbox]:disabled+label:before, input[type=radio]:disabled+label:before {background:var(--c-new-blue);border-color:var(--c-new-blue);color:var(--c-new-blue);}
@@ -163,9 +184,6 @@ input, .form-control {padding:11px 14px 7px;text-align:left;color:var(--c-blue-d
 .btn-sign {display:block;padding:8px 10px 4px;color:var(--c-white);font-weight:700;font-size:20px;background:linear-gradient(90deg, var(--c-violet-gray) 0%, var(--c-violet) 100%);border-radius:5px;text-align:center;border:none;}
 .btn-sign:hover {color:var(--c-white);background:linear-gradient(90deg, var(--c-violet-gray) 60%, var(--c-violet-dark) 100%);}
 .btn-sign:focus {box-shadow:none;}
-
-.site-signup input[type=checkbox]+label:before {border-color:var(--c-new-blue);top:3px;}
-.site-signup input[type=checkbox]:checked+label:before {border-color:var(--c-new-blue);}
 
 .site-signup .line {height:100%;width:1px;border-right:1px solid var(--c-new-blue);margin:0 auto;position:relative;}
 .site-signup .line:after {height:50px;width:50px;border-radius:200px;background:var(--c-white);position:absolute;top:50%;margin:-25px 0 0 -25px;text-align:center;content:"OR";display:block;line-height:50px;font-weight:bold;color:var(--c-new-blue)}
@@ -1177,10 +1195,6 @@ input, .form-control {padding:11px 14px 7px;text-align:left;color:var(--c-blue-d
 .show-list-list .amenities li {width:33.33333%;float:left;padding:0 30px 0 25px;color:var(--c-new-blue);font-size:18px;}
 .show-list-list .type-hotels .star-rating {float:right;}
 
-.show-list-list input[type=checkbox]+label:before, .show-list-list input[type=radio]+label:before {border:2px solid var(--c-new-blue);}
-.show-list-list input[type=checkbox]:checked+label:before, .show-list-list input[type=radio]:checked+label:before {color:var(--c-new-blue);border-color:var(--c-new-blue);}
-
-
 @media (max-width: 1600px) {
     .show-list-list .dates b, .show-list-list .dates span {width:80px;}
     .show-list-list .time .tag, .show-list-list .tag-block {width:80px;}
@@ -1347,8 +1361,6 @@ input, .form-control {padding:11px 14px 7px;text-align:left;color:var(--c-blue-d
 .order-resume .buy-btn:hover {background:linear-gradient(90deg, var(--c-violet-gray) 60%, var(--c-violet-dark) 100%);}
 .order-resume .buy-btn:focus {box-shadow:none;}
 
-.order-resume input[type=checkbox]+label:before, .order-resumeinput[type=radio]+label:before {border:1px solid var(--c-new-blue);}
-.order-resume input[type=checkbox]:checked+label:before, .order-resumeinput[type=radio]:checked+label:before {color:var(--c-new-blue);border-color:var(--c-new-blue);}
 .order-resume a {color:var(--c-new-blue);font-weight:bold;text-decoration:none;}
 .order-resume .cancellation-policy {font-size:16px;}
 
@@ -1382,4 +1394,18 @@ input, .form-control {padding:11px 14px 7px;text-align:left;color:var(--c-blue-d
 }
 @media (max-width:576px) {
     .btn-basket {margin-right:15px;}
+}
+
+
+.orders-list-header {padding:0 20px;}
+.orders-list-header, .orders-list-item {display:flex;flex-flow:row wrap;}
+.orders-list-header > div, .orders-list-item > div {width:25%;}
+.orders-list-header > div {font-size:12px;font-weight:bold;color:var(--c-gray);margin:0 0 10px;}
+.orders-list-item {border-radius:4px;background:var(--c-gray-light-3);margin:10px 0 0;padding:20px;}
+.orders-list-body .orders-list-item:first-child {margin:0;}
+@media (max-width: 575px) {
+    .orders-list-header {display:none;}
+    .orders-list-item {padding:10px;}
+    .orders-list-item > div {width:33%;}
+    .orders-list-item > div:first-child {width:100%;}
 }
