@@ -127,7 +127,7 @@ class Tripium extends Model
 // 		echo '<pre>'; var_dump($this->requestData); echo '</pre>';
 // 		echo '<pre>'; echo $this->requestData['params']; echo '</pre>';
 // 		echo "<pre>statusCode: "; var_dump($this->statusCode); echo "</pre>";
-// 		echo "<pre>server_output: "; var_dump($server_output); echo "</pre>";
+// 		echo "<pre>server_output: "; var_export($server_output); echo "</pre>";
 //exit();
         $phone = General::getConfigPhoneNumber();
 
@@ -178,12 +178,16 @@ class Tripium extends Model
                 }
             }
 
-            if (isset($res["errorCode"]) && $res["errorCode"] == self::ERROR_CANCELLED) {
-                $this->addErrors([".<br/>You could still cancel any individual item(s) that are still within cancellation period or call us $phone to assist you."]);
-            }
+//            if (isset($res["errorCode"]) && $res["errorCode"] == self::ERROR_CANCELLED) {
+//                $this->addErrors([".<br/>You could still cancel any individual item(s) that are still within cancellation period or call us $phone to assist you."]);
+//            }
 
             if (!empty($this->errorCode) && $this->errorCode == self::STATUS_ONE_HOTEL_PER_ORDER) {
                 $this->addErrors([self::getStatusValue(self::STATUS_ONE_HOTEL_PER_ORDER)]);
+            }
+
+            if (!empty($res["globalErrors"])) {
+                $this->addErrors($res["globalErrors"]);
             }
 
 			curl_close ($this->ch);
@@ -1078,7 +1082,8 @@ class Tripium extends Model
     public function orderCancel($orderNumber)
     {
         $res = $this->request(
-            '/order/' . $orderNumber . '/cancel?generateTransactions=true',
+//            '/order/' . $orderNumber . '/cancel?generateTransactions=true',
+            '/order/' . $orderNumber . '/trycancel?generateTransactions=true',
             ["transactions" => []],
             "post"
         );
