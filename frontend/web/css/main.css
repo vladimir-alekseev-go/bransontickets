@@ -222,7 +222,7 @@ input, .form-control {padding:11px 14px 7px;text-align:left;color:var(--c-blue-d
 
 /* main-page */
 
-.main-banner {margin:-40px 0 0;height:506px;background:url('/img/main-banner-image.png') repeat 50% 50%;background-size:cover;position:relative;}
+.main-banner {margin:-40px 0 0;height:506px;background:url('/img/main-search-image.png') repeat 50% 50%;background-size:cover;position:relative;}
 
 @media (max-width: 992px) {
     .main-banner {height:406px;}
