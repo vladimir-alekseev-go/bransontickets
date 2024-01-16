@@ -1,10 +1,10 @@
-.header {height:80px;position:fixed;width:100%;padding:10px 0;z-index:9990;background:var(--c-light-violet);
+.header {height:104px;position:fixed;width:100%;padding:10px 0;z-index:9990;background:var(--c-light-violet);
     box-shadow: 0 0 0 0 var(--c-shadow-purple-1), 2px 3px 8px 0 var(--c-shadow-purple-1), 7px 13px 15px 0 var(--c-shadow-purple-2), 16px 29px 20px 0 var(--c-shadow-purple-3), 29px 51px 23px 0 var(--c-shadow-purple-4), 46px 79px 26px 0 var(--c-shadow-purple-5);}
 .header .menu-up-control {float:right;color:var(--c-new-blue);font-size:26px;top:3px;position:relative;cursor:pointer;padding:10px 0;}
 .header .auth-items {display:flex;align-items:center;justify-content:flex-start;padding:10px 0;gap:10px;}
 .header .bransontickets-logo img {display:block;margin:0 auto;}
 
-.header-height-fixed-block {height: 120px;}
+.header-height-fixed-block {height: 144px;}
 
 .auth-items .auth-item {border-radius:5px;}
 .auth-items .auth-item .sign-up {padding:4px 20px;color:var(--c-white);font-weight:700;font-size:20px;background:var(--c-new-blue);transition:none;}
@@ -14,6 +14,12 @@
 .auth-items .auth-item i {font-size:32px;color:var(--c-new-blue);padding-top:4px;}
 .auth-items .auth-item a {text-decoration:none;color:var(--c-new-blue);padding-top:3px;font-size:18px;}
 .header-menu-phone {flex:1;display:flex;align-items:center;justify-content:center;gap:20px;}
+
+.menu-up, .menu-up li {margin:0;padding:0;}
+.menu-up {display:flex;}
+.menu-up li {padding:0 15px 0 0;}
+.menu-up li a {color:var(--c-new-blue);}
+
 .header-menu-phone img {width:23px;}
 .header-menu-phone .header-phone {color:var(--c-new-blue);font-weight:700;font-size:26px;text-decoration:none;letter-spacing:1px;}
 .header-menu-phone.detail {justify-content:flex-start;}
@@ -40,11 +46,11 @@
 .menu-general .menu-footer .item img {width:160px;}
 
 @media (max-width:991px) {
-    .header {height:70px;}
+    .header {height:94px;}
     .header .bransontickets-logo img {height:40px;}
     .header .menu-up-control {top:0;font-size:22px;padding:10px 0 0 0;}
 
-    .header-height-fixed-block {height: 110px;}
+    .header-height-fixed-block {height: 134px;}
 
     .header-menu-phone {gap:10px;}
     .header-menu-phone img {width:18px;}
@@ -53,12 +59,12 @@
 }
 
 @media (max-width:767px) {
-    .header {height:60px;}
+    .header {height:84px;}
     .header {padding:12px 0 13px 0;}
     .header .bransontickets-logo img {height:35px;margin:0;}
     .header .menu-up-control {top:5px;display:block;padding:2px 0 0 0;}
 
-    .header-height-fixed-block {height: 100px;}
+    .header-height-fixed-block {height: 124px;}
 
     .menu-general {width:100vw;right:-100vw;}
     .header-menu-phone {justify-content:flex-start;gap:10px;}
@@ -72,6 +78,8 @@
 }
 
 @media (max-width:576px) {
+    .menu-up li {padding:0 10px 0 0;}
+
     .menu-general .menu-phone {bottom:168px;}
     .menu-general .menu-footer {display:block;padding:10px 0 10px 60px;}
     .menu-general .menu-footer .item {padding:10px 0;}

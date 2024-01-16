@@ -75,6 +75,7 @@ return [
                 'loginajax/'                                                                       => 'site/loginajax',
                 'forgot-pass/'                                                                     => 'site/requestpasswordreset',
                 'resetpassword/'                                                                   => 'site/resetpassword',
+                'about/'														                   => 'site/about',
                 'profile/'                                                                         => 'profile/index',
                 'cart/'														                       => 'order/cart',
                 'order/delete-vatation-package/'						                           => 'order/delete-vatation-package',

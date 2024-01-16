@@ -9,6 +9,11 @@ $basket = TrBasket::build();
 ?>
 <header class="header">
     <div class="fixed">
+        <ul class="menu-up">
+            <li><a href="/">Home</a></li>
+            <li><a href="<?= Url::to(['site/about']) ?>">About Us</a></li>
+            <li><a href="<?= Url::to(['site/search']) ?>">Search</a></li>
+        </ul>
         <div class="row">
             <div class="col-4 order-1 order-md-0 d-none d-md-flex align-items-center">
                 <?php if (Yii::$app->request->url === Url::to('/') || Yii::$app->request->url === Url::to(['profile/index']) ||

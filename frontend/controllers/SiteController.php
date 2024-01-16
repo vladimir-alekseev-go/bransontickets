@@ -75,7 +75,7 @@ class SiteController extends Controller
             ->orderBy(new Expression('rand()'))
             ->limit(3)
             ->all();
-        
+
         $attractionsAllF = TrAttractions::getActive()
             ->orderBy(new Expression('rand()'))
             ->limit(3)
@@ -87,12 +87,12 @@ class SiteController extends Controller
             ->orderBy(new Expression('rand()'))
             ->limit(3)
             ->all();
-        
+
         $attractionsAllR = TrAttractions::getActive()
             ->orderBy(new Expression('rand()'))
             ->limit(3)
             ->all();
-        
+
         $showsRecommended = array_merge($showsAllR, $attractionsAllR);
 
         return $this->render('index', compact('showsFeatured', 'showsRecommended'));
