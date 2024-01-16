@@ -153,6 +153,8 @@ input[type=number] {-moz-appearance:textfield;}
 .blue {color:var(--c-new-blue);}
 .red {color:var(--c-red);}
 
+.align-items-center {align-items:center;}
+
 .star-rating .star-rating-box {position:relative;display:inline-block;font-size:18px;line-height:18px;}
 .star-rating .fon, .star-rating .val {white-space:nowrap;display:inline-block;}
 .star-rating .fon i {color:var(--c-gray-light);}
@@ -299,15 +301,15 @@ input, .form-control {padding:11px 14px 7px;text-align:left;color:var(--c-blue-d
 .main-info-block .main-info-call .main-info-call-text {padding-bottom:10px;font-weight:400;font-size:24px;}
 .main-info-block .main-info-call .main-info-call-phone {display:inline-block;padding:16px 80px;font-weight:700;font-size:32px;color:var(--c-new-blue);border-radius:10px;background:var(--c-light-violet);text-decoration:none;
     box-shadow: 0 5px 10px 10px var(--c-shadow-purple);}
-.main-info-block .main-info-call .main-info-call-phone span {vertical-align:top;display:inline-block;background-image:url('/img/phone-blue.svg');background-size:cover;width:30px;height:30px;}
-.main-info-block .main-info-call .main-info-call-phone:hover span {background-image:url('/img/phone.svg');}
+.main-info-block .main-info-call .main-info-call-phone .phone-icon {position:relative;top:-2px;vertical-align:middle;display:inline-block;background-image:url('/img/phone-blue.svg');background-size:cover;width:30px;height:30px;}
+.main-info-block .main-info-call .main-info-call-phone:hover .phone-icon {background-image:url('/img/phone.svg');}
 
 @media (max-width: 1200px) {
     .main-info-block {padding:40px 0 10px 0;}
     .main-info-block .main-info-description {font-size:24px;}
     .main-info-block .main-info-call .main-info-call-title {font-size:48px;}
     .main-info-block .main-info-call .main-info-call-phone {max-width:350px;padding:12px 40px;font-size:24px;gap:10px;}
-    .main-info-block .main-info-call .main-info-call-phone span {width:25px;height:25px;}
+    .main-info-block .main-info-call .main-info-call-phone .phone-icon {width:25px;height:25px;}
 }
 
 @media (max-width: 992px) {
@@ -322,7 +324,7 @@ input, .form-control {padding:11px 14px 7px;text-align:left;color:var(--c-blue-d
     .main-info-block .main-info-call .main-info-call-title {font-size:36px;}
     .main-info-block .main-info-call .main-info-call-text {font-size:20px;}
     .main-info-block .main-info-call .main-info-call-phone {max-width:300px;font-size:20px;}
-    .main-info-block .main-info-call .main-info-call-phone span {width:20px;height:20px;}
+    .main-info-block .main-info-call .main-info-call-phone .phone-icon {width:20px;height:20px;}
 }
 
 @media (max-width: 576px) {

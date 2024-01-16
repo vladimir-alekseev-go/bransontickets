@@ -10,18 +10,15 @@ $basket = TrBasket::build();
 <header class="header">
     <div class="fixed">
         <div class="row">
-            <div class="col-4 order-1 order-md-0 d-none d-md-block">
+            <div class="col-4 order-1 order-md-0 d-none d-md-flex align-items-center">
                 <?php if (Yii::$app->request->url === Url::to('/') || Yii::$app->request->url === Url::to(['profile/index']) ||
                     Yii::$app->request->url === Url::to(['profile/change-password']) || Yii::$app->request->url === Url::to(['profile/edit'])) { ?>
-                    <div class="auth-items">
                         <?php if (Yii::$app->user->isGuest) { ?>
-                            <div class="auth-item">
-                                <a class="btn sign-up" href="<?= Url::to(['site/signup']) ?>">Sign up</a>
-                            </div>
-                            <div class="auth-item">
-                                <a class=" btn sign-in" href="<?= Url::to(['site/login']) ?>">Sign in</a>
+                            <div class="blue">
+                                Your #1 source for tickets in Branson, Missouri
                             </div>
                         <?php } else { ?>
+                        <div class="auth-items">
                             <div class="auth-item">
                                 <?php
                                 /**
@@ -36,8 +33,8 @@ $basket = TrBasket::build();
                             <div class="auth-item">
                                 <a href="<?= Url::to(['site/logout']) ?>"><i class="fa fa-sign-out"></i></a>
                             </div>
+                        </div>
                         <?php } ?>
-                    </div>
                 <?php } else { ?>
                     <div class="header-menu-phone detail">
                         <img src="/img/phone.svg" alt="phone icon">
@@ -46,7 +43,7 @@ $basket = TrBasket::build();
                 <?php } ?>
             </div>
 
-            <div class="col-8 col-md-4 order-0 order-md-1">
+            <div class="col-8 col-md-4 order-0 order-md-1 d-flex align-items-center">
                 <?php if (Yii::$app->request->url === Url::to('/')) { ?>
                     <div class="header-menu-phone">
                         <img src="/img/phone.svg" alt="phone icon">

@@ -13,6 +13,8 @@ use yii\helpers\Url;
         <li><a href="<?= Url::to(['attractions/index']) ?>">Attractions <div class="line"></div></a></li>
         <li><a href="<?= Url::to(['lodging/index']) ?>">Lodging <div class="line"></div></a></li>
         <li><a href="<?= Url::to(['packages/index']) ?>">Vacation Packages <div class="line"></div></a></li>
+        <li><a href="<?= Url::to(['site/signup']) ?>">Sign up <div class="line"></div></a></li>
+        <li><a href="<?= Url::to(['site/login']) ?>">Sign in <div class="line"></div></a></li>
     </ul>
     <div class="menu-phone">
         <img src="/img/phone.svg" alt="phone icon">
