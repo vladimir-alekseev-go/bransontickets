@@ -94,7 +94,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'class' => StatusColumn::class,
                             'attribute' => 'show_in_footer',
                         ],
-                        'rank',
+                        'rank_level',
                         'marketing_level',
                         'cut_off',
                         'min_rate',

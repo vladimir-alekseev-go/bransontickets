@@ -23,7 +23,7 @@ use Yii;
  * @property int $status
  * @property int $show_in_footer
  * @property int|null $location_external_id
- * @property int|null $rank
+ * @property int|null $rank_level
  * @property int|null $marketing_level
  * @property string|null $voucher_procedure
  * @property int|null $weekly_schedule
@@ -79,7 +79,7 @@ class _source_TrAttractions extends \yii\db\ActiveRecord
     {
         return [
             [['id_external', 'code', 'name'], 'required'],
-            [['id_external', 'status', 'show_in_footer', 'location_external_id', 'rank', 'marketing_level', 'weekly_schedule', 'seats', 'show_length', 'cut_off', 'preview_id', 'image_id', 'display_image', 'theatre_id', 'call_us_to_book'], 'integer'],
+            [['id_external', 'status', 'show_in_footer', 'location_external_id', 'rank_level', 'marketing_level', 'weekly_schedule', 'seats', 'show_length', 'cut_off', 'preview_id', 'image_id', 'display_image', 'theatre_id', 'call_us_to_book'], 'integer'],
             [['description', 'directions'], 'string'],
             [['tax_rate', 'min_rate', 'min_rate_source'], 'number'],
             [['updated_at'], 'safe'],
@@ -123,7 +123,7 @@ class _source_TrAttractions extends \yii\db\ActiveRecord
             'status' => 'Status',
             'show_in_footer' => 'Show In Footer',
             'location_external_id' => 'Location External ID',
-            'rank' => 'Rank',
+            'rank_level' => 'Rank',
             'marketing_level' => 'Marketing Level',
             'voucher_procedure' => 'Voucher Procedure',
             'weekly_schedule' => 'Weekly Schedule',

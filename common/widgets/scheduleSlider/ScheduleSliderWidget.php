@@ -21,10 +21,10 @@ class ScheduleSliderWidget extends Widget
     public const VIEW_SHOW_IN_DESCRIPTION = 'show-description';
     public const VIEW_ATTRACTION_IN_ORDER = 'attraction';
     public const VIEW_ATTRACTION_IN_DESCRIPTION = 'attraction-description';
-    
+
     public const ANY_TIME_YES = 1;
     public const ANY_TIME_NO = 0;
-    
+
 	public $viewPreview;
 	public $inDescription = false;
 
@@ -46,7 +46,7 @@ class ScheduleSliderWidget extends Widget
     public $package;
     public $scheduleIsShow = true;
     public $scheduleUrl;
-    
+
     private $startDate;
 
     /**
@@ -100,7 +100,7 @@ class ScheduleSliderWidget extends Widget
             $this->view->registerJs('setTimeout(function(){scheduleSlider.initHash()}, 400);');
         }
         $this->view->registerJs('setTimeout(function(){scheduleSlider.initInfoOver()}, 500);');
-        
+
         $this->getRange();
         $this->getPrice();
         if (!empty($this->prices)) {
@@ -115,7 +115,7 @@ class ScheduleSliderWidget extends Widget
 
         return '<div class="no-events text-center">There are no events in the near future!</div>';
     }
-    
+
     protected function assetRegister()
     {
         $view = $this->getView();
@@ -154,30 +154,30 @@ class ScheduleSliderWidget extends Widget
 	    	])
             ->asArray()
 	        ->one();
-	        
+
         $start = new DateTime();
         $start_min = new DateTime($range['start_min']);
         $start_min = $start_min > $start ? $start_min : $start;
         $start_max = new DateTime($range['start_max']);
 	    $start_max->add(new DateInterval('P1D'));
-	    
+
 	    if (!($start_min instanceof DateTime && $start_max instanceof DateTime)) {
 	        return false;
 	    }
-	        
-	    $diffDays = $start_min->diff($start_max)->days; 
+
+	    $diffDays = $start_min->diff($start_max)->days;
         if ($diffDays < 5) {
             $start_max->add(new DateInterval('P'.(5 - $diffDays).'D'));
         }
-        
+
 	    $this->range = new DatePeriod(
-    		$start_min, 
+    		$start_min,
     		new DateInterval('P1D'),
     		$start_max
     	);
         return true;
 	}
-	
+
 	/**
 	 * Get price
 	 */
@@ -186,7 +186,7 @@ class ScheduleSliderWidget extends Widget
 	    $priceClass = $this->model->getPriceClass();
 
 	    $tmp = [];
-	    
+
 	    if ($this->model::TYPE === TrShows::TYPE) {
 	        $AllPrice = $this->model->getAvailablePrices()
     	        ->addSelect([
@@ -203,8 +203,8 @@ class ScheduleSliderWidget extends Widget
     	    		$priceClass::tableName().'.description'
     	    	])
                 ->groupby($priceClass::tableName().'.id')
-                ->orderby('rank, name');
-                
+                ->orderby('rank_level, name');
+
     	    if (!empty($this->package)) {
                 $AllPrice->orOnCondition(
                     [
@@ -212,7 +212,7 @@ class ScheduleSliderWidget extends Widget
                         'start' => $this->package->getStartDataTime()->format('Y-m-d H:i:s')
                     ]
                 );
-        	}   
+        	}
             $AllPrice = $AllPrice->asArray()->all();
             foreach ($AllPrice as $p) {
                 unset($p['shows']);
@@ -227,7 +227,7 @@ class ScheduleSliderWidget extends Widget
 		        }
     		}
 	    }
-	    
+
 	    if ($this->model::TYPE === TrAttractions::TYPE) {
 
     	    $AllPrice = $this->model->getAvailablePrices()
@@ -246,8 +246,8 @@ class ScheduleSliderWidget extends Widget
     	    		$priceClass::tableName().'.description',
     	    	])
                 ->groupby($priceClass::tableName().'.id')
-                ->orderby('rank, name');
-                
+                ->orderby('rank_level, name');
+
             if (!empty($this->package)) {
                 $class = $this->model::priceClass;
                 $AllPrice->orOnCondition(
@@ -321,7 +321,7 @@ class ScheduleSliderWidget extends Widget
 	        if (!empty($data['list'])) {
 
 				$data['max_offers_by_day'] = 0;
-				
+
 				foreach ($data['list'] as $day => $types) {
 
 				    $max_offers_by_day = 0;
@@ -334,7 +334,7 @@ class ScheduleSliderWidget extends Widget
                             $max_offers_by_day += count($price);
                         }
 				    }
-				    
+
 				    $data['max_offers_by_day'] = $data['max_offers_by_day'] < $max_offers_by_day ? $max_offers_by_day : $data['max_offers_by_day'];
 				}
 	        }

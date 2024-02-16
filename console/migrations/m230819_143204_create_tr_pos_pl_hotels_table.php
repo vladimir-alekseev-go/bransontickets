@@ -33,7 +33,7 @@ class m230819_143204_create_tr_pos_pl_hotels_table extends Migration
             'status'               => $this->integer(1)->notNull()->defaultValue(0),
             'show_in_footer'       => $this->integer(1)->notNull()->defaultValue(0),
             'location_external_id' => $this->integer()->null(),
-            'rank'                 => $this->integer()->null(),
+            'rank_level'           => $this->integer()->null(),
             'marketing_level'      => $this->integer(2)->null(),
             'weekly_schedule'      => $this->integer(1)->null(),
             'voucher_procedure'    => $this->string(1024)->null(),

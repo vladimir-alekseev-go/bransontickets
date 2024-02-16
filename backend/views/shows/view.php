@@ -64,7 +64,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     ->column()
                             )
                         ],
-                        'rank',
+                        'rank_level',
                         'marketing_level',
                         'voucher_procedure',
                         'weekly_schedule',

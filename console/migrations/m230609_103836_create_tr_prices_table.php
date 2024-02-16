@@ -37,7 +37,7 @@ class m230609_103836_create_tr_prices_table extends Migration
                 'free_sell'             => $this->tinyInteger(4)->notNull()->defaultValue(0),
                 'allotment_external_id' => $this->integer(11)->notNull(),
                 'price_external_id'     => $this->integer(11)->notNull(),
-                'rank'                  => $this->integer()->notNull()->defaultValue(999999),
+                'rank_level'            => $this->integer()->notNull()->defaultValue(999999),
             ],
             $tableOptions
         );

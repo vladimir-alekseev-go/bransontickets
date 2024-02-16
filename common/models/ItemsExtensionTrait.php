@@ -160,13 +160,13 @@ trait ItemsExtensionTrait
 
         return isset($ar[$val]) ? $ar[$val] : $val;
     }
-	
+
 	public function	updateFromTripium($params = [])
     {
         $shows = self::find()
 		->select([
-			'id', 
-			'id_external', 
+			'id',
+			'id_external',
 			'hash_summ',
 		    'min_rate',
 		    'min_rate_source'
@@ -176,7 +176,7 @@ trait ItemsExtensionTrait
 		    $shows->andWhere(['id_external' => $this->updateOnlyIdExternal]);
 		}
 		$shows = $shows->all();
-		
+
     	// Theaters
     	$Theaters = TrTheaters::find()->asArray()->indexBy('id_external')->all();
 
@@ -306,7 +306,7 @@ trait ItemsExtensionTrait
 				'location_external_id' => (
                     $this instanceof TrShows || $this instanceof TrAttractions || $this instanceof TrPosHotels)
                     && !empty($show['theatre']['locationId']) ? $show['theatre']['locationId'] : $show['location'],
-				'rank' => $show['rank'],
+				'rank_level' => $show['rank'],
 				'marketing_level' => (int)$show['marketingLevel'],
 				'voucher_procedure' => $show['voucherProcedure'],
 				'weekly_schedule' => $show['weeklySchedule'] ? 1 : 0,
@@ -370,17 +370,17 @@ trait ItemsExtensionTrait
                         $Shows->updatePreview($show['cover']);
                     }
 				    $Shows->setPhotoAndPreview();
-				    
+
 				    $setPlaceIds[] = $Shows->id;
 				    $this->added[] = $Shows->id_external;
-				    
+
 				} else {
 					$err = $Shows->getErrors();
 					if ($err) {
 						$this->errors_add[] = $err;
 					}
 				}
-				
+
 			} else if($this->updateForce || ($dataShow['hash_summ'] !== $shows[$show['id']]['hash_summ'])) {
 
 				$Shows = self::find()->where(['id_external' => $show['id']])->one();
@@ -389,7 +389,7 @@ trait ItemsExtensionTrait
 				$Shows->updateImages = $this->updateImages;
 
 				$dirtyLocs = $Shows->getDirtyAttributes(['address', 'city', 'state', 'zip_code', 'name', 'theatre_name']);
-				
+
 				if ($dirtyLocs) {
 				    $Shows->location_lat = null;
 				    $Shows->location_lng = null;
@@ -461,17 +461,17 @@ trait ItemsExtensionTrait
 
         return '';
     }
-    
+
     public function updateTheaters($item)
     {
         if (empty($item['id'])) {
             return false;
         }
-        
+
         $Theater = TrTheaters::findOne(['id_external' => $item['id']]);
 
         $model = $Theater ? $Theater : new TrTheaters;
-        
+
         $model->setAttributes([
             'id_external' => $item['id'],
             'name' => $item['address']['name'],
@@ -496,7 +496,7 @@ trait ItemsExtensionTrait
 			$this->errors_update[] = $model->errors;
 		}
     }
-    
+
 	public function setCategories($show)
     {
         $class = $this->getRelatedCategories();
@@ -555,7 +555,7 @@ trait ItemsExtensionTrait
 
         return $isOnSale;
     }
-    
+
     /**
      * Return file time
      * @param string $url
@@ -573,7 +573,7 @@ trait ItemsExtensionTrait
     {
         return Media::getRealUrl($url);
     }
-    
+
     /**
      * Updating preview
      * @param string $url
@@ -603,7 +603,7 @@ trait ItemsExtensionTrait
                 $this->preview_id = $uploadItemsPreview->id;
                 $this->save();
             }
-            
+
         } else if (!empty($this->preview->id) && empty($url)) {
             if ($this->preview) {
                 $this->preview->delete();
@@ -676,7 +676,7 @@ trait ItemsExtensionTrait
             }
         }
     }
-	
+
 	public function getSearchAddress(): string
     {
 	    $result = [];
@@ -741,7 +741,7 @@ trait ItemsExtensionTrait
             self::tableName().'.preview_id',
             self::tableName().'.theatre_id',
             self::tableName().'.tags',
-            self::tableName().'.rank',
+            self::tableName().'.rank_level',
             'IF('.self::getAliasMinPrice().'.min_rate > 0, '.self::getAliasMinPrice().'.min_rate, '.self::tableName().'.min_rate) as min_rate',
             'IF('.self::getAliasMinPrice().'.min_rate_source > 0, '.self::getAliasMinPrice().'.min_rate_source, '.self::tableName().'.min_rate_source) as min_rate_source'
         ];
@@ -857,7 +857,7 @@ trait ItemsExtensionTrait
         $query = Yii::$app->db->createCommand('UPDATE '.self::tableName().' SET min_rate = NULL, min_rate_source = NULL; UPDATE '.self::tableName().' LEFT JOIN ('.self::actualMinPrice()->createCommand()->getRawSql().') as minprice ON '.self::tableName().'.id = minprice.id SET '.self::tableName().'.min_rate = minprice.min_rate, '.self::tableName().'.min_rate_source = minprice.min_rate_source');
         $query->execute();
     }
-	
+
     /**
      * Gets query for [[TrTheaters]].
      *

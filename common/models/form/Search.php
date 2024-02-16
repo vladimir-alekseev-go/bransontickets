@@ -246,7 +246,7 @@ class Search extends Model
             $this->orderby = [
                 "IF(LOCATE('Premium', tags)>0,100,0)+IF(LOCATE('Featured', tags)>0,50,0)" =>
                     $sortOrder === SORT_DESC ? SORT_ASC : SORT_DESC,
-                "rank" => SORT_ASC,
+                "rank_level" => SORT_ASC,
                 "name" => $sortOrder,
             ];
         } else {

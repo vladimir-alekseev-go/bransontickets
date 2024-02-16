@@ -37,7 +37,7 @@ class m230809_145130_create_tr_attractions_prices_table extends Migration
                 'price'             => $this->decimal(8, 2)->notNull()->defaultValue(0.00),
                 'any_time'          => $this->tinyInteger(1)->notNull()->defaultValue(0),
                 'price_external_id' => $this->integer(11)->notNull(),
-                'rank'              => $this->integer()->notNull()->defaultValue(999999),
+                'rank_level'        => $this->integer()->notNull()->defaultValue(999999),
                 'alternative_rate'  => $this->decimal(8, 2)->null(),
             ],
             $tableOptions

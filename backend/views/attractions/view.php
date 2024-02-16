@@ -64,7 +64,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'label' => 'Items group order',
                             'value' => /*$model->location_item_id ? $model->locationItem->location_name : */null
                         ],
-                        'rank',
+                        'rank_level',
                         'marketing_level',
                         'voucher_procedure',
                         'weekly_schedule',

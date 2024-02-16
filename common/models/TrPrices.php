@@ -12,10 +12,10 @@ use yii\helpers\Json;
 class TrPrices extends _source_TrPrices
 {
     use PricesExtensionTrait;
-    
+
     public const type = 'shows';
     public const TYPE = 'shows';
-    
+
 	public const PRICE_TYPE_FAMILY_PASS = 'FAMILY PASS';
     public const PRICE_TYPE_FAMILY_PASS_4_PACK = 'FAMILY PASS 4 PACK';
     public const PRICE_TYPE_FAMILY_PASS_8_PACK = 'FAMILY PASS 8 PACK';
@@ -23,18 +23,18 @@ class TrPrices extends _source_TrPrices
     public const MAIN_CLASS = TrShows::class;
 
     public const NAME_ADULT = 'ADULT';
-    
+
 	public function init()
 	{
 	    parent::init();
 	    $this->periodUpdate = 31;
 	}
-    
+
 	public function getType(): string
     {
 	    return self::TYPE;
 	}
-	
+
 	/**
 	 * @return ActiveQuery
 	 */
@@ -42,7 +42,7 @@ class TrPrices extends _source_TrPrices
     {
 		return $this->getShow();
 	}
-	
+
 	/**
 	 * @return ActiveQuery
 	 */
@@ -50,7 +50,7 @@ class TrPrices extends _source_TrPrices
     {
 		return $this->getExternal();
     }
-    
+
     /**
      * @return ActiveQuery
      */
@@ -66,7 +66,7 @@ class TrPrices extends _source_TrPrices
 		$this->statusCodeTripium = $tripium->statusCode;
 		return $res;
 	}
-    
+
     public function updateData($tripiumData, $data): void
     {
         if (!empty($tripiumData)) {
@@ -80,7 +80,7 @@ class TrPrices extends _source_TrPrices
                 foreach ($d['prices'] as $p) {
 
 				    $hash = md5($d['id'] . '_' . $dateStart . '_' . $p['name'] . '_' . $p['description']);
-					
+
 					$dataNew = [
 						'id_external' => $d['id'],
 						'hash' => $hash,
@@ -99,7 +99,7 @@ class TrPrices extends _source_TrPrices
 						'free_sell' => $p['freeSell'] ? 1 : 0,
 						'allotment_external_id' => $p['allotmentId'],
 						'price_external_id' => $p['id'],
-					    'rank' => !empty($p['rank']) ? $p['rank'] : 999999,
+					    'rank_level' => !empty($p['rank']) ? $p['rank'] : 999999,
 					];
 					$dataNew['hash_summ'] = md5(Json::encode($dataNew));
 
@@ -128,7 +128,7 @@ class TrPrices extends _source_TrPrices
 						    $this->errors_update[] = $e->getMessage();
 						}
 					}
-					
+
 					unset($data[$hash]);
 				}
 			}

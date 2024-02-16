@@ -19,7 +19,7 @@ class AttractionsSearch extends TrAttractions
                     'id_external',
                     'status',
                     'show_in_footer',
-                    'rank',
+                    'rank_level',
                     'marketing_level',
                     'weekly_schedule',
                     'cut_off',
@@ -46,7 +46,7 @@ class AttractionsSearch extends TrAttractions
     public function search($params)
     {
         $query = self::find();
-        
+
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'pagination' => [
@@ -58,25 +58,25 @@ class AttractionsSearch extends TrAttractions
                 ],
             ],
         ]);
-        
+
         $this->load($params);
-        
+
         $query->andFilterWhere([
             'id' => $this->id,
             'id_external' => $this->id_external,
             'status' => $this->status,
             'show_in_footer' => $this->show_in_footer,
-            'rank' => $this->rank,
+            'rank_level' => $this->rank_level,
             'marketing_level' => $this->marketing_level,
             'weekly_schedule' => $this->weekly_schedule,
             'cut_off' => $this->cut_off,
             'display_image' => $this->display_image,
         ]);
-        
+
         $query->andFilterWhere(['like', 'code', $this->code]);
         $query->andFilterWhere(['like', 'name', $this->name]);
         $query->andFilterWhere(['like', 'tags', $this->tags]);
-        
+
         return $dataProvider;
     }
 }

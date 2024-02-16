@@ -507,11 +507,11 @@ class OrderForm extends DynamicModel
                 ]
             );
             $price_query->andWhere(['start' => $date->format('Y-m-d H:i:s')]);
-            $price_query->orderby('id_external asc, rank, name');
+            $price_query->orderby('id_external asc, rank_level, name');
         } else {
             $price_query = $this->model->getAvailablePrices();
             $price_query->andWhere(['start' => $date->format('Y-m-d H:i:s')]);
-            $price_query->orderby('allotment_external_id asc, rank, name');
+            $price_query->orderby('allotment_external_id asc, rank_level, name');
         }
 
         if (!empty($this->package_modify_data)) {

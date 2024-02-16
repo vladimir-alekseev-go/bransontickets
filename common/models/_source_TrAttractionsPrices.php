@@ -25,7 +25,7 @@ use Yii;
  * @property float $price
  * @property int $any_time
  * @property int $price_external_id
- * @property int $rank
+ * @property int $rank_level
  * @property float|null $alternative_rate
  *
  * @property TrAdmissions $external
@@ -46,8 +46,8 @@ class _source_TrAttractionsPrices extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id_external', 'hash', 'hash_summ', 'start', 'name', 'retail_rate', 'available', 'sold', 'stop_sell', 'price_external_id', 'rank'], 'required'],
-            [['id_external', 'available', 'sold', 'stop_sell', 'free_sell', 'any_time', 'price_external_id', 'rank'], 'integer'],
+            [['id_external', 'hash', 'hash_summ', 'start', 'name', 'retail_rate', 'available', 'sold', 'stop_sell', 'price_external_id', 'rank_level'], 'required'],
+            [['id_external', 'available', 'sold', 'stop_sell', 'free_sell', 'any_time', 'price_external_id', 'rank_level'], 'integer'],
             [['start', 'end'], 'safe'],
             [['retail_rate', 'special_rate', 'tripium_rate', 'price', 'alternative_rate'], 'number'],
             [['hash', 'hash_summ'], 'string', 'max' => 32],
@@ -80,7 +80,7 @@ class _source_TrAttractionsPrices extends \yii\db\ActiveRecord
             'price' => 'Price',
             'any_time' => 'Any Time',
             'price_external_id' => 'Price External ID',
-            'rank' => 'Rank',
+            'rank_level' => 'Rank',
             'alternative_rate' => 'Alternative Rate',
         ];
     }

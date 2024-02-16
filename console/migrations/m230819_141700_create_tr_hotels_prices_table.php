@@ -35,7 +35,7 @@ class m230819_141700_create_tr_hotels_prices_table extends Migration
             'any_time'          => $this->integer(1)->notNull()->defaultValue(0),
             'price'             => $this->decimal(8, 2)->notNull(),
             'price_external_id' => $this->integer()->notNull(),
-            'rank'              => $this->integer()->notNull()->defaultValue(999999),
+            'rank_level'        => $this->integer()->notNull()->defaultValue(999999),
             'alternative_rate'  => $this->decimal(8, 2)->null(),
             'capacity'          => $this->integer()->null(),
         ];

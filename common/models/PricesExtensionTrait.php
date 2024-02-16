@@ -26,9 +26,9 @@ trait PricesExtensionTrait
     public $errors_add = [];
 	public $errors_update = [];
 	public $errors_absent_parent_row = [];
-	
+
 	public $statusCodeTripium;
-	
+
 	public $updateOnlyIdExternal;
 	public $periodUpdate = 180;
 
@@ -73,7 +73,7 @@ trait PricesExtensionTrait
             self::deleteAll("end < '" . date("Y-m-d H:i:s") . "'");
         }
         self::deleteAll("start < '" . date("Y-m-d") . "'");
-		
+
 		$start = !empty($params['start']) ? new DateTime($params['start']) : new DateTime();
 		$end = !empty($params['end']) ? new DateTime($params['end']) : new DateTime();
 		if ($this->getUpdateStart() !== null) {
@@ -86,7 +86,7 @@ trait PricesExtensionTrait
 		    $end = new DateTime($end->format('Y-m-d H:i:s'));
 		    $end->add(new DateInterval('P1D'));
 		}
-		
+
 		$range = new DatePeriod($start, new DateInterval('P'.$this->periodUpdate.'D'), $end);
 
 		$tableName = call_user_func(array(constant(get_class($this).'::MAIN_CLASS'),'tableName'));
@@ -117,7 +117,7 @@ trait PricesExtensionTrait
 		    unset($data);
 		    unset($tripiumData);
 		}
-		
+
 		self::removeDuplicates();
     }
 
@@ -127,7 +127,7 @@ trait PricesExtensionTrait
 	    	->groupby(["hash"])
 	    	->having("count(*) > 1")
 	    	->asArray()->column();
-    	
+
     	if ($hash) {
     	    self::deleteAll(["hash"=>$hash]);
     	}
@@ -202,7 +202,7 @@ trait PricesExtensionTrait
                         "free_sell" => $p["freeSell"] ? 1 : 0,
                         "any_time" => $d["time"] == self::ANY_TIME ? 1 : 0,
                         "price_external_id" => $p["id"] ? $p["id"] : -1,
-                        "rank" => !empty($p["rank"]) ? $p["rank"] : 999999,
+                        "rank_level" => !empty($p["rank"]) ? $p["rank"] : 999999,
                     ];
 
                     if (in_array(self::TYPE, [TrPosHotelsPriceRoom::TYPE, TrPosHotelsPriceExtra::TYPE])) {

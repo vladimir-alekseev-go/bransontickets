@@ -25,7 +25,7 @@ use Yii;
  * @property int $any_time
  * @property float $price
  * @property int $price_external_id
- * @property int $rank
+ * @property int $rank_level
  * @property float|null $alternative_rate
  * @property int|null $capacity
  *
@@ -47,7 +47,7 @@ class _source_TrPosHotelsPriceRoom extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id_external', 'available', 'sold', 'stop_sell', 'free_sell', 'any_time', 'price_external_id', 'rank', 'capacity'], 'integer'],
+            [['id_external', 'available', 'sold', 'stop_sell', 'free_sell', 'any_time', 'price_external_id', 'rank_level', 'capacity'], 'integer'],
             [['name', 'hash', 'hash_summ', 'start', 'retail_rate', 'price', 'price_external_id'], 'required'],
             [['start', 'end'], 'safe'],
             [['retail_rate', 'special_rate', 'tripium_rate', 'price', 'alternative_rate'], 'number'],
@@ -82,7 +82,7 @@ class _source_TrPosHotelsPriceRoom extends \yii\db\ActiveRecord
             'any_time' => 'Any Time',
             'price' => 'Price',
             'price_external_id' => 'Price External ID',
-            'rank' => 'Rank',
+            'rank_level' => 'Rank',
             'alternative_rate' => 'Alternative Rate',
             'capacity' => 'Capacity',
         ];

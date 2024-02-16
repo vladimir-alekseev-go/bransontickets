@@ -48,7 +48,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'value' => $model->show_in_footer ? 'Yes' : 'No',
                         ],
                         'location_external_id',
-                        'rank',
+                        'rank_level',
                         'marketing_level',
                         'voucher_procedure',
                         'weekly_schedule',

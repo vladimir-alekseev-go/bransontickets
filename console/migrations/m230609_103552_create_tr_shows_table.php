@@ -35,7 +35,7 @@ class m230609_103552_create_tr_shows_table extends Migration
                 'status'               => $this->integer(1)->notNull()->defaultValue(0),
                 'show_in_footer'       => $this->tinyInteger(4)->notNull()->defaultValue(0),
                 'location_external_id' => $this->integer(11)->null(),
-                'rank'                 => $this->integer(11)->null(),
+                'rank_level'           => $this->integer(11)->null(),
                 'marketing_level'      => $this->integer(2)->null(),
                 'voucher_procedure'    => $this->string(1024)->null(),
                 'weekly_schedule'      => $this->integer(1)->null(),
