@@ -15,11 +15,14 @@ use yii\helpers\Url;
         <li><a href="<?= Url::to(['packages/index']) ?>">Vacation Packages <div class="line"></div></a></li>
         <li><a href="<?= Url::to(['site/signup']) ?>">Sign up <div class="line"></div></a></li>
         <li><a href="<?= Url::to(['site/login']) ?>">Sign in <div class="line"></div></a></li>
+        <li class="d-inline-block d-lg-none"><a href="<?= Url::to(['site/about']) ?>">About Us</a></li>
+        <li class="d-inline-block d-lg-none"><a href="<?= Url::to(['site/search']) ?>">Search</a></li>
+        <li class="d-inline-block d-lg-none">
+            <a href="tel:417-337-8455">
+                <img src="/img/phone.svg" alt="phone icon"> 417-337-8455
+            </a>
+        </li>
     </ul>
-    <div class="menu-phone">
-        <img src="/img/phone.svg" alt="phone icon">
-        <a href="tel:417-337-8455" class="phone">417-337-8455</a>
-    </div>
     <div class="menu-footer">
         <div class="item">
             <a href="https://bransonrestaurants.com/" target="_blank"><img src="/img/branson-restaurants-logo.png" alt="branson restaurants logo"></a>
