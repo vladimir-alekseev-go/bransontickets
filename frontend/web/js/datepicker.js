@@ -27,3 +27,5 @@ $('.input-daterange').datepicker({startDate: '+0d', orientation: 'bottom'}).on("
 });
 
 $('.input-group.date').datepicker({startDate: '+0d', orientation: 'bottom', todayHighlight: true, autoclose: true});
+
+$('.js-search-on-main .datepicker').datepicker();

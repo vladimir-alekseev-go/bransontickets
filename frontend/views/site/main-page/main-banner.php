@@ -8,11 +8,11 @@ use yii\web\JqueryAsset;
 <div class="main-banner mb-5">
     <div class="bg">
         <div class="fixed">
-            <div class="title">
+            <div class="title mb-3 mb-lg-5">
                 Choose an event and make your weekend bright and exciting
             </div>
             <div class="search">
-                <?= SearchWidget::widget() ?>
+                <?= $this->render('search-on-main') ?>
             </div>
         </div>
     </div>
@@ -21,17 +21,17 @@ use yii\web\JqueryAsset;
     <div class="row pros">
         <div class="col-md-4 col-12 mb-3">
             <div class="pros-item p-md-4 p-3">
-                <img src="img/check-circle-2.svg" alt="check icon">Satisfaction guaranteed
+                <span class="icon br-t-check-circle"></span> Satisfaction guaranteed
             </div>
         </div>
         <div class="col-md-4 col-12 mb-3">
             <div class="pros-item p-md-4 p-3">
-                <img src="img/circle-slash.svg" alt="check icon">No additional requirements
+                <span class="icon br-t-slash-circle"></span> No additional requirements
             </div>
         </div>
         <div class="col-md-4 col-12 mb-3">
             <div class="pros-item p-md-4 p-3">
-                <img src="img/star.svg" alt="check icon">Best seat available
+                <span class="icon br-t-star"></span> Best seat available
             </div>
         </div>
     </div>

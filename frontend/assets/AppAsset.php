@@ -17,7 +17,8 @@ class AppAsset extends AssetBundle
     public $baseUrl = '@web';
     public $css = [
         'https://fonts.googleapis.com/css?family=Poppins:400,500,600',
-        '/css/font-circe/circe.css',
+//        '/css/font-circe/circe.css',
+        '/fonts/branson-tickets/styles.css',
         '/css/bootstrap-datepicker.min.css',
         '/css/jquery-ui.min.css',
         '/css/jquery-ui.structure.min.css',
