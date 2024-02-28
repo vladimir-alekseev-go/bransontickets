@@ -14,9 +14,9 @@ use yii\web\JqueryAsset;
 ?>
 
 <?php if ($showsRecommended) { ?>
-    <div class="fixed">
-        <?php if (isset($recommended)) { ?>
-            <div class="recommended">Recommended</div>
+    <div class="fixed mb-5">
+        <?php if (isset($recommended)) { ?>`
+            <div class="slider-name mb-3">Recommended</div>
         <?php } ?>
         <div class="recommended-items" id="recommended-items">
             <div class="week-wrap">
@@ -24,33 +24,32 @@ use yii\web\JqueryAsset;
                     <ul class="clearfix">
                         <?php foreach ($showsRecommended as $show) { ?>
                             <li class="it">
-                                <?php
-                                    /**
-                                     * @var ShowsPhotoJoin|AttractionsPhotoJoin $photo
-                                     */
-                                    $photo = $show->getRelatedPhotos()->orderBy('rand()')->one();
-                                ?>
-                                <?php if (!empty($photo->preview)) { ?>
-                                    <div class="img-crop" style="background-image:url(<?= $photo->preview->url ?>)">
-                                        <?= Html::img($photo->preview->url, ['alt' => $show->name]) ?>
-                                    </div>
-                                <?php } else { ?>
-                                    <div class="img-crop img-crop-no-image"></div>
-                                <?php } ?>
+                                <div class="image">
+                                    <?php if (!empty($show->preview)) { ?>
+                                        <div class="img-crop" style="background-image:url(<?= $show->preview->url ?>)">
+                                            <?= Html::img($show->preview->url, ['alt' => $show->name]) ?>
+                                        </div>
+                                    <?php } else { ?>
+                                        <div class="img-crop img-crop-no-image"></div>
+                                    <?php } ?>
+                                </div>
                                 <div class="about">
                                     <div class="title"><?= $show->name ?></div>
                                     <div class="location">
-                                        <img src="/img/location.svg" alt="location icon">
+                                        <span class="icon br-t-location"></span>
                                         <span><?= $show->theatre->name ?? '' ?></span>
                                     </div>
-                                    <div class="recommended-line"></div>
+                                    <div class="featured-line"></div>
+                                    <div class="description"><?= $show->getDescriptionShort(120) ?></div>
                                 </div>
                                 <div class="more">
                                     <div class="category">
-                                        <img src="/img/category.svg" alt="category icon">
-                                        <span><?= implode(', ', array_slice(array_column($show->getCategories()->orderBy('rand()')->all(), 'name'), 0, 4)) ?? '' ?></span>
+                                        <?php foreach (array_slice(array_column($show->categories, 'name'), 0, 4) as $name)
+                                        { ?>
+                                            <span class="btn btn-third cursor-default text-nowrap"><?= $name ?></span>
+                                        <?php } ?>
                                     </div>
-                                    <a href="<?= $show->getUrl() ?>" class="item-btn">See details</a>
+                                    <a href="<?= $show->getUrl() ?>" class="btn btn-primary w-100">Book now</a>
                                 </div>
                             </li>
                         <?php } ?>
@@ -59,7 +58,7 @@ use yii\web\JqueryAsset;
             </div>
         </div>
     </div>
-    <div class="recommended-items-nav">
+    <div class="featured-items-nav">
         <div class="fixed-nav">
             <a href="#" class="recommended-left"><i class="fa fa-angle-left"></i></a>
             <a href="#" class="recommended-right"><i class="fa fa-angle-right"></i></a>

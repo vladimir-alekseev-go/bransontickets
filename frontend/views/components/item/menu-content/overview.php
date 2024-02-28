@@ -104,7 +104,9 @@ $this->registerJs('order.init()');
         <div class="fixed">
             <div class="may-also-like-title">You may also like</div>
         </div>
-        <div class="line"></div>
-        <?= $this->render('@app/views/components/recommended', compact('showsRecommended')) ?>
+        <div class="line mb-4"></div>
+        <div class="recommended">
+            <?= $this->render('@app/views/site/main-page/featured', ['showsFeatured' => $showsRecommended, 'id' => 'recommend-id']) ?>
+        </div>
     </div>
 </div>

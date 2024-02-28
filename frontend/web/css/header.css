@@ -41,9 +41,6 @@
 .menu-main li a:hover {color:var(--c-white);}
 .menu-main li a:hover .line {opacity:1;}
 
-.menu-general .menu-footer {display:flex;align-items:center;gap:40px;flex-wrap:wrap;position:absolute;bottom:0;left:0;right:0;padding:40px 0 40px 60px;background:var(--c-light-violet);}
-.menu-general .menu-footer .item img {width:160px;}
-
 @media (max-width:991px) {
     .header {height:80px;}
     .header .bransontickets-logo {width:130px;}
@@ -64,20 +61,12 @@
     .menu-general {width:100vw;right:-100vw;}
 
     .menu-main li, .menu-main li a {font-size:25px;}
-
-    .menu-general .menu-footer {display:block;padding:20px 0 20px 60px;}
-    .menu-general .menu-footer .item {padding:20px 0;}
 }
 
 @media (max-width:576px) {
     .menu-up li {padding:0 10px 0 0;}
-
-    .menu-general .menu-footer {display:block;padding:10px 0 10px 60px;}
-    .menu-general .menu-footer .item {padding:10px 0;}
-    .menu-general .menu-footer .item img {width:80px;}
 }
 
 @media (max-height:650px) {
     .menu-general {overflow-y:scroll;padding:0;}
-    .menu-general .menu-footer {position:relative;}
 }

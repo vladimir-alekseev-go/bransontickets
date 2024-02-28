@@ -73,11 +73,13 @@ class SiteController extends Controller
     {
         $showsAllF = TrShows::getActive()
             ->orderBy(new Expression('rand()'))
+            ->andWhere("TRIM(photos) <> ''")
             ->limit(3)
             ->all();
 
         $attractionsAllF = TrAttractions::getActive()
             ->orderBy(new Expression('rand()'))
+            ->andWhere("TRIM(photos) <> ''")
             ->limit(3)
             ->all();
 

@@ -23,12 +23,4 @@ use yii\helpers\Url;
             </a>
         </li>
     </ul>
-    <div class="menu-footer">
-        <div class="item">
-            <a href="https://bransonrestaurants.com/" target="_blank"><img src="/img/branson-restaurants-logo.png" alt="branson restaurants logo"></a>
-        </div>
-        <div class="item">
-            <a href="https://ibranson.com/" target="_blank"><img src="/img/ibranson-logo.png" alt="ibranson logo"></a>
-        </div>
-    </div>
 </div>
