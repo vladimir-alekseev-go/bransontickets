@@ -5,7 +5,7 @@
                 <div class="main-info-call-title">Have questions?</div>
                 <div class="main-info-call-text">Call us, we have your answers!</div>
                 <a href="tel:417-337-8455" class="main-info-call-phone w-100">
-                    <span class="phone-icon"></span> 417-337-8455
+                    <span class="icon br-t-smartphone"></span> 417-337-8455
                 </a>
             </div>
         </div>

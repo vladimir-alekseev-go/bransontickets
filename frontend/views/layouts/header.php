@@ -23,7 +23,7 @@ $basket = TrBasket::build();
                         Your #1 source for tickets in Branson, Missouri
                     </span>
                     <span class="phone">
-                        <img src="/img/smartphone.svg" alt="phone icon">
+                        <span class="icon br-t-smartphone"></span>
                         <a href="tel:417-337-8455">417-337-8455</a>
                     </span>
                 </span>

@@ -65,3 +65,6 @@
 .br-t-location:before {
   content: "\69";
 }
+.br-t-x:before {
+  content: "\6a";
+}

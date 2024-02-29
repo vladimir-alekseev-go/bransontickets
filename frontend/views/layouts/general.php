@@ -28,7 +28,7 @@ $this->beginPage() ?><!DOCTYPE html>
 <body>
 <?php $this->beginBody() ?>
 <?= $this->render('menu-general') ?>
-<div class="wrapper-main">
+<div class="wrapper-main js-wrapper-main">
     <?= $this->render('header') ?>
     <main>
         <div class="header-height-fixed-block"></div>
