@@ -33,7 +33,7 @@ if (!empty($theatreAddress)) {
 
 <div class="show-detail">
     <div class="fixed">
-        <div class="main-info">
+        <div class="main-info mb-5">
             <div class="image-detail">
                 <?php if ($model->preview_id) { ?>
                     <img class="preview" src="<?= $model->preview->url ?>" alt="<?= $model->name ?>" itemprop="image"/>
@@ -42,21 +42,22 @@ if (!empty($theatreAddress)) {
                 <?php } ?>
             </div>
             <div class="info">
-                <h1 itemprop="name"><?= $model->name ?></h1>
-                <div class="theatre-info">
+                <h1 class="mb-3 mb-md-4"><?= $model->name ?></h1>
+                <div class="theatre-info mb-3 mb-md-4">
                     <div class="item">
-                        <img src="/img/map-marker.svg" alt="map marker icon">
+                        <span class="icon br-t-location fs-4"></span>
                         <span class="theatre">
                             <?= implode(', ', $theatreArrayLine) ?>
                         </span>
                     </div>
                     <div class="item">
-                        <img src="/img/phone.svg" class="phone-img" alt="phone icon"><span class="phone"><?= $model->phone ?></span>
+                        <span class="icon br-t-phone fs-4"></span>
+                        <span class="phone"><?= $model->phone ?></span>
                     </div>
                     <?php if (isset($model->show_length) || (isset($model->intermissions) && $model->intermissions !==
                         'null')) { ?>
                         <div class="item">
-                            <img src="/img/time.svg" alt="time icon">
+                            <span class="icon br-t-time fs-4"></span>
                                 <span class="time">
                                     <?php if ($model->show_length) { ?>
                                         <?= $model->show_length ?> min.
@@ -71,27 +72,29 @@ if (!empty($theatreAddress)) {
                 </div>
                 <?php if ($model instanceof TrPosHotels || $model instanceof TrPosPlHotels) { ?>
                     <?php if (!empty($model->check_in) || !empty($model->check_out)) { ?>
-                        <div class="check-time">
+                        <div class="check-time mb-3 mb-md-4">
                             <?php if (!empty($model->check_in)) { ?>
                                 <div class="item">
-                                    <img src="/img/time.svg" alt="time icon"> Check In: <?= $model->getCheckIn() ?>
+                                    <span class="icon br-t-time fs-4"></span> Check In: <?= $model->getCheckIn() ?>
                                 </div>
-                            <?php } ?> 
+                            <?php } ?>
                             <span> - </span>
                             <?php if (!empty($model->check_out)) { ?>
                                 <div class="item">
-                                    <img src="/img/time.svg" alt="time icon"> Check Out: <?= $model->getCheckOut() ?>
+                                    <span class="icon br-t-time fs-4"></span> Check Out: <?= $model->getCheckOut() ?>
                                 </div>
                             <?php } ?>
                         </div>
                     <?php } ?>
-                <?php } elseif (!empty($model->categories)) { ?>
+                <?php } ?>
+
+                <?php if (!empty($model->categories)) { ?>
                     <div class="categories">
                         <?php foreach ($model->categories as $category) {
                             echo Html::a(
                                 $category->name,
                                 [$this->context->id . '/index', 's[c]' => [$category->id_external]],
-                                ['class' => 'tag text-uppercase']
+                                ['class' => 'btn btn-third text-nowrap text-uppercase btn-sm me-1']
                             );
                         } ?>
                     </div>

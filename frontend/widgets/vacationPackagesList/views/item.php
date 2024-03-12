@@ -26,7 +26,7 @@ $items = $item->getItems();
                 <div class="info-item">
                 <div class="info-title">Available Dates:</div>
                     <span>
-                        <?= (new DateTime($item['valid_start']))->format('M d, Y') ?> - 
+                        <?= (new DateTime($item['valid_start']))->format('M d, Y') ?> -
                         <?= (new DateTime($item['valid_end']))->format('M d, Y') ?>
                     </span>
                 </div>
@@ -46,7 +46,7 @@ $items = $item->getItems();
                     <span>$ <?= number_format($min, 2, '.', '') ?></span>
                 </div>
                 <div class="price-item">
-                    <div class="price-title">Pick 
+                    <div class="price-title">Pick
                         <?php foreach (ArrayHelper::getColumn($item->vacationPackagePrices, 'count') as $k => $c) {?>
                             <?php if ($k === count($item->vacationPackagePrices)-1 && count($item->vacationPackagePrices) !== 1) {
                                 echo ' or ';}?>
@@ -79,7 +79,11 @@ $items = $item->getItems();
             </div>
         </div>
         <div class="col-md-4 order-5 order-md-4">
-            <a href="<?= Url::to(['packages/detail', 'code' => $item->code])?>" class="btn buy-package">Buy Package</a>
+            <div class="description">
+            <a href="<?= Url::to(['packages/detail', 'code' => $item->code])?>" class="btn btn-primary w-100">
+                Buy Package
+            </a>
+            </div>
         </div>
         <div class="col-12 order-4 order-md-5 js-package">
             <div class="items-in row">

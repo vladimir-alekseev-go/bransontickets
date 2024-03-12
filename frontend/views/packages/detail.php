@@ -152,7 +152,7 @@ $DateValidStart = $VacationPackage->getValidStart() > new DateTime ? $VacationPa
                                         </div>
                                     </div>
                                     <div class="col-7">
-                                        <button class="btn buy-btn w-100 ps-0 pe-0" id="btn-buy-package">
+                                        <button class="btn btn-primary w-100 ps-0 pe-0" id="btn-buy-package">
                                             Add to cart
                                         </button>
                                     </div>

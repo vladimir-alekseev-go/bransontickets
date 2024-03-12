@@ -14,14 +14,14 @@ let scheduleSlider = {
 
         _self.initSly();
 
-        _self.frame.find('a.tag').click(function () {
+        _self.frame.find('a.js-tag').click(function () {
             _self.loadPage($(this).data('href'), $(this));
             return false;
         });
 
         $(document).on('click', '.js-allotment', function(){
-            _self.frame.find("a.tag[data-allotment-id='" + $(this).data('allotmentId') + "']").eq(0).trigger('click');
-            let index = $(".calendar-slider .frame li").index($(".calendar-slider .frame li .tag.active").closest('li'));
+            _self.frame.find("a.js-tag[data-allotment-id='" + $(this).data('allotmentId') + "']").eq(0).trigger('click');
+            let index = $(".calendar-slider .frame li").index($(".calendar-slider .frame li .js-tag.active").closest('li'));
             _self.toCenter(index, true);
             $('.js-allotment').removeClass('active');
             $(this).addClass('active');
@@ -29,22 +29,22 @@ let scheduleSlider = {
         });
         let urlParams = new URLSearchParams(window.location.search);
         if (urlParams.get('tickets-on-date') !== null && urlParams.get('allotmentId') !== null) {
-            _self.frame.find("a.tag[data-date='" + urlParams.get('tickets-on-date') + "'][data-allotment-id='" + urlParams.get('allotmentId') + "']").trigger('click');
-            let index = $(".calendar-slider .frame li").index($(".calendar-slider .frame li .tag.active").closest('li'));
+            _self.frame.find("a.js-tag[data-date='" + urlParams.get('tickets-on-date') + "'][data-allotment-id='" + urlParams.get('allotmentId') + "']").trigger('click');
+            let index = $(".calendar-slider .frame li").index($(".calendar-slider .frame li .js-tag.active").closest('li'));
             _self.toCenter(index, true);
         } else if (urlParams.get('tickets-on-date') !== null) {
-            _self.frame.find("a.tag[data-date='" + urlParams.get('tickets-on-date') + "']").trigger('click');
-            let index = $(".calendar-slider .frame li").index($(".calendar-slider .frame li .tag.active").closest('li'));
+            _self.frame.find("a.js-tag[data-date='" + urlParams.get('tickets-on-date') + "']").trigger('click');
+            let index = $(".calendar-slider .frame li").index($(".calendar-slider .frame li .js-tag.active").closest('li'));
             _self.toCenter(index, true);
         } else if (urlParams.get('allotmentId') !== null) {
-            _self.frame.find("a.tag[data-allotment-id='" + urlParams.get('allotmentId') + "']").eq(0).trigger('click');
-            let index = $(".calendar-slider .frame li").index($(".calendar-slider .frame li .tag.active").closest('li'));
+            _self.frame.find("a.js-tag[data-allotment-id='" + urlParams.get('allotmentId') + "']").eq(0).trigger('click');
+            let index = $(".calendar-slider .frame li").index($(".calendar-slider .frame li .js-tag.active").closest('li'));
             _self.toCenter(index, true);
         } else if (urlParams.get('on-date') !== null) {
             let index = $("li[data-date='" + urlParams.get('on-date') + "']");
             _self.toCenter(index, true);
         } else if (_self.calendarSlider.hasClass('d-none')) {
-            _self.calendarSlider.find('a.tag').eq(0).trigger('click');
+            _self.calendarSlider.find('a.js-tag').eq(0).trigger('click');
         }
     },
     loadPage: function (url, ob) {
@@ -56,7 +56,7 @@ let scheduleSlider = {
         window.location.hash = 'availability';
         let _self = this;
         _self.orderFormContainer.addClass('load-progress');
-        _self.frame.find('.tag').removeClass('active');
+        _self.frame.find('.js-tag').removeClass('active');
         ob.addClass('active');
         $.get(url, function (result) {
             $('#order-form-container').html(result);
@@ -98,7 +98,7 @@ let scheduleSlider = {
         });
         _self.sly.one('load', function (eventName) {
             $(".calendar-slider-block").css('height', 'auto');
-            let index = $(".calendar-slider .frame li").index($(".calendar-slider .frame li .tag.active").closest('li'));
+            let index = $(".calendar-slider .frame li").index($(".calendar-slider .frame li .js-tag.active").closest('li'));
             _self.toCenter(index, true);
         });
         _self.sly.init();

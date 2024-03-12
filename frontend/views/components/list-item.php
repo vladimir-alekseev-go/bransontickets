@@ -136,11 +136,11 @@ use yii\helpers\Html;
                 </div>
                 <div class="col-5 col-md-12">
                     <?php if (!empty($model->getBuyNowUrl())) { ?>
-                        <a href="<?= $model->getBuyNowUrl() ?>" class="btn buy-btn w-100">Buy now</a>
+                        <a href="<?= $model->getBuyNowUrl() ?>" class="btn btn-primary w-100">Buy now</a>
                     <?php } elseif ($model instanceof TrPosHotels || $model instanceof TrPosPlHotels) { ?>
-                        <a href="<?= $model->getUrl() ?>" class="btn buy-btn w-100">Book now</a>
+                        <a href="<?= $model->getUrl() ?>" class="btn btn-primary w-100">Book now</a>
                     <?php } else { ?>
-                        <a href="<?= $model->getUrl() ?>" class="btn buy-btn w-100">More</a>
+                        <a href="<?= $model->getUrl() ?>" class="btn btn-primary w-100">More</a>
                     <?php } ?>
                 </div>
             </div>

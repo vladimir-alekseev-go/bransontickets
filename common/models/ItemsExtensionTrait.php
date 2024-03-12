@@ -10,6 +10,7 @@ use common\models\upload\UploadItemsPreview;
 use common\tripium\Tripium;
 use DateTime;
 use Exception;
+use JetBrains\PhpStorm\Pure;
 use RuntimeException;
 use Yii;
 use yii\base\InvalidConfigException;
@@ -908,11 +909,20 @@ trait ItemsExtensionTrait
         return $this->theatre->location_lng ?? $this->location_lng;
     }
 
-    public function getDescriptionShort($len = 170)
+    /**
+     * @param int  $len
+     * @param array|string $allowedTags
+     *
+     * @return string
+     */
+    public function getDescriptionShort($len = 170, $allowedTags = null): string
     {
         $description = $this->description;
 
-        $ar = explode(' ', strip_tags(htmlspecialchars_decode($this->description)));
+        $ar = strip_tags(htmlspecialchars_decode($this->description), $allowedTags);
+        $ar = str_replace('<br><br>', '<br>', $ar);
+        $ar = str_replace('<br><br>', '<br>', $ar);
+        $ar = explode(' ', $ar);
         if ($ar) {
             $description = '';
             foreach ($ar as $k => $v) {

@@ -48,7 +48,7 @@ $model = $ReservationForm->model;
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-6">
-                                    <a href="#" class="btn buy-btn w-100 js-reservation-url reservation-url <?=
+                                    <a href="#" class="btn btn-primary w-100 js-reservation-url reservation-url <?=
                                     $ReservationForm->basket->hasHotel() && $ReservationForm->inBasket($roomType)
                                         ? 'reservation-in-basket' : ''?>"
                                        data-url="<?= Url::to(

@@ -26,7 +26,7 @@ use yii\bootstrap\ActiveForm;
     </div>
     <div class="col-sm-3 col-lg-2 text-end">
         <div class="text-right" itemprop="potentialAction" itemscope itemtype="https://schema.org/BuyAction">
-            <button class="btn buy-btn btn-loading-need w-100" itemprop="target" content="<?=
+            <button class="btn btn-primary btn-loading-need w-100" itemprop="target" content="<?=
             Yii::$app->request->url ?>">Add to cart
             </button>
         </div>

@@ -87,7 +87,7 @@ if (!empty($this->context->controller)) {
                         'Any Time',
                         $url,
                         [
-                            'class' => 'show-over-info tag' . ($special_rate ? ' tag-discount' : ''),
+                            'class' => 'js-tag btn btn-six w-100 mb-1 ' . ($special_rate ? ' tag-discount' : ''),
                             'data-href' => $url,
                             'data-date' => $dateTime->format('Y-m-d 00:00:00'),
                             'data-allotment-id' => $prices[$name]['allotmentId'] ?? null,
@@ -137,7 +137,7 @@ if (!empty($this->context->controller)) {
                             $time,
                             $url,
                             [
-                                'class' => 'show-over-info tag' . ($special_rate ? ' tag-discount' : ''),
+                                'class' => 'js-tag btn btn-six w-100 mb-1' . ($special_rate ? ' tag-discount' : ''),
                                 'data-href' => $url,
                                 'data-date' => $date->format('Y-m-d H:i:s'),
                                 'data-allotment-id' => $prices[$name]['allotmentId'] ?? null,
@@ -147,7 +147,10 @@ if (!empty($this->context->controller)) {
 		        <?php }?>
 		    <?php }?>
             <?php if ($cc < $data['max_offers_by_day']) { ?>
-                <?= str_repeat('<div class="tag">N/A</div>', $data['max_offers_by_day'] - $cc) ?>
+                <?= str_repeat(
+                    '<div class="text-center"><span class="btn mb-1 cursor-default">N/A</span></div>',
+                    $data['max_offers_by_day'] - $cc
+                ) ?>
             <?php }?>
 		<?php }?>
 	</li>

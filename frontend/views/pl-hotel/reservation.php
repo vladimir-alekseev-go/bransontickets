@@ -138,7 +138,7 @@ $warning = Yii::$app->session->getFlash('warning');
                     ) ?></span>
             </div>
             <div class="col-5 col-sm-3 col-lg-2">
-                <button class="btn buy-btn btn-loading-need w-100">Book Now</button>
+                <button class="btn btn-primary btn-loading-need w-100">Book Now</button>
             </div>
         </div>
     </div>

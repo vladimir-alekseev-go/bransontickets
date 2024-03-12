@@ -1,7 +1,5 @@
 <?php
 
-use common\models\AttractionsPhotoJoin;
-use common\models\ShowsPhotoJoin;
 use common\models\TrAttractions;
 use common\models\TrShows;
 use yii\helpers\Html;
@@ -9,7 +7,8 @@ use yii\web\JqueryAsset;
 
 /**
  * @var TrShows[]|TrAttractions[] $showsFeatured
- * @var string $id
+ * @var string                    $id
+ * @var bool                      $showDescription
  */
 ?>
 
@@ -36,14 +35,16 @@ use yii\web\JqueryAsset;
                                         <span class="icon br-t-location"></span>
                                         <span><?= $show->theatre->name ?? '' ?></span>
                                     </div>
-                                    <div class="featured-line"></div>
-                                    <div class="description"><?= $show->getDescriptionShort(120) ?></div>
+                                    <?php if ($showDescription) { ?>
+                                        <div class="description"><?= $show->getDescriptionShort(120) ?></div>
+                                    <?php } ?>
                                 </div>
                                 <div class="more">
                                     <div class="category">
                                         <?php foreach (array_slice(array_column($show->categories, 'name'), 0, 4) as $name)
                                         { ?>
-                                            <span class="btn btn-third cursor-default text-nowrap"><?= $name ?></span>
+                                            <span class="btn btn-third btn-sm cursor-default text-nowrap"><?= $name
+                                                ?></span>
                                         <?php } ?>
                                     </div>
                                     <a href="<?= $show->getUrl() ?>" class="btn btn-primary w-100">Book now</a>

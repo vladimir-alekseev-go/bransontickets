@@ -11,53 +11,54 @@ use yii\web\JqueryAsset;
  * @var TrShows|TrAttractions $model
  */
 
-$videos = !empty($model->videos) ? explode(";", $model->videos) : [];
-$videos = General::handleVideoLink($videos);
-$images = $model->relatedPhotos;
 ?>
-<div class="menu-content margin-block">
-    <div class="fixed">
+
+<div class="fixed">
+    <div class="menu-content margin-block white-block shadow-block">
         <ul class="nav nav-tabs" role="tablist">
             <li role="presentation">
-                <a href="#overview" id="overview-tab" data-bs-toggle="tab" data-bs-target="#overview" role="tab" aria-controls="overview" aria-selected="true" class="active">Overview</a>
-            </li>
-            <li role="presentation">
-                <a href="#description" id="description-tab" data-bs-toggle="tab" data-bs-target="#description" role="tab" aria-controls="description" aria-selected="false" class="">Description</a>
+                <a href="#overview" id="overview-tab" data-bs-toggle="tab" data-bs-target="#overview" role="tab"
+                   aria-controls="overview" aria-selected="true" class="active">Availability</a>
             </li>
             <?php if ($model instanceof TrShows || $model instanceof TrAttractions) { ?>
                 <li role="presentation">
-                    <a href="#schedule" id="schedule-tab" data-bs-toggle="tab" data-bs-target="#schedule" role="tab" aria-controls="schedule" aria-selected="false" class="">Schedule</a>
-                </li>
-            <?php } ?>
-            <?php if (count($images) + count($videos) > 1) { ?>
-                <li role="presentation">
-                    <a href="#gallery" id="gallery-tab" data-bs-toggle="tab" data-bs-target="#gallery" role="tab" aria-controls="gallery" aria-selected="false" class="">Gallery</a>
+                    <a href="#schedule" id="schedule-tab" data-bs-toggle="tab" data-bs-target="#schedule" role="tab"
+                       aria-controls="schedule" aria-selected="false" class="">Schedule</a>
                 </li>
             <?php } ?>
             <?php if (!empty($model->vacationPackages)) { ?>
                 <li role="presentation">
-                    <a href="#packages" id="packages-tab" data-bs-toggle="tab" data-bs-target="#packages" role="tab" aria-controls="packages" aria-selected="false" class="">Packages</a>
+                    <a href="#packages" id="packages-tab" data-bs-toggle="tab" data-bs-target="#packages" role="tab"
+                       aria-controls="packages" aria-selected="false" class="">Packages</a>
                 </li>
             <?php } ?>
         </ul>
-    </div>
-    <div class="tab-content">
-        <?php if ($model instanceof TrPosHotels || $model instanceof TrPosPlHotels) { ?>
-            <?= $this->render('@app/views/components/item/menu-content/overview', compact('model', 'HotelReservationForm', 'showsRecommended', 'videos', 'images')) ?>
-        <?php } else { ?>
-            <?= $this->render('@app/views/components/item/menu-content/overview', compact('model', 'showsRecommended', 'ScheduleSlider', 'videos', 'images')) ?>
-        <?php } ?>
-        <?= $this->render('@app/views/components/item/menu-content/description', compact('model')) ?>
-        <?php if ($model instanceof TrShows || $model instanceof TrAttractions) { ?>
-            <?= $this->render('@app/views/components/item/menu-content/schedule') ?>
-        <?php } ?>
-        <?php if (count($images) + count($videos) > 1) { ?>
-            <?= $this->render('@app/views/components/item/menu-content/gallery', compact('model', 'videos', 'images')) ?>
-        <?php } ?>
-        <?php if (!empty($model->vacationPackages)) { ?>
-            <?= $this->render('@app/views/components/item/menu-content/packages', compact('VPLWidget')) ?>
-        <?php } ?>
+        <div class="tab-content">
+            <?php if ($model instanceof TrPosHotels || $model instanceof TrPosPlHotels) { ?>
+                <div id="overview" role="tabpanel" aria-labelledby="overview-tab" class="tab-pane active">
+                    <?= $this->render(
+                        '@app/views/components/item/menu-content/overview',
+                        compact('model', 'HotelReservationForm')
+                    ) ?>
+                </div>
+            <?php } else { ?>
+                <div id="overview" role="tabpanel" aria-labelledby="overview-tab" class="tab-pane active">
+                    <?= $this->render(
+                        '@app/views/components/item/menu-content/overview',
+                        compact('model', 'ScheduleSlider')
+                    ) ?>
+                </div>
+            <?php } ?>
+            <?php if ($model instanceof TrShows || $model instanceof TrAttractions) { ?>
+                <div id="schedule" role="tabpanel" aria-labelledby="schedule-tab" class="tab-pane">
+                    <?= $this->render('@app/views/components/item/menu-content/schedule') ?>
+                </div>
+            <?php } ?>
+            <?php if (!empty($model->vacationPackages)) { ?>
+                <div id="packages" role="tabpanel" aria-labelledby="packages-tab" class="tab-pane">
+                    <?= $this->render('@app/views/components/item/menu-content/packages', compact('VPLWidget')) ?>
+                </div>
+            <?php } ?>
+        </div>
     </div>
 </div>
-
-<?php $this->registerJsFile('/js/nav-tabs-slide.js', ['depends' => [JqueryAsset::class]]); ?>

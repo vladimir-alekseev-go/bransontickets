@@ -1,4 +1,4 @@
-.header {border-radius:0 0 8px 8px;height:80px;position:fixed;width:100%;padding:10px 0;z-index:9990;background:var(--c-light-violet);box-shadow: 0 0 30px -10px #000;}
+.header {border-radius:0 0 8px 8px;height:80px;position:fixed;width:100%;padding:10px 0;z-index:990;background:var(--c-light-violet);box-shadow: 0 0 30px -10px #000;}
 .header .header-content {display:flex;}
 .header .menu-up-control {float:right;color:var(--c-new-blue);font-size:26px;cursor:pointer;padding:10px 0;}
 .header .auth-items {display:flex;align-items:center;justify-content:flex-start;padding:10px 0;gap:10px;}

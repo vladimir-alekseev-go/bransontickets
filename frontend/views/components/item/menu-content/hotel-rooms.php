@@ -58,7 +58,7 @@ $roomsCount = 0;
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-6">
-                                    <a href="#" class="btn buy-btn w-100 js-reservation-url reservation-url" data-url="<?=
+                                    <a href="#" class="btn btn-primary w-100 js-reservation-url reservation-url" data-url="<?=
                                     Url::to(
                                         [
                                             'hotel/reservation',

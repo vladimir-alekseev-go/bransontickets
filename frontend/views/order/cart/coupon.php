@@ -75,7 +75,7 @@ use yii\widgets\ActiveForm;
                     ->textInput()->label(false) ?>
             </div>
             <div class="col-5">
-                <button class="buy-btn w-100" type="submit">Apply!</button>
+                <button class="btn btn-primary w-100" type="submit">Apply!</button>
             </div>
         </div>
         <?= $form->errorSummary(

@@ -62,9 +62,18 @@
 .br-t-angle-down:before {
   content: "\68";
 }
+.br-t-x:before {
+  content: "\6a";
+}
+.br-t-phone:before {
+  content: "\6b";
+}
 .br-t-location:before {
   content: "\69";
 }
-.br-t-x:before {
-  content: "\6a";
+.br-t-time:before {
+  content: "\6c";
+}
+.br-t-arrow-middle-right:before {
+  content: "\6d";
 }

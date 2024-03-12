@@ -110,7 +110,7 @@ use yii\bootstrap\ActiveForm;
             ) ?>
         </small>
     </p>
-    <button class="btn buy-btn btn-loading-need w-100">Proceed to Checkout</button>
+    <button class="btn btn-primary btn-loading-need w-100">Proceed to Checkout</button>
 
     <?php ActiveForm::end(); ?>
 </div>
