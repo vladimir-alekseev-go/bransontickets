@@ -1,6 +1,9 @@
 <?php
 /** @var array $showsRecommended */
 /** @var array $showsFeatured */
+
+use yii\helpers\Url;
+
 ?>
 <?= $this->render('main-page/main-banner') ?>
 <?= $this->render('main-page/main-info-block') ?>
@@ -23,4 +26,7 @@
             'showDescription' => true,
         ]
     ) ?>
+</div>
+<div class="text-center mb-5">
+    <a class="btn btn-secondary" href="<?= Url::to(['site/search'])?>">Find more</a>
 </div>

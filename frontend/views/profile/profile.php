@@ -22,7 +22,7 @@ $this->title = trim($user->first_name . ' ' . $user->last_name);
                 <i class="fa fa-envelope"></i> <?= $user->email ?>
             </span>
             <span class="d-inline-block me-4">
-                <i class="fa fa-phone"></i> <?= General::formatPhoneNumber($user->phone) ?>
+                <i class="icon br-t-smartphone"></i> <?= General::formatPhoneNumber($user->phone) ?>
             </span>
             <span class="d-inline-block me-4">
                 <i class="fa fa-map-marker"></i> <?= $user->getAddress() ?>

@@ -38,20 +38,20 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.br-t-angle-down:before {
+  content: "\68";
+}
+.br-t-location:before {
+  content: "\69";
+}
 .br-t-check:before {
   content: "\61";
 }
-.br-t-star:before {
-  content: "\62";
+.br-t-menu:before {
+  content: "\6e";
 }
-.br-t-check-circle:before {
-  content: "\63";
-}
-.br-t-slash-circle:before {
-  content: "\64";
-}
-.br-t-smartphone:before {
-  content: "\65";
+.br-t-time:before {
+  content: "\6c";
 }
 .br-t-search:before {
   content: "\66";
@@ -59,21 +59,24 @@
 .br-t-calendar:before {
   content: "\67";
 }
-.br-t-angle-down:before {
-  content: "\68";
+.br-t-arrow-middle-right:before {
+  content: "\6d";
+}
+.br-t-smartphone:before {
+  content: "\65";
+}
+.br-t-star:before {
+  content: "\62";
 }
 .br-t-x:before {
   content: "\6a";
 }
-.br-t-phone:before {
-  content: "\6b";
+.br-t-slash-circle:before {
+  content: "\64";
 }
-.br-t-location:before {
-  content: "\69";
+.br-t-check-circle:before {
+  content: "\63";
 }
-.br-t-time:before {
-  content: "\6c";
-}
-.br-t-arrow-middle-right:before {
-  content: "\6d";
+.br-t-points:before {
+  content: "\6f";
 }

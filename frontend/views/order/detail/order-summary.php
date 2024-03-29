@@ -127,7 +127,7 @@ foreach ($order->getValidPackages() as $package) {
             <small>If you want to cancel or modify the order, please call</small>
         </div>
         <div class="phone fs-5">
-            <strong><span class="icon ib-phone fs-4"></span> <?= $phone ?></strong>
+            <strong><span class="icon br-t-smartphone fs-4"></span> <?= $phone ?></strong>
         </div>
     </div>
 </div>

@@ -51,7 +51,7 @@ if (!empty($theatreAddress)) {
                         </span>
                     </div>
                     <div class="item">
-                        <span class="icon br-t-phone fs-4"></span>
+                        <span class="icon br-t-smartphone fs-4"></span>
                         <span class="phone"><?= $model->phone ?></span>
                     </div>
                     <?php if (isset($model->show_length) || (isset($model->intermissions) && $model->intermissions !==

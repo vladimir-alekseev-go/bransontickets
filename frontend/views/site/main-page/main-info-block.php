@@ -10,11 +10,9 @@
             </div>
         </div>
         <div class="left-side">
-            <div class="main-info-description">At <strong>bransontickets.com</strong> you can streamline your vacation process and avoid the lines by getting your tickets ahead of time. We offer a <strong>HUGE</strong> variety of Branson's most beloved shows, attractions and great restaurant deals to choose from.</div>
-            <div class="main-info-line"></div>
-            <div class="guitar">
-                <img src="img/guitar.svg" alt="guitar">
-            </div>
+            <div class="main-info-description text-center text-lg-start">At <strong>bransontickets.com</strong> you can
+                streamline your
+                vacation process and avoid the lines by getting your tickets ahead of time. We offer a <strong>HUGE</strong> variety of Branson's most beloved shows, attractions and great restaurant deals to choose from.</div>
         </div>
     </div>
 </div>

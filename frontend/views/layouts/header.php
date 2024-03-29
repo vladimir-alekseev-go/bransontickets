@@ -50,7 +50,7 @@ $basket = TrBasket::build();
             </div>
             <div>
                 <a id="menu-up-control" class="menu-up-control">
-                    <i class="fa fa-bars"></i>
+                    <i class="icon br-t-menu"></i>
                 </a>
                 <?php if ($basket->getTotalCount()) {?>
                     <a href="<?= Url::to(['order/cart']) ?>" class="btn-basket">
