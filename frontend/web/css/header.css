@@ -24,6 +24,7 @@
 .menu-up a {color:var(--c-new-blue);font-size:20px;font-weight:900;text-decoration:none;display:inline-block;margin:0 15px 0 0;}
 
 .menu-general {position:fixed;width:400px;top:0;right:-400px;bottom:0;z-index:9999;padding:30px 40px;background-color:var(--c-blue-deep-dark);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);}
+.menu-general .phone {position:absolute;bottom:40px;left:40px;right:40px;}
 .menu-up-control-close {display:inline-block;cursor:pointer;border-radius:5px;width:40px;height:40px;line-height:40px;font-size:40px;color:var(--c-white);}
 .menu-up-control-close:hover {background:#fff;color:var(--c-new-blue);}
 .menu-up-control-close i {color:var(--c-light-violet);font-size:40px;left:12px;bottom:2px;position:relative;}
@@ -33,12 +34,12 @@ body.menu-up-is-open .menu-general-fon {content:"";display:block;position:fixed;
 body.menu-up-is-open .menu-general-fon-click {position:fixed;top:0;bottom:0;left:0;right:400px;z-index:9999;}
 
 .menu-main, .menu-main li {margin:0;padding:0;}
-.menu-main {padding:30px 0 10px;margin:0 0 10px;clear:both;overflow:hidden}
+.menu-main {padding:0 0 10px;margin:0 0 10px;clear:both;overflow:hidden}
 .menu-main li {margin:0 0 15px;padding:0;list-style:none;width:100%;text-align:left;border-bottom: 2px solid transparent}
 .menu-main li:before {display:none;}
-.menu-main li, .menu-main li a {font-size:36px;font-weight:700;}
+.menu-main li, .menu-main li a {font-size:32px;font-weight:600;}
 .menu-main li a {font-weight:bold;color:var(--c-light-violet);text-decoration:none;line-height:1.2;display:block;}
-.menu-main li a:after {content:"";display:block;opacity:0;margin:5px 0;height:2px;background:linear-gradient(90deg, var(--c-violet-gray) 0%, var(--c-violet) 100%);}
+.menu-main li a:after {content:"";display:block;opacity:0;margin:5px 0;height:1px;border-top:1px solid var(--c-white);}
 .menu-main li a:hover {color:var(--c-white);}
 .menu-main li a:hover:after {opacity:1;}
 
@@ -68,9 +69,11 @@ body.menu-up-is-open .menu-general-fon-click {position:fixed;top:0;bottom:0;left
 }
 
 @media (max-width:576px) {
+    .menu-general {padding:20px;}
     .menu-up li {padding:0 10px 0 0;}
 }
 
 @media (max-height:650px) {
-    .menu-general {overflow-y:scroll;padding:0;}
+    .menu-general {overflow-y:scroll;}
+    .menu-general .phone {position:static;}
 }

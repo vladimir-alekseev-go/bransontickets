@@ -17,16 +17,20 @@ use yii\helpers\Url;
         <li><a href="<?= Url::to(['packages/index']) ?>">Vacation Packages</a></li>
         <li class="d-inline-block d-lg-none"><a href="<?= Url::to(['site/about']) ?>">About Us</a></li>
         <li class="d-inline-block d-lg-none"><a href="<?= Url::to(['site/search']) ?>">Search</a></li>
-        <li class="d-inline-block d-lg-none">
-            <a href="tel:417-337-8455">
-                <span class="icon br-t-smartphone"></span> 417-337-8455
-            </a>
-        </li>
     </ul>
     <?php if (Yii::$app->user->isGuest) { ?>
-        <div class="text-center mb-3"><a href="<?= Url::to(['site/signup']) ?>" class="btn btn-fifth px-5">Sign up</a></div>
-        <div class="text-center"><a href="<?= Url::to(['site/login']) ?>" class="btn btn-fourth px-5">Sign in</a></div>
+        <div class="text-center mb-3">
+            <a href="<?= Url::to(['site/signup']) ?>" class="btn btn-primary px-5 w-100">Sign up</a>
+        </div>
+        <div class="text-center mb-3">
+            <a href="<?= Url::to(['site/login']) ?>" class="btn btn-secondary px-5 w-100">Sign in</a>
+        </div>
     <?php } ?>
+    <div class="phone">
+        <a href="tel:417-337-8455" class="text-center btn btn-secondary d-block">
+            <span class="icon br-t-smartphone"></span> 417-337-8455
+        </a>
+    </div>
 </div>
 <div class="menu-general-fon"></div>
 <div class="menu-general-fon-click js-menu-general-fon-click"></div>

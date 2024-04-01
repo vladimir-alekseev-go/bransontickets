@@ -14,7 +14,7 @@
     --c-gray-light: #d3d3d3;
     --c-blue-deep: #252161;
     --c-new-blue: #373281;
-    --c-blue-deep-dark: rgba(37, 33, 97, 0.7);
+        --c-blue-deep-dark: rgba(37, 33, 97, 0.7);
     --c-blue-deep-dark-2: rgba(37, 33, 97, 0.1);
     --c-blue-deep-dark-3: rgba(37, 33, 97, 0.6);
     --c-shadow-purple: rgba(16, 14, 37, 0.30);
@@ -166,7 +166,7 @@ input[type=checkbox]+label:before, input[type=radio]+label:before {
     .margin-block-small {margin:0 0 25px;}
 }
 
-.btn {border-radius:8px;box-shadow:none!important;font-size:20px;}
+.btn {border-radius:8px;box-shadow:none!important;font-size:20px;line-height:1;padding-top:9px;padding-bottom:9px;}
 .btn-primary {background: var(--c-primary);border:1px solid transparent;color:var(--c-white);}
 .btn-primary:hover {background:var(--c-primary-deep);border:1px solid transparent;color:var(--c-white);}
 .btn-primary:disabled {background:var(--c-primary-ligth);border:1px solid transparent;color:var(--c-primary-disabled);}
