@@ -29,7 +29,7 @@ let compare = {
             + '<span class="d-none d-sm-block"><i class="fa fa-rotate-left"></i> Clear Selection</span>'
             + '<span class="d-sm-none d-block"><i class="fa fa-rotate-left"></i> Clear</span>'
             + '</a>'
-            + '<a class="btn btn-compare" id="link-to-compare">Compare items</a>' +
+            + '<a class="btn btn-primary" id="link-to-compare">Compare items</a>' +
             '</div>' +
             '</div>');
 

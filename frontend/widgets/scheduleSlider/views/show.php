@@ -13,9 +13,4 @@ use yii\helpers\Url;
     <div class="week-wrap calendar-slider calendar-slider-in-order">
         <?= $this->render('frame', compact('model', 'prices', 'range')) ?>
     </div>
-    <div class="text-end">
-        <a href="#" id="more-available">
-            More Available Dates <span class="icon br-t-arrow-middle-right"></span>
-        </a>
-    </div>
 </div>

@@ -1,4 +1,4 @@
-.header {border-radius:0 0 8px 8px;height:80px;position:fixed;width:100%;padding:10px 0;z-index:990;background:var(--c-light-violet);box-shadow: 0 0 30px -10px #000;}
+.header {border-radius:0 0 8px 8px;height:80px;position:fixed;width:100%;padding:10px 0;z-index:990;background:var(--c-primary-ligth);box-shadow: 0 0 30px -10px #000;}
 .header .header-content {display:flex;}
 .header .menu-up-control {float:right;color:var(--c-new-blue);font-size:26px;cursor:pointer;padding:10px 0;}
 .header .auth-items {display:flex;align-items:center;justify-content:flex-start;padding:10px 0;gap:10px;}
@@ -27,7 +27,7 @@
 .menu-general .phone {position:absolute;bottom:40px;left:40px;right:40px;}
 .menu-up-control-close {display:inline-block;cursor:pointer;border-radius:5px;width:40px;height:40px;line-height:40px;font-size:40px;color:var(--c-white);}
 .menu-up-control-close:hover {background:#fff;color:var(--c-new-blue);}
-.menu-up-control-close i {color:var(--c-light-violet);font-size:40px;left:12px;bottom:2px;position:relative;}
+.menu-up-control-close i {color:var(--c-primary-ligth);font-size:40px;left:12px;bottom:2px;position:relative;}
 .menu-up-control-close:hover i {color:var(--c-new-blue);}
 body.menu-up-is-open {overflow: hidden;}
 body.menu-up-is-open .menu-general-fon {content:"";display:block;position:fixed;top:0;bottom:0;left:0;right:0;z-index:9998;backdrop-filter:blur(10px);}
@@ -38,7 +38,7 @@ body.menu-up-is-open .menu-general-fon-click {position:fixed;top:0;bottom:0;left
 .menu-main li {margin:0 0 15px;padding:0;list-style:none;width:100%;text-align:left;border-bottom: 2px solid transparent}
 .menu-main li:before {display:none;}
 .menu-main li, .menu-main li a {font-size:32px;font-weight:600;}
-.menu-main li a {font-weight:bold;color:var(--c-light-violet);text-decoration:none;line-height:1.2;display:block;}
+.menu-main li a {font-weight:bold;color:var(--c-primary-ligth);text-decoration:none;line-height:1.2;display:block;}
 .menu-main li a:after {content:"";display:block;opacity:0;margin:5px 0;height:1px;border-top:1px solid var(--c-white);}
 .menu-main li a:hover {color:var(--c-white);}
 .menu-main li a:hover:after {opacity:1;}

@@ -36,11 +36,11 @@ use yii\helpers\Url;
                         <?php } ?>
                         <a href="<?= $item->getUrl() ?>" class="title"><?= $package->name ?></a>
                         <div>
-                            <i class="fa fa-map-marker"></i>
+                            <i class="icon br-t-location"></i>
                             <small><?= $package->type_name ?></small>
                         </div>
                         <div>
-                            <i class="fa fa-calendar"></i>
+                            <i class="icon br-t-calendar"></i>
                             <small>
                                 <?php if ($item::TYPE === TrShows::TYPE) { ?>
                                     <?= $package->getStartDataTime()->format('m/d/Y h:i A') ?>

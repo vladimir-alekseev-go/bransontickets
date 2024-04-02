@@ -25,7 +25,7 @@ $this->title = trim($user->first_name . ' ' . $user->last_name);
                 <i class="icon br-t-smartphone"></i> <?= General::formatPhoneNumber($user->phone) ?>
             </span>
             <span class="d-inline-block me-4">
-                <i class="fa fa-map-marker"></i> <?= $user->getAddress() ?>
+                <i class="icon br-t-location"></i> <?= $user->getAddress() ?>
             </span>
         </div>
         <div class="col-lg-4 mb-3 text-lg-end">

@@ -22,7 +22,7 @@
                     <div class="place"><?= $item->theatre->getSearchAddress() ?></div>
                     <div class="description">
                         <?= $item->getDescriptionShort(320) ?> <a class="float-end more" href="<?= $item->getUrl() ?>" target="_blank">
-                            <strong>More Details <i class="fa fa-arrow-right"></i></span></strong>
+                            <strong>More Details <i class="icon br-t-points"></i></strong>
                         </a>
                     </div>
                 </div>

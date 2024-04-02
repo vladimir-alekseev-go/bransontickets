@@ -71,7 +71,7 @@ $DateValidStart = $VacationPackage->getValidStart() > new DateTime ? $VacationPa
                         <span class="cost fs-4">$ <?= $VacationPackage->getSaveUpTo() ?></span>
                     </div>
                     <div class="mb-3">
-                        <div><i class="fa fa-calendar"></i> <small>Available Dates:</small></div>
+                        <div><i class="icon br-t-calendar"></i> <small>Available Dates:</small></div>
                         <div>
                             <?= $DateValidStart->format('M d, Y') ?> - <?= $VacationPackage->getValidEnd()->format(
                                 'M d, Y'
@@ -82,7 +82,7 @@ $DateValidStart = $VacationPackage->getValidStart() > new DateTime ? $VacationPa
                         <div class="mb-3">
                             <div><i class="fa fa-list-alt"></i> <small>Category:</small></div>
                             <?php foreach ($VacationPackage->getTypes() as $type) { ?>
-                                <span class="tag">
+                                <span class="btn btn-secondary btn-sm mb-1 me-1">
                                     <?= Html::a($type, ['packages/index', 's[c][]' => $type]) ?>
                                 </span>
                             <?php } ?>

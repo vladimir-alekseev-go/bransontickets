@@ -21,10 +21,11 @@ use yii\helpers\Html;
                 <?= Html::a(
                     $time,
                     $model->getUrl(['tickets-on-date' => $t["start"], '#' => 'availability']),
-                    ['class' => 'tag' . ($t['special_rate'] ? ' tag-discount' : '')]
+                    ['class' => 'btn btn-third btn-sm w-100 mb-1 text-nowrap px-0' . ($t['special_rate'] ? ' tag-discount' : '')]
                 ) ?>
             <?php } ?>
-            <?php if (empty($times)) { ?><span class="tag tag-n-a">N/A</span><?php } ?>
+            <?php if (empty($times)) { ?><span class="btn btn-link btn-sm w-100 cursor-default mb-1">N/A</span><?php
+            } ?>
         </div>
     <?php } ?>
 </div>

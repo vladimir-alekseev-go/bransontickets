@@ -25,19 +25,19 @@ use common\models\TrShows;
 
 <?php if (in_array($item::TYPE, [TrPosHotels::TYPE, TrPosPlHotels::TYPE], true)) { ?>
     <div class="d-block d-lg-none ps-2 overflow-hidden">
-        <i class="fa fa-map-marker"></i> <small>Location</small>
+        <i class="icon br-t-location"></i> <small>Location 1</small>
         <div class="ms-3"><small><?= $item->theatre->getSearchAddress() ?></small></div>
     </div>
     <div class="clear-both d-block d-lg-none"></div>
     <div class="row mb-3">
         <div class="col-5 d-none d-lg-block">
-            <i class="fa fa-map-marker"></i> <small>Location</small>
+            <i class="icon br-t-location"></i> <small>Location 2</small>
             <div class="ms-3"><small><?= $item->theatre->getSearchAddress() ?></small></div>
         </div>
         <div class="col-12 col-lg-7">
             <div class="check-in-out">
                 <div class="float-start me-1">
-                    <i class="fa fa-calendar"></i>
+                    <i class="icon br-t-calendar"></i>
                 </div>
                 <div class="float-start">
                     <div><small>Check in</small></div>
@@ -64,19 +64,19 @@ use common\models\TrShows;
     <div class="row mb-3">
         <?php if (!empty($item->theatre)) { ?>
             <div class="col-5">
-                <i class="fa fa-map-marker"></i> <small>Location</small>
+                <i class="icon br-t-location"></i> <small>Location 3</small>
                 <div class="ms-3"><small><?= $item->theatre->name ?></small></div>
             </div>
         <?php } ?>
         <?php if ($item::TYPE === TrShows::TYPE) { ?>
             <div class="col-7">
-                <i class="fa fa-calendar"></i> <small>Date and Time</small>
+                <i class="icon br-t-calendar"></i> <small>Date and Time</small>
                 <div class="ms-3"><small><?= $package->getStartDataTime()->format('m/d/Y h:i A') ?></small>
                 </div>
             </div>
         <?php } elseif (in_array($item::TYPE, [TrAttractions::TYPE], true)) { ?>
             <div class="col-7">
-                <i class="fa fa-calendar"></i> <small>Avail dates</small>
+                <i class="icon br-t-calendar"></i> <small>Avail dates</small>
                 <div class="ms-3"><small>
                         <?php if ($package->isAnyTime) { ?>
                             <?= $package->getStartDataTime()->format(

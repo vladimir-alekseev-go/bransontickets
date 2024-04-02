@@ -71,13 +71,13 @@ use yii\helpers\Html;
                             </div>
                             <div class="col-12 col-sm-3 text-sm-end pt-3 more-detail">
                                 <a href="<?= $model->getUrl() ?>">
-                                    More Detail <i class="fa fa-arrow-right"></i>
+                                    More Detail <i class="icon br-t-points"></i>
                                 </a>
                             </div>
                         <?php } else { ?>
                             <div class="col-5 col-sm-7 text-end pt-3 more-detail">
                                 <a href="<?= $model->getUrl() ?>">
-                                    More Detail <i class="fa fa-arrow-right"></i>
+                                    More Detail <i class="icon br-t-points"></i>
                                 </a>
                             </div>
                         <?php } ?>
@@ -85,10 +85,10 @@ use yii\helpers\Html;
                 </div>
             <?php } else { ?>
                 <a href="<?= $model->getUrl() ?>" class="description-more">
-                    More Detail <i class="fa fa-arrow-right"></i>
+                    More Detail <i class="icon br-t-points"></i>
                 </a>
                 <a href="<?= $model->getUrl() ?>" class="me-3 d-md-inline d-none full-schedule">
-                <i class="fa fa-calendar"></i> Full Schedule
+                <i class="icon br-t-calendar"></i> Full Schedule
                 </a>
                 <span class="compare-add">
                     <input id="it-<?= $model->id_external ?>" type="checkbox" name="compare[]"

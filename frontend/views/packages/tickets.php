@@ -130,7 +130,7 @@ foreach ($VacationPackage->getData()['ticketTypes'] as $ticketType) {
         				<?php $_count = !empty($countTypesByDate[$dateTime->format('Y-m-d')][$dateTime->format('H:i:s')]) ? count($countTypesByDate[$dateTime->format('Y-m-d')][$dateTime->format('H:i:s')]) : 0;?>
         				<?php if ($_count === count($arTypes)) {?>
         				<?php $has = true;?>
-        				<a class="js-package-item-time tag"
+        				<a class="js-package-item-time btn btn-third btn-sm w-100 px-0"
                            href="<?= $item->getUrl($item->code, $dateTime->format('Y-m-d H:i:s'))?>"
                            data-item-type="<?= $item->type?>"
                            data-item-type-real="<?= $item->type?>" data-item-id="<?= $item->id_external?>"
@@ -139,10 +139,10 @@ foreach ($VacationPackage->getData()['ticketTypes'] as $ticketType) {
         				<?php }?>
                 	<?php }?>
                 	<?php if (!$has) {?>
-                        <div class="tag">N/A</div>
+                        <div class="btn btn-link btn-sm w-100 cursor-default mb-1">N/A</div>
     				<?php }?>
 				<?php } else {?>
-                    <div class="tag">N/A</div>
+                    <div class="btn btn-link btn-sm w-100 cursor-default mb-1">N/A</div>
 				<?php }?>
     		</li>
 		<?php }?>

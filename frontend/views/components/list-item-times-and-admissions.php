@@ -42,7 +42,7 @@ if (!empty($priceAll[$model->id_external])) {
                                         '#'               => 'availability'
                                     ]
                                 ),
-                                ['class' => 'tag' . ($hasSpecialPrice ? ' tag-discount' : '')]
+                                ['class' => 'btn btn-third btn-sm w-100 cursor-default mb-1' . ($hasSpecialPrice ? ' tag-discount' : '')]
                             );
                         }
                         if (!empty($data['list'][$date->format('Md')][0])) {
@@ -57,12 +57,12 @@ if (!empty($priceAll[$model->id_external])) {
                                             '#'               => 'availability',
                                         ]
                                     ),
-                                    ['class' => 'tag' . ($price['special_rate'] ? ' tag-discount' : '')]
+                                    ['class' => 'btn btn-third btn-sm w-100 cursor-default mb-1' . ($price['special_rate'] ? ' tag-discount' : '')]
                                 );
                             }
                         }
                     } else {
-                        ?><span class="tag tag-n-a">N/A</span>
+                        ?><span class="btn btn-link btn-sm w-100 cursor-default mb-1">N/A</span>
                     <?php } ?>
                 </div>
             <?php } ?>
@@ -71,7 +71,7 @@ if (!empty($priceAll[$model->id_external])) {
 <?php } else { ?>
     <div class="time d-flex flex-row justify-content-between">
         <?php for ($i = 0; $i < 7; $i++) { ?>
-            <div class="tag-block"><span class="tag tag-n-a">N/A</span></div>
+            <div class="tag-block"><span class="btn btn-link btn-sm w-100 cursor-default mb-1">N/A</span></div>
         <?php } ?>
     </div>
 <?php } ?>

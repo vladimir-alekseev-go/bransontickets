@@ -80,3 +80,21 @@
 .br-t-points:before {
   content: "\6f";
 }
+.br-t-guitar:before {
+  content: "\6b";
+}
+.br-t-clock:before {
+  content: "\6b";
+}
+.br-t-gem:before {
+  content: "\70";
+}
+.br-t-tag:before {
+  content: "\71";
+}
+.br-t-users:before {
+  content: "\72";
+}
+.br-t-usd:before {
+  content: "\73";
+}

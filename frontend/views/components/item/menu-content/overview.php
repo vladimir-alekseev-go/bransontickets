@@ -20,7 +20,7 @@ $this->registerJs('order.init()');
 
 <div class="overview-calendar-block">
     <div class="row">
-        <div class="col-sm-4 col-md-3 col-lg-2">
+        <div class="col-sm-4 col-md-3 col-lg-2 order-2">
             <div class="ticket text-center pt-3">
                 <div class="title">
                     <?php if ($model instanceof TrPosHotels || $model instanceof TrPosPlHotels) { ?>
@@ -39,7 +39,7 @@ $this->registerJs('order.init()');
                 </a>
             </div>
         </div>
-        <div class="col-sm-8 col-md-9 col-lg-10">
+        <div class="col-sm-8 col-md-9 col-lg-10 order-1">
             <?php if ($model instanceof TrPosHotels || $model instanceof TrPosPlHotels) { ?>
                 <?= $this->render(
                     '@app/views/components/item/menu-content/hotel-filter',
@@ -65,6 +65,11 @@ $this->registerJs('order.init()');
                 <?= $ScheduleSlider->run() ?>
             <?php } ?>
         </div>
+    </div>
+    <div class="text-center">
+        <a href="#schedule" id="more-available">
+            More Available Dates <span class="icon br-t-points"></span>
+        </a>
     </div>
 </div>
 <?php if ($model instanceof TrPosHotels || $model instanceof TrPosPlHotels) { ?>

@@ -1,5 +1,6 @@
 <?php
 
+use common\helpers\General;
 use common\models\TrAttractions;
 use common\models\TrShows;
 use common\models\TrPosHotels;
@@ -33,7 +34,8 @@ if (!empty($theatreAddress)) {
 
 <div class="show-detail">
     <div class="fixed">
-        <div class="main-info mb-5">
+        <div class="main-info shadow-block mb-5">
+            <div class="icon br-t-guitar"></div>
             <div class="image-detail">
                 <?php if ($model->preview_id) { ?>
                     <img class="preview" src="<?= $model->preview->url ?>" alt="<?= $model->name ?>" itemprop="image"/>
@@ -50,10 +52,6 @@ if (!empty($theatreAddress)) {
                             <?= implode(', ', $theatreArrayLine) ?>
                         </span>
                     </div>
-                    <div class="item">
-                        <span class="icon br-t-smartphone fs-4"></span>
-                        <span class="phone"><?= $model->phone ?></span>
-                    </div>
                     <?php if (isset($model->show_length) || (isset($model->intermissions) && $model->intermissions !==
                         'null')) { ?>
                         <div class="item">
@@ -69,6 +67,10 @@ if (!empty($theatreAddress)) {
                                 </span>
                         </div>
                     <?php } ?>
+                    <div class="item">
+                        <span class="icon br-t-smartphone fs-4"></span>
+                        <a href="tel: <?= $model->phone ?>" class="phone"><?= General::formatPhoneNumber($model->phone) ?></a>
+                    </div>
                 </div>
                 <?php if ($model instanceof TrPosHotels || $model instanceof TrPosPlHotels) { ?>
                     <?php if (!empty($model->check_in) || !empty($model->check_out)) { ?>

@@ -26,9 +26,4 @@ $scheduleSliderWidget = $this->context;
         </div>
         <?= $this->render('frame', compact('model', 'prices', 'range')) ?>
     </div>
-    <div class="text-end">
-        <a href="#" id="more-available">
-            More Available Dates <span class="icon br-t-arrow-middle-right"></span>
-        </a>
-    </div>
 </div>

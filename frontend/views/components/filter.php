@@ -79,7 +79,7 @@ $model = $Search->model ? $Search->model->className() : null;
 <?php if ($Search->model && $Search->model instanceof TrShows) { ?>
     <div class="timerange it">
         <?= $model::name ?> times:
-        <span class="time"><b id="time-from">11:00 AM</b> - <b id="time-to">9:00 PM</b></span>
+        <span class="time"><b id="time-from">11:00AM</b>-<b id="time-to">9:00PM</b></span>
         <div id="time-range" data-value-from="<?= $Search->timeFrom ?>" data-value-to="<?= $Search->timeTo ?>"
              data-min="8" data-max="23"></div>
         <div class="slider-range-grid">
@@ -106,7 +106,7 @@ $model = $Search->model ? $Search->model->className() : null;
         <?php if (!($Search->model instanceof TrPosPlHotels)) { ?>
             <?= $form->field($Search, 'alternativeRate', [])->checkbox(
                 [
-                    'template' => '{input}<label class="text-uppercase" for="s-alternativerate"><span class="tag tag-non-refundable">$ &nbsp;Non-refundable ticket</span></label>'
+                    'template' => '{input}<label class="text-uppercase" for="s-alternativerate"><span class="tag tag-non-refundable">Non-refundable ticket</span></label>'
                 ]
             ) ?>
         <?php } ?>
