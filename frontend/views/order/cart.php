@@ -27,9 +27,9 @@ $remove = Yii::$app->session->getFlash('remove');
 ?>
 <div class="fixed">
     <div class="row">
-        <div class="col-12 col-md-8 col-lg-9">
+        <div class="col-12 col-md-8 col-xl-9">
             <?php if (!empty($Basket->getPackages()) || !empty($Basket->getVacationPackages())) { ?>
-                <a href="<?= Url::to(['order/cart', 'remove_all' => 1]) ?>" class="remove-all-items float-end mt-3"
+                <a href="<?= Url::to(['order/cart', 'remove_all' => 1]) ?>" class="remove-all-items float-end mt-md-3"
                    onclick="return confirm('Do you want to remove all items?')">
                     <strong><i class="fa fa-trash"></i></span> Clear cart</strong>
                 </a>

@@ -843,58 +843,54 @@ input, .form-control {padding:11px 14px 7px;text-align:left;color:var(--c-new-bl
 .packages-panel .vacation-packages-list .item {padding:0;}
 .vacation-packages-list .item {padding:20px;margin-bottom:20px;background-color:var(--c-white);border-radius:10px;}
 .vacation-packages-list .item .package-name {display:flex;align-items:center;justify-content:space-between;gap:100px;padding:10px 20px;border-radius:5px;background:var(--c-primary-ligth);}
-.vacation-packages-list .item .package-name .name {font-weight:700;font-size:36px;}
+.vacation-packages-list .item .package-name .name {font-weight:700;font-size:32px;}
 .vacation-packages-list .item .package-name .name a {color:var(--c-new-blue);}
 .vacation-packages-list .item .package-name .save-up {padding:7px 20px 5px;border:1px solid var(--c-new-blue);border-radius:5px;background:var(--c-white);
     font-weight:700;font-size:20px;color:var(--c-new-blue);}
-.vacation-packages-list .item .info {padding-top:30px;display:flex;align-items:center;justify-content:start;gap:40px;}
+.vacation-packages-list .item .info {display:flex;justify-content:start;gap:40px;}
 .vacation-packages-list .item .info .info-item {font-size:18px;color:var(--c-new-blue);}
 .vacation-packages-list .item .info .info-item .info-title {font-weight:700;}
 .vacation-packages-list .item .info .info-item span {font-weight:400;}
-.vacation-packages-list .item .price {padding-top:30px;display:flex;align-items:center;justify-content:end;gap:60px;}
+.vacation-packages-list .item .price {display:flex;justify-content:end;gap:60px;}
 .vacation-packages-list .item .price .price-item {color:var(--c-new-blue);}
-.vacation-packages-list .item .price .price-item .price-title {font-size:16px;font-weight:400;text-transform:uppercase;}
-.vacation-packages-list .item .price .price-item span {font-weight:700;font-size:24px;}
-.vacation-packages-list .item .line {padding-top:10px;border-bottom:1px solid var(--c-new-blue);}
-.vacation-packages-list .item .description {padding:30px 0;font-weight:400;font-size:18px;color:var(--c-new-blue);text-align:left;}
+.vacation-packages-list .item .price .price-item .price-title {font-size:16px;font-weight:400;}
+.vacation-packages-list .item .price .price-item span {font-weight:700;font-size:20px;}
+.vacation-packages-list .item .line {border-bottom:1px solid var(--c-primary-ligth);}
+.vacation-packages-list .item .description {font-weight:400;font-size:18px;color:var(--c-new-blue);text-align:left;}
 .vacation-packages-list .item .package-show {display:none;padding:0 0 30px 0;}
 .vacation-packages-list .item .package-hide {display:none;}
 .vacation-packages-list .item .package-show, .vacation-packages-list .item .package-hide {font-weight:700;font-size:14px;color:var(--c-purple-bright);cursor:pointer;}
 .vacation-packages-list .item i {padding:0 0 0 10px;font-size:30px;position:relative;bottom:-4px;color:var(--c-new-blue);}
-.vacation-packages-list .item .items-in .package-item {display:flex;justify-content:start;gap:10px;}
+.vacation-packages-list .item .items-in .package-item {align-items: center;display:flex;justify-content:start;gap:10px;}
 .vacation-packages-list .item .items-in a {font-weight:700;font-size:16px;display:block;color:var(--c-new-blue);line-height:1.2}
-.vacation-packages-list .item .items-in a img {margin:0 0 15px;width:100px;border-radius:10px;}
-
-@media (max-width: 1200px) {
-    .vacation-packages-list .item .package-name .name {font-size:32px;}
-}
+.vacation-packages-list .item .items-in a img {width:100px;border-radius:10px;}
 
 @media (max-width: 992px) {
     .vacation-packages-list .item .package-name .name {font-size:30px;}
     .vacation-packages-list .item .info {display:block;}
     .vacation-packages-list .item .info .info-item {padding-bottom:10px;}
     .vacation-packages-list .item .price {gap:30px;}
-    .vacation-packages-list .item .price .price-item span {font-size:20px;}
 }
 
 @media (max-width: 768px) {
     .packages-panel {padding:20px;}
     .packages-panel.title {font-size:20px;}
     .vacation-packages-list .item .package-name {display:block;}
-    .vacation-packages-list .item .package-name .name {text-align:center;font-size:24px;padding-bottom:10px;}
-    .vacation-packages-list .item .package-name .save-up {font-size:18px;padding:6px 10px 5px;width:100%;display:block;text-align:center;font-size:16px;}
-    .vacation-packages-list .item .info {padding:20px 0 0 0;}
+    .vacation-packages-list .item .package-name .name {font-size:24px;padding-bottom:10px;}
     .vacation-packages-list .item .info .info-item span {font-size:16px;}
-    .vacation-packages-list .item .price {padding:30px 0 0 0;justify-content:flex-start;}
-    .vacation-packages-list .item .description {padding:20px 0;font-size:16px;}
+    .vacation-packages-list .item .price {justify-content:flex-start;}
+    .vacation-packages-list .item .description {font-size:16px;}
     .vacation-packages-list .item .package-show {display:block;}
-    .vacation-packages-list .item .items-in {padding:10px 0 20px 0;}
-    .vacation-packages-list .item .js-package {display:none;}
+    .vacation-packages-list .item .items-in-list:not(.items-in-list-full) .item-in {display:none;}
+    .vacation-packages-list .item .items-in-list .item-in:nth-child(1) {display:block;}
+    .vacation-packages-list .item .items-in-list .item-in:nth-child(2) {display:block;}
+    .vacation-packages-list .item .items-in-list .item-in:nth-child(3) {display:block;}
+    .vacation-packages-list .item .items-in-list-full .view-more {display:none!important;}
+    .vacation-packages-list .item .items-in-list-full .view-more-hide {display:block!important;}
 }
 
 @media (max-width: 575px) {
     .packages-panel .title {font-size:16px;}
-    .vacation-packages-list .item .package-name .name {text-align:center;}
     .vacation-packages-list .item .package-name .save-up {width:100%;margin:0 0 20px 0;text-align:center;font-size:14px;}
 }
 
@@ -938,9 +934,7 @@ input, .form-control {padding:11px 14px 7px;text-align:left;color:var(--c-new-bl
 .calendar-slider-block .frame.horizontal ul li {margin:0 5px;}
 .calendar-slider-block .date {width:130px;padding:0 0 5px 0;font-weight:700;font-size:18px;color:var(--c-new-blue);text-align:center;}
 .calendar-slider-block .w {padding: 0 0 14px 0;font-weight:350;font-size:16px;color:var(--c-new-blue);text-align:center;opacity:0.7;}
-.calendar-slider-block .tag {display:inline-block;width:100%;text-align:center;font-weight:700;font-size:20px;}
-.calendar-slider-block a.tag {display:inline-block;padding:7px 10px 3px;font-size:20px;font-weight:700;border:1px solid var(--c-new-blue);border-radius:5px;background:var(--c-new-blue);margin:0 0 7px 0;color:var(--c-white);}
-.calendar-slider-block a.tag:hover {border:none;padding:8px 12px 4px;background:linear-gradient(90deg, var(--c-violet-gray) 60%, var(--c-violet-dark) 100%);color:var(--c-white);}
+.calendar-slider-block .btn-third {padding-left:0;padding-right:0;}
 
 .vp-overview-list .it {border-top:1px solid var(--c-new-blue);margin:0 -24px;padding:24px;overflow:hidden;}
 .vp-overview-list .it:first-child {border-top:none;padding-top:0;}

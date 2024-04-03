@@ -12,17 +12,17 @@ $items = $item->getItems();
 
 ?>
 <div id="packages-list-<?= $item->id?>" class="item">
-    <div class="package-name">
+    <div class="package-name text-center text-md-start mb-3">
         <div class="name">
             <a href="<?= Url::to(['packages/detail', 'code' => $item->code]) ?>"><?= $item->name ?> Package</a>
         </div>
         <?php if ($item->getSaveUpTo()) { ?>
-            <div class="save-up">Save up to $<?= $item->getSaveUpTo() ?></div>
+            <div class="btn btn-secondary cursor-default">Save up to $<?= $item->getSaveUpTo() ?></div>
         <?php } ?>
     </div>
     <div class="row">
-        <div class="col-md-7 order-3 order-md-0 js-package">
-            <div class="info">
+        <div class="col-md-6 js-package">
+            <div class="info mb-3">
                 <div class="info-item">
                 <div class="info-title">Available Dates:</div>
                     <span>
@@ -36,8 +36,8 @@ $items = $item->getItems();
                 </div>
             </div>
         </div>
-        <div class="col-md-5 order-0 order-md-1">
-            <div class="price">
+        <div class="col-md-6">
+            <div class="price mb-3">
                 <div class="price-item">
                     <div class="price-title">Package from</div>
                     <?php $prices = ArrayHelper::getColumn($item->vacationPackagePrices, 'price'); ?>
@@ -64,32 +64,24 @@ $items = $item->getItems();
                     </div>
                 </div>
         </div>
-        <div class="col-12 order-1 order-md-2">
-            <div class="line"></div>
+        <div class="col-12">
+            <div class="line mb-3"></div>
         </div>
-        <div class="col-md-8 order-2 order-md-3">
-            <div class="description"><?= $item->description ?></div>
+        <div class="col-md-8">
+            <div class="description mb-4"><?= $item->description ?></div>
         </div>
-        <div class="col-12 order-2">
-            <div class="package-show">
-                View all details <i class="fa fa-angle-down"></i>
-            </div>
-            <div class="package-hide">
-                Hide details <i class="fa fa-angle-up"></i>
-            </div>
-        </div>
-        <div class="col-md-4 order-5 order-md-4">
-            <div class="description">
+        <div class="col-md-4">
+            <div class="description mb-4">
             <a href="<?= Url::to(['packages/detail', 'code' => $item->code])?>" class="btn btn-primary w-100">
                 Buy Package
             </a>
             </div>
         </div>
-        <div class="col-12 order-4 order-md-5 js-package">
+        <div class="col-12 js-package items-in-list js-items-in-list">
             <div class="items-in row">
                 <?php foreach ($items as $it) { ?>
                     <?php $itemExternal = $it->itemExternal; ?>
-                    <div class="col-md-5 col-lg-4 col-xl-3">
+                    <div class="col-12 col-md-6 col-xl-4 mb-3 item-in">
                         <a href="<?= $itemExternal->getUrl() ?>" class="package-item">
                             <?php if (!empty($itemExternal->preview->url)) { ?>
                                 <img src="<?= $itemExternal->preview->url ?>" alt="<?= $itemExternal->name ?>">
@@ -103,6 +95,14 @@ $items = $item->getItems();
                     </div>
                 <?php } ?>
             </div>
+            <?php if (count($items) > 3) { ?>
+            <div class="text-center">
+                <a href="#" onclick="$('.js-items-in-list').toggleClass('items-in-list-full'); return false;">
+                    <span class="view-more d-md-none">View more <span class="icon br-t-points"></span></span>
+                    <span class="view-more-hide d-none">Hide <span class="icon br-t-points"></span></span>
+                </a>
+            </div>
+            <?php }?>
         </div>
     </div>
  </div>

@@ -1,10 +1,8 @@
 <?php
+
 namespace common\models;
 
 use yii\base\Model;
-
-use common\models\User;
-use common\models\Custumer;
 
 /**
  * Password reset request form
@@ -24,83 +22,87 @@ class CustumerForm extends Model
             [['zip_code'], 'integer'],
             [['zip_code'], 'string', 'max' => 6, 'min' => 5],
             [['first_name', 'last_name'], 'match', 'pattern' => '/^([A-z\-\s]+)$/'],
-            [['first_name', 'last_name'], 'string', 'min'=>2],
+            [['first_name', 'last_name'], 'string', 'min' => 2],
             [['email', 'first_name', 'last_name'], 'string', 'max' => 64],
             [['email'], 'email'],
             [['phone'], 'match', 'pattern' => '/^([\d\-]+)$/'],
-            [['phone'], 'string', 'min'=>10, 'max'=>10],
+            [['phone'], 'string', 'min' => 10, 'max' => 10],
         ];
     }
-    
-	public function isAgree($attribute, $params)
-    {
-    	if (!$this->agree) {
-    		$this->addError($attribute, 'Need to accept terms');
-    	}
-    }
-    
-	public function isCount($attribute, $params)
-    {
-    	if (!$this->count) {
-    		$this->addError($attribute, 'Need to take the ticket');
-    	}
-    }
-    
+//
+//    public function isAgree($attribute, $params)
+//    {
+//        if (!$this->agree) {
+//            $this->addError($attribute, 'Need to accept terms');
+//        }
+//    }
+//
+//    public function isCount($attribute, $params)
+//    {
+//        if (!$this->count) {
+//            $this->addError($attribute, 'Need to take the ticket');
+//        }
+//    }
+
     public function register()
     {
-    	$Custumer = new Custumer;
-    	$res = $Custumer->create([
-    		"email" => $this->email,
-			"firstName" => $this->first_name,
-			"lastName" => $this->last_name,
-			"phone" => $this->phone,
-    	    "zipCode" => $this->zip_code,
-    	]);
-    	
-    	if (!$res) {
-    		$errors = $Custumer->getErrors();
-    		if ($errors) {
-    			$this->addError('errors', array_shift($errors)[0]);	
-    		}
-    	}
-    	
-    	return $res;
+        $Custumer = new Custumer();
+        $res = $Custumer->create(
+            [
+                "email"     => $this->email,
+                "firstName" => $this->first_name,
+                "lastName"  => $this->last_name,
+                "phone"     => $this->phone,
+                "zipCode"   => $this->zip_code,
+            ]
+        );
+
+        if (!$res) {
+            $errors = $Custumer->getErrors();
+            if ($errors) {
+                $this->addError('errors', array_shift($errors)[0]);
+            }
+        }
+
+        return $res;
     }
-    
+
     public function update($tripium_id)
     {
-    	$Custumer = new Custumer;
-    	$res = $Custumer->create([
-    		"id" => $tripium_id,
-    		"email" => $this->email,
-			"firstName" => $this->first_name,
-			"lastName" => $this->last_name,
-			"phone" => $this->phone,
-			"zipCode" => $this->zip_code,
-    	]);
-    	
-    	if (!$res) {
-    		$errors = $Custumer->getErrors();
-    		if ($errors) {
-    			$this->addError('errors', array_shift($errors)[0]);	
-    		}
-    	}
-    	
-    	return $res;
+        $Custumer = new Custumer();
+        $res = $Custumer->create(
+            [
+                "id"        => $tripium_id,
+                "email"     => $this->email,
+                "firstName" => $this->first_name,
+                "lastName"  => $this->last_name,
+                "phone"     => $this->phone,
+                "zipCode"   => $this->zip_code,
+            ]
+        );
+
+        if (!$res) {
+            $errors = $Custumer->getErrors();
+            if ($errors) {
+                $this->addError('errors', array_shift($errors)[0]);
+            }
+        }
+
+        return $res;
     }
-    
+
     public function save()
     {
-    	if (!$this->validate()) {
-    		return false;
-    	}
-    	
-    	$tripium_id = User::getCustomerTripiumID();
-    	
-    	if ($tripium_id) {
-    		return $this->update($tripium_id);
-    	} else {
-    		return $this->register();
-    	}
+        if (!$this->validate()) {
+            return false;
+        }
+
+        $tripium_id = User::getCustomerTripiumID();
+
+        if ($tripium_id) {
+            return $this->update($tripium_id);
+        }
+
+        return $this->register();
     }
 }
