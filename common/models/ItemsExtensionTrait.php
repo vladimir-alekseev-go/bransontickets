@@ -937,4 +937,69 @@ trait ItemsExtensionTrait
 
         return $description;
     }
+
+    protected function groupCalendarEvents(array $schedule): array
+    {
+        $maxPositionOnDay = 4;
+
+        $counter = [];
+        $events = [];
+        $counterCurrent = [];
+        foreach ($schedule as $s) {
+            try {
+                $startDate = new DateTime($s["start"]);
+                $counter[$startDate->format("Y-m-d")] = !empty($counter[$startDate->format("Y-m-d")]) ? $counter[$startDate->format("Y-m-d")]+1 : 1;
+            } catch (Exception $e) {}
+        }
+
+        $start_date = [];
+        foreach ($schedule as $s) {
+            try {
+                $startDate = new DateTime($s["start"]);
+                $counterCurrent[$startDate->format("Y-m-d")] = !empty($counterCurrent[$startDate->format("Y-m-d")]) ? $counterCurrent[$startDate->format("Y-m-d")]+1 : 1;
+
+                $event = [
+                    'start' => $startDate->format("Y-m-d"),
+                    'url' => $this->getUrlTicket(
+                        [
+                            'date' => $s["start"],
+                            'allotmentId' => $s['id_external'] ?? null,
+                            'tickets-on-date' => $s["start"],
+                            '#' => 'availability',
+                        ]
+                    ),
+                    'className' => empty($start_date[$s["start"]]) && $s["special_rate"] ? 'has-sale' : '',
+                ];
+                if ($counterCurrent[$startDate->format("Y-m-d")] < $maxPositionOnDay
+                    || (
+                        $counterCurrent[$startDate->format("Y-m-d")] === $maxPositionOnDay
+                        && $counter[$startDate->format("Y-m-d")] === $maxPositionOnDay
+                    )) {
+                    $events[] = array_merge(
+                        [
+                            'title' => isset($s['any_time']) && (int)$s['any_time'] === 1
+                                ? 'Any Time' : $startDate->format("h:i A")
+                        ],
+                        $event
+                    );
+                } else if ($counter[$startDate->format("Y-m-d")] > $maxPositionOnDay && $counterCurrent[$startDate->format("Y-m-d")] === $maxPositionOnDay) {
+                    $event['url'] = $this->getURL(
+                        [
+//                            'on-date' => $startDate->format('Y-m-d'),
+//                            '#'       => 'availability',
+                        ]
+                    );
+                    $events[] = array_merge(
+                        [
+                            'title' => 'more'
+                        ],
+                        $event
+                    );
+                }
+                $start_date[$s["start"]]=1;
+            } catch (Exception $e) {}
+        }
+
+        return $events;
+    }
 }

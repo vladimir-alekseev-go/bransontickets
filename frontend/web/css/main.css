@@ -3,7 +3,8 @@
     --c-black: #020018;
     --c-primary: #3400C7;
     --c-primary-deep: #1E0074;
-    --c-primary-ligth: #EDE9FF;
+    --c-primary-ligth: #EDE9FF; /*rgb(237, 233, 255)*/
+    --c-primary-ligth-05: rgba(237, 233, 255, 0.5);
     --c-primary-disabled: rgba(55, 50, 129, 0.1);
     --c-primary-disabled-2: rgba(55, 50, 129, 0.2);
     --c-violet-light: #DDD6FF;
@@ -116,6 +117,7 @@ input[type=checkbox]+label:before, input[type=radio]+label:before, .tag-premium:
 
 .hide {display:none!important;}
 .opacity-2 {opacity:0.2;}
+.opacity-0 {opacity:0}
 
 .flex-1 {flex:1;}
 .flex-2 {flex:2;}
@@ -170,9 +172,6 @@ input[type=checkbox]+label:before, input[type=radio]+label:before, .tag-premium:
 }
 
 .btn {border-radius:8px;box-shadow:none!important;font-size:20px;line-height:1;padding-top:9px;padding-bottom:9px;}
-.btn-primary {background: var(--c-primary);border:1px solid transparent;color:var(--c-white);}
-.btn-primary:hover {background:var(--c-primary-deep);border:1px solid transparent;color:var(--c-white);}
-.btn-primary:disabled {background:var(--c-primary-ligth);border:1px solid transparent;color:var(--c-primary-disabled);}
 .btn-secondary {background: var(--c-white);border:1px solid transparent;color:var(--c-primary);}
 .btn-secondary:hover {background: var(--c-primary-ligth);border:1px solid transparent;color:var(--c-primary-deep);}
 .btn-secondary:disabled {background: var(--c-white);border:1px solid transparent;color:var(--c-primary-disabled-2);}
@@ -185,6 +184,9 @@ input[type=checkbox]+label:before, input[type=radio]+label:before, .tag-premium:
 .btn-fifth:hover {border-color:var(--c-gray-light);color:var(--c-gray-light);}
 .btn-link {text-decoration:none;color:var(--c-primary);}
 .btn-link:hover {color:var(--c-new-blue);}
+.btn-primary, .btn-third.active {background: var(--c-primary);border:1px solid transparent;color:var(--c-white);}
+.btn-primary:hover, .btn-third.active:hover {background:var(--c-primary-deep);border:1px solid transparent;color:var(--c-white);}
+.btn-primary:disabled, .btn-third.active:disabled {background:var(--c-primary-ligth);border:1px solid transparent;color:var(--c-primary-disabled);}
 
 .btn-sm {font-size:12px;border-radius:6px;}
 
@@ -812,50 +814,30 @@ input, .form-control {padding:11px 14px 7px;text-align:left;color:var(--c-new-bl
     .popup-gallery a img {height:auto;width:100%;}
 }
 
+
+.fc.fc-theme-standard td {border:2px solid var(--c-white);}
+.fc.fc-theme-standard th {border-bottom:1px solid var(--c-new-blue);border-top:none;border-left:none;border-right:none;}
+.fc table {border:none!important;}
+.fc .fc-col-header-cell-cushion {font-size:24px;text-transform:uppercase;}
+.fc .fc-daygrid-day-top {flex-direction:row;}
 .fc .fc-toolbar {justify-content:center;gap:10px;}
 .fc .fc-toolbar-title {font-weight:700;font-size:36px;color:var(--c-new-blue);text-transform:uppercase;}
-.fc .fc-button, .fc .fc-button:hover {background-color:var(--c-white);border:1px solid var(--c-white);text-align:center;}
-.fc .fc-button .fc-icon {font-size:40px;background:-webkit-gradient(linear,left top,right bottom,from(var(--c-violet)),to(var(--c-violet-gray)));
-    -webkit-background-clip:text;-webkit-text-fill-color: transparent;text-align:center;}
-.fc .fc-button-primary, .fc .fc-button-primary:not(:disabled):active:focus, .fc .fc-button:focus{background-color:var(--c-white);border:1px solid var(--c-white);text-align:center;box-shadow:0 0 0 0;}
-.fc .fc-col-header-cell-cushion {color:var(--c-new-blue);font-weight:700;font-size:24px;text-transform:uppercase;}
-.fc .fc-daygrid-day-number {color:var(--c-new-blue);font-weight:400;font-size:18px;}
-.fc .fc-daygrid-day {background:var(--c-primary-ligth);border:2px solid var(--c-white) !important;}
-.fc .fc-daygrid-day.fc-day-today {background:var(--c-purple-bright);}
-.fc .fc-daygrid-day.fc-day-today .fc-daygrid-day-number {color:var(--c-white);}
-.fc .fc-h-event {border:1px solid transparent;background:transparent;text-align:right;padding:10px 5px 0 0;}
-.fc .fc-h-event .fc-event-main {color:var(--c-blue-deep);font-weight:700;font-size:24px;}
-.fc .fc-daygrid-day.fc-day-today .fc-h-event .fc-event-main {color:var(--c-white);}
-.fc .fc-daygrid-day-top {padding:15px 5px 0 0;}
-.fc .fc-daygrid-day.fc-day-other {opacity: 0.5;}
-.fc-scrollgrid {border:2px solid var(--c-white) !important;}
-.fc-theme-standard td, .fc-theme-standard th {border:2px solid var(--c-white) !important;}
-.fc tbody td {border-top:1px solid transparent !important;background:linear-gradient(var(--c-white), var(--c-white)) padding-box,
-    linear-gradient(to right, var(--c-violet-gray), var(--c-violet)) border-box;}
-
+.fc .fc-toolbar-chunk .fc-button {background:none!important;border-color:transparent!important;padding:0;box-shadow:none!important;}
+.fc .fc-toolbar-chunk .fc-button .fc-icon {color:var(--c-new-blue);font-size:40px;}
+.fc .fc-day-future, .fc .fc-day-past {background:var(--c-primary-ligth);}
+.fc .fc-day-other {background:var(--c-primary-ligth-05);}
+.fc .fc-day-today {background:var(--c-primary)!important;}
+.fc .fc-day-today .fc-daygrid-day-number {color:var(--c-white);}
+.fc .fc-h-event {border:none;background:none;text-align:right;font-weight:600;padding:0 10px 0 0;}
+.fc .fc-h-event div {color:var(--c-black);font-size:18px;line-height:1.0;}
+.fc .fc-day-today .fc-h-event div {color:var(--c-white);}
 @media (max-width: 992px) {
-    .fc .fc-h-event .fc-event-main {font-size:18px;}
 }
 
 @media (max-width: 768px) {
-    #calendar {padding:20px 0;}
-    .fc .fc-toolbar-title {font-size:30px;}
-    .fc .fc-button, .fc .fc-button:hover {width:60px;}
-    .fc .fc-col-header-cell-cushion {font-size:18px;}
-    .fc .fc-h-event .fc-event-main {font-size:14px;}
 }
 
 @media (max-width: 576px) {
-    #calendar {max-height:600px;}
-    .fc .fc-toolbar-title {padding-top:5px;font-size:24px;}
-    .fc .fc-toolbar.fc-header-toolbar {margin-bottom:12px;}
-    .fc .fc-button .fc-icon {font-size:30px;}
-    .fc .fc-col-header-cell-cushion {padding:2px;font-size:14px;font-weight:400;}
-    .fc .fc-daygrid-day-number {font-size:16px;}
-    .fc .fc-h-event .fc-event-main {font-size:10px;}
-    .fc .fc-h-event {padding:0;}
-    .fc .fc-daygrid-day-top {padding:0;}
-    .fc .fc-event-title {white-space:initial;}
 }
 
 .packages-panel .vacation-packages-list .item {padding:0;}

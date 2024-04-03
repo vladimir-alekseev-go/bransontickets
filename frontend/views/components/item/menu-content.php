@@ -50,8 +50,8 @@ use yii\web\JqueryAsset;
                 </div>
             <?php } ?>
             <?php if ($model instanceof TrShows || $model instanceof TrAttractions) { ?>
-                <div id="schedule" role="tabpanel" aria-labelledby="schedule-tab" class="tab-pane">
-                    <?= $this->render('@app/views/components/item/menu-content/schedule') ?>
+                <div id="schedule" role="tabpanel" aria-labelledby="schedule-tab" class="tab-pane active opacity-0">
+                    <?= $this->render('@app/views/components/item/menu-content/schedule', compact('model')) ?>
                 </div>
             <?php } ?>
             <?php if (!empty($model->vacationPackages)) { ?>

@@ -98,3 +98,6 @@
 .br-t-usd:before {
   content: "\73";
 }
+.br-t-guitar:before {
+  content: "\74";
+}

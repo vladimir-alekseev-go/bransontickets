@@ -2,11 +2,13 @@
 
 namespace frontend\controllers;
 
+use common\helpers\General;
 use common\models\Compare;
 use common\models\form\Search;
 use common\models\TrAttractions;
 use common\models\TrAttractionsPrices;
 use common\models\TrBasket;
+use frontend\models\ScheduleForm;
 use frontend\widgets\scheduleSlider\ScheduleSliderWidget;
 use frontend\widgets\vacationPackagesList\VacationPackagesListWidget;
 use DateInterval;
@@ -16,6 +18,7 @@ use yii\data\Pagination;
 use yii\db\ActiveQuery;
 use yii\db\Expression;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Json;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
@@ -23,7 +26,7 @@ use yii\web\Response;
 class AttractionsController extends Controller
 {
     use TicketsControllerTrait;
-    
+
     public const mainClass = TrAttractions::class;
 
     /**
@@ -216,5 +219,34 @@ class AttractionsController extends Controller
             '@app/views/components/popup-compare-data',
             compact('model', 'items', 'Search', 'priceAll')
         );
+    }
+
+    public function actionSchedule($code, $date = '')
+    {
+        $ScheduleForm = new ScheduleForm();
+        $ScheduleForm->load(Yii::$app->request->get());
+
+        /**
+         * @var TrAttractions $model
+         */
+        $model = TrAttractions::getActive()->where(['code' => $code])->one();
+
+        if (!$model) {
+            throw new NotFoundHttpException;
+        }
+
+        $gotoDate = $ScheduleForm->getDate() ?: General::getDatePeriod()->start;
+
+        if (Yii::$app->request->isAjax) {
+            $this->layout = false;
+            return Json::encode(
+                [
+                    'events' => $model->getCalendarEvents(),
+                    'gotoDate' => $gotoDate->format('Y-m-d'),
+                ]
+            );
+        }
+
+        return $this->redirect($model->getUrl());
     }
 }

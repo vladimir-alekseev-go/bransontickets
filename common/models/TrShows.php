@@ -6,10 +6,12 @@ use common\helpers\General;
 use common\models\theaters\TheatersShows;
 use common\tripium\Tripium;
 use DateInterval;
+use DateTime;
 use Yii;
 use yii\base\InvalidConfigException;
 use yii\db\ActiveQuery;
 use yii\db\Expression;
+use yii\helpers\ArrayHelper;
 
 class TrShows extends _source_TrShows
 {
@@ -127,6 +129,16 @@ class TrShows extends _source_TrShows
             );
         }
         return Yii::$app->urlManager->createUrl(['shows/detail', 'code' => $this->code]);
+    }
+
+    public function getUrlTicket($params = []): string
+    {
+        if (!empty($params['date']) && $params['date'] instanceof DateTime) {
+            $params['date'] = $params['date']->format('Y-m-d_H:i:s');
+        } elseif (!empty($params['date'])) {
+            $params['date'] = str_replace(' ', '_', $params['date']);
+        }
+        return Yii::$app->urlManager->createUrl(array_merge(['shows/tickets', 'code' => $this->code], $params));
     }
 
     /**
@@ -584,5 +596,24 @@ class TrShows extends _source_TrShows
                 ]
             )
             ->groupby(self::tableName() . '.id_external');
+    }
+
+    public function getCalendarEvents(): array
+    {
+        $scheduleQuery = $this->getAvailablePrices()
+            ->select(['start', 'retail_rate', 'special_rate'])
+            ->groupBy(['start', 'retail_rate', 'special_rate'])
+            ->orderby('special_rate')
+            ->asArray();
+
+        $schedule = $scheduleQuery->all();
+
+        $scheduleSpecialRate = $scheduleQuery->where(['not', ['special_rate' => false]])->all();
+
+        $schedule = ArrayHelper::merge($schedule, $scheduleSpecialRate);
+
+        $schedule = ArrayHelper::index($schedule, 'start');
+
+        return $this->groupCalendarEvents($schedule);
     }
 }

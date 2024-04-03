@@ -36,10 +36,10 @@ class TrAttractions extends _source_TrAttractions
     public const photoJoinClass = AttractionsPhotoJoin::class;
 
     public const TYPE_ID = 3;
-   
+
     public const type = 'attractions';
     public const TYPE = 'attractions';
-  
+
     public const name = 'Attraction';
     public const NAME = 'Attraction';
     public const NAME_PLURAL = 'Attractions';
@@ -48,15 +48,15 @@ class TrAttractions extends _source_TrAttractions
     public const STATUS_INACTIVE = 0;
 
     public const EXTERNAL_SERVICE_SDC = 'SDC';
-    
+
     public static $type = 'attractions';
-   
+
     public static $name = 'Attraction';
-    
+
     public $priceClass = AttractionsPrices::class;
-   
+
     public $categoriesClass = AttractionsCategories::class;
-   
+
     public $categoriesClassName = 'AttractionsCategories';
 
     /**
@@ -146,6 +146,23 @@ class TrAttractions extends _source_TrAttractions
             );
         }
         return Yii::$app->urlManager->createUrl(['attractions/detail', 'code' => $this->code]);
+    }
+
+    /**
+     * Return item tickets url
+     *
+     * @param array $params
+     *
+     * @return string
+     */
+    public function getUrlTicket($params = []): string
+    {
+        if (!empty($params['date']) && $params['date'] instanceof DateTime) {
+            $params['date'] = $params['date']->format('Y-m-d_H:i:s');
+        } elseif (!empty($params['date'])) {
+            $params['date'] = str_replace(' ', '_', $params['date']);
+        }
+        return Yii::$app->urlManager->createUrl(array_merge(['attractions/tickets', 'code' => $this->code], $params));
     }
 
     /**
