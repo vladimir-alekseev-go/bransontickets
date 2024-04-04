@@ -10,6 +10,14 @@ use yii\helpers\Url;
             <span class="icon br-t-x"></span>
         </span>
     </div>
+    <div class="search-menu mb-3">
+        <form action="<?= Url::to(['site/search']) ?>" method="get">
+            <button type="submit" class="btn btn-link"><span class="icon br-t-search"></span></button>
+            <div class="form-group input-search">
+                <input type="text" class="form-control" name="q" value="" placeholder="Start typing to search">
+            </div>
+        </form>
+    </div>
     <ul class="menu-main">
         <li><a href="<?= Url::to(['shows/index']) ?>">Shows</a></li>
         <li><a href="<?= Url::to(['attractions/index']) ?>">Attractions</a></li>

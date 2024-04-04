@@ -22,7 +22,7 @@ $items = $item->getItems();
     <div class="items-in row">
         <?php foreach ($items as $it) { ?>
             <?php $itemExternal = $it->itemExternal;?>
-            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+            <div class="col-12 col-sm-6 col-md-4">
                 <a href="<?= $itemExternal->getUrl() ?>">
                     <?php if (!empty($itemExternal->preview->url)) { ?>
                         <img src="<?= $itemExternal->preview->url ?>" alt="<?= $itemExternal->name ?>">
@@ -36,4 +36,4 @@ $items = $item->getItems();
             </div>
         <?php } ?>
     </div>
-</div> 
+</div>

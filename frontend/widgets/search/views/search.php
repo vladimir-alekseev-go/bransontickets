@@ -25,7 +25,7 @@ $attractions = $this->context->attractions;
 		    <?= $form->field($this->context->searchForm, 'q')->input('q', ['placeholder' => "I'm looking for"])->label(false) ?>
         </div>
         <div class="<?= Yii::$app->request->url === Url::to('/') ? 'col-12 col-md-5'  : 'col-sm-3 col-md-2' ?>">
-		<button class="btn btn-search w-100">Search</button>
+		<button class="btn btn-secondary w-100">Search</button>
     </div>
 	</div>
 	<?php ActiveForm::end(); ?>

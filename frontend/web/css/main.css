@@ -466,18 +466,15 @@ input, .form-control {padding:11px 14px 7px;text-align:left;color:var(--c-new-bl
     box-shadow: 0 0 0 0 var(--c-shadow-purple-1), 2px 3px 8px 0 var(--c-shadow-purple-1), 7px 13px 15px 0 var(--c-shadow-purple-2), 16px 29px 20px 0 var(--c-shadow-purple-3), 29px 51px 23px 0 var(--c-shadow-purple-4), 46px 79px 26px 0 var(--c-shadow-purple-5);}
 .find-more a:hover {padding:7px 11px;border:none;background:linear-gradient(90deg, var(--c-violet-gray) 60%, var(--c-violet-dark) 100%);color:var(--c-white);}
 
-/* search */
-
-.search-form .btn-search {display:block;padding:9px 10px 5px;color:var(--c-white);font-weight:700;font-size:20px;background:linear-gradient(90deg, var(--c-violet-gray) 0%, var(--c-violet) 100%);border-radius:5px;text-align:center;border:none;}
-.search-form .btn-search:hover {background:linear-gradient(90deg, var(--c-violet-gray) 60%, var(--c-violet-dark) 100%);}
-.search-form .btn-search:focus {box-shadow:none;}
+.search-menu {position:relative;}
+.search-menu .btn {position:absolute;top:2px;right:0;}
 
 .search-data .search-menu-content {clear:both;}
 .search-data .search-menu-content ul {display:block;}
 .search-data .search-menu-content ul, .search-data .search-menu-content li {margin:0;padding:0;}
 .search-data .search-menu-content li {list-style:none;display:inline-block;}
 .search-data .search-menu-content li a {display:inline-block;font-size:18px;font-weight:bold;color:var(--c-white);border-bottom:3px solid transparent;padding:0 0 5px;margin:0 30px 0 0;}
-.search-data .search-menu-content li a:hover, .search-data .search-menu-content li a.active, .search-data .search-menu-content li:first-child a {color:var(--c-white);border-color:var(--c-violet-dark);}
+.search-data .search-menu-content li a:hover, .search-data .search-menu-content li a.active, .search-data .search-menu-content li:first-child a {color:var(--c-white);border-color:var(--c-white);}
 
 @media (max-width: 575px) {
     .search-data .search-menu-content li a {font-size:16px;margin-right: 10px;}
@@ -497,7 +494,7 @@ input, .form-control {padding:11px 14px 7px;text-align:left;color:var(--c-new-bl
 .search-data .it .detail i {padding:0 0 0 5px;font-size:14px;}
 .search-data .it .sq {font-weight:bold;background:var(--c-primary-ligth);display:inline-block;padding:0 5px;border-radius:4px}
 .search-data .vacation-package .title {font-weight:bold;font-size:18px;color:var(--c-new-blue);display:block;margin:0 0 10px;}
-.search-data .vacation-package .items-in a {font-size:14px;font-weight:bold;opacity:0.7;display:block;color:var(--c-new-blue);}
+.search-data .vacation-package .items-in a {font-size:14px;font-weight:bold;display:block;color:var(--c-new-blue);}
 .search-data .vacation-package .items-in a img {width:80px;border-radius:4px;float:left;margin:0 10px 10px 0;}
 .search-data .vacation-package .description {margin-bottom:15px;}
 
