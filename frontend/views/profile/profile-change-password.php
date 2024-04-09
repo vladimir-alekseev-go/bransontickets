@@ -74,7 +74,7 @@ $warnings = $emailConfirmation . (strlen($emailConfirmation) > 0 && strlen($warn
                 <div class="text-center">
                     <?= Html::submitButton(
                         'Change password',
-                        ['class' => 'btn btn-sign d-inline-block']
+                        ['class' => 'btn btn-primary d-inline-block']
                     ) ?>
                 </div>
                 <?php ActiveForm::end(); ?>

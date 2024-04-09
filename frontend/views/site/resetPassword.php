@@ -31,7 +31,7 @@ $success = Yii::$app->session->getFlash('success');
                     <?= $form->field($model, 'password')->passwordInput() ?>
 
                     <div class="form-group">
-                        <?= Html::submitButton('Save', ['class' => 'btn btn-sign d-inline-block ps-5 pe-5']) ?>
+                        <?= Html::submitButton('Save', ['class' => 'btn btn-primary d-inline-block ps-5 pe-5']) ?>
                     </div>
 
                 <?php ActiveForm::end(); ?>

@@ -90,11 +90,12 @@ $warnings = $emailConfirmation . (strlen($emailConfirmation) > 0 && strlen($warn
                             </div>
                         </div>
                     </div>
-
-                    <?= Html::submitButton(
-                        'Update information',
-                        ['class' => 'btn btn-sign']
-                    ) ?>
+                    <div class="text-center">
+                        <?= Html::submitButton(
+                            'Update information',
+                            ['class' => 'btn btn-primary']
+                        ) ?>
+                    </div>
                     <?php ActiveForm::end(); ?>
                 </div>
             </div>
@@ -112,7 +113,7 @@ $warnings = $emailConfirmation . (strlen($emailConfirmation) > 0 && strlen($warn
                     <?= Html::submitButton(
                         'Delete My Account',
                         [
-                            'class'   => 'btn btn-delete',
+                            'class'   => 'btn btn-primary btn-delete',
                             'onclick' => 'return confirm("Are you sure you want to delete your account?");'
                         ]
                     ) ?>

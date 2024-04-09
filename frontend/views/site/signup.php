@@ -39,7 +39,7 @@ $messages = Yii::$app->session->getFlash('messages');
                             <div class="form-group">
                                 <?= Html::submitButton(
                                     'Signup',
-                                    ['class' => 'btn btn-sign', 'name' => 'signup-button']
+                                    ['class' => 'btn btn-primary', 'name' => 'signup-button']
                                 ) ?>
                             </div>
                             <?php ActiveForm::end(); ?>

@@ -39,7 +39,7 @@ $error = Yii::$app->session->getFlash('error');
                             <div class="form-group">
                                 <?= Html::submitButton(
                                     'Send',
-                                    ['class' => 'btn btn-sign d-inline-block ps-5 pe-5']
+                                    ['class' => 'btn btn-primary d-inline-block ps-5 pe-5']
                                 ) ?>
                             </div>
 

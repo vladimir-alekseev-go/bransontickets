@@ -10,7 +10,7 @@
     --c-violet-light: #DDD6FF;
 
 
-    --c-white-smoky: #F5F5F5;
+    /*--c-white-smoky: #F5F5F5;*/
     --c-gray-granite: #313844;
     --c-gray-light: #d3d3d3;
     --c-blue-deep: #252161;
@@ -30,8 +30,6 @@
     --c-violet-dark: #A700FF;
     --c-yellow: #FF9C01;
     --c-red: #EB0909;
-    --c-light-red: #f0416c;
-    --c-dark-red: #BB0707;
     --c-green: #6BAE05;
     --c-light-green: #F1F8E6;
     --c-turquoise: #05BFBB;
@@ -283,9 +281,9 @@ input, .form-control {padding:11px 14px 7px;text-align:left;color:var(--c-new-bl
 
 .help-block-error {color:var(--c-red);}
 
-.btn-delete {display:inline-block;padding:8px 10px 4px;color:var(--c-white);font-weight:700;font-size:20px;background:var(--c-red);border-radius:5px;text-align:center;border:none;}
-.btn-delete:hover {color:var(--c-white);background:var(--c-dark-red);}
-.btn-delete:focus {box-shadow:none;}
+.btn-delete {background:var(--c-red);}
+.btn-delete:hover {background:var(--c-red);box-shadow: inset 0 0 100px rgba(0,0,0,0.3)!important;}
+.btn-delete:focus {background:var(--c-red);}
 
 /* auth */
 
@@ -293,10 +291,6 @@ input, .form-control {padding:11px 14px 7px;text-align:left;color:var(--c-new-bl
 .back:hover {color:var(--c-white);}
 
 .forgot a {color:var(--c-new-blue);}
-
-.btn-sign {display:block;padding:8px 10px 4px;color:var(--c-white);font-weight:700;font-size:20px;background:linear-gradient(90deg, var(--c-violet-gray) 0%, var(--c-violet) 100%);border-radius:5px;text-align:center;border:none;}
-.btn-sign:hover {color:var(--c-white);background:linear-gradient(90deg, var(--c-violet-gray) 60%, var(--c-violet-dark) 100%);}
-.btn-sign:focus {box-shadow:none;}
 
 .site-signup .line {height:100%;width:1px;border-right:1px solid var(--c-new-blue);margin:0 auto;position:relative;}
 .site-signup .line:after {height:50px;width:50px;border-radius:200px;background:var(--c-white);position:absolute;top:50%;margin:-25px 0 0 -25px;text-align:center;content:"OR";display:block;line-height:50px;font-weight:bold;color:var(--c-new-blue)}
@@ -1045,7 +1039,7 @@ input, .form-control {padding:11px 14px 7px;text-align:left;color:var(--c-new-bl
 .tag-premium:before {content:'p';}
 .tag-family-pass {background:var(--c-yellow);color:var(--c-white);}
 .tag-family-pass:before {content:'r';}
-.tag-non-refundable {background:var(--c-light-red);color:var(--c-white);}
+.tag-non-refundable {background:var(--c-red);color:var(--c-white);}
 .tag-non-refundable:before {content:'s';}
 .tag-on-sale {background:var(--c-green);color:var(--c-white);}
 .tag-on-sale:before {content:'q';}

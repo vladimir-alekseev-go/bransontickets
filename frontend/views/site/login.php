@@ -47,7 +47,7 @@ $messages = Yii::$app->session->getFlash('messages');
                                 <div class="col-5">
                                     <?= Html::submitButton(
                                         'Sign In',
-                                        ['class' => 'btn btn-sign', 'name' => 'sign-in-button']
+                                        ['class' => 'btn btn-primary', 'name' => 'sign-in-button']
                                     ) ?>
                                 </div>
                                 <div class="col-7 text-end forgot">
