@@ -118,6 +118,7 @@ class Tripium extends Model
         $server_output = curl_exec($this->ch);
         $this->curlInfo = curl_getinfo($this->ch);
         $this->statusCode = (int)$this->curlInfo['http_code'];
+        $this->errorCode = null;
         if ($this->statusCode === 0 && $server_output === false && floor(
                 $this->curlInfo['total_time']
             ) == $this->timeout) {
@@ -142,7 +143,11 @@ class Tripium extends Model
             || $this->statusCode === self::STATUS_UNPROCESSABLE_ENTITY) {
             $res = Json::decode($server_output);
 
-            if (isset($res["errorCode"]) && $res["errorCode"] == self::ERROR_CRUD_WITH_PAST_DATE) {
+            if (isset($res["errorCode"])) {
+                $this->errorCode = (int)$res["errorCode"];
+            }
+
+            if ($this->errorCode === self::ERROR_CRUD_WITH_PAST_DATE) {
                 if (!empty($itempriceGroup["name"])) {
                     $this->addErrors([
                         "Tickets " . ($itempriceGroup["name"] ? 'for ' . $itempriceGroup["name"] : '') . " are no longer available to purchase online. Please remove this item from your shopping cart to complete your order. 
@@ -150,22 +155,16 @@ class Tripium extends Model
                     ]);
                 }
             }
-            if (isset($res["errorCode"])) {
-                $this->errorCode = $res["errorCode"];
-            }
 
-            if (!empty($res["errors"])) {
-                $this->addErrors([$res["errorCode"]]);
-            }
-
-            if (isset($res["errorCode"]) && in_array(
-                    $res["errorCode"],
-                    [
-                        self::CUTOFF,
-                        self::ERROR_NOT_AVAILABLE_SS,
-                        self::ERROR_NOT_AVAILABLE
-                    ]
-                )) {
+            if (in_array(
+                $this->errorCode,
+                [
+                    self::CUTOFF,
+                    self::ERROR_NOT_AVAILABLE_SS,
+                    self::ERROR_NOT_AVAILABLE
+                ],
+                true
+            )) {
                 $package = isset($res['data']['pkg']) ? $res['data']['pkg'] : $res['package'];
                 if (!empty($package['category'])) {
                     $itemNames = MarketingItemHelper::getItemNames();
@@ -178,16 +177,24 @@ class Tripium extends Model
                 }
             }
 
-//            if (isset($res["errorCode"]) && $res["errorCode"] == self::ERROR_CANCELLED) {
-//                $this->addErrors([".<br/>You could still cancel any individual item(s) that are still within cancellation period or call us $phone to assist you."]);
-//            }
+            if ($this->errorCode === self::ERROR_CANCELLED) {
+                $this->addErrors([".<br/>You could still cancel any individual item(s) that are still within cancellation period or call us $phone to assist you."]);
+            }
 
-            if (!empty($this->errorCode) && $this->errorCode == self::STATUS_ONE_HOTEL_PER_ORDER) {
+            if ($this->errorCode === self::STATUS_ONE_HOTEL_PER_ORDER) {
                 $this->addErrors([self::getStatusValue(self::STATUS_ONE_HOTEL_PER_ORDER)]);
             }
 
             if (!empty($res["globalErrors"])) {
                 $this->addErrors($res["globalErrors"]);
+            }
+
+            if (!empty($res['errors']) && is_array($res['errors'])) {
+                foreach ($res['errors'] as $name => $errors) {
+                    foreach ($errors as $error) {
+                        $this->addErrors([$name => $error]);
+                    }
+                }
             }
 
 			curl_close ($this->ch);
@@ -700,17 +707,21 @@ class Tripium extends Model
         return $res;
     }
 
-    public function postCustomer($data)
+    public function postCustomer($data): ?array
     {
         if (!empty($data['id'])) {
             $res = $this->request('/customer/' . $data['id'], $data, 'put');
         } else {
             $res = $this->request('/customer', $data, 'post');
         }
-        return $res ? $res : false;
+        if ($this->statusCode === self::STATUS_CODE_SUCCESS) {
+            return $res;
+        }
+
+        return null;
     }
 
-    public function getCustomer($id)
+    public function getCustomer($id): ?array
     {
         if (!$id) {
             return null;
@@ -719,6 +730,7 @@ class Tripium extends Model
         if ($this->statusCode === self::STATUS_CODE_SUCCESS) {
             return $res;
         }
+        return null;
     }
 
     /**

@@ -57,11 +57,8 @@ class CustumerForm extends Model
             ]
         );
 
-        if (!$res) {
-            $errors = $Custumer->getErrors();
-            if ($errors) {
-                $this->addError('errors', array_shift($errors)[0]);
-            }
+        if (!$res && $Custumer->getErrors()) {
+            $this->addErrors($Custumer->getErrors());
         }
 
         return $res;
@@ -81,11 +78,8 @@ class CustumerForm extends Model
             ]
         );
 
-        if (!$res) {
-            $errors = $Custumer->getErrors();
-            if ($errors) {
-                $this->addError('errors', array_shift($errors)[0]);
-            }
+        if (!$res && $Custumer->getErrors()) {
+            $this->addErrors($Custumer->getErrors());
         }
 
         return $res;

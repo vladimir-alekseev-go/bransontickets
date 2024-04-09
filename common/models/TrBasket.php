@@ -978,6 +978,9 @@ class TrBasket extends _source_TrBasket
 
         $Tripium = new Tripium;
         $userTripium = $Tripium->getCustomer($customer_id);
+        if ($Tripium->errorCode === Tripium::CUSTOMER_WAS_NOT_FOUND) {
+            $userTripium = (new Custumer())->reCreate();
+        }
 
         if (empty($userTripium) && $Tripium->statusCode == Tripium::STATUS_NOT_ACCEPTABLE) {
             $user = User::find()->where(["tripium_id" => $customer_id])->one();
@@ -1018,7 +1021,7 @@ class TrBasket extends _source_TrBasket
         $order = $tripium->addOrder($data);
 
         if (!empty($tripium->errors)) {
-            if (!empty($order["errorCode"]) && $order["errorCode"] == Tripium::CUSTOMER_WAS_NOT_FOUND) {
+            if ($tripium->errorCode === Tripium::CUSTOMER_WAS_NOT_FOUND) {
                 $Customer = new Custumer;
                 $res = $Customer->reCreate();
 

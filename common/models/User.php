@@ -518,40 +518,32 @@ class User extends _source_Users implements IdentityInterface
         return false;
     }
 
-	public function updateFromTripium($user_id, $recreate = false)
+	public function updateFromTripium($recreate = false): ?array
 	{
 		$Tripium = new Tripium;
 
-		$user = self::findOne($user_id);
+		$res = $Tripium->getCustomer($this->tripium_id);
 
-		if (!$user) {
-            return false;
+		if ($res) {
+            $this->first_name = $res['firstName'];
+            $this->last_name = $res['lastName'];
+            $this->address = $res['address'];
+            $this->city = $res['city'];
+            $this->state = $res['state'];
+            $this->zip_code = $res['zipCode'];
+            $this->phone = $res['phone'];
+            $this->email = $res['email'];
+            if ($dirty = $this->getDirtyAttributes()) {
+                $this->save();
+            }
+            return $res;
         }
 
-		$res = $Tripium->getCustomer($user->tripium_id);
-
-		if (!$res) {
-            return false;
+        if ($recreate && $Tripium->errorCode === Tripium::CUSTOMER_WAS_NOT_FOUND) {
+            return (new Custumer())->reCreate($this->id);
         }
 
-		$user->first_name = $res['firstName'];
-		$user->last_name = $res['lastName'];
-		$user->address = $res['address'];
-		$user->city = $res['city'];
-		$user->state = $res['state'];
-		$user->zip_code = $res['zipCode'];
-		$user->phone = $res['phone'];
-		$user->email = $res['email'];
-		if ($dirty = $user->getDirtyAttributes()) {
-			$user->save();
-		}
-
-		if (!empty($res['errorCode']) && $res['errorCode'] == Tripium::CUSTOMER_WAS_NOT_FOUND && $recreate) {
-			$Custumer = new Custumer;
-			$res = $Custumer->reCreate($user_id);
-		}
-
-		return $res;
+        return null;
 	}
 
     public static function getStatusList()

@@ -52,16 +52,13 @@ class ProfileController extends Controller
             return $this->redirect(['profile/edit'], 302);
         }
 
-        $user = User::getCurrentUser();
+        $user = User::getCurrentUser(true);
 
         if (!$user) {
             return $this->redirect('/');
         }
 
-        $User = new User;
-        $User->updateFromTripium($user->id, true);
-
-        $user = User::getCurrentUser(true);
+        $user->updateFromTripium(true);
 
         $orders = TrOrders::find()
             ->where(['tripium_user_id' => $user->tripium_id])

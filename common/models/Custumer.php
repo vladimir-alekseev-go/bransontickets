@@ -61,76 +61,81 @@ class Custumer extends Model
         return self::get()->tripium_id;
 	}
 
-	/**
-	 * Create user on the POS
-	 * @param [] $data
-	 * @param int $user_id
-	 * @return bool | []
-	 */
-	public function create($data, $user_id = null)
-	{
-		$tripium = new Tripium;
-		$res = $tripium->postCustomer($data);
+    /**
+     * Create user on the POS
+     *
+     * @param array $data
+     * @param null  $userId
+     *
+     * @return array|null
+     */
+    public function create($data, $userId = null): ?array
+    {
+        $tripium = new Tripium;
+        $res = $tripium->postCustomer($data);
 
-		if (!empty($res["globalErrors"])) {
-    		if (is_array($res["globalErrors"])) {
-    			$res["globalErrors"] = array_shift($res["globalErrors"]);
-    		}
-    		if (is_array($res["globalErrors"])) {
-    			$res["globalErrors"] = array_shift($res["globalErrors"]);
-    		}
-    		$this->addError("errors",$res["globalErrors"]);
-    		return false;
-    	} else {
-			Yii::$app->session->set("tripium_custumer", [
-			    "tripium_id" => $res["id"],
-			    "first_name" => $res["firstName"],
-			    "last_name" => $res["lastName"],
-			    "email" => $res["email"],
-			    "phone" => $res["phone"],
-			    "address" => $res["address"],
-			    "city" => $res["city"],
-			    "state" => $res["state"],
-			    "zip_code" => $res["zipCode"],
-			    "country" => $res["country"],
-			]);
+        if (!$res) {
+            $this->addErrors($tripium->getErrors());
+            return null;
+        }
 
-			if ($user_id) {
-				$User = User::find()->where(['id' => $user_id])->one();
-				$User->tripium_id = $res["id"];
-				$User->save();
-				User::getCurrentUser(true);
-			}
+        Yii::$app->session->set(
+            "tripium_custumer",
+            [
+                "tripium_id" => $res["id"],
+                "first_name" => $res["firstName"],
+                "last_name"  => $res["lastName"],
+                "email"      => $res["email"],
+                "phone"      => $res["phone"],
+                "address"    => $res["address"],
+                "city"       => $res["city"],
+                "state"      => $res["state"],
+                "zip_code"   => $res["zipCode"],
+                "country"    => $res["country"],
+            ]
+        );
 
-    		return $res;
-    	}
-	}
+        if ($userId) {
+            /** @var User $User */
+            $User = User::find()->where(['id' => $userId])->one();
+            $User->tripium_id = $res["id"];
+            $User->save();
+            User::getCurrentUser(true);
+        }
 
-	/**
-	 * Re create user on the POS
-	 * @param int $user_id
-	 * @return bool | []
-	 */
-	public function reCreate($user_id = null)
-	{
-		if (!$user_id) {
-			$user = User::getCurrentUser();
-			$userCustomerTripium = User::getCustomerTripium();
-			$user_id = $user["id"];
-		} else {
-		    $userCustomerTripium = User::find()->where(['id' => $user_id])->one();
-		}
+        return $res;
+    }
 
-		return $this->create([
-    		"email" => $userCustomerTripium->email,
-			"firstName" => $userCustomerTripium->first_name,
-			"lastName" => $userCustomerTripium->last_name,
-			"phone" => $userCustomerTripium->phone,
-			"address" => $userCustomerTripium->address,
-			"city" => $userCustomerTripium->city,
-			"state" => $userCustomerTripium->state,
-			"zipCode" => $userCustomerTripium->zip_code,
-			"country" => $userCustomerTripium->country,
-    	], $user_id);
-	}
+    /**
+     * Re create user on the POS
+     *
+     * @param null $userId
+     *
+     * @return array|null
+     */
+    public function reCreate($userId = null): ?array
+    {
+        if (!$userId) {
+            $user = User::getCurrentUser();
+            if ($user) {
+                $userId = $user->id;
+            }
+            $userCustomerTripium = User::getCustomerTripium();
+        } else {
+            $userCustomerTripium = User::find()->where(['id' => $userId])->one();
+        }
+        return $this->create(
+            [
+                "email"     => $userCustomerTripium->email,
+                "firstName" => $userCustomerTripium->first_name,
+                "lastName"  => $userCustomerTripium->last_name,
+                "phone"     => $userCustomerTripium->phone,
+                "address"   => $userCustomerTripium->address,
+                "city"      => $userCustomerTripium->city,
+                "state"     => $userCustomerTripium->state,
+                "zipCode"   => $userCustomerTripium->zip_code,
+            ],
+            $userId
+        );
+    }
 }
