@@ -30,7 +30,7 @@ $this->registerJs('order.init()');
                     <?php } ?>
                 </div>
                 <div class="price">$ <?= $model->min_rate ?></div>
-                <a href="#" class="btn btn-primary w-100">
+                <a href="#availability" onclick="$('.js-tag').eq(0).trigger('click')" class="btn btn-primary w-100">
                     <?php if ($model instanceof TrPosHotels || $model instanceof TrPosPlHotels) { ?>
                         Book now
                     <?php } else { ?>
