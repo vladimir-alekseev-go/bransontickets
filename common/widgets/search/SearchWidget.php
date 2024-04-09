@@ -138,6 +138,7 @@ class SearchWidget extends Widget
             return $str;
         }
         $ar = explode($this->query, $str);
+        $ar = array_splice($ar, 0, 20);
         if ($ar) {
             foreach ($ar as $k => &$it) {
                 if ($k === 0 && strlen($it) > $len) {
