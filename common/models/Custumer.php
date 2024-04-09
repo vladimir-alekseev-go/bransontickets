@@ -19,7 +19,7 @@ class Custumer extends Model
     public $state;
     public $zip_code;
     public $country;
-    
+
     /**
      * @inheritdoc
      */
@@ -40,7 +40,7 @@ class Custumer extends Model
             [['zip_code'], 'string', 'max' => 6, 'min' => 5],
         ];
     }
-    
+
     /**
      * Get Custumer from session
      * @return Custumer
@@ -51,7 +51,7 @@ class Custumer extends Model
         $Custumer->setAttributes(Yii::$app->session->get("tripium_custumer"));
         return $Custumer;
     }
-    
+
     /**
      * Get Customer id from session
      * @return int
@@ -60,7 +60,7 @@ class Custumer extends Model
 	{
         return self::get()->tripium_id;
 	}
-	
+
 	/**
 	 * Create user on the POS
 	 * @param [] $data
@@ -71,14 +71,14 @@ class Custumer extends Model
 	{
 		$tripium = new Tripium;
 		$res = $tripium->postCustomer($data);
-		
+
 		if (!empty($res["globalErrors"])) {
     		if (is_array($res["globalErrors"])) {
     			$res["globalErrors"] = array_shift($res["globalErrors"]);
     		}
     		if (is_array($res["globalErrors"])) {
     			$res["globalErrors"] = array_shift($res["globalErrors"]);
-    		}	
+    		}
     		$this->addError("errors",$res["globalErrors"]);
     		return false;
     	} else {
@@ -94,14 +94,14 @@ class Custumer extends Model
 			    "zip_code" => $res["zipCode"],
 			    "country" => $res["country"],
 			]);
-			
+
 			if ($user_id) {
 				$User = User::find()->where(['id' => $user_id])->one();
 				$User->tripium_id = $res["id"];
 				$User->save();
-				User::getCurentUser(true);
+				User::getCurrentUser(true);
 			}
-			
+
     		return $res;
     	}
 	}
@@ -114,13 +114,13 @@ class Custumer extends Model
 	public function reCreate($user_id = null)
 	{
 		if (!$user_id) {
-			$user = User::getCurentUser();
+			$user = User::getCurrentUser();
 			$userCustomerTripium = User::getCustomerTripium();
 			$user_id = $user["id"];
 		} else {
 		    $userCustomerTripium = User::find()->where(['id' => $user_id])->one();
 		}
-		
+
 		return $this->create([
     		"email" => $userCustomerTripium->email,
 			"firstName" => $userCustomerTripium->first_name,

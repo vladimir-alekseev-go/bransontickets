@@ -70,7 +70,7 @@ class User extends _source_Users implements IdentityInterface
             [['first_name', 'last_name'], 'match', 'pattern' => '/^([A-zА-я\-\s]+)$/', 'on' => self::SCENARIO_PROFILE],
             [['first_name', 'last_name'], 'string', 'min'=>2, 'on' => self::SCENARIO_PROFILE],
             [['first_name', 'last_name', 'email', 'phone', 'zip_code'], 'required', 'on' => self::SCENARIO_PROFILE],
-            
+
         ];
     }
 
@@ -85,7 +85,7 @@ class User extends _source_Users implements IdentityInterface
 		$save["city"] = $this->city;
 		$save["state"] = $this->state;
 		$save["zipCode"] = $this->zip_code;
-		
+
 		if ($this->getOldAttribute("email") && $this->email != $this->getOldAttribute("email")) {
 			if ($this->fb_id || $this->tw_id || $this->gp_id) {
 				$this->addError("email", "You can't change email, it has connection with social network");
@@ -95,10 +95,10 @@ class User extends _source_Users implements IdentityInterface
 		}
 
 		if (!$this->withoutTripium) {
-			if (!$this->tripium_id) {	
+			if (!$this->tripium_id) {
 				$tripium = new Tripium;
 		    	$result = $tripium->postCustomer($save);
-		    	
+
 		    	if (!empty($result["id"])) {
 		    		$this->tripium_id = $result["id"];
 		    	}
@@ -108,11 +108,11 @@ class User extends _source_Users implements IdentityInterface
 				$saveTripium["id"] = $this->tripium_id;
 		    	$result = $tripium->postCustomer($saveTripium);
 			}
-		
+
 	    	if (!empty($result["errors"]["email"])) {
 	    		$this->addError("email", $result["errors"]["email"][0]);
 	    	}
-	    	
+
 	    	if (!$this->isNewRecord) {
 	    	    if (!empty($result["errors"]["phone"])) {
                     $this->addError("phone", $result["errors"]["phone"][0]);
@@ -147,13 +147,13 @@ class User extends _source_Users implements IdentityInterface
 	public function afterSave($insert, $data)
 	{
 		parent::afterSave($insert, $data);
-		
+
 		// set the connect between basket with user
 		//if (!$this->withoutBasket) {
 		//	$b = new Basket;
 		//	$b->setForUser($this->id);
 		//}
-		// updating orders of users 
+		// updating orders of users
 //		if(!$this->withoutTripium && $this->tripium_id)
 //		{
 //			$Orders = new Orders;
@@ -307,19 +307,19 @@ class User extends _source_Users implements IdentityInterface
     public static function socialAuth($client): bool
     {
     	$name = $client->getName();
-       	 
+
         if ($name === self::FACEBOOK) {
             return self::authByFacebook($client);
         }
-        	
+
         if ($name === self::TWITTER) {
             return self::authByTwitter($client);
         }
-        	
+
         if ($name === self::GOOGLE) {
             return self::authByGoogle($client);
         }
-        	
+
         return false;
     }
 
@@ -452,18 +452,6 @@ class User extends _source_Users implements IdentityInterface
      * @param bool $force
      *
      * @return User|null
-     *
-     * @deprecated Use `getCurrentUser()`
-     */
-    public static function getCurentUser($force = false): ?User
-    {
-		return self::getCurrentUser($force);
-	}
-
-    /**
-     * @param bool $force
-     *
-     * @return User|null
      */
     public static function getCurrentUser($force = false): ?User
     {
@@ -529,7 +517,7 @@ class User extends _source_Users implements IdentityInterface
 
         return false;
     }
-	
+
 	public function updateFromTripium($user_id, $recreate = false)
 	{
 		$Tripium = new Tripium;

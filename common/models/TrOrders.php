@@ -339,7 +339,7 @@ class TrOrders extends _source_TrOrders
         $canBeCanselled = in_array(TrShows::TYPE, $categories, false) || in_array(TrAttractions::TYPE, $categories, false) ||
             $this->getVacationPackages();
 
-        $user = User::getCurentUser();
+        $user = User::getCurrentUser();
 
         $limitTime = null;
         foreach ($this->getPackages() as $package) {
@@ -625,7 +625,7 @@ class TrOrders extends _source_TrOrders
      */
     public function getUserFullName()
     {
-        $user = User::getCurentUser();
+        $user = User::getCurrentUser();
         $userFullName = $user !== null ? trim($user->first_name . " " . $user->last_name) : '';
         return empty($userFullName) ? $this->getCustomerFullName() : $userFullName;
     }
