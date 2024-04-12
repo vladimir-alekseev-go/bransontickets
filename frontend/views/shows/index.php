@@ -4,6 +4,7 @@ use common\models\form\Search;
 use common\models\TrPosHotels;
 use common\models\TrPosPlHotels;
 use common\models\TrShows;
+use frontend\controllers\BaseController;
 use yii\data\Pagination;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
@@ -20,7 +21,7 @@ use yii\widgets\LinkPager;
  */
 
 
-$this->context->layout = 'main-list';
+$this->context->layout = BaseController::LAYOUT_MAIN_LIST;
 $this->title = constant(get_class($Search->model) . '::NAME_PLURAL');
 
 $this->registerJsFile('/js/page-nav.js', ['depends' => [JqueryAsset::class]]);

@@ -23,6 +23,7 @@ use common\models\TrOrders;
 use common\models\TrShows;
 use common\models\User;
 use common\tripium\Tripium;
+use frontend\controllers\BaseController;
 use wlfrontend\widgets\scheduleSlider\ScheduleSliderWidget;
 use DateTime;
 use Exception;
@@ -396,7 +397,7 @@ trait OrderController
      */
     public function actionPrintVoucherVacationPackage($orderNumber, $vacationPackageId, $packageId)
     {
-        $this->layout = "print";
+        $this->layout = BaseController::LAYOUT_PRINT;
 
         $Order = $this->getOrder($orderNumber);
 
@@ -426,7 +427,7 @@ trait OrderController
      */
     public function actionPrintAllVoucher($orderNumber)
     {
-    	$this->layout = "print";
+    	$this->layout = BaseController::LAYOUT_PRINT;
 
     	$Order = $this->getOrder($orderNumber);
 
@@ -450,7 +451,7 @@ trait OrderController
      */
     public function actionPrintVoucher($orderNumber, $packageId)
     {
-    	$this->layout = "print";
+    	$this->layout = BaseController::LAYOUT_PRINT;
 
     	$Order = $this->getOrder($orderNumber);
 
@@ -475,7 +476,7 @@ trait OrderController
      */
     public function actionPrint($orderNumber)
     {
-    	$this->layout = "print";
+    	$this->layout = BaseController::LAYOUT_PRINT;
 
     	$Order = $this->getOrder($orderNumber);
 
@@ -496,7 +497,7 @@ trait OrderController
      */
     public function actionPrintItinerary($orderNumber)
     {
-    	$this->layout = "print";
+    	$this->layout = BaseController::LAYOUT_PRINT;
 
     	$Order = $this->getOrder($orderNumber);
 
@@ -667,7 +668,7 @@ trait OrderController
 	{
 	    $date = new DateTime($date);
 
-		$this->layout = "empty";
+		$this->layout = BaseController::LAYOUT_EMPTY;
 
 		$tripium_id = User::getCustomerTripiumID();
 
@@ -763,7 +764,7 @@ trait OrderController
     	}
 
 	    if ((int)$process === 1) {
-	    	$this->layout = "empty";
+	    	$this->layout = BaseController::LAYOUT_EMPTY;
 	    	$PaymentModifyForm = new PaymentModifyForm(['coupon_code'=>$OrderForm->coupon_code]);
 	    	$PaymentModifyFormAddCard = new PaymentModifyFormAddCard(['coupon_code'=>$OrderForm->coupon_code]);
 

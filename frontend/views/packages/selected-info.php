@@ -1,12 +1,13 @@
 <?php
 
 use common\models\form\PackageForm;
+use frontend\controllers\BaseController;
 
 /**
  * @var PackageForm $packageForm
  */
 
-$this->context->layout = 'empty';
+$this->context->layout = BaseController::LAYOUT_EMPTY;
 $selectedItems = $packageForm->getSelectedItems();
 
 ?>

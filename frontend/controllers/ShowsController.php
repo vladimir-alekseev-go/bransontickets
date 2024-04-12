@@ -71,7 +71,7 @@ class ShowsController extends Controller
 
         if (Yii::$app->request->isAjax) {
             Yii::$app->response->format = Response::FORMAT_JSON;
-            $this->layout = 'empty';
+            $this->layout = BaseController::LAYOUT_EMPTY;
         }
 
         $query = TrShows::getByFilterAll($Search);

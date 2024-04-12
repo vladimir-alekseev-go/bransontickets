@@ -1,5 +1,6 @@
 <?php
 
+use frontend\controllers\BaseController;
 use common\helpers\General;
 use common\models\TrAttractions;
 use common\models\TrShows;
@@ -8,7 +9,7 @@ use common\models\TrShows;
  * @var TrShows|TrAttractions $model
  */
 
-$this->context->layout = 'item-detail';
+$this->context->layout = BaseController::LAYOUT_ITEM_DETAIL;
 Yii::$app->view->params['model'] = $model;
 
 $this->title = $model->name;

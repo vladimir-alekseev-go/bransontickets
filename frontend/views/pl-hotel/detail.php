@@ -2,6 +2,7 @@
 
 use common\models\form\PlHotelReservationForm;
 use common\models\TrPosPlHotels;
+use frontend\controllers\BaseController;
 
 /**
  * @var TrPosPlHotels          $model
@@ -9,7 +10,7 @@ use common\models\TrPosPlHotels;
  */
 
 $model = $ReservationForm->model;
-$this->context->layout = 'item-detail';
+$this->context->layout = BaseController::LAYOUT_ITEM_DETAIL;
 Yii::$app->view->params['model'] = $model;
 
 $this->title = $model->name;
