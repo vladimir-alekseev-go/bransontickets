@@ -3,6 +3,7 @@
 namespace frontend\controllers;
 
 use common\controllers\SiteControllerTrait;
+use frontend\components\CustomerErrorAction;
 use Yii;
 use yii\authclient\AuthAction;
 use yii\web\Controller;
@@ -50,8 +51,8 @@ class SiteController extends Controller
     public function actions()
     {
         return [
-            'error' => [
-                'class' => \yii\web\ErrorAction::class,
+            'error'   => [
+                'class' => CustomerErrorAction::class,
             ],
             'captcha' => [
                 'class' => \yii\captcha\CaptchaAction::class,
@@ -133,7 +134,7 @@ class SiteController extends Controller
      *
      * @return mixed
      */
-    public function actionAbout()
+    public function actionAboutOld()
     {
         return $this->render('about');
     }
