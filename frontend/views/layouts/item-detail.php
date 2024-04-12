@@ -67,20 +67,21 @@ if (!empty($theatreAddress)) {
                                 </span>
                         </div>
                     <?php } ?>
+                    <?php if ($model->phone) {?>
                     <div class="item">
                         <span class="icon br-t-smartphone fs-4"></span>
                         <a href="tel: <?= $model->phone ?>" class="phone"><?= General::formatPhoneNumber($model->phone) ?></a>
                     </div>
+                    <?php } ?>
                 </div>
                 <?php if ($model instanceof TrPosHotels || $model instanceof TrPosPlHotels) { ?>
                     <?php if (!empty($model->check_in) || !empty($model->check_out)) { ?>
-                        <div class="check-time mb-3 mb-md-4">
+                        <div class="theatre-info check-time mb-3 mb-md-4">
                             <?php if (!empty($model->check_in)) { ?>
                                 <div class="item">
                                     <span class="icon br-t-time fs-4"></span> Check In: <?= $model->getCheckIn() ?>
                                 </div>
                             <?php } ?>
-                            <span> - </span>
                             <?php if (!empty($model->check_out)) { ?>
                                 <div class="item">
                                     <span class="icon br-t-time fs-4"></span> Check Out: <?= $model->getCheckOut() ?>

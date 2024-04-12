@@ -69,7 +69,7 @@ use yii\helpers\Html;
                                         <?= $model->rating ?> <?= $model->review_rating_desc ?>
                                     </small></div>
                             </div>
-                            <div class="col-12 col-sm-3 text-sm-end pt-3 more-detail">
+                            <div class="col-12 d-none d-sm-block col-sm-3 text-sm-end pt-1 more-detail">
                                 <a href="<?= $model->getUrl() ?>">
                                     More Detail <i class="icon br-t-points"></i>
                                 </a>

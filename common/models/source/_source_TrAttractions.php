@@ -54,13 +54,14 @@ use Yii;
  * @property int|null $call_us_to_book
  * @property string|null $external_service
  *
+ * @property AttractionsPhotoJoin[] $attractionsPhotoJoins
  * @property ContentFiles $image
  * @property ContentFiles $preview
- * @property TrTheaters $theatre
  * @property TrAdmissions[] $trAdmissions
  * @property TrAttractionsCategories[] $trAttractionsCategories
  * @property TrAttractionsSimilar[] $trAttractionsSimilars
  * @property TrAttractionsSimilar[] $trAttractionsSimilars0
+ * @property VacationPackageAttraction[] $vacationPackageAttractions
  */
 class _source_TrAttractions extends \yii\db\ActiveRecord
 {
@@ -86,17 +87,15 @@ class _source_TrAttractions extends \yii\db\ActiveRecord
             [['code', 'name', 'address', 'email', 'theatre_name'], 'string', 'max' => 128],
             [['city', 'phone', 'fax', 'intermissions'], 'string', 'max' => 64],
             [['state', 'zip_code'], 'string', 'max' => 8],
-            [['voucher_procedure', 'on_special_text'], 'string', 'max' => 1024],
+            [['voucher_procedure', 'amenities', 'videos', 'cancel_policy_text', 'hours'], 'string', 'max' => 2048],
+            [['on_special_text'], 'string', 'max' => 1024],
             [['cast_size', 'location_lat', 'location_lng', 'external_service'], 'string', 'max' => 16],
             [['hash_summ'], 'string', 'max' => 32],
             [['photos'], 'string', 'max' => 4096],
-            [['amenities', 'videos', 'cancel_policy_text'], 'string', 'max' => 2048],
             [['tags'], 'string', 'max' => 256],
-            [['hours'], 'string', 'max' => 1048],
             [['id_external'], 'unique'],
             [['code'], 'unique'],
             [['image_id'], 'exist', 'skipOnError' => true, 'targetClass' => ContentFiles::class, 'targetAttribute' => ['image_id' => 'id']],
-            [['theatre_id'], 'exist', 'skipOnError' => true, 'targetClass' => TrTheaters::class, 'targetAttribute' => ['theatre_id' => 'id_external']],
             [['preview_id'], 'exist', 'skipOnError' => true, 'targetClass' => ContentFiles::class, 'targetAttribute' => ['preview_id' => 'id']],
         ];
     }
@@ -123,7 +122,7 @@ class _source_TrAttractions extends \yii\db\ActiveRecord
             'status' => 'Status',
             'show_in_footer' => 'Show In Footer',
             'location_external_id' => 'Location External ID',
-            'rank_level' => 'Rank',
+            'rank_level' => 'Rank Level',
             'marketing_level' => 'Marketing Level',
             'voucher_procedure' => 'Voucher Procedure',
             'weekly_schedule' => 'Weekly Schedule',
@@ -157,6 +156,16 @@ class _source_TrAttractions extends \yii\db\ActiveRecord
     }
 
     /**
+     * Gets query for [[AttractionsPhotoJoins]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAttractionsPhotoJoins()
+    {
+        return $this->hasMany(AttractionsPhotoJoin::class, ['item_id' => 'id']);
+    }
+
+    /**
      * Gets query for [[Image]].
      *
      * @return \yii\db\ActiveQuery
@@ -174,16 +183,6 @@ class _source_TrAttractions extends \yii\db\ActiveRecord
     public function getPreview()
     {
         return $this->hasOne(ContentFiles::class, ['id' => 'preview_id']);
-    }
-
-    /**
-     * Gets query for [[Theatre]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getTheatre()
-    {
-        return $this->hasOne(TrTheaters::class, ['id_external' => 'theatre_id']);
     }
 
     /**
@@ -224,5 +223,15 @@ class _source_TrAttractions extends \yii\db\ActiveRecord
     public function getTrAttractionsSimilars0()
     {
         return $this->hasMany(TrAttractionsSimilar::class, ['similar_external_id' => 'id_external']);
+    }
+
+    /**
+     * Gets query for [[VacationPackageAttractions]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getVacationPackageAttractions()
+    {
+        return $this->hasMany(VacationPackageAttraction::class, ['item_external_id' => 'id_external']);
     }
 }

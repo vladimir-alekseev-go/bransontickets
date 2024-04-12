@@ -513,8 +513,11 @@ input, .form-control {padding:11px 14px 7px;text-align:left;color:var(--c-new-bl
 .show-detail .theatre-info .item:nth-child(1) {flex:5;}
 .show-detail .theatre-info .item:nth-child(2) {flex:4;}
 .show-detail .theatre-info .item:nth-child(3) {flex:2;}
+.show-detail .theatre-info.theatre-info {display: block;}
+.show-detail .theatre-info.theatre-info .item {display: inline-block;}
 .show-detail .theatre-info, .show-detail .check-time {font-size:18px;}
 .show-detail .theatre-info .item, .show-detail .check-time .item {margin:0 10px 10px 0;}
+.show-detail .hotel-filter .help-block-error {margin:0;}
 
 @media (max-width: 1200px) {
     .show-detail h1 {font-size:32px;}
@@ -561,7 +564,7 @@ input, .form-control {padding:11px 14px 7px;text-align:left;color:var(--c-new-bl
 }
 
 .overview-calendar-block .ticket .title {padding:5px 0;font-size:17px;color:var(--c-gray-granite);text-transform:uppercase;}
-.overview-calendar-block .ticket .price {padding:0 0 26px 0;font-weight:700;font-size:30px;color:var(--c-gray-granite);}
+.overview-calendar-block .ticket .price {font-weight:700;font-size:30px;color:var(--c-gray-granite);}
 .overview-calendar-block .calendar-slider {position:relative;margin:15px 0;padding:10px;border:2px solid var(--c-primary-ligth);border-radius:8px;}
 .overview-calendar-block .calendar-slider .frame ul {transform-translateZ:none !important;width:9999999999px;overflow:hidden;margin:0;}
 .overview-calendar-block .calendar-slider .frame ul li {width:114px;margin:0 5px;}
@@ -573,37 +576,17 @@ input, .form-control {padding:11px 14px 7px;text-align:left;color:var(--c-new-bl
 .overview-calendar-block .calendar-slider-block .admissions-list .name {padding-bottom:5px;font-size:20px;white-space:nowrap;height:35px;}
 .overview-calendar-block .calendar-slider-block .admissions-list .name span {display:inline;padding:0 10px 0 0;position:relative;z-index:5;background:var(--c-white);}
 .overview-calendar-block .calendar-slider-block .admission-space {height:50px;}
-.overview-calendar-block .name {padding-bottom:40px;font-weight:700;font-size:24px;color:var(--c-blue-deep);}
+.overview-calendar-block .name {font-weight:700;font-size:24px;color:var(--c-blue-deep);}
 .overview-calendar-block .label {font-weight:700;font-size:18px;color:var(--c-blue-deep);}
-.overview-calendar-block .input-daterange input {width:220px;padding:11px 14px 7px;text-align:left;color:var(--c-blue-deep-dark-3);font-weight:350;font-size:16px;border:1px solid var(--c-blue-deep);border-radius:5px;box-shadow:none !important;}
+.overview-calendar-block .input-daterange input {padding:11px 14px 7px;text-align:left;color:var(--c-blue-deep-dark-3);font-weight:350;font-size:16px;border:1px solid var(--c-blue-deep);border-radius:5px;box-shadow:none !important;}
 .overview-calendar-block .filter-rooms-description {font-weight:700;font-size:18px;color:var(--c-blue-deep);}
-.overview-calendar-block button.search-room {margin-top:34px;}
-.overview-calendar-block .search-room {width:100%;padding:7px 10px 3px;font-size:20px;font-weight:700;border:1px solid var(--c-new-blue);border-radius:5px;background:var(--c-new-blue);color:var(--c-white);}
-.overview-calendar-block .search-room:hover {border:none;padding:8px 12px 4px;background:linear-gradient(90deg, var(--c-violet-gray) 60%, var(--c-violet-dark) 100%);color:var(--c-white);}
 
 .no-events {padding:16px 0;font-size:18px;font-weight:bold;color:var(--c-new-blue);}
-
-@media (max-width: 1600px) {
-    .overview-calendar-block .search-room {padding:9px 10px 5px;font-size:18px;}
-    .overview-calendar-block .search-room:hover {padding:10px 12px 6px;}
-}
-
-@media (max-width: 1200px) {
-    .overview-calendar-block  .input-daterange input {width:200px;}
-}
-
-@media (max-width: 992px) {
-
-}
-
-@media (max-width: 768px) {
-    .overview-calendar-block .ticket .price {padding:5px 0 22px 0;}
-}
 
 @media (max-width: 576px) {
     .overview-calendar-block .ticket {padding:0 0 10px;border-right:none;border-bottom:1px solid var(--c-blue-deep);}
     .overview-calendar-block .ticket .title {font-size:12px;padding:0;}
-    .overview-calendar-block .ticket .price {font-size:24px;padding:0;}
+    .overview-calendar-block .ticket .price {font-size:24px;}
     .overview-calendar-block .calendar-slider {position:relative;padding:10px 0 0;}
     .overview-calendar-block .calendar-slider .calendar-slider-items .date {font-size:16px;}
     .overview-calendar-block .calendar-slider .calendar-slider-items .w {padding:0 0 10px 0;font-size:14px;}
@@ -1077,6 +1060,8 @@ input, .form-control {padding:11px 14px 7px;text-align:left;color:var(--c-new-bl
 .show-list-list .time .tag-n-a {color:var(--c-new-blue);}
 .show-list-list .review-rating * {line-height:10px;}
 .show-list-list .amenities {overflow:hidden;}
+.show-list-list ul {padding-left:0;}
+.show-list-list ul li {list-style: none;}
 .show-list-list ul li:before {display:inline-block;content:url('/img/check-blue.svg');width:18px;height:18px;position:absolute;top:1px;left:0;}
 .show-list-list .amenities li {width:33.33333%;float:left;padding:0 30px 0 25px;color:var(--c-new-blue);font-size:18px;}
 .show-list-list .type-hotels .star-rating {float:right;}
@@ -1273,7 +1258,7 @@ input, .form-control {padding:11px 14px 7px;text-align:left;color:var(--c-new-bl
 
 .orders-list-header {padding:0 20px;}
 .orders-list-header, .orders-list-item {display:flex;flex-flow:row wrap;}
-.orders-list-header > div, .orders-list-item > div {width:25%;}
+.orders-list-header > div, .orders-list-item > div {wishshdth:25%;}
 .orders-list-header > div {font-size:12px;font-weight:bold;color:var(--c-gray);margin:0 0 10px;}
 .orders-list-item {border-radius:4px;background:var(--c-gray-light-3);margin:10px 0 0;padding:20px;}
 .orders-list-body .orders-list-item:first-child {margin:0;}

@@ -19,24 +19,23 @@ $this->registerJs('order.init()');
 ?>
 
 <div class="overview-calendar-block">
-    <div class="row">
-        <div class="col-sm-4 col-md-3 col-lg-2 order-2">
+    <div class="row align-items-end">
+        <div class="col-sm-4 col-md-3 col-lg-2 order-2 d-none d-sm-block">
             <div class="ticket text-center pt-3">
-                <div class="title">
-                    <?php if ($model instanceof TrPosHotels || $model instanceof TrPosPlHotels) { ?>
-                        Per Night
-                    <?php } else { ?>
+                <?php if ($model instanceof TrPosHotels || $model instanceof TrPosPlHotels) { ?>
+                    <div class="title">
+                        Avg rate Per Night
+                    </div>
+                    <div class="price">$ <?= $model->min_rate ?></div>
+                <?php } else { ?>
+                    <div class="title">
                         Tickets from
-                    <?php } ?>
-                </div>
-                <div class="price">$ <?= $model->min_rate ?></div>
-                <a href="#availability" onclick="$('.js-tag').eq(0).trigger('click')" class="btn btn-primary w-100">
-                    <?php if ($model instanceof TrPosHotels || $model instanceof TrPosPlHotels) { ?>
-                        Book now
-                    <?php } else { ?>
+                    </div>
+                    <div class="price">$ <?= $model->min_rate ?></div>
+                    <a href="#availability" onclick="$('.js-tag').eq(0).trigger('click')" class="btn btn-primary w-100">
                         Buy now
-                    <?php } ?>
-                </a>
+                    </a>
+                <?php } ?>
             </div>
         </div>
         <div class="col-sm-8 col-md-9 col-lg-10 order-1">
@@ -66,11 +65,13 @@ $this->registerJs('order.init()');
             <?php } ?>
         </div>
     </div>
-    <div class="text-center">
-        <a href="#schedule" id="more-available">
-            More Available Dates <span class="icon br-t-points"></span>
-        </a>
-    </div>
+    <?php if (!($model instanceof TrPosHotels || $model instanceof TrPosPlHotels)) { ?>
+        <div class="text-center">
+            <a href="#schedule" id="more-available">
+                More Available Dates <span class="icon br-t-points"></span>
+            </a>
+        </div>
+    <?php } ?>
 </div>
 <?php if ($model instanceof TrPosHotels || $model instanceof TrPosPlHotels) { ?>
     <div id="show-list" class="rooms-type-list">

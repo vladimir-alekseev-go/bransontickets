@@ -72,11 +72,10 @@ class _source_TrHotels extends \yii\db\ActiveRecord
             [['hotel_rating'], 'number'],
             [['updated_at'], 'safe'],
             [['name', 'code', 'address', 'email'], 'string', 'max' => 128],
-            [['amenities', 'property_amenities', 'cancel_policy_text'], 'string', 'max' => 2048],
+            [['amenities', 'property_amenities', 'cancel_policy_text', 'voucher_procedure'], 'string', 'max' => 2048],
             [['hash_summ', 'hash_summ_fast_update', 'city', 'phone'], 'string', 'max' => 64],
             [['state'], 'string', 'max' => 8],
             [['zip_code', 'fax', 'location_lat', 'location_lng', 'external_service'], 'string', 'max' => 16],
-            [['voucher_procedure'], 'string', 'max' => 1024],
             [['id_external'], 'unique'],
             [['preview_id'], 'exist', 'skipOnError' => true, 'targetClass' => ContentFiles::class, 'targetAttribute' => ['preview_id' => 'id']],
         ];
