@@ -11,15 +11,7 @@
 .header-height-fixed-block {height: 120px;}
 .auth-items {margin:0 10px 0 0;}
 .auth-items .auth-item {font-size:30px;margin:0 5px 0 0;display:inline-block;}
-/*
-.auth-items .auth-item {border-radius:5px;}
-.auth-items .auth-item .sign-up {padding:4px 20px;color:var(--c-white);font-weight:700;font-size:20px;background:var(--c-new-blue);transition:none;}
-.auth-items .auth-item .sign-up:hover {background:linear-gradient(90deg, var(--c-violet-gray) 60%, var(--c-violet-dark) 100%);}
-.auth-items .auth-item .sign-in {padding:4px 20px;color:var(--c-new-blue);font-weight:700;font-size:20px;}
-.auth-items .auth-item .sign-in:hover {border:1px solid var(--c-new-blue);}
-.auth-items .auth-item i {font-size:32px;color:var(--c-new-blue);padding-top:4px;}
-.auth-items .auth-item a {text-decoration:none;color:var(--c-new-blue);padding-top:3px;font-size:18px;}
-*/
+
 .menu-up {display:inline-block;margin:0 15px 0 0;}
 .menu-up a {color:var(--c-new-blue);font-size:20px;font-weight:900;text-decoration:none;display:inline-block;margin:0 15px 0 0;}
 

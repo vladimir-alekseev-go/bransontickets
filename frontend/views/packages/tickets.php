@@ -87,7 +87,7 @@ foreach ($VacationPackage->getData()['ticketTypes'] as $ticketType) {
                 <div class="row">
                     <div class="col-6 text-left text-sm-end item-selected-date js-selected-date"></div>
                     <div class="col-6 icon-checkbox js-open-close">
-                        <button class="btn-vp-cancel w-100 ps-0 pe-0">Cancel</button>
+                        <button class="btn btn-primary btn-vp-cancel w-100 ps-0 pe-0">Cancel</button>
                     </div>
                 </div>
             </div>

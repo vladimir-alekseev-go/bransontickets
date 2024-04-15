@@ -105,7 +105,7 @@ $remove = Yii::$app->session->getFlash('remove');
                                 'url'   => ['packages/index'],
                             ],
                         ]; ?>
-                        <button type="button" class="shadow-block add-more-btn w-100 mb-3"
+                        <button type="button" class="shadow-block btn btn-secondary w-100 mb-3"
                                 onclick="$('.dropdown-menu').toggle('slow')">
                             I want to add more <i class="fa fa-angle-down"></i>
                         </button>
@@ -114,7 +114,8 @@ $remove = Yii::$app->session->getFlash('remove');
                                 <?php if (isset($itemMenu['visible']) && $itemMenu['visible'] === false) {
                                     continue;
                                 } ?>
-                                <li><a href="<?= Url::to($itemMenu['url']) ?>"><?= $itemMenu['label'] ?></a></li>
+                                <li class="px-3"><a href="<?= Url::to($itemMenu['url']) ?>"><?= $itemMenu['label']
+                                        ?></a></li>
                             <?php } ?>
                         </ul>
                     </div>
