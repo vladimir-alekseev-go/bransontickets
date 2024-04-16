@@ -11,7 +11,7 @@ use yii\db\StaleObjectException;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
-abstract class CrudController extends BaseController
+class CrudController extends BaseController
 {
     /**
      * Lists all models.
