@@ -34,10 +34,12 @@ use yii\web\View;
             <input type="hidden" id="ci_consenturl" name="ci_consenturl" value="">
             <div class="row">
                 <div class="col-12 col-sm-4 order-1 mb-2">
-                    <input type="email" name="email" id="email" aria-required="true" required placeholder="Email" class="w-100" />
+                    <input type="email" name="email" id="email" aria-required="true" required placeholder="Email"
+                           class="form-control w-100" />
                 </div>
                 <div class="col-12 col-sm-4 order-2 mb-2">
-                    <input type="text" class="text w-100" name="cd_FIRSTNAME" id="FIRSTNAME" aria-required="true" required
+                    <input type="text" class="form-control text w-100" name="cd_FIRSTNAME" id="FIRSTNAME"
+                           aria-required="true" required
                            placeholder="First Name" />
                 </div>
                 <div class="col-12 order-3 order-sm-4 mb-2">
