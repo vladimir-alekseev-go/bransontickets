@@ -33,6 +33,16 @@ $this->beginPage() ?><!DOCTYPE html>
     <main>
         <div class="header-height-fixed-block"></div>
         <?= $content ?>
+        <?php if (!empty(Yii::$app->params['dotdigital']['addressbookid'])
+            && !empty(Yii::$app->params['dotdigital']['name'])) { ?>
+            <?= $this->render(
+                'dotdigital/code',
+                [
+                    'name' => Yii::$app->params['dotdigital']['name'],
+                    'addressBookId' => Yii::$app->params['dotdigital']['addressbookid'],
+                ]
+            ) ?>
+        <?php } ?>
     </main>
     <?= $this->render('footer') ?>
 </div>
