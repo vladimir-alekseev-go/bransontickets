@@ -20,7 +20,7 @@ $this->registerJs('order.init()');
 
 <div class="overview-calendar-block">
     <div class="row align-items-end">
-        <div class="col-sm-4 col-md-3 col-lg-2 order-2 d-none d-sm-block">
+        <div class="col-lg-2 order-2 d-none d-lg-block">
             <div class="ticket text-center pt-3">
                 <?php if ($model instanceof TrPosHotels || $model instanceof TrPosPlHotels) { ?>
                     <div class="title">
@@ -38,7 +38,7 @@ $this->registerJs('order.init()');
                 <?php } ?>
             </div>
         </div>
-        <div class="col-sm-8 col-md-9 col-lg-10 order-1">
+        <div class="col-lg-10 order-1">
             <?php if ($model instanceof TrPosHotels || $model instanceof TrPosPlHotels) { ?>
                 <?= $this->render(
                     '@app/views/components/item/menu-content/hotel-filter',

@@ -498,7 +498,7 @@ input, .form-control {padding:11px 14px 7px;text-align:left;color:var(--c-new-bl
 .show-detail {color:var(--c-black);}
 .show-detail h2 {color:var(--c-white);}
 .show-detail .icon {color:var(--c-primary);}
-.show-detail .main-info {color:var(--c-new-blue);position:relative;padding:24px;margin-top:30px;border-radius:10px;display:flex;justify-content:flex-start;gap:40px;background:var(--c-primary-ligth);}
+.show-detail .main-info {overflow:hidden;color:var(--c-new-blue);position:relative;padding:24px;margin-top:30px;border-radius:10px;display:flex;justify-content:flex-start;gap:40px;background:var(--c-primary-ligth);}
 .show-detail .br-t-guitar {font-size:233px;position:absolute;top:auto;bottom:-33px;right:-93px;color:var(--c-new-blue);opacity:0.5;}
 .show-detail .image-detail img {width:280px;border-radius:10px;}
 .show-detail .theatre-info {display:flex;}
@@ -559,7 +559,7 @@ input, .form-control {padding:11px 14px 7px;text-align:left;color:var(--c-new-bl
 
 .overview-calendar-block .ticket .title {padding:5px 0;font-size:17px;color:var(--c-gray-granite);text-transform:uppercase;}
 .overview-calendar-block .ticket .price {font-weight:700;font-size:30px;color:var(--c-gray-granite);}
-.overview-calendar-block .calendar-slider {position:relative;margin:15px 0;padding:10px;border:2px solid var(--c-primary-ligth);border-radius:8px;}
+.overview-calendar-block .calendar-slider {position:relative;margin:15px 0;padding:10px;border:2px solid var(--c-primary-ligth);border-radius:8px;overflow:hidden;}
 .overview-calendar-block .calendar-slider .frame ul {transform-translateZ:none !important;width:9999999999px;overflow:hidden;margin:0;}
 .overview-calendar-block .calendar-slider .frame ul li {width:114px;margin:0 5px;}
 .overview-calendar-block .calendar-slider .calendar-slider-items .date {width:114px;padding:0 0 5px 0;font-weight:600;font-size:18px;color:var(--c-blue-deep);text-align:center;}
@@ -569,7 +569,7 @@ input, .form-control {padding:11px 14px 7px;text-align:left;color:var(--c-new-bl
 .overview-calendar-block .calendar-slider-block .admissions-list {position:absolute;top:80px;left:25px;}
 .overview-calendar-block .calendar-slider-block .admissions-list .name {padding-bottom:5px;font-size:20px;white-space:nowrap;height:35px;}
 .overview-calendar-block .calendar-slider-block .admissions-list .name span {display:inline;padding:0 10px 0 0;position:relative;z-index:5;background:var(--c-white);}
-.overview-calendar-block .calendar-slider-block .admission-space {height:50px;}
+.overview-calendar-block .calendar-slider-block .admission-space {height:44px;}
 .overview-calendar-block .name {font-weight:700;font-size:24px;color:var(--c-blue-deep);}
 .overview-calendar-block .label {font-weight:700;font-size:18px;color:var(--c-blue-deep);}
 .overview-calendar-block .input-daterange input {padding:11px 14px 7px;text-align:left;color:var(--c-blue-deep-dark-3);font-weight:350;font-size:16px;border:1px solid var(--c-blue-deep);border-radius:5px;box-shadow:none !important;}
@@ -585,6 +585,7 @@ input, .form-control {padding:11px 14px 7px;text-align:left;color:var(--c-new-bl
     .overview-calendar-block .calendar-slider .calendar-slider-items .date {font-size:16px;}
     .overview-calendar-block .calendar-slider .calendar-slider-items .w {padding:0 0 10px 0;font-size:14px;}
     .overview-calendar-block .calendar-slider .calendar-slider-items .tag {font-size:16px;}
+    .overview-calendar-block .calendar-slider-block .admissions-list {top:73px;}
 }
 
 .order-form-container {padding:0;color:var(--c-new-blue);position:relative;}
