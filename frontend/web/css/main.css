@@ -176,19 +176,19 @@ input[type=checkbox]+label:before, input[type=radio]+label:before, .tag-premium:
 
 .btn {border-radius:8px;box-shadow:none!important;font-size:20px;line-height:1;padding-top:9px;padding-bottom:9px;}
 .btn-secondary {background: var(--c-white);border:1px solid transparent;color:var(--c-primary);}
-.btn-secondary:hover {background: var(--c-primary-ligth);border:1px solid transparent;color:var(--c-primary-deep);}
+.btn-secondary:hover:not(.cursor-default) {background: var(--c-primary-ligth);border:1px solid transparent;color:var(--c-primary-deep);}
 .btn-secondary:disabled {background: var(--c-white);border:1px solid transparent;color:var(--c-primary-disabled-2);}
 .btn-third {background:rgba(255,255,255,1);border:1px solid var(--c-primary);color:var(--c-primary);}
-.btn-third:hover {background:rgba(237,233,255,0.30);border:1px solid var(--c-primary-deep);color:var(--c-primary-deep);}
+.btn-third:hover:not(.cursor-default) {background:rgba(237,233,255,0.30);border:1px solid var(--c-primary-deep);color:var(--c-primary-deep);}
 .btn-third:disabled {opacity:0.2}
 .btn-fourth {border-color:#fff;color:#fff;}
-.btn-fourth:hover {background:transparent;border-color:var(--c-gray-light);color:var(--c-gray-light);}
+.btn-fourth:hover:not(.cursor-default) {background:transparent;border-color:var(--c-gray-light);color:var(--c-gray-light);}
 .btn-fifth {background:var(--c-new-blue);border-color:#1E0074;color:#fff;}
-.btn-fifth:hover {border-color:var(--c-gray-light);color:var(--c-gray-light);}
+.btn-fifth:hover:not(.cursor-default) {border-color:var(--c-gray-light);color:var(--c-gray-light);}
 .btn-link {text-decoration:none;color:var(--c-primary);}
-.btn-link:hover {color:var(--c-new-blue);}
+.btn-link:hover:not(.cursor-default) {color:var(--c-new-blue);}
 .btn-primary, .btn-third.active {background: var(--c-primary);border:1px solid transparent;color:var(--c-white);}
-.btn-primary:hover, .btn-third.active:hover {background:var(--c-primary-deep);border:1px solid transparent;color:var(--c-white);}
+.btn-primary:hover:not(.cursor-default), .btn-third.active:hover:not(.cursor-default) {background:var(--c-primary-deep);border:1px solid transparent;color:var(--c-white);}
 .btn-primary:disabled, .btn-third.active:disabled {background:var(--c-primary-ligth);border:1px solid transparent;color:var(--c-primary-disabled);}
 
 .btn-sm {font-size:12px;border-radius:6px;}
