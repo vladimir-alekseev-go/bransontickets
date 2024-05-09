@@ -68,7 +68,7 @@ $this->registerJs('order.init()');
     <?php if (!($model instanceof TrPosHotels || $model instanceof TrPosPlHotels)) { ?>
         <div class="text-center">
             <a href="#schedule" id="more-available">
-                More Available Dates <span class="icon br-t-points"></span>
+                <b>More Available Dates</b> <span class="icon br-t-points"></span>
             </a>
         </div>
     <?php } ?>

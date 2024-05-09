@@ -16,6 +16,7 @@ let scheduleSlider = {
 
         _self.frame.find('a.js-tag').click(function () {
             _self.loadPage($(this).data('href'), $(this));
+            document.getElementById('order-form-container').scrollIntoView();
             return false;
         });
 

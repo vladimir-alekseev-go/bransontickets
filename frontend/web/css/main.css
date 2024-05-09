@@ -314,6 +314,7 @@ input, .form-control {padding:11px 14px 7px;text-align:left;color:var(--c-new-bl
 .success-block {padding:24px;border-radius:10px;}
 
 .cost {font-weight:bold;}
+.cost-old {text-decoration:line-through;opacity:0.5;}
 
 .back a {color:var(--c-white);}
 

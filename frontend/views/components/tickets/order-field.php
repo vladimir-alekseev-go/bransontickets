@@ -53,10 +53,10 @@ $alternativeRate = $alternativeRate ?? false;
         <?php } else {?>
             <?php if ($p->retail_rate !== $p->price) {?>
                 <div>
-                    <span class="tag tag-save">
+                    <span class="btn btn-third btn-sm">
                         $<?= number_format($p->getSaved(),2, '.', '') ?>&nbsp;saved
                     </span>
-                    <span class="cost">$ <?= $p->retail_rate?></span>
+                    <span class="cost cost-old">$ <?= $p->retail_rate?></span>
                 </div>
             <?php }?>
             <span class="cost" itemprop="price" content="<?= number_format($p->price, 2, '.', '')?>">$ <?= $p->price?></span>

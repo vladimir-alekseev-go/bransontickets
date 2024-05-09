@@ -19,7 +19,7 @@ class SearchOnMainForm extends Model
     public function rules()
     {
         return [
-            [['searchType', 'title'], 'required'],
+            [['searchType'], 'required'],
         ];
     }
 
