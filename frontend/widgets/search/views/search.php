@@ -58,7 +58,8 @@ $attractions = $this->context->attractions;
         </ul>
     </div>
 	<div>
-		<div class="white-block shadow-block mb-4 overflow-hidden ms-n15 me-n15" id="shows">
+        <a id="shows" class="search-result-id"></a>
+		<div class="white-block shadow-block mb-4 overflow-hidden ms-n15 me-n15">
             <div class="items-header item-<?= TrShows::TYPE ?>"><?= TrShows::NAME_PLURAL ?></div>
 			<?php if ($shows) {?>
 		    	<?php foreach ($shows as $item) {?>
@@ -73,7 +74,8 @@ $attractions = $this->context->attractions;
 				</div>
 			<?php }?>
 		</div>
-		<div class="white-block shadow-block mb-4 overflow-hidden ms-n15 me-n15" id="attractions">
+        <a id="attractions" class="search-result-id"></a>
+		<div class="white-block shadow-block mb-4 overflow-hidden ms-n15 me-n15">
             <div class="items-header item-<?= TrAttractions::TYPE ?>"><?= TrAttractions::NAME_PLURAL ?></div>
     		<?php if ($attractions) {?>
     		    <?php foreach ($attractions as $item) {?>
@@ -88,7 +90,8 @@ $attractions = $this->context->attractions;
                 </div>
     		<?php }?>
 		</div>
-		<div class="white-block shadow-block mb-4 overflow-hidden ms-n15 me-n15" id="lodging">
+        <a id="lodging" class="search-result-id"></a>
+		<div class="white-block shadow-block mb-4 overflow-hidden ms-n15 me-n15">
             <div class="items-header item-<?= TrPosHotels::TYPE?>"><?= TrPosHotels::NAME_PLURAL ?></div>
 			<?php if ($this->context->hotels) {?>
     		    <?php foreach ($this->context->hotels as $item) {?>
@@ -103,7 +106,8 @@ $attractions = $this->context->attractions;
                 </div>
     		<?php }?>
 		</div>
-		<div class="white-block shadow-block mb-4 overflow-hidden ms-n15 me-n15" id="packages">
+        <a id="packages" class="search-result-id"></a>
+		<div class="white-block shadow-block mb-4 overflow-hidden ms-n15 me-n15">
             <div class="items-header item-packages">Vacation Packages</div>
 			<?php if ($packagesCount) {?>
     		    <?= $packages?>

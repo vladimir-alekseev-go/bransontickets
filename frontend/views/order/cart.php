@@ -167,8 +167,8 @@ $remove = Yii::$app->session->getFlash('remove');
 </div>
 <?php Modal::end(); ?>
 
-<?php $this->registerJsFile('/js/cart.js', ['depends' => [JqueryAsset::class]], 'cart-js'); ?>
-<?php $this->registerJs('cart.init()'); ?>
+<?php //$this->registerJsFile('/js/cart.js', ['depends' => [JqueryAsset::class]], 'cart-js'); ?>
+<?php //$this->registerJs('cart.init()'); ?>
 <?php $this->registerJs(
     '$(".js-popup-cancellation-policy").click(function(){
     $("#modalContentCancellationPolicy").html(\'<div class="load-progress"></div><br/><br/>\');
