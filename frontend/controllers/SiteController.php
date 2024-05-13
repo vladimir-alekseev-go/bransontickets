@@ -3,6 +3,8 @@
 namespace frontend\controllers;
 
 use common\controllers\SiteControllerTrait;
+use DateInterval;
+use DateTime;
 use frontend\components\CustomerErrorAction;
 use Yii;
 use yii\authclient\AuthAction;
@@ -72,30 +74,27 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        $showsAllF = TrShows::getActive()
+        $queryShows = TrShows::getAvailable()->with(['theatre', 'preview'])
+            ->andWhere(['<', 'start', (new DateTime)->add(new DateInterval('P30D'))->format('Y-m-d H:i:s')])
+            ->andWhere(['not', ['min_rate' => null]])
+            ->groupBy(TrShows::tableName() . '.id')
             ->orderBy(new Expression('rand()'))
             ->andWhere("TRIM(photos) <> ''")
-            ->limit(3)
-            ->all();
+            ->limit(3);
+        $queryAttractions = TrAttractions::getAvailable()->with(['theatre', 'preview'])
+            ->andWhere(['<', 'start', (new DateTime)->add(new DateInterval('P30D'))->format('Y-m-d H:i:s')])
+            ->andWhere(['not', ['min_rate' => null]])
+            ->groupBy(TrAttractions::tableName() . '.id')
+            ->orderBy(new Expression('rand()'))
+            ->andWhere("TRIM(photos) <> ''")
+            ->limit(3);
 
-        $attractionsAllF = TrAttractions::getActive()
-            ->orderBy(new Expression('rand()'))
-            ->andWhere("TRIM(photos) <> ''")
-            ->limit(3)
-            ->all();
+        $showsAllF = $queryShows->all();
+        $showsAllR = $queryShows->all();
+        $attractionsAllF = $queryAttractions->all();
+        $attractionsAllR = $queryAttractions->all();
 
         $showsFeatured = array_merge($showsAllF, $attractionsAllF);
-
-        $showsAllR = TrShows::getActive()
-            ->orderBy(new Expression('rand()'))
-            ->limit(3)
-            ->all();
-
-        $attractionsAllR = TrAttractions::getActive()
-            ->orderBy(new Expression('rand()'))
-            ->limit(3)
-            ->all();
-
         $showsRecommended = array_merge($showsAllR, $attractionsAllR);
 
         return $this->render('index', compact('showsFeatured', 'showsRecommended'));
