@@ -94,7 +94,7 @@ $DateValidStart = $VacationPackage->getValidStart() > new DateTime ? $VacationPa
                                 <div><small>For More Package Info</small></div>
                                 <i class="icon br-t-smartphone"></i>
                                 <strong>
-                                    417-337-8455
+                                    417-337-4814
                                 </strong>
                             </div>
                             <div class="col-4">

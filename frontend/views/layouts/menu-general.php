@@ -35,8 +35,8 @@ use yii\helpers\Url;
         </div>
     <?php } ?>
     <div class="phone">
-        <a href="tel:417-337-8455" class="text-center btn btn-secondary d-block">
-            <span class="icon br-t-smartphone"></span> 417-337-8455
+        <a href="tel:417-337-4814" class="text-center btn btn-secondary d-block">
+            <span class="icon br-t-smartphone"></span> 417-337-4814
         </a>
     </div>
 </div>

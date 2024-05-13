@@ -84,7 +84,7 @@ class TrOrders extends _source_TrOrders
     {
         parent::init();
 
-        $phone = '1-417-337-8455';
+        $phone = '1-417-337-4814';
         $this->messageCallUsToBookModification = 'Changes and/or cancellations for this item are not able to be done online. <br>Please call '.$phone.' and we can assist you with this item.';
     }
 

@@ -24,7 +24,7 @@ $basket = TrBasket::build();
                     </span>
                     <span class="phone">
                         <span class="icon br-t-smartphone"></span>
-                        <a href="tel:417-337-8455">417-337-8455</a>
+                        <a href="tel:417-337-4814">417-337-4814</a>
                     </span>
                 </span>
             </div>
