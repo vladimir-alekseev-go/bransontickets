@@ -48,6 +48,7 @@ $this->beginPage() ?><!DOCTYPE html>
 </div>
 <?php $this->endBody() ?>
 <?= $this->blocks['before-end-body'] ?? '' ?>
+<script src="https://r1.for-email.com/DM-3255854826-01/ddgtag.js"></script>
 </body>
 </html>
 <?php $this->endPage() ?>
