@@ -123,7 +123,7 @@ use yii\helpers\Html;
                             </div>
                             <?php if ($model->min_rate !== $model->min_rate_source) { ?>
                                 <div class="col-6 text-end">
-                                    <div class="cost">$ <?= number_format(
+                                    <div class="cost cost-old">$ <?= number_format(
                                             $model->min_rate_source,
                                             '2',
                                             '.',
