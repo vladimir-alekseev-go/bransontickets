@@ -12,7 +12,6 @@ class TripiumUpdater extends Model
     public const MODE_HIDE_MESSAGE = 'hide';
 
     public $mode = self::SHOW_ERROR_COUNT;
-    public $isWL = false;
     public $models = [];
 
     public function rules()
@@ -28,20 +27,11 @@ class TripiumUpdater extends Model
             echo "-- tripium start update --";
             echo "\n\r";
         }
-        if ($this->isWL) {
-            echo "-- WL update --";
-            echo "\n\r";
-        }
         foreach ($this->models as $modelData) {
             //echo "-- memory_get_usage(): ".memory_get_usage();
             //echo "\n\r";
             try {
                 $model = new $modelData['class'];
-                if ($this->isWL && method_exists($model, 'shouldUpdateTripium') && !$model->shouldUpdateTripium()) {
-                    echo "-- " . $modelData['class'] . " omitted";
-                    echo "\n\r";
-                    continue;
-                }
                 if (method_exists($model, 'updateFromTripium')) {
                     if (!empty($modelData['params'])) {
                         foreach ($modelData['params'] as $param => $value) {

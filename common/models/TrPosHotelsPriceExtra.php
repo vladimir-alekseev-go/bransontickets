@@ -2,6 +2,9 @@
 
 namespace common\models;
 
+/**
+ * @deprecated
+ */
 class TrPosHotelsPriceExtra extends TrPosHotelsPrice
 {
     use PricesExtensionTrait;

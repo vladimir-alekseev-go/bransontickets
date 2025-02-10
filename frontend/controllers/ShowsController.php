@@ -6,6 +6,7 @@ use common\helpers\General;
 use common\models\Compare;
 use common\models\TrPrices;
 use common\models\TrShows;
+use Exception;
 use frontend\models\ScheduleForm;
 use frontend\widgets\scheduleSlider\ScheduleSliderWidget;
 use frontend\widgets\vacationPackagesList\VacationPackagesListWidget;
@@ -40,7 +41,6 @@ class ShowsController extends Controller
 
     /**
      * {@inheritDoc}
-     * @throws Exception
      */
     public function init(): void
     {
@@ -48,9 +48,6 @@ class ShowsController extends Controller
         $this->setPriceListInterval();
     }
 
-    /**
-     * @throws Exception
-     */
     protected function setPriceListInterval(): void
     {
         $this->priceListInterval = new DateInterval('P7D');

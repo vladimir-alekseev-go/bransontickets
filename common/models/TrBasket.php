@@ -5,8 +5,7 @@ namespace common\models;
 use common\analytics\Analytics;
 use common\helpers\General;
 use common\helpers\MarketingItemHelper;
-use common\models\form\HotelReservationForm;
-use common\models\form\PlHotelReservationForm;
+use common\models\form\HotelReserveForm;
 use common\tripium\Tripium;
 use DateInterval;
 use DateTime;
@@ -99,29 +98,35 @@ class TrBasket extends _source_TrBasket
         }
     }
 
-    public function reserve()
+    /**
+     * @return Itinerary|null
+     */
+    public function reserve(): ?Itinerary
     {
         $this->scenario = self::SCENARIO_RESERVATION;
         $this->needResetCoupon = false;
 
         if (!$this->validate()) {
-            return false;
+            return null;
         }
 
-        $data = $this->get();
-
-        $total_before = $data["total"];
+        $total_before = $this->getItinerary()->getTotalCount();
 
         $this->tripium = new Tripium();
-        $reserve = $this->tripium->reserve($this->session_id);
+        $itinerary = $this->tripium->reserve($this->session_id);
 
-        $data = $this->get(true);
-
-        if ($data === null) {
-            return false;
+        if (!empty($this->tripium->getFirstErrors())) {
+            $this->addError('reserve', $this->tripium->getFirstErrors()[0]);
+            return null;
         }
 
-        $total_after = $data["total"];
+//        $data = $this->get(true);
+
+        if ($itinerary === null) {
+            return null;
+        }
+
+        $total_after = $itinerary->getTotalCount();
 
         if ($total_before < $total_after) {
             $this->warnings[] = 'Oops... the price of the items in your itinerary has changed since your last search. It is now $'.number_format($total_after, 2, ',', '').'. ';
@@ -129,22 +134,15 @@ class TrBasket extends _source_TrBasket
             $this->messages[] = 'Great news - we were able to find even lower prices for you itinerary! It is now $'.number_format($total_after, 2, ',', '').'.';
         }
 
-        if (!empty($reserve["globalErrors"])) {
-            $this->addError('reserve', $reserve["globalErrors"][0]);
-            return false;
-        }
-
+        $this->data = Json::encode($itinerary->getData()[Itinerary::KEY_ITINERARY]);
         $this->save();
 
-        $this->reset();
+//        $this->reset();
 
-        $res = $this->get();
+//        $res = $this->get();
         $categories = [];
-
-        if (!empty($res["packages"])) {
-            foreach ($res["packages"] as $package) {
-                $categories[$package["category"]] = $package["category"];
-            }
+        foreach ($itinerary->getPackages() as $package) {
+            $categories[$package->category] = $package->category;
         }
 
         $MarketingItem = MarketingItemHelper::getItemClassNames();
@@ -158,7 +156,7 @@ class TrBasket extends _source_TrBasket
             }
         }
 
-        return $reserve;
+        return $itinerary;
     }
 
     /**
@@ -218,7 +216,7 @@ class TrBasket extends _source_TrBasket
 
         if (!empty($data["packages"])) {
             foreach ($data["packages"] as $packageData) {
-                $package = new Package;
+                $package = new Package();
                 $package->loadData($packageData);
                 $packages[] = $package;
             }
@@ -258,6 +256,11 @@ class TrBasket extends _source_TrBasket
         return Json::decode($this->data);
     }
 
+    public function getItinerary(): Itinerary
+    {
+        return (new Itinerary())->loadData([Itinerary::KEY_ITINERARY => Json::decode($this->data)]);
+    }
+
     /**
      * Set up coupon
      *
@@ -269,22 +272,23 @@ class TrBasket extends _source_TrBasket
      */
     public function setCoupon($Coupon)
     {
-        $type = Yii::$app->params['siteType'] === 'mobile' ? Coupon::COUPON_TYPE_MOBILE : Coupon::COUPON_TYPE_DESKTOP;
-
-        if ($Coupon instanceof Coupon && !empty($Coupon->code) && $Coupon->isTypeOf($type)) {
-            $tripium = new Tripium;
-            $itinerary = $tripium->getItineraryByCoupon($this->session_id, $Coupon);
-            if (!$itinerary) {
-                return false;
-            }
-            $this->progressResult($itinerary, $AnalyticsData);
-        } else {
-            $this->data = Json::encode($this->get(true));
-            $this->coupon_data = null;
-            $this->update(false);
-        }
-
-        return true;
+        return false;
+//        $type = Yii::$app->params['siteType'] === 'mobile' ? Coupon::COUPON_TYPE_MOBILE : Coupon::COUPON_TYPE_DESKTOP;
+//
+//        if ($Coupon instanceof Coupon && !empty($Coupon->code) && $Coupon->isTypeOf($type)) {
+//            $tripium = new Tripium;
+//            $itinerary = $tripium->getItineraryByCoupon($this->session_id, $Coupon);
+//            if (!$itinerary) {
+//                return false;
+//            }
+//            $this->progressResult($itinerary, $AnalyticsData);
+//        } else {
+//            $this->data = Json::encode($this->get(true));
+//            $this->coupon_data = null;
+//            $this->update(false);
+//        }
+//
+//        return true;
     }
 
     /**
@@ -468,11 +472,11 @@ class TrBasket extends _source_TrBasket
 
         $package = $this->getPackage($packageId);
 
-        $result = $tripium->removePackage($this->getAttribute('session_id'), $packageId);
+        $itinerary = $tripium->removePackage($this->getAttribute('session_id'), $packageId);
 
-        $this->setFullData($result);
-
-        if (!empty($tripium->getErrors())) {
+        if ($itinerary) {
+            $this->setFullData($itinerary);
+        } else if (!empty($tripium->getFirstErrors())) {
             $this->addError('removePackage', $tripium->getFirstErrors()[0]);
             return false;
         }
@@ -489,24 +493,31 @@ class TrBasket extends _source_TrBasket
      */
     public function removeAll(): void
     {
-        $data = $this->get();
+        $itinerary = $this->getItinerary();
 
-        if (!empty($data["packages"])) {
+        if (!empty($itinerary->getPackages())) {
             $AnalyticsData = [];
-            foreach ($data["packages"] as $package) {
+            foreach ($itinerary->getPackages() as $package) {
                 $AnalyticsData[] = ['package' => $package];
             }
             Analytics::addEvent(Analytics::EVENT_REMOVEFROMCART, $AnalyticsData);
         }
 
         $tripium = new Tripium();
-        $result = $tripium->clearItinerary($this->getAttribute('session_id'));
+        $itinerary = $tripium->clearItinerary($this->getAttribute('session_id'));
         $this->setAttributes(
             [
                 'reserve_at' => null,
             ]
         );
-        $this->setFullData($result);
+        if ($itinerary) {
+            $this->setFullData($itinerary);
+        } else if (!empty($tripium->getFirstErrors())) {
+            $this->addError(
+                'clear',
+                $tripium->getFirstErrors()[0]
+            );
+        }
     }
 
     /**
@@ -519,7 +530,6 @@ class TrBasket extends _source_TrBasket
     public static function getSessionID($withoutUser = false)
     {
         $tripiumBasketId_session = Yii::$app->session->get("tripium_basket_id");
-//        var_dump($tripiumBasketId_session);
         $tripiumBasketId_cookie = false;//$_COOKIE['tripium_basket_id'];
 
         $session_id = false;
@@ -580,7 +590,7 @@ class TrBasket extends _source_TrBasket
                 $b->setAttributes(
                     [
                         "session_id" => $itinerary->session,
-                        "user_id" => $user_id,
+                        "user_id" => $user_id
                     ]
                 );
                 $b->save();
@@ -590,6 +600,23 @@ class TrBasket extends _source_TrBasket
         }
 
         return null;
+    }
+
+    public function getQRCodeUrl(): string
+    {
+        $url = 'https://' . Yii::$app->params['domain'];
+        return $url . Url::to(
+                [
+                    'order/kiosk-payment',
+                    'sessionId' => $this->session_id,
+                    'hash' => self::getHashSessionId($this->session_id)
+                ]
+            );
+    }
+
+    public static function getHashSessionId($session_id): string
+    {
+        return hash('sha256',Yii::$app->params['kiosk-server-key'] . $session_id);
     }
 
     public static function setSessionId($sessionId): void
@@ -614,32 +641,33 @@ class TrBasket extends _source_TrBasket
      *
      * @return array|null
      */
-    public function get($force = false): ?array
+    public function get($force = false): ?Itinerary
     {
         $this->sessionIsCreated();
 
         if ($force) {
-
             $tripium = new Tripium;
-            $res = $tripium->getItinerary($this->getAttribute('session_id'));
+            $itinerary = $tripium->getItinerary($this->getAttribute('session_id'));
 
-            if (!empty($res["globalErrors"])) {
-                $this->addError('get_basket', $res["globalErrors"][0]);
+            if (!empty($tripium->getFirstErrors())) {
+                $this->addError('reserve', $tripium->getFirstErrors()[0]);
                 return null;
             }
-            $res = self::calculateParams($res);
-        } else {
-            $res = self::find()->where(["session_id"=>$this->getAttribute('session_id')])->one();
-            if ($res) {
-                $data = Json::decode($res->data);
-                $data["db"] = $res;
-                return $data;
-            }
-
-            return null;
+            return $itinerary;
         }
-
-        return $res;
+        return $this->getItinerary();
+//        } else {
+//            $res = self::find()->where(["session_id"=>$this->getAttribute('session_id')])->one();
+//            if ($res) {
+//                $data = Json::decode($res->data);
+//                $data["db"] = $res;
+//                return $data;
+//            }
+//
+//            return $this->getItinerary();
+//        }
+//
+//        return $res;
     }
 
     private function sessionIsCreated(): bool
@@ -668,13 +696,11 @@ class TrBasket extends _source_TrBasket
     /**
      * Add tickets
      *
-     * @param                                                       $type
-     * @param OrderForm|PlHotelReservationForm|HotelReservationForm $OrderForm
+     * @param OrderForm|HotelReserveForm $OrderForm
      *
      * @return bool
-     * @throws Throwable
      */
-    public function set($type, $OrderForm): bool
+    public function set($OrderForm): bool
     {
         $this->sessionIsCreated();
 
@@ -684,150 +710,49 @@ class TrBasket extends _source_TrBasket
         $AnalyticsData = [];
         $request = null;
 
-        if ($type === TrPosPlHotels::TYPE) {
-            if (!($OrderForm instanceof PlHotelReservationForm)) {
+        if ($OrderForm instanceof HotelReserveForm) {
+            $itinerary = $this->tripium->postPackage(
+                $this->getAttribute('session_id'),  $OrderForm->requestAddToBasket($this->get())
+            );
+
+            if ($itinerary) {
+                $this->progressResult($itinerary, $AnalyticsData);
+            }
+
+            if ($this->tripium->getErrors()) {
+                $this->addError('add_to_basket', $this->tripium->getFirstError('globalErrors'));
                 return false;
             }
 
-            $request = $OrderForm->requestAddToBasket();
+            return true;
         }
 
-        if ($type === TrPosHotels::TYPE) {
-            if (!($OrderForm instanceof HotelReservationForm)) {
-                return false;
-            }
-
-            foreach ($OrderForm->rooms as $k => $room) {
-                $itinerary = $this->tripium->postPackage($this->getAttribute('session_id'),  $OrderForm->requestAddToBasket($k));
-
-                if ($itinerary) {
-                    $this->progressResult($itinerary, $AnalyticsData);
-                }
-
-                if ($this->tripium->getErrors()) {
-                    $this->addError($type . '_reservation', $this->tripium->getFirstError('globalErrors'));
-                    return false;
-                }
-            }
-        }
-
-        if (empty($OrderForm->prices)
-            && $OrderForm instanceof OrderForm
-            && in_array($type, [TrShows::TYPE, TrAttractions::TYPE], false)) {
+        if ($OrderForm instanceof OrderForm && empty($OrderForm->prices)) {
             $this->addError('prices', 'Prices are absent');
             return false;
         }
 
-        // for shows
-        if ($OrderForm instanceof OrderForm && $OrderForm->model instanceof TrShows) {
-
-            $packageId = null;
-            $firstPrice = array_values($OrderForm->prices);
-            $firstPrice = $firstPrice[0];
-            $start = (new DateTime($firstPrice->start));
-            $res = $this->get();
-            if (!empty($res['packages'])) {
-                foreach ($res["packages"] as $package) {
-                    if (
-                        $package["id"] == $firstPrice->main->id_external &&
-                        $package["date"] == $start->format("m/d/Y") &&
-                        $package["time"] == $start->format("h:i A") &&
-                        $package["category"] == $firstPrice->type
-                    ) {
-                        $packageId = $package["packageId"];
-                    }
-                }
-            }
-
-            // edit tickets
-            $request = [
-                "packageId" => $packageId,
-                "id" => $firstPrice->main->id_external,
-                "date" => $start->format("m/d/Y"),
-                "time" => $start->format("h:i A"),
-                "category" => $firstPrice->type,
-                "comments" => $OrderForm->getComments(),
-            ];
-
-            foreach ($OrderForm->prices as $price) {
-                $request['tickets'][] = [
-                    'name' => $price->name,
-                    'description' => $price->description,
-                    'qty' => $OrderForm->getQuantity($price),
-                    'info' => $price->id,
-                    'id' => $price->price_external_id,
-                    'seats' => $OrderForm->getQuantitySeats($price),
-                    'nonRefundable' => $OrderForm->isAlternativeRate($price),
-                ];
-            }
-        }
-
-        // for attractions
-        if ($OrderForm instanceof OrderForm && $OrderForm->model instanceof TrAttractions) {
-
-            $res = $this->get();
-
-            $packageId = null;
-
-            $firstPrice = array_values($OrderForm->prices);
-            $firstPrice = $firstPrice[0];
-
-            $start = (new DateTime($firstPrice->start));
-
-            if (!empty($res['packages'])) {
-                foreach ($res["packages"] as $package) {
-                    if (
-                        $package["id"] == $firstPrice->main->id_external &&
-                        $package["date"] == $start->format('m/d/Y') &&
-                        $package["time"] == ($firstPrice->any_time == 1 ? TrAttractionsPrices::ANY_TIME : $start->format('h:i A')) &&
-                        $package["typeId"] == $OrderForm->allotmentId &&
-                        $package["category"] == $firstPrice->type
-                    ) {
-                        $packageId = $package["packageId"];
-                    }
-                }
-            }
-
-            $request = [
-                "packageId" => $packageId,
-                "id" => $firstPrice->main->id_external,
-                "date" => $start->format('m/d/Y'),
-                "time" => (int)$firstPrice->any_time === 1 ? TrAttractionsPrices::ANY_TIME : $start->format('h:i A'),
-                "typeId" => $OrderForm->allotmentId,
-                "category" => $firstPrice->type,
-                "comments" => $OrderForm->getComments(),
-            ];
-
-            foreach ($OrderForm->prices as $price) {
-                $request['tickets'][] = [
-                    'name' => $price->name,
-                    'description' => $price->description,
-                    'qty' => $OrderForm->getQuantity($price),
-                    'info' => $price->id,
-                    'id' => $price->price_external_id,
-                    'seats' => $OrderForm->getQuantitySeats($price),
-                    'nonRefundable' => $OrderForm->isAlternativeRate($price),
-                ];
-            }
-//            var_dump($request);
-//            var_dump($OrderForm->allotmentId);
-//            exit();
+        if ($OrderForm instanceof OrderForm &&
+            ($OrderForm->model instanceof TrShows
+                || $OrderForm->model instanceof TrAttractions)
+        ) {
+            $request = $OrderForm->requestAddToBasket($this->get());
         }
 
         if (!empty($request)) {
 
-            if ($type === TrPosPlHotels::TYPE
-                || ($type !== TrPosPlHotels::TYPE && ($packageId || $OrderForm->count > 0))) {
+            if ($OrderForm->count > 0) {
+
                 $itinerary = $this->tripium->postPackage($this->getAttribute('session_id'), $request, $this->getCoupon());
 
-                if ((int)$this->tripium->errorCode === Tripium::STATUS_ONE_HOTEL_PER_ORDER
+                if ($this->tripium->errorCode === Tripium::STATUS_ONE_HOTEL_PER_ORDER
                     && !empty($this->tripium->getFirstErrors())) {
                     $this->addError(
-                        $type . '_reservation',
+                        'add_to_basket',
                         $this->tripium->getFirstErrors()[0] . ' <a href="' . Url::to(['/order/cart']) . '">Cart</a>'
                     );
                 } else if (!empty($this->tripium->getFirstErrors())) {
-                    $this->addError($type.'_reservation', $this->tripium->getFirstErrors()[0]);
+                    $this->addError('add_to_basket', $this->tripium->getFirstErrors()[0]);
                 } else if($itinerary !== null) {
                     $this->progressResult($itinerary, $AnalyticsData);
                 }
@@ -847,41 +772,44 @@ class TrBasket extends _source_TrBasket
 
     private function progressResult(Itinerary $itinerary, &$AnalyticsData): void
     {
-        $result = $itinerary->getData();
         $packageIds = [];
-
-        foreach ($this->getPackages() as $package) {
+        foreach ($itinerary->getPackages() as $package) {
             $packageIds[] = $package->package_id;
         }
-        if (!empty($result['itinerary']['packages'])) {
-            foreach ($result['itinerary']['packages'] as $newPackages) {
-                $p = new Package;
-                $p->loadData($newPackages);
-                if (!in_array($p->package_id, $packageIds, true)) {
-                    $AnalyticsData[] = ['package' => $p];
-                }
+        foreach ($itinerary->getPackages() as $package) {
+            if (!in_array($package->package_id, $packageIds, true)) {
+                $AnalyticsData[] = ['package' => $package];
             }
         }
-        $this->setFullData($result);
+        $this->setFullData($itinerary);
     }
 
     /**
-     * @param array $result
+     * @param Itinerary $itinerary
      *
+     * @deprecated refactor
      * @return bool
      */
-    private function setFullData($result): bool
+    private function setFullData($itinerary): bool
     {
-        if (empty($result['itinerary'])) {
+        if ($itinerary) {
+            $result = $itinerary->getData();
+            if (empty($result['itinerary'])) {
+                return false;
+            }
+        } else {
             return false;
         }
 
-        $itinerary = self::calculateParams($result['itinerary']);
-        $autoCodeItinerary = !empty($result['autoCodeItinerary'])
-            ? self::calculateParams($result['autoCodeItinerary']) : null;
+//        $autoCodeItinerary = !empty($result['autoCodeItinerary'])
+//            ? self::calculateParams($result['autoCodeItinerary']) : null;
+        $autoCodeItinerary = null;
 
-        $data = !empty($autoCodeItinerary) ? $autoCodeItinerary : $itinerary;
-        $data['originalData'] = !empty($autoCodeItinerary) ? $itinerary : null;
+        $data = !empty($autoCodeItinerary) ? $autoCodeItinerary : $itinerary->getItineraryData();
+        $data['originalData'] = !empty($autoCodeItinerary) ? $itinerary->getItineraryData() : null;
+        if (!empty($data['originalData']['originalData'])) {
+            unset($data['originalData']['originalData']);
+        }
 
         $coupon = null;
         if (!empty($result['appliedCode'])) {
@@ -901,32 +829,52 @@ class TrBasket extends _source_TrBasket
 
         return $this->save();
     }
-
-    public static function calculateParams($data)
+//
+//    /**
+//     * @param Itinerary $itinerary
+//     *
+//     * @return mixed
+//     */
+//    public static function calculateParams($itinerary)
+//    {
+//        $data = $itinerary->getData()['itinerary'];
+//        $total_count = 0;
+//        if (!empty($data['packages'])) {
+//            foreach ($data['packages'] as &$package) {
+//                if ($package['category'] === TrPosHotels::TYPE) {
+//                    $total_count++;
+//                    continue;
+//                }
+//                if ($package['category'] === TrPosPlHotels::TYPE) {
+//                    $total_count += count($package['tickets']);
+//                }
+//                foreach ($package['tickets'] as &$ticket) {
+//                    if ($package['category'] !== TrPosPlHotels::TYPE) {
+//                        $total_count += $ticket['qty'];
+//                    }
+//                    $ticket['resultRate'] = number_format($ticket['specialRate'] ?: $ticket['retailRate'], 2, '.', '');
+//                }
+//            }
+//            unset($package, $ticket);
+//        }
+//        $data['total_count'] = $total_count;
+//        $data['total'] = number_format($data['total'], 2, '.', '');
+//
+//        var_dump($data);exit();
+//        return $data;
+//    }
+    /**
+     * @return Package[]
+     */
+    public function getHotelsRooms(): array
     {
-        $total_count = 0;
-
-        if (!empty($data['packages'])) {
-            foreach ($data['packages'] as &$package) {
-                if ($package['category'] === TrPosHotels::TYPE) {
-                    $total_count++;
-                    continue;
-                }
-                if ($package['category'] === TrPosPlHotels::TYPE) {
-                    $total_count += count($package['tickets']);
-                }
-                foreach ($package['tickets'] as &$ticket) {
-                    if ($package['category'] !== TrPosPlHotels::TYPE) {
-                        $total_count += $ticket['qty'];
-                    }
-                    $ticket['resultRate'] = number_format($ticket['specialRate'] ?: $ticket['retailRate'], 2, '.', '');
-                }
+        $packages = [];
+        foreach ($this->getPackages() as $package) {
+            if ($package->getItem()::TYPE === TrPosHotels::TYPE) {
+                $packages[] = $package;
             }
-            unset($package, $ticket);
         }
-        $data['total_count'] = $total_count;
-        $data['total'] = number_format($data['total'], 2, '.', '');
-        return $data;
+        return $packages;
     }
 
     /**
@@ -943,14 +891,14 @@ class TrBasket extends _source_TrBasket
         }
     }
 
-    public static function setForUser($user_id): bool
+    public function setForUser($user_id): bool
     {
         $session_id = self::getSessionID(true);
 
         if (!$session_id) {
             return false;
         }
-        /** @var TrBasket $b */
+
         $b = self::find()->where(["session_id" => $session_id, "user_id" => null])->one();
 
         if ($b) {
@@ -978,9 +926,6 @@ class TrBasket extends _source_TrBasket
 
         $Tripium = new Tripium;
         $userTripium = $Tripium->getCustomer($customer_id);
-        if ($Tripium->errorCode === Tripium::CUSTOMER_WAS_NOT_FOUND) {
-            $userTripium = (new Custumer())->reCreate();
-        }
 
         if (empty($userTripium) && $Tripium->statusCode == Tripium::STATUS_NOT_ACCEPTABLE) {
             $user = User::find()->where(["tripium_id" => $customer_id])->one();
@@ -1022,7 +967,7 @@ class TrBasket extends _source_TrBasket
 
         if (!empty($tripium->errors)) {
             if ($tripium->errorCode === Tripium::CUSTOMER_WAS_NOT_FOUND) {
-                $Customer = new Custumer;
+                $Customer = new Custumer();
                 $res = $Customer->reCreate();
 
                 if ($res) {
@@ -1148,17 +1093,14 @@ class TrBasket extends _source_TrBasket
 
     public function getFullTotal()
     {
+        $fullTotal = $this->getData() ? $this->getData()['fullTotal'] : null;
         $coupon = $this->getCoupon();
-        if ($coupon) {
-            return $coupon->discounted_total;
-        }
-
-        return $this->getTotal();
+        return $coupon->discounted_total ?? $fullTotal;
     }
 
     public function getTotalCount()
     {
-        $count = $this->getData() ? $this->getData()['total_count'] : 0;
+        $count = $this->getItinerary()->getTotalCount();
 
         $VacationPackages = $this->getVacationPackages();
         if ($VacationPackages) {
@@ -1196,14 +1138,14 @@ class TrBasket extends _source_TrBasket
      */
     public function reset(array $data = null): void
     {
-        if (!$data) {
-            $data = $this->get(true);
-        }
-        $data['originalData'] = $data;
-
-        $this->setAttributes(['data' => Json::encode($data)]);
-        $this->save();
-        $this->resetCoupon();
+//        if (!$data) {
+//            $data = $this->get(true);
+//        }
+//        $data['originalData'] = $data;
+//
+//        $this->setAttributes(['data' => Json::encode($data)]);
+//        $this->save();
+//        $this->resetCoupon();
     }
 
     public function resetCoupon(): void

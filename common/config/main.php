@@ -78,6 +78,12 @@ return [
 			            ['crop', 'width' => 260, 'height' => 180, 'x' => 'center - ' . floor(260/2), 'y' => 'center - ' . floor(180/2)],
 			        ],
 			    ],
+                'showsSeatMap' => [
+                    'process' => [
+                        ['autorotate'],
+                        ['resize', 'width' => 1024, 'height' => 768, 'scaleTo' => 'fit', 'only' => 'down'],
+                    ],
+                ],
             ]
         ],
     ],

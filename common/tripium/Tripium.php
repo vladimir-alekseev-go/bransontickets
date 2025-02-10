@@ -8,6 +8,7 @@ use common\helpers\StrHelper;
 use common\models\Coupon;
 use common\models\Itinerary;
 use common\models\Package;
+use common\models\TrAttractions;
 use common\models\TrBasket;
 use common\models\TrOrders;
 use DateTime;
@@ -65,9 +66,10 @@ class Tripium extends Model
         ];
     }
 
-    public static function getStatusValue($val): string
+    public static function getStatusValue($val)
     {
         $ar = self::getStatusList();
+
         return $ar[$val] ?? $val;
     }
 
@@ -99,7 +101,7 @@ class Tripium extends Model
         curl_setopt($this->ch, CURLOPT_URL, $this->url . $path);
         curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($this->ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($this->ch, CURLOPT_CONNECTTIMEOUT, 10);
+//        curl_setopt($this->ch, CURLOPT_CONNECTTIMEOUT, 10);
         curl_setopt($this->ch, CURLOPT_TIMEOUT, $this->timeout);
 
         if ($type !== 'get') {
@@ -125,16 +127,37 @@ class Tripium extends Model
             $this->statusCode = self::STATUS_GATEWAY_TIMEOUT;
             $this->addError('request', 'Gateway Time-out');
         }
-// 		echo '<pre>'; var_dump($this->requestData); echo '</pre>';
+// 		echo '<pre>'; var_export($this->requestData); echo '</pre>';
 // 		echo '<pre>'; echo $this->requestData['params']; echo '</pre>';
-// 		echo "<pre>statusCode: "; var_dump($this->statusCode); echo "</pre>";
+// 		echo "<pre>statusCode: "; var_export($this->statusCode); echo "</pre>";
 // 		echo "<pre>server_output: "; var_export($server_output); echo "</pre>";
 //exit();
         $phone = General::getConfigPhoneNumber();
 
         if ($this->statusCode !== self::STATUS_CODE_SUCCESS) {
             try {
-                $this->requestSendMail($server_output);
+                $res = Json::decode($server_output);
+                if (!isset($res["errorCode"])
+                    || (isset($res["errorCode"])
+                        && !in_array(
+                            (int)$res["errorCode"],
+                            [self::ERROR_AUTH_LOCATION, self::ERROR_ACCESS_DENIED, self::ERROR_MAX_LENGTH_STAY],
+                            true
+                        ))) {
+                    Yii::$app->mailer
+                        ->compose(
+                            "notification/tripium-request",
+                            [
+                                'requestData' => $this->requestData,
+                                'statusCode' => $this->statusCode,
+                                'serverOutput' => $server_output,
+                            ]
+                        )
+                        ->setTo(Yii::$app->params['technicalNotificationEmail'])
+                        ->setFrom([Yii::$app->params['tripiumRequestEmailFrom']])
+                        ->setSubject('Tripium request ' . date('Y-m-d H:i:s') . ' ' . Yii::$app->name)
+                        ->send();
+                }
             } catch (Exception $e) {
             }
         }
@@ -146,14 +169,32 @@ class Tripium extends Model
             if (isset($res["errorCode"])) {
                 $this->errorCode = (int)$res["errorCode"];
             }
-
             if ($this->errorCode === self::ERROR_CRUD_WITH_PAST_DATE) {
+                $class = MarketingItemHelper::getItemClassNames()[$res["data"]["pkg"]['category']];
+                if ($class) {
+//					$item = $class::find()->where(['id_external'=>$res["data"]["pkg"]['id']])->asArray()->one();
+                    if ($class::TYPE === TrAttractions::TYPE) {
+                        $priceGroup = $class::priceGroup;
+                        $itempriceGroup = $priceGroup::find()->where(
+                            ['id_external' => $res["data"]["pkg"]['typeId']]
+                        )->asArray()->one();
+                    }
+                }
+                $res["originalErrors"] = $res["globalErrors"];
                 if (!empty($itempriceGroup["name"])) {
-                    $this->addErrors([
+                    $res["globalErrors"] = [
                         "Tickets " . ($itempriceGroup["name"] ? 'for ' . $itempriceGroup["name"] : '') . " are no longer available to purchase online. Please remove this item from your shopping cart to complete your order. 
 				If you would like further assistance with purchasing " . $res["data"]["pkg"]["name"] . ", please call us at $phone."
-                    ]);
+                    ];
                 }
+            }
+
+            if (!empty($res["errors"])) {
+                $res["globalErrors"] = [$res["errorCode"]];
+            }
+
+            if (empty($res["globalErrors"]) && !empty($res["errorCode"])) {
+                $res["globalErrors"] = array_merge($res["globalErrors"], [$res["errorCode"]]);
             }
 
             if (in_array(
@@ -169,25 +210,33 @@ class Tripium extends Model
                 if (!empty($package['category'])) {
                     $itemNames = MarketingItemHelper::getItemNames();
                     $itemName = isset($itemNames[$package['category']]) ? $itemNames[$package['category']] : '';
-                    $this->addErrors([
+                    $res["globalErrors"] = [
                         "You are attempting to purchase tickets for " . strtolower(
                             $itemName
                         ) . " {$package['name']}, {$package['date']}, {$package['time']} within cutoff time or there are not enough tickets available. Please change your requested dates/times or call us $phone"
-                    ]);
+                    ];
+                }
+            }
+
+            if (!empty($res["globalErrors"])) {
+                $this->globalErrors = $res["globalErrors"];
+                if (!empty($res["data"])) {
+                    $this->errorData = $res["data"];
                 }
             }
 
             if ($this->errorCode === self::ERROR_CANCELLED) {
-                $this->addErrors([".<br/>You could still cancel any individual item(s) that are still within cancellation period or call us $phone to assist you."]);
+                $res["globalErrors"][0] .= ".<br/>You could still cancel any individual item(s) that are still within cancellation period or call us $phone to assist you.";
             }
 
             if ($this->errorCode === self::STATUS_ONE_HOTEL_PER_ORDER) {
-                $this->addErrors([self::getStatusValue(self::STATUS_ONE_HOTEL_PER_ORDER)]);
+                $res["globalErrors"] = [self::getStatusValue(self::STATUS_ONE_HOTEL_PER_ORDER)];
             }
 
             if (!empty($res["globalErrors"])) {
                 $this->addErrors($res["globalErrors"]);
-            }
+                $this->addErrors(['globalErrors' => $res['globalErrors']]);
+			}
 
             if (!empty($res['errors']) && is_array($res['errors'])) {
                 foreach ($res['errors'] as $name => $errors) {
@@ -221,58 +270,50 @@ class Tripium extends Model
         return ['globalErrors' => $errors];
     }
 
-    public function requestSendMail($server_output)
-    {
-        $res = Json::decode($server_output);
-        if (!isset($res["errorCode"])
-            || (isset($res["errorCode"])
-                && !in_array(
-                    (int)$res["errorCode"],
-                    [self::ERROR_AUTH_LOCATION, self::ERROR_ACCESS_DENIED, self::ERROR_MAX_LENGTH_STAY],
-                    true
-                ))) {
-            Yii::$app->mailer
-                ->compose(
-                    "notification/tripium-request",
-                    [
-                        'requestData' => $this->requestData,
-                        'statusCode' => $this->statusCode,
-                        'serverOutput' => $server_output,
-                    ]
-                )
-                ->setTo(Yii::$app->params['technicalNotificationEmail'])
-                ->setFrom([Yii::$app->params['tripiumRequestEmailFrom']])
-                ->setSubject('Tripium request ' . date('Y-m-d H:i:s') . ' ' . Yii::$app->name)
-                ->send();
-        }
-
-        return false;
-    }
-
     public function getShows($ids = null): ?array
     {
         $ids = !empty($ids) ? implode(',', $ids) : null;
-        $res = $this->request('/shows?' . http_build_query(['status' => 'all', 'ids' => $ids]));
+        $res = $this->request('/v2/wl/shows/list?' . http_build_query(['status' => 'all', 'ids' => $ids]));
         if ($this->statusCode === self::STATUS_CODE_SUCCESS) {
-            return $res ? $res['results'] : [];
+            return $res ? $res['results'] : null;
         }
+
         return null;
     }
 
-    public function getAttractions($ids = null)
+    public function getAttractions($ids = null): ?array
     {
         $ids = !empty($ids) ? implode(',', $ids) : null;
-        $res = $this->request('/attractions?' . http_build_query(['status' => 'all', 'ids' => $ids]));
-        return $res ? $res['results'] : [];
+        $res = $this->request('/v2/wl/attractions/list?' . http_build_query(['status' => 'all', 'ids' => $ids]));
+        if ($this->statusCode === self::STATUS_CODE_SUCCESS) {
+            return $res ? $res['results'] : null;
+        }
+
+        return null;
     }
 
     public function getCategories(): ?array
     {
         $res = $this->request('/provider/category');
         if ($this->statusCode === self::STATUS_CODE_SUCCESS) {
-            return $res ? $res['results'] : [];
+            return $res ? $res['results'] : null;
         }
+
         return null;
+    }
+
+    public function getCancellation()
+    {
+        $return = [];
+        $res = $this->request('/cancellation');
+        foreach ($res as $it) {
+            foreach ($it as $r) {
+                foreach ($r as $data) {
+                    $return[] = $data;
+                }
+            }
+        }
+        return $return;
     }
 
     public function getShowsPrice($params): ?array
@@ -280,85 +321,639 @@ class Tripium extends Model
         $start = !empty($params['start']) ? $params['start'] : date('m/d/Y');
         $end = !empty($params['end']) ? $params['end'] : date('m/d/Y', time() + 3600 * 24 * 60);
         $res = $this->request(
-            "/shows/price?start=" . $start . "&end=" . $end . (!empty($params['ids']) ? '&ids=' . implode(
+            "/v2/wl/shows/prices?start=" . $start . "&end=" . $end . (!empty($params['ids']) ? '&ids=' . implode(
                     ',',
                     $params['ids']
                 ) : '')
         );
         if ($this->statusCode === self::STATUS_CODE_SUCCESS) {
-            return !empty($res['results']) ? $res['results'] : [];
+            return !empty($res['results']) ? $res['results'] : null;
         }
+
         return null;
     }
 
-    public function getAttractionsPrice($params)
+    public function getAttractionsPrice($params): ?array
     {
         $start = !empty($params['start']) ? $params['start'] : date('m/d/Y');
         $end = !empty($params['end']) ? $params['end'] : date("m/d/Y", time() + 3600 * 24 * 60);
         $res = $this->request(
-            "/attractions/price?start=" . $start . "&end=" . $end . (!empty($params['ids']) ? '&ids=' . implode(
+            "/v2/wl/attractions/prices?start=" . $start . "&end=" . $end . (!empty($params['ids']) ? '&ids=' . implode(
                     ',',
                     $params['ids']
                 ) : '')
         );
-        return !empty($res['results']) ? $res['results'] : [];
+        if ($this->statusCode === self::STATUS_CODE_SUCCESS) {
+            return !empty($res['results']) ? $res['results'] : null;
+        }
+
+        return null;
     }
 
-    public function getAttractionsAvailability($params)
-    {
-        $start = $params['start'] ? $params['start'] : date("m/d/Y");
-        $end = $params['end'] ? $params['end'] : date("m/d/Y", time() + 3600 * 24 * 360);
-        return $this->request("/attractions/availability?start=" . $start . "&end=" . $end)["results"];
-    }
-
-    public function getShowslocation(): ?array
+    public function getShowsLocation(): ?array
     {
         $res = $this->request('/provider/location');
         if ($this->statusCode === self::STATUS_CODE_SUCCESS) {
-            return !empty($res['results']) ? $res['results'] : [];
+            return !empty($res['results']) ? $res['results'] : null;
+        }
+
+        return null;
+    }
+
+    public function getDining($ids = null): ?array
+    {
+        $ids = !empty($ids) ? implode(',', $ids) : null;
+        $res = $this->request('/v2/wl/dining/list?' . http_build_query(['status' => 'all', 'ids' => $ids]));
+        if ($this->statusCode === self::STATUS_CODE_SUCCESS) {
+            return !empty($res['results']) ? $res['results'] : null;
+        }
+
+        return null;
+    }
+
+    public function getDiningPrice($params): ?array
+    {
+        $start = !empty($params['start']) ? $params['start'] : date('m/d/Y');
+        $end = !empty($params['end']) ? $params['end'] : date('m/d/Y', time() + 3600 * 24 * 60);
+        $status = !empty($params['status']) ? (bool)$params['status'] : true;
+        $status = $status === true ? 'true' : '';
+        $res = $this->request(
+            "/v2/wl/dining/prices?start=" . $start . "&end=" . $end . "&status=" . $status . (!empty($params['ids']) ? '&ids=' . implode(
+                    ',',
+                    $params['ids']
+                ) : '')
+        );
+        if ($this->statusCode === self::STATUS_CODE_SUCCESS) {
+            return !empty($res['results']) ? $res['results'] : null;
+        }
+
+        return null;
+    }
+
+    public function postCustomer($data): ?array
+    {
+        if (!empty($data['id'])) {
+            $res = $this->request('/customer/' . $data['id'], $data, 'put');
+        } else {
+            $res = $this->request('/customer', $data, 'post');
+        }
+        if ($this->statusCode === self::STATUS_CODE_SUCCESS) {
+            return $res;
+        }
+
+        return null;
+    }
+
+    public function getCustomer($id): ?array
+    {
+        if (!$id) {
+            return null;
+        }
+        $res = $this->request('/customer/' . $id);
+        if ($this->statusCode === self::STATUS_CODE_SUCCESS) {
+            return $res;
         }
         return null;
     }
 
     /**
-     * @param $category
-     * @param $vendorId
-     * @param $types
-     * @param $tags
-     * @return array
+     * @param $data
+     *
+     * @return Itinerary|null
      */
-    function getContent($category, $vendorId, $types = null, $tags = null)
+    public function postItinerary($data): ?Itinerary
     {
-        $url = "/content/vendor/{$category}/{$vendorId}";
-        $url .= '?' . http_build_query(['types' => $types, 'tags' => $tags]);
-        $res = $this->request($url);
-        return !empty($res) ? $res : [];
+        $result = $this->request('/v2/wl/ext/itinerary', $data, 'post');
+
+        if (empty($this->getErrors())) {
+            return (new Itinerary())->loadData($result);
+        }
+        return null;
+    }
+
+    /**
+     * @param string $session
+     * @param Coupon $coupon
+     *
+     * @return Itinerary|null
+     */
+    public function getItineraryByCoupon($session, Coupon $coupon): ?Itinerary
+    {
+        if (!$session) {
+            return null;
+        }
+
+        $result = $this->request(
+            '/ext/itinerary/' . $session . '/?' . http_build_query(['discountCode' => $coupon->code])
+        );
+
+        if (empty($this->getErrors())) {
+            return (new Itinerary())->loadData($result);
+        }
+        return null;
     }
 
     /**
      * Gets hotels
-     * @param null $ids
+     *
+     * @param null  $ids
      * @param mixed $status
-     * @return array
-     */
-    function getPosHotels($ids = null, $status = 'all')
-    {
-        $ids = !empty($ids) ? implode(',', $ids) : null;
-        $res = $this->request("/hotel?" . http_build_query(['status' => $status, 'ids' => $ids]));
-        return !empty($res["results"]) ? $res["results"] : [];
-    }
-
-    /**
-     * @param $params
      *
      * @return array
      */
-    function getPosHotelsPrice($params)
+    public function getPosHotels($ids = null, $status = 'all'): ?array
     {
-        $start = !empty($params['start']) ? $params['start'] : date("m/d/Y");
-        $end = !empty($params['end']) ? $params['end'] : date("m/d/Y",time()+3600*24*60);
-        $res = $this->request("/hotel/price?start=".$start."&end=".$end.(!empty($params['ids']) ? '&ids='.implode(',',$params['ids']) : ''));
-        return !empty($res["results"]) ? $res["results"] : [];
+        $ids = !empty($ids) ? implode(',', $ids) : null;
+        $res = $this->request('/v2/wl/hotel/list?' . http_build_query(['status' => $status, 'ids' => $ids]));
+
+        if ($this->statusCode === self::STATUS_CODE_SUCCESS) {
+            return !empty($res['results']) ? $res['results'] : null;
+        }
+
+        return null;
+    }
+
+    /**
+     * @param array|null    $ids
+     * @param DateTime|null $start
+     * @param DateTime|null $end
+     * @param int|null      $adults
+     * @param array|null    $childAges
+     *
+     * @param string|null   $status
+     *
+     * @return array
+     */
+    public function getPosHotelsPrice(
+        array $ids = null,
+        DateTime $start = null,
+        DateTime $end = null,
+        int $adults = null,
+        array $childAges = null,
+        string $status = null
+    ): ?array {
+        $res = $this->request(
+            '/v2/wl/hotel/prices?'
+            . implode(
+                '&',
+                [
+                    'status=' . $status,
+                    'adults=' . $adults,
+                    'childAges=' . (is_array($childAges) ? implode(',', $childAges) : null),
+                    'start=' . ($start ? $start->format('m/d/Y') : null),
+                    'end=' . ($end ? $end->format('m/d/Y') : null),
+                    'ids=' . (is_array($ids)
+                        ? implode(',', array_slice($ids, 0, 250)) : null)
+                ]
+            )
+        );
+
+        if ($this->statusCode === self::STATUS_CODE_SUCCESS) {
+            return !empty($res['results']) ? $res['results'] : null;
+        }
+        return null;
+    }
+
+    /**
+     * @param bool     $isPriceLine
+     * @param string   $id
+     * @param DateTime $start
+     * @param DateTime $end
+     * @param array    $rooms
+     *
+     * @return array|null
+     */
+    public function getHotelContent(
+        bool $isPriceLine,
+        string $id,
+        DateTime $start,
+        DateTime $end,
+        $rooms = []
+    ): ?array
+    {
+        $res = $this->getHotelData($isPriceLine, $id, $start, $end, $rooms);
+
+        if ($this->statusCode === self::STATUS_CODE_SUCCESS) {
+            return array_values($res)[0][0] ?? null;
+        }
+        return null;
+    }
+
+    /**
+     * @param bool     $isPriceLine
+     * @param string   $id
+     * @param DateTime $start
+     * @param DateTime $end
+     * @param array    $rooms
+     *
+     * @return array|null
+     */
+    private function getHotelData(
+        bool $isPriceLine,
+        string $id,
+        DateTime $start,
+        DateTime $end,
+        $rooms = []
+    ): ?array
+    {
+        $groups = array_map(
+            static function ($el) {
+                return "a:{$el['adult']},ch:" . (implode('_', !empty($el['age']) ? $el['age'] : []));
+            },
+            $rooms
+        );
+
+        $category = $isPriceLine ? 'hotels' : 'hotel';
+        $res = $this->request(
+            "/v2/wl/{$category}/prices/{$id}?"
+            . implode(
+                '&',
+                [
+                    "groups=" . implode(';', $groups),
+                    'start=' . ($start ? $start->format('m/d/Y') : null),
+                    'end=' . ($end ? $end->format('m/d/Y') : null)
+                ]
+            )
+        );
+        if ($this->statusCode === self::STATUS_CODE_SUCCESS) {
+            return $res;
+        }
+        return null;
+    }
+
+    /**
+     * @param bool     $isPriceLine
+     * @param string   $id
+     * @param DateTime $start
+     * @param DateTime $end
+     * @param array    $rooms
+     *
+     * @return TripiumHotelPrice[]
+     */
+    public function getHotelPrices(
+        bool $isPriceLine,
+        string $id,
+        DateTime $start,
+        DateTime $end,
+        $rooms = []
+    ): ?array {
+        $res = $this->getHotelData($isPriceLine, $id, $start, $end, $rooms);
+
+        if ($this->statusCode === self::STATUS_CODE_SUCCESS) {
+            $result = [];
+            foreach ($res as $groupKey => $group) {
+                if (is_array($group[0]['prices'])) {
+                    foreach ($group[0]['prices'] as $price) {
+                        $p = new TripiumHotelPrice();
+                        $p->loadData(
+                            array_merge(
+                                $price,
+                                [
+                                    'time'          => $group[0]['time'],
+                                    'start'         => $group[0]['start'],
+                                    'end'           => $group[0]['end'],
+                                    'hotelType'     => $group[0]['hotelType'],
+                                    'checkInPolicy' => $group[0]['checkInPolicy'],
+                                    'vendorId'      => $group[0]['vendorId'],
+                                    'groupKey'      => $groupKey,
+                                ]
+                            )
+                        );
+                        $result[] = $p;
+                    }
+                }
+            }
+            return $result;
+        }
+        return null;
+    }
+
+    /**
+     * @param $session
+     *
+     * @return Itinerary|null
+     */
+    public function getItinerary($session): ?Itinerary
+    {
+        if (!$session) {
+            return null;
+        }
+
+        $result = $this->request('/v2/wl/itinerary/' . $session);
+
+        if ($this->statusCode === self::STATUS_CODE_SUCCESS) {
+            return (new Itinerary())->loadData(['itinerary' => $result]);
+        }
+        return null;
+    }
+
+    /**
+     * Add/modify a product in a cart
+     *
+     * @param string      $session
+     * @param array       $data
+     * @param Coupon|null $coupon
+     *
+     * @return Itinerary|null
+     */
+    public function postPackage($session, $data, Coupon $coupon = null): ?Itinerary
+    {
+        if (empty($session)) {
+            return null;
+        }
+        $queryData = [];
+        if ($coupon) {
+            $queryData['discountCode'] = $coupon->code;
+        }
+        $query = '?' . http_build_query($queryData);
+
+        if (!empty($data['packageId'])) {
+            $result = $this->request(
+                '/v2/wl/ext/itinerary/' . $session . '/' . $data['packageId'] . $query,
+                $data,
+                'put'
+            );
+        } else {
+            $result = $this->request('/v2/wl/ext/itinerary/' . $session . $query, $data, 'post');
+        }
+
+        if ($this->statusCode === self::STATUS_CODE_SUCCESS) {
+            return (new Itinerary())->loadData($result);
+        }
+
+        try {
+            Yii::$app->mailer->compose('basket/basket-add-edit', ['data' => $data, 'errors' => $this->getErrors()])
+                ->setFrom(Yii::$app->params['subscriptionEmailFrom'])
+                ->setTo(Yii::$app->params['technicalNotificationEmail'])
+                ->setSubject('Adding/modify items in a basket. ' . Yii::$app->name)
+                ->send();
+        } catch (Exception $e) {
+        }
+
+        return null;
+    }
+
+    /**
+     * @return string
+     */
+    private static function getSiteType(): string
+    {
+        return !empty(Yii::$app->params['siteType']) ? Yii::$app->params['siteType'] : self::SITE_TYPE_DESKTOP;
+    }
+
+    /**
+     * @param $session
+     * @param $packageId
+     *
+     * @return Itinerary|null
+     */
+    public function removePackage($session, $packageId): ?Itinerary
+    {
+        $result = $this->request('/v2/wl/ext/itinerary/' . $session . '/' . $packageId, [], 'delete');
+        if ($this->statusCode === self::STATUS_CODE_SUCCESS) {
+            return (new Itinerary())->loadData($result);
+        }
+        return null;
+    }
+
+    /**
+     * @param $session
+     *
+     * @return Itinerary|null
+     */
+    public function clearItinerary($session): ?Itinerary
+    {
+        $result = $this->request('/v2/wl/ext/itinerary/clear/' . $session, [], 'delete');
+        if ($this->statusCode === self::STATUS_CODE_SUCCESS) {
+            return (new Itinerary())->loadData($result);
+        }
+        return null;
+    }
+
+    /**
+     * @param $session
+     *
+     * @return Itinerary|null
+     */
+    public function reserve($session): ?Itinerary
+    {
+        $result = $this->request('/v2/wl/itinerary/' . $session . '/reserve', [], 'post');
+        if ($this->statusCode === self::STATUS_CODE_SUCCESS) {
+            return (new Itinerary())->loadData($result);
+        }
+        return null;
+    }
+
+    public function addOrder($data): ?array
+    {
+        $res = $this->request('/v2/wl/order', $data, 'post');
+        if ($this->statusCode === self::STATUS_CODE_SUCCESS) {
+            return $res;
+        }
+        return null;
+    }
+
+    public function getOrder($orderNumber): ?array
+    {
+        $res = $this->request("/v2/wl/order/$orderNumber");
+        if ($this->statusCode === self::STATUS_CODE_SUCCESS) {
+            return $res;
+        }
+        return null;
+    }
+
+    /**
+     * @param DateTime|null $startDate
+     * @param DateTime|null $endDate
+     * @param null          $search
+     * @param string        $sort
+     * @param int           $page
+     * @param int           $size
+     *
+     * @return array|null
+     */
+    public function getOrders(
+        DateTime $startDate = null,
+        DateTime $endDate = null,
+        $search = null,
+        int $page = 0,
+        int $size = 20,
+        $sort = 'orderDate,desc'
+    ): ?array {
+        $query = http_build_query(
+            [
+                'startDate' => $startDate ? $startDate->format('m/d/Y') : null,
+                'endDate' => $endDate ? $endDate->format('m/d/Y') : null,
+//                'search' => $search,
+                'sort' => $sort,
+                'page' => $page,
+                'size' => $size,
+            ]
+        );
+        $res = $this->request("/v2/wl/order?" . $query);
+        if ($this->statusCode !== self::STATUS_CODE_SUCCESS) {
+            return null;
+        }
+        $results = [];
+        foreach ($res['results'] as $order) {
+            $results[] = TrOrders::build($order);
+        }
+        $res['results'] = $results;
+        return $res;
+    }
+
+    /**
+     * @param int      $customerNumber
+     * @param DateTime $startDate
+     * @param DateTime $endDate
+     *
+     * @return TrOrders[]|null
+     */
+    public function getWlCustomerOrders(
+        int $customerNumber,
+        DateTime $startDate,
+        DateTime $endDate
+    ): ?array {
+        $query = http_build_query(
+            [
+                'startDate' => $startDate ? $startDate->format('m/d/Y') : null,
+                'endDate' => $endDate ? $endDate->format('m/d/Y') : null,
+            ]
+        );
+        $res = $this->request("/v2/wl/report/customer/{$customerNumber}/orders?" . $query);
+        if ($this->statusCode !== self::STATUS_CODE_SUCCESS) {
+            return null;
+        }
+        $results = [];
+        foreach ($res['results'] as $order) {
+            $results[] = TrOrders::build($order);
+        }
+        return $results;
+    }
+
+//    /**
+//     * @param $category
+//     * @param $vendorId
+//     * @param $types
+//     * @param $tags
+//     * @return array
+//     */
+//    function getContent($category, $vendorId, $types = null, $tags = null)
+//    {
+//        $url = "/content/vendor/{$category}/{$vendorId}";
+//        $url .= '?' . http_build_query(['types' => $types, 'tags' => $tags]);
+//        $res = $this->request($url);
+//        return !empty($res) ? $res : [];
+//    }
+
+    public function getCustomerCars($id)
+    {
+        $customer = $this->getCustomer($id);
+
+        if (empty($customer['axiaId'])) {
+            return false;
+        }
+
+		$res = $this->request('/customer/axia/' . $customer['axiaId']);
+
+        if (empty($res['results'])) {
+            return false;
+        }
+
+		$res['results'] = ArrayHelper::index($res['results'], 'id');
+		foreach($res['results'] as &$it) {
+		    $ar = array_merge($it, $it["card"]);
+            $it = $ar;
+        }
+
+        return $res['results'];
+    }
+
+    public function getCustomerOrders($id, $past = true): ?array
+    {
+        if (!$id) {
+            return null;
+        }
+
+        $res = $this->request('/v2/wl/customer/' . $id . '/orders?size=2000&page=0&past=' . ($past ? 'true' : 'false'));
+
+        if ($this->statusCode === self::STATUS_CODE_SUCCESS) {
+            return $res;
+        }
+        return null;
+    }
+
+    public function getLocations(): ?array
+    {
+        $result = $this->request("/location?size=2000");
+        if ($this->statusCode === self::STATUS_CODE_SUCCESS) {
+            return !empty($result["results"]) ? $result["results"] : null;
+        }
+        return null;
+    }
+
+    public function getLocation($id)
+    {
+        $result = $this->request("/location/" . $id);
+        return !empty($result["results"]) ? $result["results"] : null;
+    }
+
+//    public function getAttractionsAvailability($params)
+//    {
+//        $start = $params['start'] ?: date("m/d/Y");
+//        $end = $params['end'] ?: date("m/d/Y", time() + 3600 * 24 * 360);
+//        return $this->request("/v2/wl/attractions/availability?start=" . $start . "&end=" . $end)["results"];
+//    }
+
+    public function getDiningAvailability($params)
+    {
+        $start = $params['start'] ?: date("m/d/Y");
+        $end = $params['end'] ?: date("m/d/Y", time() + 3600 * 24 * 360);
+        return $this->request("/v2/wl/dining/availability?start=" . $start . "&end=" . $end)["results"];
+    }
+
+    public function orderCancel($orderNumber): bool
+    {
+        $this->request(
+            '/v2/wl/order/' . $orderNumber . '/cancel?generateTransactions=true',
+            ['transactions' => []],
+            'post'
+        );
+        return $this->statusCode === self::STATUS_CODE_SUCCESS;
+    }
+
+    public function orderCancelPackage($orderNumber, $packageId): bool
+    {
+        $this->request(
+            '/v2/wl/order/' . $orderNumber . '/cancel/' . $packageId . '?generateTransactions=true',
+            ['transactions' => []],
+            'post'
+        );
+        return $this->statusCode === self::STATUS_CODE_SUCCESS;
+    }
+
+    public function orderModifyPackage($orderNumber, $packageId, $params)
+    {
+        return $this->request(
+            '/order/' . $orderNumber . '/modify/' . $packageId . '?generateTransactions=true',
+            $params,
+            "put"
+        );
+    }
+
+    public function orderCards($orderNumber)
+    {
+        $res = $this->request('/order/' . $orderNumber . '/cards');
+        if (empty($this->errors)) {
+            return $res['results'];
+        }
+
+        return null;
+    }
+
+    public function orderModifyCheck($orderNumber, $packageNumber, $params)
+    {
+        return $this->request('/order/' . $orderNumber . '/check/' . $packageNumber, $params, "post");
     }
 
     /**
@@ -366,6 +961,7 @@ class Tripium extends Model
      * @param bool  $useParams
      *
      * @return null
+     * @deprecated
      */
     public function getHotels($query = [], $useParams = true)
     {
@@ -481,304 +1077,6 @@ class Tripium extends Model
         }
 
         return null;
-    }
-
-    /**
-     * Gets Price Line hotels.
-     *
-     * @param DateTime $checkIn
-     * @param DateTime $checkOut
-     * @param int      $rooms
-     * @param int      $adults
-     * @param int      $children
-     * @param string   $sortBy
-     * @param array    $hotelIds
-     *
-     * @return array
-     */
-    public function getPLHotels(
-        DateTime $checkIn,
-        DateTime $checkOut,
-        int $rooms = 1,
-        int $adults = 2,
-        int $children = 0,
-        $sortBy = null,
-        array $hotelIds = []
-    ): array {
-        $query = http_build_query(
-            [
-                'check_in' => $checkIn->format('m/d/Y'),
-                'check_out' => $checkOut->format('m/d/Y'),
-                'rooms' => $rooms,
-                'adults' => $adults,
-                'children' => $children,
-                'sort_by' => $sortBy,
-                'hotel_ids' => !empty($hotelIds) ? implode(',', $hotelIds) : null
-            ]
-        );
-        $res = $this->request('/hotels?' . $query);
-
-        return !empty($res['results']) ? $res['results'] : [];
-    }
-
-    /**
-     * Gets a Price Line hotel detail.
-     *
-     * @param int $id
-     *
-     * @return array|null
-     */
-    public function getPLHotelDetail(int $id): ?array
-    {
-        $res = $this->request('/hotels/' . $id);
-
-        if ($this->statusCode === self::STATUS_CODE_SUCCESS) {
-            return is_array($res) ? $res : null;
-        }
-
-        return null;
-    }
-
-    /**
-     * Gets a price of Price Line hotel.
-     *
-     * @param string $ppnBundle
-     *
-     * @return array|null
-     */
-    public function getPLHotelPrice(string $ppnBundle): ?array
-    {
-        $query = http_build_query(['ppn_bundle' => $ppnBundle]);
-
-        $res = $this->request('/hotels/price?' . $query);
-
-        if ($this->statusCode === self::STATUS_CODE_SUCCESS) {
-            return is_array($res['results']) && !empty($res['results']) ? $res['results'][0] : null;
-        }
-        return null;
-    }
-
-    public function getItinerary($session)
-    {
-        if (!$session) {
-            return false;
-        }
-
-        $res = $this->request('/itinerary/' . $session);
-        return $res ? $res : false;
-    }
-
-    /**
-     * Add/modify a product in a cart
-     *
-     * @param string $session
-     * @param array  $data
-     * @param Coupon $coupon
-     *
-     * @return Itinerary|null
-     */
-    public function postPackage($session, $data, Coupon $coupon = null): ?Itinerary
-    {
-        if (empty($session)) {
-            return null;
-        }
-
-        $queryData = ['info' => self::getSiteType()];
-        if ($coupon) {
-            $queryData['discountCode'] = $coupon->code;
-        }
-        $query = '?' . http_build_query($queryData);
-
-        if (!empty($data['packageId'])) {
-            $result = $this->request(
-                '/ext/itinerary/' . $session . '/package/' . $data['packageId'] . $query,
-                $data,
-                'put'
-            );
-        } else {
-            $result = $this->request('/ext/itinerary/' . $session . $query, $data, 'post');
-        }
-
-        if (empty($this->getErrors())) {
-            $itinerary = new Itinerary();
-            return $itinerary->loadData($result);
-        }
-
-        try {
-            Yii::$app->mailer->compose('basket/basket-add-edit', ['data' => $data, 'errors' => $this->getErrors()])
-                ->setFrom(Yii::$app->params['subscriptionEmailFrom'])
-                ->setTo(Yii::$app->params['technicalNotificationEmail'])
-                ->setSubject('Adding/modify items in a basket. ' . Yii::$app->name)
-                ->send();
-        } catch (Exception $e) {
-        }
-
-        return null;
-    }
-
-    /**
-     * @return string
-     */
-    private static function getSiteType(): string
-    {
-        return !empty(Yii::$app->params['siteType']) ? Yii::$app->params['siteType'] : self::SITE_TYPE_DESKTOP;
-    }
-
-    /**
-     * @param $session
-     * @param $packageId
-     *
-     * @return mixed|string[]|null
-     */
-    public function removePackage($session, $packageId)
-    {
-        $query = '?' . http_build_query(['info' => self::getSiteType()]);
-        $res = $this->request('/ext/itinerary/' .$session. '/package/' .$packageId . $query, [], 'delete');
-        return isset($res['itinerary']) ? $res : null;
-    }
-
-    /**
-     * @param $session
-     *
-     * @return mixed|string[]|null
-     */
-    public function clearItinerary($session)
-    {
-        $query = '?' . http_build_query(['info' => self::getSiteType()]);
-        $res = $this->request('/ext/itinerary/' .$session . $query, [], 'delete');
-        return isset($res['itinerary']) ? $res : null;
-    }
-
-    public function reserve($session)
-    {
-        $res = $this->request('/itinerary/' .$session. '/reserve', [], 'post');
-        return $res ? $res : false;
-    }
-
-    public function addOrder($data)
-    {
-        $res = $this->request('/order', $data, 'post');
-        return $res ? $res : false;
-    }
-
-    public function getOrder($orderNumber)
-    {
-        $res = $this->request("/order/$orderNumber");
-        return $res ? $res : null;
-    }
-
-    /**
-     * @param DateTime|null $startDate
-     * @param DateTime|null $endDate
-     * @param null          $search
-     * @param string        $sort
-     * @param int           $page
-     * @param int           $size
-     *
-     * @return array|null
-     */
-    public function getOrders(
-        DateTime $startDate = null,
-        DateTime $endDate = null,
-        $search = null,
-        int $page = 0,
-        int $size = 20,
-        $sort = 'orderDate,desc'
-    ): ?array {
-        $query = http_build_query(
-            [
-                'startDate' => $startDate ? $startDate->format('m/d/Y') : null,
-                'endDate' => $endDate ? $endDate->format('m/d/Y') : null,
-                'search' => $search,
-                'sort' => $sort,
-                'page' => $page,
-                'size' => $size,
-            ]
-        );
-        $res = $this->request("/order?" . $query);
-        if (!isset($res['results'])) {
-            return null;
-        }
-        $results = [];
-        foreach ($res['results'] as $order) {
-            $results[] = TrOrders::build($order);
-        }
-        $res['results'] = $results;
-        return $res;
-    }
-
-    public function postCustomer($data): ?array
-    {
-        if (!empty($data['id'])) {
-            $res = $this->request('/customer/' . $data['id'], $data, 'put');
-        } else {
-            $res = $this->request('/customer', $data, 'post');
-        }
-        if ($this->statusCode === self::STATUS_CODE_SUCCESS) {
-            return $res;
-        }
-
-        return null;
-    }
-
-    public function getCustomer($id): ?array
-    {
-        if (!$id) {
-            return null;
-        }
-        $res = $this->request('/customer/' . $id);
-        if ($this->statusCode === self::STATUS_CODE_SUCCESS) {
-            return $res;
-        }
-        return null;
-    }
-
-    /**
-     * @param $data
-     *
-     * @return Itinerary|null
-     */
-    public function postItinerary($data): ?Itinerary
-    {
-        $result = $this->request('/ext/itinerary', $data, 'post');
-
-        if (empty($this->getErrors())) {
-            $itinerary = new Itinerary();
-            return $itinerary->loadData($result);
-        }
-        return null;
-    }
-
-    /**
-     * @param string $session
-     * @param Coupon $coupon
-     *
-     * @return Itinerary|null
-     */
-    public function getItineraryByCoupon($session, Coupon $coupon): ?Itinerary
-    {
-        if (!$session) {
-            return null;
-        }
-
-        $result = $this->request(
-            '/ext/itinerary/' . $session . '/?' . http_build_query(['discountCode' => $coupon->code])
-        );
-
-        if (empty($this->getErrors())) {
-            $itinerary = new Itinerary();
-            return $itinerary->loadData($result);
-        }
-        return null;
-    }
-
-    public function getCustomerOrders($id, $past = true)
-    {
-        if (!$id) {
-            return false;
-        }
-
-        return $this->request("/customer/" . $id . "/orders?size=2000&page=0&past=" . ($past ? "true" : "false"));
     }
 
     /**
@@ -902,6 +1200,26 @@ class Tripium extends Model
 	    return $result;
 	}
 
+//	/**
+//	 * @param $orderNumber
+//	 * @param $discountCode
+//	 * @param $type
+//	 *
+//	 * @return array
+//	 * */
+//	public function getRecalculatingPakages($orderNumber, $discountCode, $type = null)
+//	{
+//	    $res = $this->request("/discount/itinerary/$orderNumber/$discountCode?".http_build_query(['type'=>$type]), [], "get");
+//
+//	    $result = [];
+//
+//	    if (!empty($res["results"])) {
+//	        $result = $res["results"];
+//	    }
+//
+//	    return $result;
+//	}
+
     /**
      * @param string $orderNumber
      * @param string $discountCode
@@ -917,44 +1235,13 @@ class Tripium extends Model
 
         if (!empty($res["results"])) {
             foreach ($res["results"] as $data) {
-                $package = new Package;
+                $package = new Package();
                 $package->loadData($data);
                 $result[] = $package;
             }
         }
 
         return $result;
-    }
-
-    /**
-     * Gets the terms and conditions of Price Line hotel.
-     *
-     * @return array|null
-     */
-    public function getPLTermsConditions(): ?array
-    {
-        $res = $this->request('/priceline/policy?category=terms_and_conditions');
-
-        if ($this->statusCode === self::STATUS_CODE_SUCCESS) {
-            return is_array($res['results']) ? $res['results'] : null;
-        }
-        return null;
-    }
-
-    /**
-     * Gets the privacy policy of Price Line hotel.
-     *
-     * @return array|null
-     */
-    public function getPLPrivacyPolicy(): ?array
-    {
-        $res = $this->request('/priceline/policy?category=privacy_policy');
-
-        if ($this->statusCode === self::STATUS_CODE_SUCCESS) {
-            return is_array($res['results']) ? $res['results'] : null;
-        }
-
-        return null;
     }
 
     /**
@@ -1031,92 +1318,376 @@ class Tripium extends Model
         return empty($this->errors);
     }
 
-    public function getCustomerCards($id)
+    /**
+     * Get url of barcode.
+     *
+     * @param $category
+     * @param $packageId
+     * @param $barCode
+     *
+     * @return string
+     */
+    public static function getBarcodeUrl($category, $packageId, $barCode)
     {
-        $customer = $this->getCustomer($id);
+        return Yii::$app->params["tripium"]["urlRoot"] . '/barcode/' . $category . '/' . $packageId . '/' . $barCode;
+    }
 
-        if (empty($customer['axiaId'])) {
-            return null;
+    /**
+     * SDC Voucher Data / List of vouchers for specific order.
+     *
+     * @see https://pos23.docs.apiary.io/#reference/0/sdc-voucher-data/list-of-vouchers-for-specific-order
+     *
+     * @param string $orderNumber
+     *
+     * @return array
+     */
+    public function getSdcVouchersOrder($orderNumber)
+    {
+        $res = $this->request('/order/sdc/' . $orderNumber);
+        if (!empty($res["results"])) {
+            return $res["results"];
         }
 
-        $res = $this->request('/customer/axia/' . $customer['axiaId']);
-        if ($this->statusCode === self::STATUS_CODE_SUCCESS) {
-            if (empty($res['results'])) {
-                return null;
-            }
-
-            $res['results'] = ArrayHelper::index($res['results'], 'id');
-            foreach ($res['results'] as &$it) {
-                $ar = array_merge($it, $it["card"]);
-                $it = $ar;
-            }
-
-            return $res['results'];
-        }
         return null;
     }
 
     /**
      * Get link for Voucher file.
      *
-     * @param $orderNumber
-     * @param null   $packageId
+     * @param string      $orderNumber
+     * @param null|string $packageId
      *
-     * @return string|null url
+     * @return string
      */
-    public function getVoucherLink($orderNumber, $packageId = null): ?string
+    public function getVoucherLink(string $orderNumber, $packageId = null): ?string
     {
-        $res = $this->request('/voucher/' . $orderNumber . ($packageId ? '/' . $packageId : ''));
-        if ($this->statusCode === self::STATUS_CODE_SUCCESS) {
+        $res = $this->request('/v2/wl/voucher/' . $orderNumber . ($packageId ? '/' . $packageId : ''));
+        if ($this->statusCode === self::STATUS_CODE_SUCCESS && !empty($res["url"])) {
             if (!empty(Yii::$app->params['replaceDownlowUrlFile']) && is_array(
                     Yii::$app->params['replaceDownlowUrlFile']
                 )) {
                 foreach (Yii::$app->params['replaceDownlowUrlFile'] as $search => $replace) {
-                    $res["url"] = str_replace($search, $replace, $res["url"]);
+                    $res['url'] = str_replace($search, $replace, $res['url']);
                 }
             }
-            return $res["url"];
+            return $res['url'];
         }
 
         return null;
     }
 
-    public function orderCards($orderNumber): ?array
-    {
-        $res = $this->request('/order/' . $orderNumber . '/cards');
-        if ($this->statusCode === self::STATUS_CODE_SUCCESS) {
-            return $res['results'];
-        }
-
-        return null;
-    }
-
-    public function orderCancel($orderNumber)
-    {
-        $res = $this->request(
-//            '/order/' . $orderNumber . '/cancel?generateTransactions=true',
-            '/order/' . $orderNumber . '/trycancel?generateTransactions=true',
-            ["transactions" => []],
-            "post"
+    /**
+     * Gets Price Line hotels.
+     *
+     * @param DateTime $checkIn
+     * @param DateTime $checkOut
+     * @param int      $rooms
+     * @param int      $adults
+     * @param int      $children
+     * @param string   $sortBy
+     * @param array    $hotelIds
+     *
+     * @return array
+     */
+    public function getPLHotels(
+        DateTime $checkIn,
+        DateTime $checkOut,
+        int $rooms = 1,
+        int $adults = 2,
+        int $children = 0,
+        $sortBy = null,
+        array $hotelIds = []
+    ): array {
+        $query = http_build_query(
+            [
+                'check_in' => $checkIn->format('m/d/Y'),
+                'check_out' => $checkOut->format('m/d/Y'),
+                'rooms' => $rooms,
+                'adults' => $adults,
+                'children' => $children,
+                'sort_by' => $sortBy,
+                'hotel_ids' => !empty($hotelIds) ? implode(',', $hotelIds) : null
+            ]
         );
+        $res = $this->request('/hotels?' . $query);
+
+        return !empty($res['results']) ? $res['results'] : [];
+    }
+
+    /**
+     * Gets a Price Line hotel detail.
+     *
+     * @param int $id
+     *
+     * @return array|null
+     */
+    public function getPLHotelDetail(int $id): ?array
+    {
+        $res = $this->request('/hotels/' . $id);
+
+        if ($this->statusCode === self::STATUS_CODE_SUCCESS) {
+            return is_array($res) ? $res : null;
+        }
+
+        return null;
+    }
+
+    /**
+     * Gets a price of Price Line hotel.
+     *
+     * @param string $ppnBundle
+     *
+     * @return array|null
+     */
+//    public function getPLHotelPrice(string $ppnBundle): ?array
+//    {
+//        $query = http_build_query(['ppn_bundle' => $ppnBundle]);
+//
+//        $res = $this->request('/hotels/price?' . $query);
+//
+//        if ($this->statusCode === self::STATUS_CODE_SUCCESS) {
+//            return is_array($res['results']) && !empty($res['results']) ? $res['results'][0] : null;
+//        }
+//        return null;
+//    }
+
+    /**
+     * Gets the terms and conditions of Price Line hotel.
+     *
+     * @return array|null
+     */
+    public function getPLTermsConditions(): ?array
+    {
+        $res = $this->request('/priceline/policy?category=terms_and_conditions');
+
+        if ($this->statusCode === self::STATUS_CODE_SUCCESS) {
+            return is_array($res['results']) ? $res['results'] : null;
+        }
+        return null;
+    }
+
+    /**
+     * Gets the privacy policy of Price Line hotel.
+     *
+     * @return array|null
+     */
+    public function getPLPrivacyPolicy(): ?array
+    {
+        $res = $this->request('/priceline/policy?category=privacy_policy');
+
+        if ($this->statusCode === self::STATUS_CODE_SUCCESS) {
+            return is_array($res['results']) ? $res['results'] : null;
+        }
+
+        return null;
+    }
+
+    /**
+     * Affiliate Report.
+     *
+     * @param DateTime $startDate
+     * @param DateTime $endDate
+     * @param bool     $status
+     * @param string   $checkNumber
+     *
+     * @return array|null
+     */
+    public function getAffiliateReport(
+        DateTime $startDate,
+        DateTime $endDate,
+        bool $status,
+        $checkNumber = null
+    ): ?array {
+        $query = http_build_query(
+            [
+                'startDate' => $startDate->format('m/d/Y'),
+                'endDate' => $endDate->format('m/d/Y'),
+                'status' => $status ? 'true' : 'false',
+                'checkNumber' => $checkNumber,
+            ]
+        );
+
+        $res = $this->request('/v2/wl/report/affiliate?' . $query);
+        if ($this->statusCode === self::STATUS_CODE_SUCCESS) {
+            return isset($res['rows']) ? $res : null;
+        }
+        return null;
+    }
+
+    /**
+     * Incentive Report.
+     *
+     * @param string|int    $vendor
+     * @param DateTime|null $orderStart
+     * @param DateTime|null $orderEnd
+     * @param DateTime|null $itemStart
+     * @param DateTime|null $itemEnd
+     * @param string|null   $agent
+     * @param string|null   $location
+     *
+     * @return array|null
+     */
+    public function getIncentiveReport(
+        $vendor,
+        DateTime $orderStart = null,
+        DateTime $orderEnd = null,
+        DateTime $itemStart = null,
+        DateTime $itemEnd = null,
+        $agent = null,
+        $location = null
+    ): ?array {
+        $query = http_build_query(
+            [
+                'vendor' => $vendor,
+                'orderStart' => $orderStart ? $orderStart->format('m/d/Y') : null,
+                'orderEnd' => $orderEnd ? $orderEnd->format('m/d/Y') : null,
+                'itemStart' => $itemStart ? $itemStart->format('m/d/Y') : null,
+                'itemEnd' => $itemEnd ? $itemEnd->format('m/d/Y') : null,
+                'info' => $location ?: null,
+                'agent' => $agent ?: null,
+            ]
+        );
+        $res = $this->request('/v2/wl/report/incentive?' . $query);
+        if ($this->statusCode === self::STATUS_CODE_SUCCESS) {
+            return is_array($res) ? $res : null;
+        }
+        return null;
+    }
+
+    /**
+     * Reservation Report.
+     *
+     * @param DateTime|null $startDate
+     * @param DateTime|null $endDate
+     * @param string        $vendorId
+     *
+     * @return array|null
+     */
+    public function getReservationReport(
+        DateTime $startDate = null,
+        DateTime $endDate = null,
+        $vendorId = null
+    ): ?array {
+        $params = [
+            'startDate' => $startDate ? $startDate->format('m/d/Y') : null,
+            'endDate' => $endDate ? $endDate->format('m/d/Y') : null,
+        ];
+        if ($vendorId) {
+            $params['vendor'] = $vendorId;
+        }
+        $query = http_build_query($params);
+        $res = $this->request('/v2/wl/report/reservation?' . $query);
+        if ($this->statusCode === self::STATUS_CODE_SUCCESS) {
+            return !empty($res['results']) ? $res['results'] : null;
+        }
+        return null;
+    }
+
+    /**
+     * Delivery Report.
+     *
+     * @param DateTime|null $date
+     * @param string        $location
+     *
+     * @return array|null
+     */
+    public function getDeliveryReport(
+        DateTime $date = null,
+        $location = null
+    ): ?array {
+        $query = http_build_query(
+            [
+                'date' => $date ? $date->format('m/d/Y') : null,
+                'info' => $location ?: null
+            ]
+        );
+        $res = $this->request('/v2/wl/report/delivery?' . $query);
+
+        if ($this->statusCode === self::STATUS_CODE_SUCCESS) {
+            return !empty($res['results']) ? $res['results'] : null;
+        }
+        return null;
+    }
+
+    /**
+     * Customer Report.
+     *
+     * @param DateTime|null $startDate
+     * @param DateTime|null $endDate
+     *
+     * @return array|null
+     */
+    public function getCustomerReport(
+        DateTime $startDate = null,
+        DateTime $endDate = null
+    ): ?array {
+        $query = http_build_query(
+            [
+                'startDate' => $startDate ? $startDate->format('m/d/Y') : null,
+                'endDate' => $endDate ? $endDate->format('m/d/Y') : null,
+            ]
+        );
+        $res = $this->request('/v2/wl/report/customer?' . $query);
+
+        if ($this->statusCode === self::STATUS_CODE_SUCCESS) {
+            return !empty($res['results']) ? $res['results'] : null;
+        }
+        return null;
+    }
+
+    /**
+     * Get the Wl location config.
+     *
+     * @return array|null
+     */
+    public function getLocationConfigWl(): ?array
+    {
+        $res = $this->request('/location/config/wl');
+
         if ($this->statusCode === self::STATUS_CODE_SUCCESS) {
             return $res;
         }
-
         return null;
     }
 
-    public function orderCancelPackage($orderNumber, $packageId)
+    /**
+     * Set the Wl location config.
+     *
+     * @param array $config
+     *
+     * @return array|null
+     */
+    public function setLocationConfigWl(array $config): ?array
     {
-        $res = $this->request(
-            '/order/' . $orderNumber . '/cancel/' . $packageId . '?generateTransactions=true',
-            ["transactions" => []],
-            "post"
-        );
+        $res = $this->request('/location/config/wl', $config, 'post');
         if ($this->statusCode === self::STATUS_CODE_SUCCESS) {
             return $res;
         }
+        return null;
+    }
 
+    /**
+     * Set the Wl location config.
+     *
+     * @param string $sessionId
+     *
+     * @return array|null
+     */
+    public function getCancellationTexts(string $sessionId): ?array
+    {
+        $res = $this->request("/cancellation/session/$sessionId/text");
+        if ($this->statusCode === self::STATUS_CODE_SUCCESS) {
+            return $res;
+        }
+        return null;
+    }
+
+    public function logKioskPayment(string $sessionId): ?array
+    {
+        $res = $this->request("/kiosk/log/payment/$sessionId");
+        if ($this->statusCode === self::STATUS_CODE_SUCCESS) {
+            return $res;
+        }
         return null;
     }
 }

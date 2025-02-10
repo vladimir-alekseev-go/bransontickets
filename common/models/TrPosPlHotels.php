@@ -14,6 +14,9 @@ use yii\db\ActiveQuery;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
 
+/**
+ * @deprecated
+ */
 class TrPosPlHotels extends _source_TrPosPlHotels
 {
     use ItemsExtensionTrait;

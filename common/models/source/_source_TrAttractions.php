@@ -53,6 +53,7 @@ use Yii;
  * @property string|null $hours
  * @property int|null $call_us_to_book
  * @property string|null $external_service
+ * @property string $change_status_date
  *
  * @property AttractionsPhotoJoin[] $attractionsPhotoJoins
  * @property ContentFiles $image
@@ -83,7 +84,7 @@ class _source_TrAttractions extends \yii\db\ActiveRecord
             [['id_external', 'status', 'show_in_footer', 'location_external_id', 'rank_level', 'marketing_level', 'weekly_schedule', 'seats', 'show_length', 'cut_off', 'preview_id', 'image_id', 'display_image', 'theatre_id', 'call_us_to_book'], 'integer'],
             [['description', 'directions'], 'string'],
             [['tax_rate', 'min_rate', 'min_rate_source'], 'number'],
-            [['updated_at'], 'safe'],
+            [['updated_at', 'change_status_date'], 'safe'],
             [['code', 'name', 'address', 'email', 'theatre_name'], 'string', 'max' => 128],
             [['city', 'phone', 'fax', 'intermissions'], 'string', 'max' => 64],
             [['state', 'zip_code'], 'string', 'max' => 8],
@@ -152,6 +153,7 @@ class _source_TrAttractions extends \yii\db\ActiveRecord
             'hours' => 'Hours',
             'call_us_to_book' => 'Call Us To Book',
             'external_service' => 'External Service',
+            'change_status_date' => 'Change Status Date',
         ];
     }
 

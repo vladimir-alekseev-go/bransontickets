@@ -11,6 +11,9 @@ use yii\db\ActiveQuery;
 use yii\helpers\Json;
 use common\models\TrPosHotels;
 
+/**
+ * @deprecated
+ */
 class TrPosRoomTypes extends _source_TrPosRoomTypes
 {
     public $statusCodeTripium = null;

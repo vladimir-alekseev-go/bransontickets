@@ -23,8 +23,11 @@ use Yii;
  * @property int $stop_sell
  * @property float $price
  * @property int $free_sell
- * @property int $allotment_external_id
+ * @property string $allotment_external_id
  * @property int $price_external_id
+ * @property int $rank_level
+ * @property float|null $alternative_rate
+ * @property int $any_time
  *
  * @property TrShows $external
  */
@@ -45,11 +48,12 @@ class _source_TrPrices extends \yii\db\ActiveRecord
     {
         return [
             [['id_external', 'hash', 'hash_summ', 'start', 'name', 'retail_rate', 'available', 'sold', 'stop_sell', 'allotment_external_id', 'price_external_id'], 'required'],
-            [['id_external', 'available', 'sold', 'stop_sell', 'free_sell', 'allotment_external_id', 'price_external_id'], 'integer'],
+            [['id_external', 'available', 'sold', 'stop_sell', 'free_sell', 'price_external_id', 'rank_level', 'any_time'], 'integer'],
             [['start', 'end'], 'safe'],
-            [['retail_rate', 'special_rate', 'tripium_rate', 'price'], 'number'],
+            [['retail_rate', 'special_rate', 'tripium_rate', 'price', 'alternative_rate'], 'number'],
             [['hash', 'hash_summ'], 'string', 'max' => 32],
             [['name', 'description'], 'string', 'max' => 128],
+            [['allotment_external_id'], 'string', 'max' => 36],
             [['id_external'], 'exist', 'skipOnError' => true, 'targetClass' => TrShows::class, 'targetAttribute' => ['id_external' => 'id_external']],
         ];
     }
@@ -78,6 +82,9 @@ class _source_TrPrices extends \yii\db\ActiveRecord
             'free_sell' => 'Free Sell',
             'allotment_external_id' => 'Allotment External ID',
             'price_external_id' => 'Price External ID',
+            'rank_level' => 'Rank Level',
+            'alternative_rate' => 'Alternative Rate',
+            'any_time' => 'Any Time',
         ];
     }
 

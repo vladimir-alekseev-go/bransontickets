@@ -24,6 +24,7 @@ use Yii;
  * @property string|null $channel
  * @property string|null $created_at
  * @property string|null $updated_at
+ * @property string $change_status_date
  *
  * @property ContentFiles $image
  * @property ContentFiles $preview
@@ -50,11 +51,12 @@ class _source_VacationPackage extends \yii\db\ActiveRecord
         return [
             [['vp_external_id', 'name', 'status', 'period_start', 'period_end', 'valid_start', 'valid_end'], 'required'],
             [['vp_external_id', 'status', 'preview_id', 'image_id'], 'integer'],
-            [['period_start', 'period_end', 'valid_start', 'valid_end', 'created_at', 'updated_at'], 'safe'],
+            [['period_start', 'period_end', 'valid_start', 'valid_end', 'created_at', 'updated_at', 'change_status_date'], 'safe'],
             [['data'], 'string'],
             [['name', 'code'], 'string', 'max' => 128],
             [['description'], 'string', 'max' => 4096],
             [['hash', 'channel'], 'string', 'max' => 32],
+            [['vp_external_id'], 'unique'],
             [['image_id'], 'exist', 'skipOnError' => true, 'targetClass' => ContentFiles::class, 'targetAttribute' => ['image_id' => 'id']],
             [['preview_id'], 'exist', 'skipOnError' => true, 'targetClass' => ContentFiles::class, 'targetAttribute' => ['preview_id' => 'id']],
         ];
@@ -83,6 +85,7 @@ class _source_VacationPackage extends \yii\db\ActiveRecord
             'channel' => 'Channel',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
+            'change_status_date' => 'Change Status Date',
         ];
     }
 

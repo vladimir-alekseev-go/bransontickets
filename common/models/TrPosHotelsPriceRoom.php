@@ -6,6 +6,9 @@ use common\tripium\Tripium;
 use yii\base\InvalidConfigException;
 use yii\db\ActiveQuery;
 
+/**
+ * @deprecated
+ */
 class TrPosHotelsPriceRoom extends _source_TrPosHotelsPriceRoom
 {
     use PricesExtensionTrait;

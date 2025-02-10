@@ -94,12 +94,13 @@ class OrderForm extends DynamicModel
         }
     }
 
-    public function rules()
+    public function rules(): array
     {
         return [
             [['date', 'model'], 'required'],
             [['result', 'family_pass_4_open', 'family_pass_8_open', 'category', 'package_modify', 'allotmentId'], 'safe'],
             [['comments'], 'filter', 'filter' => '\yii\helpers\HtmlPurifier::process'], //xss protection
+            [['comments'], 'string', 'max' => 500],
             ['count', 'default', 'value' => 0],
             ['count', 'isCount'],
             ['isCutOff', 'checkCutOff'],
@@ -162,7 +163,7 @@ class OrderForm extends DynamicModel
      * Return attributes of a count input
      *
      * @param TrPrices|TrAttractionsPrices $item
-     * @param bool                         $alternativeRate
+     * @param bool                                        $alternativeRate
      *
      * @return array
      * @throws Exception
@@ -498,7 +499,7 @@ class OrderForm extends DynamicModel
     {
         $date = $d ? $d : $this->date;
 
-       if ($this->model::TYPE === TrAttractions::TYPE) {
+        if ($this->model::TYPE === TrAttractions::TYPE) {
             $price_query = $this->model->getAvailablePrices();
             $price_query->joinWith([$this->model::TYPE]);
             $price_query->andWhere(
@@ -790,12 +791,12 @@ class OrderForm extends DynamicModel
     public function run()
     {
         $Basket = TrBasket::build(true);
-        $result = $Basket->set($this->category, $this);
+        $result = $Basket->set($this);
 
-        if (isset($Basket->tripium) && (int)$Basket->tripium->errorCode === Tripium::ITINERARY_WAS_NOT_FOUND) {
+        if (isset($Basket->tripium) && $Basket->tripium->errorCode === Tripium::ITINERARY_WAS_NOT_FOUND) {
             TrBasket::removeSessionID($Basket->getAttribute('session_id'));
             $Basket = TrBasket::build(true);
-            $result = $Basket->set($this->category, $this);
+            $result = $Basket->set($this);
         }
 
         if (!$result) {
@@ -1009,5 +1010,71 @@ class OrderForm extends DynamicModel
     public function getComments(): string
     {
         return is_string($this->comments) ? $this->comments : '';
+    }
+
+    /**
+     * @param Itinerary $itinerary
+     *
+     * @return array
+     */
+    public function requestAddToBasket($itinerary): array
+    {
+        $packageId = null;
+        $firstPrice = array_values($this->prices);
+        $firstPrice = $firstPrice[0];
+
+        if (!empty($itinerary->getPackages())) {
+            foreach ($itinerary->getPackages() as $package) {
+                if (
+                    $this->model instanceof TrShows &&
+                    $package->id === $this->model->external_id &&
+                    $package->category === $this->model::TYPE &&
+                    $package->start_date === $this->date->format("Y-m-d") &&
+                    $package->start_time === $this->date->format("H:i:s")
+                ) {
+                    $packageId = $package->package_id;
+                } else {
+                    if (
+                        $this->model instanceof TrAttractions &&
+                        $package->type_id === $this->allotmentId &&
+                        $package->id === $this->model->external_id &&
+                        $package->category === $this->model::TYPE &&
+                        $package->start_date === $this->date->format("Y-m-d") &&
+                        $package->start_time === ((int)$firstPrice->any_time === 1 ? TrAttractionsPrices::ANY_TIME :
+                            $this->date->format("H:i:s"))
+                    ) {
+                        $packageId = $package->package_id;
+                    }
+                }
+            }
+        }
+
+        $request = [
+            'packageId' => $packageId,
+            'id'        => $this->model->external_id,
+            'date'      => $this->date->format("m/d/Y"),
+            'time'      => (int)$firstPrice->any_time === 1
+                ? TrAttractionsPrices::ANY_TIME : $this->date->format("h:i A"),
+            'category'  => $this->model::TYPE,
+            'comments'  => $this->getComments(),
+            'schema'    => $this->model instanceof TrShows
+                ? $firstPrice->allotment_external_id : $firstPrice->id_external,
+            'typeId'    => $this->model instanceof TrShows ? null : $this->allotmentId,
+        ];
+
+        foreach ($this->prices as $price) {
+            if ($this->getQuantity($price) > 0) {
+                $request['tickets'][] = [
+                    'name'          => $price->name,
+                    'description'   => $price->description,
+                    'qty'           => $this->getQuantity($price),
+                    'info'          => $price->id,
+                    'id'            => $price->price_external_id,
+                    'seats'         => $this->getQuantitySeats($price),
+                    'nonRefundable' => $this->isAlternativeRate($price),
+                ];
+            }
+        }
+        return $request;
     }
 }

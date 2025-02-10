@@ -49,6 +49,7 @@ use Yii;
  * @property string|null $check_in
  * @property string|null $check_out
  * @property string|null $updated_at
+ * @property string $change_status_date
  *
  * @property ContentFiles $image
  * @property ContentFiles $preview
@@ -76,7 +77,7 @@ class _source_TrPosHotels extends \yii\db\ActiveRecord
             [['id_external', 'status', 'show_in_footer', 'location_external_id', 'rank_level', 'marketing_level', 'weekly_schedule', 'call_us_to_book', 'preview_id', 'image_id', 'display_image', 'theatre_id', 'min_age'], 'integer'],
             [['description', 'directions'], 'string'],
             [['min_rate', 'min_rate_source'], 'number'],
-            [['updated_at'], 'safe'],
+            [['updated_at', 'change_status_date'], 'safe'],
             [['code', 'name', 'address', 'email'], 'string', 'max' => 128],
             [['city'], 'string', 'max' => 164],
             [['state', 'zip_code', 'check_in', 'check_out'], 'string', 'max' => 8],
@@ -141,6 +142,7 @@ class _source_TrPosHotels extends \yii\db\ActiveRecord
             'check_in' => 'Check In',
             'check_out' => 'Check Out',
             'updated_at' => 'Updated At',
+            'change_status_date' => 'Change Status Date',
         ];
     }
 

@@ -3,9 +3,9 @@
 namespace common\models;
 
 /**
- * Class Shows
+ * @deprecated
  */
 class Shows extends TrShows
 {
-    
+
 }

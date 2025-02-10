@@ -4,6 +4,9 @@ namespace common\models;
 
 use common\tripium\Tripium;
 
+/**
+ * @deprecated
+ */
 abstract class TrPosHotelsPrice extends _source_TrPosHotelsPriceExtra
 {
     /**
