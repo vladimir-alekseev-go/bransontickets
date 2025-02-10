@@ -8,7 +8,7 @@ use Yii;
  * This is the model class for table "tr_admissions".
  *
  * @property int $id
- * @property int $id_external
+ * @property string $id_external
  * @property int $id_external_item
  * @property string $name
  * @property string $hash_summ
@@ -18,6 +18,7 @@ use Yii;
  * @property TrAttractions $externalItem
  * @property TrAttractionsAvailability[] $trAttractionsAvailabilities
  * @property TrAttractionsPrices[] $trAttractionsPrices
+ * @property VacationPackageAttraction[] $vacationPackageAttractions
  */
 class _source_TrAdmissions extends \yii\db\ActiveRecord
 {
@@ -36,10 +37,12 @@ class _source_TrAdmissions extends \yii\db\ActiveRecord
     {
         return [
             [['id_external', 'id_external_item', 'name', 'hash_summ'], 'required'],
-            [['id_external', 'id_external_item'], 'integer'],
+            [['id_external_item'], 'integer'],
             [['inclusions', 'exclusions'], 'string'],
+            [['id_external'], 'string', 'max' => 36],
             [['name'], 'string', 'max' => 64],
             [['hash_summ'], 'string', 'max' => 32],
+            [['id_external'], 'unique'],
             [['id_external_item'], 'exist', 'skipOnError' => true, 'targetClass' => TrAttractions::class, 'targetAttribute' => ['id_external_item' => 'id_external']],
         ];
     }
@@ -88,5 +91,15 @@ class _source_TrAdmissions extends \yii\db\ActiveRecord
     public function getTrAttractionsPrices()
     {
         return $this->hasMany(TrAttractionsPrices::class, ['id_external' => 'id_external']);
+    }
+
+    /**
+     * Gets query for [[VacationPackageAttractions]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getVacationPackageAttractions()
+    {
+        return $this->hasMany(VacationPackageAttraction::class, ['item_type_id' => 'id_external']);
     }
 }

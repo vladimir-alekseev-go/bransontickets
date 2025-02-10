@@ -12,7 +12,9 @@ class TrAttractionsPrices extends _source_TrAttractionsPrices
 
     public const ANY_TIME = 'Any time';
     public const TYPE_ID = 3;
-   
+    /**
+     * @deprecated
+     */
     public const type = "attractions";
     public const TYPE = 'attractions';
 
@@ -32,18 +34,15 @@ class TrAttractionsPrices extends _source_TrAttractionsPrices
         ]);
     }
 
-    public function getSourceData($params)
-	{
-		$tripium = new Tripium;
-		$res = $tripium->getAttractionsPrice($params);
-		$this->statusCodeTripium = $tripium->statusCode;
-		return $res;
-	}
+    public function getSourceData($params): ?array
+    {
+        return (new Tripium)->getAttractionsPrice($params);
+    }
 
-	public function getType()
-	{
-	    return self::type;
-	}
+    public function getType()
+    {
+        return self::type;
+    }
 
     public function dateRange($attraction_id_external)
     {
@@ -65,15 +64,15 @@ class TrAttractionsPrices extends _source_TrAttractionsPrices
             ->asArray()->one();
     }
 
-	public static function getActualPrices()
-	{
-		// don't use it, use model TrAttraction::getActivePrices()
-		return self::find()
-			->where("start < NOW( )")
-			->andWhere("end > NOW( )")
-			->andWhere(["stop_sell"=>0])
-		;
-	}
+    public static function getActualPrices()
+    {
+        // don't use it, use model TrAttraction::getActivePrices()
+        return self::find()
+            ->where("start < NOW( )")
+            ->andWhere("end > NOW( )")
+            ->andWhere(["stop_sell"=>0])
+            ;
+    }
 
 
     /**
@@ -84,7 +83,7 @@ class TrAttractionsPrices extends _source_TrAttractionsPrices
         return self::find()
             ->andOnCondition(['stop_sell'=>0])
             ->andOnCondition('start >= NOW( ) and any_time=0 or start >= CURDATE( ) and any_time=1')
-        ;
+            ;
     }
 
     /**
@@ -94,7 +93,7 @@ class TrAttractionsPrices extends _source_TrAttractionsPrices
     {
         return self::getActive()
             ->andOnCondition(['or','available > 0','free_sell=1'])
-        ;
+            ;
     }
 
     /**
@@ -125,7 +124,7 @@ class TrAttractionsPrices extends _source_TrAttractionsPrices
     {
         return $this->hasOne(TrAttractions::class, ['id_external' => 'id_external_item'])
             ->viaTable(TrAdmissions::tableName(), ['id_external' => 'id_external'])
-        ;
+            ;
     }
 
     /**
@@ -147,21 +146,21 @@ class TrAttractionsPrices extends _source_TrAttractionsPrices
         return self::getAvailable()
             ->joinWith(['attractions'], false)
             ->select([
-                TrAttractions::tableName().'.id',
-                TrAttractions::tableName().'.id_external',
-                self::tableName().'.price_external_id',
-                'start',
-                'code',
-                'delta' => 'ABS(UNIX_TIMESTAMP(start) - '.$date->getTimestamp().')'
-            ])
+                         TrAttractions::tableName().'.id',
+                         TrAttractions::tableName().'.id_external',
+                         self::tableName().'.price_external_id',
+                         'start',
+                         'code',
+                         'delta' => 'ABS(UNIX_TIMESTAMP(start) - '.$date->getTimestamp().')'
+                     ])
             ->distinct()
-    	    ->orderby('delta')
-    	    ->groupby([
-    	        TrAttractions::tableName().'.id',
-    	        TrAttractions::tableName().'.id_external',
-    	        self::tableName().'.price_external_id',
-    	        'start',
-    	        'delta'])
+            ->orderby('delta')
+            ->groupby([
+                          TrAttractions::tableName().'.id',
+                          TrAttractions::tableName().'.id_external',
+                          self::tableName().'.price_external_id',
+                          'start',
+                          'delta'])
             ->where(['id_external_item' => $ids]);
     }
 }

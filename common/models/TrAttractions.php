@@ -5,10 +5,13 @@ namespace common\models;
 use common\helpers\General;
 use common\tripium\Tripium;
 use DateTime;
+use Throwable;
 use Yii;
 use yii\base\InvalidConfigException;
 use yii\db\ActiveQuery;
+use yii\db\StaleObjectException;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Url;
 
 class TrAttractions extends _source_TrAttractions
 {
@@ -31,15 +34,19 @@ class TrAttractions extends _source_TrAttractions
 
     public const priceClass = TrAttractionsPrices::class;
     public const priceGroup = TrAdmissions::class;
-    public const categoriesClass = Categories::class;
-    public const joinCategoriesClass = AttractionsCategories::class;
+//    public const categoriesClass = Categories::class;
+//    public const joinCategoriesClass = AttractionsCategories::class;
     public const photoJoinClass = AttractionsPhotoJoin::class;
 
     public const TYPE_ID = 3;
-
+    /**
+     * @deprecated
+     */
     public const type = 'attractions';
     public const TYPE = 'attractions';
-
+    /**
+     * @deprecated
+     */
     public const name = 'Attraction';
     public const NAME = 'Attraction';
     public const NAME_PLURAL = 'Attractions';
@@ -47,22 +54,26 @@ class TrAttractions extends _source_TrAttractions
     public const STATUS_ACTIVE = 1;
     public const STATUS_INACTIVE = 0;
 
+    public const STATUS_WL_ACTIVE = 1;
+    public const STATUS_WL_INACTIVE = 0;
+
+    public const WEEKLY_SCHEDULE_ACTIVE = 1;
+    public const WEEKLY_SCHEDULE_INACTIVE = 0;
+
     public const EXTERNAL_SERVICE_SDC = 'SDC';
-
+    /**
+     * @deprecated
+     */
     public static $type = 'attractions';
-
+    /**
+     * @deprecated
+     */
     public static $name = 'Attraction';
-
-    public $priceClass = AttractionsPrices::class;
-
-    public $categoriesClass = AttractionsCategories::class;
-
-    public $categoriesClassName = 'AttractionsCategories';
 
     /**
      * {@inheritdoc}
      */
-    public function rules()
+    public function rules(): array
     {
         return array_merge(
             parent::rules(),
@@ -81,9 +92,33 @@ class TrAttractions extends _source_TrAttractions
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
+    public function attributeLabels(): array
     {
         return array_merge(parent::attributeLabels(), ['show_in_footer' => 'Display In Footer']);
+    }
+
+    /**
+     * @return bool
+     * @throws StaleObjectException
+     * @throws Throwable
+     */
+    public function beforeDelete(): bool
+    {
+        foreach ($this->attractionBanners as $attractionBanner) {
+            $attractionBanner->delete();
+        }
+
+        return parent::beforeDelete();
+    }
+
+    /**
+     * Gets query for [[SeatMap]].
+     *
+     * @return ActiveQuery
+     */
+    public function getSeatMap(): ActiveQuery
+    {
+        return $this->hasOne(ContentFiles::class, ['id' => 'seat_map_id']);
     }
 
     /**
@@ -109,12 +144,12 @@ class TrAttractions extends _source_TrAttractions
     /**
      * @return ActiveQuery
      */
-    function getRelatedPhotos()
+    public function getRelatedPhotos(): ActiveQuery
     {
         return $this->hasMany(AttractionsPhotoJoin::class, ['item_id' => 'id']);
     }
 
-    public static function getTagsList()
+    public static function getTagsList(): array
     {
         return array(
             self::TAG_USD => self::TAG_ORIGINAL_ON_SALE,
@@ -123,29 +158,75 @@ class TrAttractions extends _source_TrAttractions
         );
     }
 
-    public function getSourceData()
+    public function getSourceData(): ?array
     {
-        $tripium = new Tripium;
-        $res = $tripium->getAttractions($this->updateOnlyIdExternal);
-        $this->statusCodeTripium = $tripium->statusCode;
-        return $res;
+        return (new Tripium)->getAttractions($this->updateOnlyIdExternal);
+    }
+
+    /**
+     * @param null $code
+     * @param null $date
+     *
+     * @return string
+     * @deprecated use getUrl()
+     */
+    public static function detailURL($code = null, $date = null)
+    {
+        if ($date) {
+            $date = General::formatDateUrlTicket($date);
+            return Yii::$app->urlManager->createUrl(
+                ['attractions/tickets', 'code' => $code, 'date' => $date, '#' => 'm']
+            );
+        }
+
+        if ($code) {
+            return Yii::$app->urlManager->createUrl(['attractions/detail', 'code' => $code]);
+        }
+
+        return Yii::$app->urlManager->createUrl(['attractions/index']);
     }
 
     /**
      * Return item url.
      *
-     * @param mixed $options
+     * @param mixed  $options
+     * @param string $urlManager
      *
      * @return string
      */
-    public function getUrl($options = null): string
+    public function getUrl($options = null, $urlManager = 'urlManager'): string
     {
+        if ($options instanceof DateTime) {
+            return Yii::$app->{$urlManager}->createUrl(
+                ['attractions/tickets', 'code' => $this->code, 'date' => $options->format('Y-m-d_H:i:s')]
+            );
+        }
         if (is_array($options)) {
-            return Yii::$app->urlManager->createUrl(
+            return Yii::$app->{$urlManager}->createUrl(
                 array_merge(['attractions/detail'], $options, ['code' => $this->code])
             );
         }
-        return Yii::$app->urlManager->createUrl(['attractions/detail', 'code' => $this->code]);
+        return Yii::$app->{$urlManager}->createUrl(['attractions/detail', 'code' => $this->code]);
+    }
+
+    /**
+     * Return list url.
+     *
+     * @return string
+     */
+    public static function getListUrl(): string
+    {
+        return Url::to(['attractions/index']);
+    }
+
+    /**
+     * Return item description url
+     *
+     * @return string
+     */
+    public function getUrlDescription()
+    {
+        return Yii::$app->urlManager->createUrl(['attractions/description', 'code' => $this->code]);
     }
 
     /**
@@ -197,7 +278,7 @@ class TrAttractions extends _source_TrAttractions
      */
     public static function getAllCategories(): ActiveQuery
     {
-        return TrAttractionsCategories::find()->joinWith('idExternalShow', false, 'INNER JOIN');
+        return TrAttractionsCategories::find()->joinWith('externalShow', false, 'INNER JOIN');
     }
 
     /**
@@ -244,7 +325,24 @@ class TrAttractions extends _source_TrAttractions
 
         return $query;
     }
+    /*
+        public static function getTagTitleList()
+        {
+            return [
+                self::TAG_USD => 'On Sale',
+                self::TAG_PREMIUM => 'Premium',
+                self::TAG_FEATURED => 'Featured',
+                self::TAG_LIMITED => 'Limited Engagement',
+            ];
+        }
 
+        public static function getTagTitleValue($val)
+        {
+            $ar = self::getTagTitleList();
+
+            return isset($ar[$val]) ? $ar[$val] : $val;
+        }
+    */
     /**
      * Return Original Tags Title
      *
@@ -259,6 +357,73 @@ class TrAttractions extends _source_TrAttractions
             self::TAG_ORIGINAL_FAMILY_PASS => 'Family Pass',
             self::TAG_ORIGINAL_LIMITED => 'Limited Engagement',
         ];
+    }
+
+    /**
+     * Return Original Tag Title
+     *
+     * @return string
+     */
+    public static function getOriginalTagTitleValue($val)
+    {
+        $ar = self::getOriginalTagTitleList();
+
+        return isset($ar[$val]) ? $ar[$val] : $val;
+    }
+
+    /**
+     * Return Original Tags Title.
+     *
+     * @return array
+     */
+    public static function getWeeklyScheduleList(): array
+    {
+        return [
+            self::WEEKLY_SCHEDULE_ACTIVE => 'Active',
+            self::WEEKLY_SCHEDULE_INACTIVE => 'Inactive',
+        ];
+    }
+
+    /**
+     * Return Original Tag Title.
+     *
+     * @param $val
+     *
+     * @return string
+     */
+    public static function getWeeklyScheduleValue($val): string
+    {
+        $ar = self::getWeeklyScheduleList();
+
+        return $ar[$val] ?? $val;
+    }
+
+    /**
+     * Return Original Tags Icon
+     *
+     * @return array
+     */
+    public static function getOriginalTagIcon()
+    {
+        return [
+            self::TAG_ORIGINAL_ON_SALE => 'dollar-sign',
+            self::TAG_ORIGINAL_PREMIUM => 'star',
+            self::TAG_ORIGINAL_FEATURED => 'star',
+            self::TAG_ORIGINAL_FAMILY_PASS => 'users',
+            self::TAG_ORIGINAL_LIMITED => 'clock',
+        ];
+    }
+
+    /**
+     * Return Original Tag Icon
+     *
+     * @return string
+     */
+    public static function getOriginalTagIconValue($val)
+    {
+        $ar = self::getOriginalTagIcon();
+
+        return isset($ar[$val]) ? $ar[$val] : $val;
     }
 
     public static function getPriceByFilter(\common\models\form\Search $Search)
@@ -344,6 +509,20 @@ class TrAttractions extends _source_TrAttractions
         unset($itemData, $data);
         $priceAll = $tmp;
         return $priceAll;
+    }
+
+    public static function preparePricesForList($priceAll): array
+    {
+        $tmp = [];
+        foreach ($priceAll as $p) {
+            $date = new DateTime($p['start']);
+            if ((int)$p['any_time'] === 1) {
+                $tmp[$p['main_id_external']][$p['price_group_name']][$date->format('Md')][$p['any_time']][] = $p;
+            } else {
+                $tmp[$p['main_id_external']][$p['price_group_name']][$date->format('Md')][$p['any_time']][$date->format('h:iA')][] = $p;
+            }
+        }
+        return $tmp;
     }
 
     /**
@@ -484,19 +663,66 @@ class TrAttractions extends _source_TrAttractions
     /**
      * @return ActiveQuery
      */
-    public static function getActualCategories()
+    public static function getActualTrLocations()
     {
-        return TrCategories::find()
+        return TrLocations::find()
             ->joinWith(
                 [
                     'trAttractions' => static function (ActiveQuery $query) {
-                        $query->joinWith('availablePrices', false, 'INNER JOIN');
+//                        $query->joinWith('availablePrices', false, 'INNER JOIN');
                     }
                 ],
                 false,
                 'INNER JOIN'
             )
             ->andOnCondition(self::getConditionActive());
+    }
+
+    /**
+     * @return ActiveQuery
+     */
+    public static function getActualCategories()
+    {
+        return TrCategories::find()
+            ->joinWith(
+                [
+                    'trAttractions' => static function (ActiveQuery $query) {
+//                        $query->joinWith('availablePrices', false, 'INNER JOIN');
+                    }
+                ],
+                false,
+                'INNER JOIN'
+            )
+            ->andOnCondition(self::getConditionActive());
+    }
+
+
+    /**
+     * Build query by $Search
+     *
+     * @param \common\models\form\Search $Search
+     *
+     * @return ActiveQuery
+     */
+    public static function getByFilterWithOutDate($Search = null): ActiveQuery
+    {
+        $subQuery = TrAdmissions::find()->select(['id_external_item'])->groupBy('id_external_item')
+            ->innerJoinWith(['trAttractionsPrices']);
+
+        $query = self::getActive();
+        $query->innerJoin(['price' => $subQuery], self::tableName() . '.id_external = price.id_external_item');
+
+        if ($Search->title) {
+            $query->joinWith('theatre')->andFilterWhere(
+                [
+                    'or',
+                    ['like', self::tableName() . '.name', $Search->title],
+                    ['like', TrTheaters::tableName() . '.name', $Search->title]
+                ]
+            );
+        }
+
+        return $query;
     }
 
     /**
@@ -558,9 +784,14 @@ class TrAttractions extends _source_TrAttractions
             $query->andWhere([self::tableName() . '.id_external' => $Search->externalIds]);
         }
 
+        if (isset($Search->statusWl)) {
+            $query->andWhere([self::tableName() . '.status_wl' => $Search->statusWl]);
+        }
         if (!empty($Search->alternativeRate)) {
             $query->andWhere(['>', TrAttractionsPrices::tableName() . '.alternative_rate', 0]);
         }
+
+//        $query->joinWith('locationItem');
 
         $query->leftJoin(
             '(' . self::actualMinPrice()
@@ -580,6 +811,7 @@ class TrAttractions extends _source_TrAttractions
 
         return $query;
     }
+
 
     /**
      * @return ActiveQuery

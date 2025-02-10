@@ -8,7 +8,7 @@ use Yii;
  * This is the model class for table "tr_attractions_prices".
  *
  * @property int $id
- * @property int $id_external
+ * @property string $id_external
  * @property string $hash
  * @property string $hash_summ
  * @property string $start
@@ -18,8 +18,8 @@ use Yii;
  * @property float $retail_rate
  * @property float|null $special_rate
  * @property float|null $tripium_rate
- * @property int $available
- * @property int $sold
+ * @property int|null $available
+ * @property int|null $sold
  * @property int $stop_sell
  * @property int $free_sell
  * @property float $price
@@ -46,10 +46,11 @@ class _source_TrAttractionsPrices extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id_external', 'hash', 'hash_summ', 'start', 'name', 'retail_rate', 'available', 'sold', 'stop_sell', 'price_external_id', 'rank_level'], 'required'],
-            [['id_external', 'available', 'sold', 'stop_sell', 'free_sell', 'any_time', 'price_external_id', 'rank_level'], 'integer'],
+            [['id_external', 'hash', 'hash_summ', 'start', 'name', 'retail_rate', 'stop_sell', 'price_external_id'], 'required'],
             [['start', 'end'], 'safe'],
             [['retail_rate', 'special_rate', 'tripium_rate', 'price', 'alternative_rate'], 'number'],
+            [['available', 'sold', 'stop_sell', 'free_sell', 'any_time', 'price_external_id', 'rank_level'], 'integer'],
+            [['id_external'], 'string', 'max' => 36],
             [['hash', 'hash_summ'], 'string', 'max' => 32],
             [['name', 'description'], 'string', 'max' => 128],
             [['id_external'], 'exist', 'skipOnError' => true, 'targetClass' => TrAdmissions::class, 'targetAttribute' => ['id_external' => 'id_external']],
@@ -80,7 +81,7 @@ class _source_TrAttractionsPrices extends \yii\db\ActiveRecord
             'price' => 'Price',
             'any_time' => 'Any Time',
             'price_external_id' => 'Price External ID',
-            'rank_level' => 'Rank',
+            'rank_level' => 'Rank Level',
             'alternative_rate' => 'Alternative Rate',
         ];
     }

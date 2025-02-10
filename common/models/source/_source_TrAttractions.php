@@ -9,6 +9,7 @@ use Yii;
  *
  * @property int $id
  * @property int $id_external
+ * @property string $external_id
  * @property string $code
  * @property string $name
  * @property string|null $description
@@ -80,11 +81,12 @@ class _source_TrAttractions extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id_external', 'code', 'name'], 'required'],
+            [['id_external', 'external_id', 'code', 'name'], 'required'],
             [['id_external', 'status', 'show_in_footer', 'location_external_id', 'rank_level', 'marketing_level', 'weekly_schedule', 'seats', 'show_length', 'cut_off', 'preview_id', 'image_id', 'display_image', 'theatre_id', 'call_us_to_book'], 'integer'],
             [['description', 'directions'], 'string'],
             [['tax_rate', 'min_rate', 'min_rate_source'], 'number'],
             [['updated_at', 'change_status_date'], 'safe'],
+            [['external_id'], 'string', 'max' => 10],
             [['code', 'name', 'address', 'email', 'theatre_name'], 'string', 'max' => 128],
             [['city', 'phone', 'fax', 'intermissions'], 'string', 'max' => 64],
             [['state', 'zip_code'], 'string', 'max' => 8],
@@ -109,6 +111,7 @@ class _source_TrAttractions extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'id_external' => 'Id External',
+            'external_id' => 'External ID',
             'code' => 'Code',
             'name' => 'Name',
             'description' => 'Description',
