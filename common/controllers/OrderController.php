@@ -40,114 +40,114 @@ trait OrderController
     public function actionCart()
     {
         $get = Yii::$app->request->get();
-    	$backurl = isset($get["backurl"]) ? $get["backurl"] : ['order/cart', 'changed'=>true];
+        $backurl = isset($get["backurl"]) ? $get["backurl"] : ['order/cart', 'changed'=>true];
 
-    	$Basket = TrBasket::build();
+        $Basket = TrBasket::build();
 
-    	$CartForm = new CartForm;
+        $CartForm = new CartForm;
 
-    	$CartCouponForm = new CartCouponForm(['coupon'=>$Basket->getCoupon() ? $Basket->getCoupon()->code : null]);
+        $CartCouponForm = new CartCouponForm(['coupon'=>$Basket->getCoupon() ? $Basket->getCoupon()->code : null]);
 
-    	if (Yii::$app->request->isPost) {
+        if (Yii::$app->request->isPost) {
 
-    	    if ($CartCouponForm->load(Yii::$app->request->post()) && $CartCouponForm->send()) {
-    	        return $this->redirect($backurl);
-    	    }
+            if ($CartCouponForm->load(Yii::$app->request->post()) && $CartCouponForm->send()) {
+                return $this->redirect($backurl);
+            }
 
-    	    if ($CartForm->load(Yii::$app->request->post()) && $CartForm->validate()) {
+            if ($CartForm->load(Yii::$app->request->post()) && $CartForm->validate()) {
 
-    		    $Basket->accept_terms = $CartForm->agree;
-    		    $resultReservation = $Basket->reserve();
+                $Basket->accept_terms = $CartForm->agree;
+                $resultReservation = $Basket->reserve();
 
                 if (!$resultReservation && isset($Basket->tripium)
-                    && (int)$Basket->tripium->errorCode === Tripium::ITINERARY_WAS_NOT_FOUND) {
+                    && $Basket->tripium->errorCode === Tripium::ITINERARY_WAS_NOT_FOUND) {
                     TrBasket::removeSessionID($Basket->getAttribute('session_id'));
                     return $this->redirect(['order/cart']);
                 }
 
-    		    if ($resultReservation) {
-    		        return $this->redirect(['order/payment', 'isAuth' => true]);
-	    		}
+                if ($resultReservation) {
+                    return $this->redirect(['order/payment', 'isAuth' => true]);
+                }
 
-	    		if(!empty($Basket->getErrors())) {
+                if(!empty($Basket->getErrors())) {
                     Yii::$app->session->setFlash('errors', array_values($Basket->getFirstErrors()));
                 }
-	    		if(!empty($Basket->warnings)) {
+                if(!empty($Basket->warnings)) {
                     Yii::$app->session->setFlash('warnings', $Basket->warnings);
                 }
-	    		if(!empty($Basket->messages)) {
+                if(!empty($Basket->messages)) {
                     Yii::$app->session->setFlash('messages', $Basket->messages);
                 }
-    		}
-    	}
+            }
+        }
 
-    	if (!empty($get["remove_id"])) {
-    		$Basket->removePackage($get["remove_id"]);
+        if (!empty($get["remove_id"])) {
+            $Basket->removePackage($get["remove_id"]);
 
-    		Yii::$app->session->setFlash('remove', true);
+            Yii::$app->session->setFlash('remove', true);
 
-    		if(!empty($Basket->getErrors())) {
+            if(!empty($Basket->getErrors())) {
                 Yii::$app->session->setFlash('errors', array_values($Basket->getFirstErrors()));
             }
-    		if(!empty($Basket->warnings)) {
+            if(!empty($Basket->warnings)) {
                 Yii::$app->session->setFlash('warnings', $Basket->warnings);
             }
-    		if(!empty($Basket->messages)) {
+            if(!empty($Basket->messages)) {
                 Yii::$app->session->setFlash('messages', $Basket->messages);
             }
 
-    		if (empty($Basket->getErrors())) {
-    			return $this->redirect($backurl);
-    		}
-    	}
+            if (empty($Basket->getErrors())) {
+                return $this->redirect($backurl);
+            }
+        }
 
-    	if (!empty($get["remove_all"])) {
-    	    $Basket->removeAll();
+        if (!empty($get["remove_all"])) {
+            $Basket->removeAll();
 
-    		Yii::$app->session->setFlash('remove', true);
+            Yii::$app->session->setFlash('remove', true);
 
-    		if(!empty($Basket->getErrors())) {
+            if(!empty($Basket->getErrors())) {
                 Yii::$app->session->setFlash('errors', array_values($Basket->getFirstErrors()));
             }
-    		if(!empty($Basket->warnings)) {
+            if(!empty($Basket->warnings)) {
                 Yii::$app->session->setFlash('warnings', $Basket->warnings);
             }
-    		if(!empty($Basket->messages)) {
+            if(!empty($Basket->messages)) {
                 Yii::$app->session->setFlash('messages', $Basket->messages);
             }
 
-    		return $this->redirect($backurl);
-    	}
+            return $this->redirect($backurl);
+        }
 
-    	if (!empty($get["remove_package_id"])) {
-    	    $Basket->removePackage($get["remove_package_id"]);
+        if (!empty($get["remove_package_id"])) {
+            $Basket->removePackage($get["remove_package_id"]);
 
-    		Yii::$app->session->setFlash('remove', true);
+            Yii::$app->session->setFlash('remove', true);
 
-    		if(!empty($Basket->getErrors())) {
+            if(!empty($Basket->getErrors())) {
                 Yii::$app->session->setFlash('errors', array_values($Basket->getFirstErrors()));
             }
-    		if(!empty($Basket->warnings)) {
+            if(!empty($Basket->warnings)) {
                 Yii::$app->session->setFlash('warnings', $Basket->warnings);
             }
-    		if(!empty($Basket->messages)) {
+            if(!empty($Basket->messages)) {
                 Yii::$app->session->setFlash('messages', $Basket->messages);
             }
 
-    		return $this->redirect($backurl);
-    	}
+            return $this->redirect($backurl);
+        }
 
-    	if (!empty($Basket->getPackages())) {
+        if (!empty($Basket->getPackages())) {
             $AnalyticsData = [];
 
             foreach ($Basket->getPackages() as $package) {
                 $AnalyticsData[] = ['package' => $package];
             }
 
-    		Analytics::addEvent(Analytics::EVENT_CHECKOUT, $AnalyticsData, ['step' => 1, 'option' => 'checkout']);
-    	}
+            Analytics::addEvent(Analytics::EVENT_CHECKOUT, $AnalyticsData, ['step' => 1, 'option' => 'checkout']);
+        }
 
-    	return $this->render('cart', compact('Basket', 'CartForm', 'CartCouponForm'));
+        return $this->render('cart', compact('Basket', 'CartForm', 'CartCouponForm'));
     }
 
     /**
@@ -177,44 +177,44 @@ trait OrderController
     {
         $basket = TrBasket::build();
 
-		if ($basket === null) {
-			return $this->redirect(['order/cart']);
-		}
+        if ($basket === null) {
+            return $this->redirect(['order/cart']);
+        }
 
         if (!Yii::$app->user->isGuest) {
-    	    return $this->redirect(['order/payment']);
-		}
+            return $this->redirect(['order/payment']);
+        }
 
-    	$custumerForm = new CustumerForm;
-    	$Custumer = Custumer::get();
-    	$custumerForm->setAttributes($Custumer->getAttributes());
+        $custumerForm = new CustumerForm;
+        $Custumer = Custumer::get();
+        $custumerForm->setAttributes($Custumer->getAttributes());
 
-    	if ($custumerForm->load(Yii::$app->request->post()) && $custumerForm->register()) {
+        if ($custumerForm->load(Yii::$app->request->post()) && $custumerForm->register()) {
             return $this->redirect(['order/payment']);
         }
 
         $errors = $custumerForm->getErrors();
 
         if (!empty($errors)) {
-    		Yii::$app->session->setFlash('errors', array_values(array_shift($errors)));
-    	} else {
+            Yii::$app->session->setFlash('errors', array_values(array_shift($errors)));
+        } else {
             $AnalyticsData = [];
             foreach ($basket->getPackages() as $package) {
                 $AnalyticsData[] = ['package' => $package];
             }
-    	    Analytics::addEvent(Analytics::EVENT_CHECKOUT, $AnalyticsData, ['step' => 2, 'option' => 'auth']);
-    	}
+            Analytics::addEvent(Analytics::EVENT_CHECKOUT, $AnalyticsData, ['step' => 2, 'option' => 'auth']);
+        }
 
-    	return $this->render('auth', compact('basket', 'custumerForm'));
+        return $this->render('auth', compact('basket', 'custumerForm'));
     }
 
     function actionPayment()
     {
         $Basket = TrBasket::build();
 
-		if ($Basket === null) {
-			return $this->redirect(['order/cart']);
-		}
+        if ($Basket === null) {
+            return $this->redirect(['order/cart']);
+        }
 
         $Basket->scenario = TrBasket::SCENARIO_PAYMENT;
         if (!$Basket->validate()) {
@@ -223,16 +223,16 @@ trait OrderController
         }
 
         if (empty($Basket->packages) && empty($Basket->getVacationPackages())) {
-    	    return $this->redirect(['order/cart']);
-    	}
+            return $this->redirect(['order/cart']);
+        }
 
-    	$customerTripium = $user = User::getCustomerTripium();
+        $customerTripium = $user = User::getCustomerTripium();
 
-    	if ($customerTripium instanceOf Custumer && !$customerTripium->validate()) {
-    	    Yii::$app->getUser()->setReturnUrl(["/order/payment"]);
-    	    Yii::$app->session->setFlash('warnings', "You need to fill in the required fields");
-    	    return $this->redirect(["/order/checkout"]);
-    	}
+        if ($customerTripium instanceOf Custumer && !$customerTripium->validate()) {
+            Yii::$app->getUser()->setReturnUrl(["/order/payment"]);
+            Yii::$app->session->setFlash('warnings', "You need to fill in the required fields");
+            return $this->redirect(["/order/checkout"]);
+        }
 
         if ($customerTripium instanceOf User) {
             $customerTripium->scenario = User::SCENARIO_PROFILE;
@@ -245,17 +245,17 @@ trait OrderController
 
         $tripium_id = $customerTripium && $customerTripium->tripium_id ? $customerTripium->tripium_id : null;
 
-    	if (!$tripium_id && Yii::$app->user->isGuest) {
-    		Yii::$app->getUser()->setReturnUrl("/order/payment/");
-    		return $this->redirect("/order/checkout/");
-    	}
+        if (!$tripium_id && Yii::$app->user->isGuest) {
+            Yii::$app->getUser()->setReturnUrl("/order/payment/");
+            return $this->redirect("/order/checkout/");
+        }
 
         if (!$tripium_id && !Yii::$app->user->isGuest) {
             Yii::$app->getUser()->setReturnUrl("/order/payment/");
             Yii::$app->session->setFlash('message', "You need to fill in the required fields");
             return $this->redirect("/profile/edit/");
         }
-//
+
 //        if ($customerTripium && Yii::$app->request->post('subscribe')) {
 //            if (!empty(Yii::$app->params['hubSpot']['hApiKey'])) {
 //                try {
@@ -273,46 +273,46 @@ trait OrderController
 //            }
 //            if (!empty(Yii::$app->siteSettings->data->mailchimp_key) && !empty(Yii::$app->siteSettings->data->mailchimp_list_id)) {
 //                $mailchimp = new Mailchimp([
-//                    'apikey' => Yii::$app->siteSettings->data->mailchimp_key,
-//                    'listID' => Yii::$app->siteSettings->data->mailchimp_list_id
-//                ]);
+//                                               'apikey' => Yii::$app->siteSettings->data->mailchimp_key,
+//                                               'listID' => Yii::$app->siteSettings->data->mailchimp_list_id
+//                                           ]);
 //                $mailchimp->email = $customerTripium->email;
 //                $mailchimp->subscribe([
-//                    "FNAME" => $customerTripium->first_name,
-//                    "LNAME" => $customerTripium->last_name,
-//                ]);
+//                                          "FNAME" => $customerTripium->first_name,
+//                                          "LNAME" => $customerTripium->last_name,
+//                                      ]);
 //            }
 //        }
 
-    	$tripium = new Tripium();
-    	$cards = $tripium->getCustomerCards($tripium_id);
-    	if (!empty($cards)) {
-    		$cards = ArrayHelper::map($cards, 'id', 'cardNumber');
-    	}
-    	$model = new PaymentForm();
-    	$modelAddCard = new PaymentFormAddCard();
-    	$post = Yii::$app->request->post();
+        $tripium = new Tripium();
+        $cards = $tripium->getCustomerCards($tripium_id);
+        if (!empty($cards)) {
+            $cards = ArrayHelper::map($cards, 'id', 'cardNumber');
+        }
+        $model = new PaymentForm();
+        $modelAddCard = new PaymentFormAddCard();
+        $post = Yii::$app->request->post();
 
-    	if (isset(Yii::$app->params["tripium_info"]) && Yii::$app->params["tripium_info"] === "mobile") {
-    		if (Yii::$app->user->isGuest) {
-	    		$successMsg = "Your order was successfully completed. An email has been sent to you with links to your voucher(s) or you can view voucher(s) below and download image.";
-    		} else {
-	    		$successMsg = "Your order was successfully completed. Your order is available in your profile. An email has been sent to you with links to your voucher(s) or you can view voucher(s) below and download image.";
-    		}
-    	} elseif (Yii::$app->user->isGuest) {
+        if (isset(Yii::$app->params["tripium_info"]) && Yii::$app->params["tripium_info"] === "mobile") {
+            if (Yii::$app->user->isGuest) {
+                $successMsg = "Your order was successfully completed. An email has been sent to you with links to your voucher(s) or you can view voucher(s) below and download image.";
+            } else {
+                $successMsg = "Your order was successfully completed. Your order is available in your profile. An email has been sent to you with links to your voucher(s) or you can view voucher(s) below and download image.";
+            }
+        } elseif (Yii::$app->user->isGuest) {
             $successMsg = "Your order was successfully completed. An email has been sent to you with links to your voucher(s).";
         } else {
             $successMsg = "Your order was successfully completed. Your order is available in your profile. An email has been sent to you with links to your voucher(s).";
         }
 
-    	if (!empty($post["PaymentForm"]) && $model->load($post) && $order = $model->pay()) {
-    		Yii::$app->session->setFlash('success', $successMsg);
-    		return $this->redirect(['order/detail', 'orderNumber' => $order["orderNumber"], 'id' => $tripium_id]);
+        if (!empty($post["PaymentForm"]) && $model->load($post) && $order = $model->pay()) {
+            Yii::$app->session->setFlash('success', $successMsg);
+            return $this->redirect(['order/detail', 'orderNumber' => $order["orderNumber"], 'id' => $tripium_id]);
         }
 
         if (!empty($post["PaymentFormAddCard"]) && $modelAddCard->load($post) && $order = $modelAddCard->pay()) {
-        	Yii::$app->session->setFlash('success', $successMsg);
-        	return $this->redirect(['order/detail', 'orderNumber' => $order["orderNumber"], 'id' => $tripium_id]);
+            Yii::$app->session->setFlash('success', $successMsg);
+            return $this->redirect(['order/detail', 'orderNumber' => $order["orderNumber"], 'id' => $tripium_id]);
         }
 
         if ($model->getErrors()) {
@@ -331,7 +331,7 @@ trait OrderController
             Analytics::addEvent(Analytics::EVENT_CHECKOUT, $AnalyticsData, ['step' => 2, 'option' => 'auth']);
         }
 
-    	Analytics::addEvent(Analytics::EVENT_CHECKOUT, $AnalyticsData, ['step' => 3, 'option' => 'payment']);
+        Analytics::addEvent(Analytics::EVENT_CHECKOUT, $AnalyticsData, ['step' => 3, 'option' => 'payment']);
 
         return $this->render('payment', compact('model', 'modelAddCard', 'cards', 'user', 'Basket'));
     }

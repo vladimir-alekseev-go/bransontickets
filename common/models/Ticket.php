@@ -23,6 +23,7 @@ class Ticket extends Model
     public $tripium_rate;
     public $info;
     public $bed_type_id;
+    public $adult_count;
     public $child_ages = [];
     public $first_name;
     public $last_name;
@@ -37,7 +38,7 @@ class Ticket extends Model
     public $supplementary;
     public $pricelineRoomInfo;
 
-    public function loadData($data)
+    public function loadData($data): void
     {
         if (!empty($data['id'])) {
             $this->id = $data['id'];
@@ -72,14 +73,17 @@ class Ticket extends Model
         if (!empty($data['bedTypeId'])) {
             $this->bed_type_id = $data['bedTypeId'];
         }
-        if (!empty($data['childAges'])) {
-            $this->child_ages = $data['childAges'];
+        if (!empty($data['group']['adultCount'])) {
+            $this->adult_count = $data['group']['adultCount'];
         }
-        if (!empty($data['firstName'])) {
-            $this->first_name = $data['firstName'];
+        if (!empty($data['group']['childAges'])) {
+            $this->child_ages = $data['group']['childAges'];
         }
-        if (!empty($data['lastName'])) {
-            $this->last_name = $data['lastName'];
+        if (!empty($data['group']['firstName'])) {
+            $this->first_name = $data['group']['firstName'];
+        }
+        if (!empty($data['group']['lastName'])) {
+            $this->last_name = $data['group']['lastName'];
         }
         if (!empty($data['numberOfBeds'])) {
             $this->number_of_beds = $data['numberOfBeds'];
@@ -104,7 +108,7 @@ class Ticket extends Model
         }
         $this->supplementary = $data['supplementary'] === true;
 
-        $this->result_rate = number_format($this->special_rate ? $this->special_rate : $this->retail_rate, 2, '.', '');
+        $this->result_rate = number_format($this->special_rate ?: $this->retail_rate, 2, '.', '');
 
         if (!empty($data['resultRate'])) {
             $this->result_rate = number_format($data['resultRate'], 2, '.', '');

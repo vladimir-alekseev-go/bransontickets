@@ -733,8 +733,7 @@ class TrBasket extends _source_TrBasket
         }
 
         if ($OrderForm instanceof OrderForm &&
-            ($OrderForm->model instanceof TrShows
-                || $OrderForm->model instanceof TrAttractions)
+            ($OrderForm->model instanceof TrShows || $OrderForm->model instanceof TrAttractions)
         ) {
             $request = $OrderForm->requestAddToBasket($this->get());
         }

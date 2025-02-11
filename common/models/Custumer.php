@@ -42,12 +42,12 @@ class Custumer extends Model
     }
 
     /**
-     * Get Custumer from session
+     * Get Customer from session
      * @return Custumer
      */
-    public static function get()
+    public static function get(): Custumer
     {
-        $Custumer = new Custumer();
+        $Custumer = new self();
         $Custumer->setAttributes(Yii::$app->session->get("tripium_custumer"));
         return $Custumer;
     }
@@ -57,9 +57,9 @@ class Custumer extends Model
      * @return int
      */
     public static function getID()
-	{
+    {
         return self::get()->tripium_id;
-	}
+    }
 
     /**
      * Create user on the POS

@@ -53,7 +53,7 @@ $roomsCount = 0;
                                 ) ?>">
                                     Book now
                                 </a>
-                                <a class="btn btn-secondary w-100 js-go-to-cart hide" href="<?= Url::to(['order/cart']) ?>">
+                                <a class="btn btn-third w-100 js-go-to-cart hide" href="<?= Url::to(['order/cart']) ?>">
                                     Go To Cart
                                 </a>
                                 <a class="js-reservation-cancel btn btn-link reservation-cancel">

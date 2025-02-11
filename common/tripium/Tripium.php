@@ -236,7 +236,7 @@ class Tripium extends Model
             if (!empty($res["globalErrors"])) {
                 $this->addErrors($res["globalErrors"]);
                 $this->addErrors(['globalErrors' => $res['globalErrors']]);
-			}
+            }
 
             if (!empty($res['errors']) && is_array($res['errors'])) {
                 foreach ($res['errors'] as $name => $errors) {
@@ -246,11 +246,11 @@ class Tripium extends Model
                 }
             }
 
-			curl_close ($this->ch);
+            curl_close ($this->ch);
 
-			return $res;
+            return $res;
 
-		}
+        }
 
 //        Yii::error('request statusCode: '.$this->statusCode, 'tripium-request');
 //        Yii::error('request path: '.$this->url.$path, 'tripium-request');
@@ -425,7 +425,7 @@ class Tripium extends Model
     {
         $result = $this->request('/v2/wl/ext/itinerary', $data, 'post');
 
-        if (empty($this->getErrors())) {
+        if ($this->statusCode === self::STATUS_CODE_SUCCESS) {
             return (new Itinerary())->loadData($result);
         }
         return null;
@@ -846,7 +846,7 @@ class Tripium extends Model
 //        return !empty($res) ? $res : [];
 //    }
 
-    public function getCustomerCars($id)
+    public function getCustomerCards($id)
     {
         $customer = $this->getCustomer($id);
 
@@ -854,15 +854,15 @@ class Tripium extends Model
             return false;
         }
 
-		$res = $this->request('/customer/axia/' . $customer['axiaId']);
+        $res = $this->request('/customer/axia/' . $customer['axiaId']);
 
         if (empty($res['results'])) {
             return false;
         }
 
-		$res['results'] = ArrayHelper::index($res['results'], 'id');
-		foreach($res['results'] as &$it) {
-		    $ar = array_merge($it, $it["card"]);
+        $res['results'] = ArrayHelper::index($res['results'], 'id');
+        foreach($res['results'] as &$it) {
+            $ar = array_merge($it, $it["card"]);
             $it = $ar;
         }
 
@@ -1146,59 +1146,59 @@ class Tripium extends Model
         return $list[0];
     }
 
-	/**
-	 * @param $code
-	 * @param $siteType
-	 *
-	 * @return Coupon|null
-	 * */
-	public function getCouponByCode($code, $siteType = null): ?Coupon
+    /**
+     * @param $code
+     * @param $siteType
+     *
+     * @return Coupon|null
+     * */
+    public function getCouponByCode($code, $siteType = null): ?Coupon
     {
-	    if (empty($code)) {
-	        return null;
-	    }
+        if (empty($code)) {
+            return null;
+        }
 
-	    if (!$siteType) {
-	        $siteType = Yii::$app->params['siteType'] === Coupon::COUPON_TYPE_MOBILE ? Coupon::COUPON_TYPE_MOBILE : Coupon::COUPON_TYPE_DESKTOP;
-	    } else if (!in_array($siteType, [Coupon::COUPON_TYPE_DESKTOP, Coupon::COUPON_TYPE_MOBILE], true)) {
-	        return null;
-	    }
+        if (!$siteType) {
+            $siteType = Yii::$app->params['siteType'] === Coupon::COUPON_TYPE_MOBILE ? Coupon::COUPON_TYPE_MOBILE : Coupon::COUPON_TYPE_DESKTOP;
+        } else if (!in_array($siteType, [Coupon::COUPON_TYPE_DESKTOP, Coupon::COUPON_TYPE_MOBILE], true)) {
+            return null;
+        }
 
-	    $Basket = TrBasket::find()->where(['session_id' => TrBasket::getSessionID()])->one();
-	    $Coupons = $this->getCoupons($Basket->sessionId, $siteType);
+        $Basket = TrBasket::find()->where(['session_id' => TrBasket::getSessionID()])->one();
+        $Coupons = $this->getCoupons($Basket->sessionId, $siteType);
 
-	    foreach ($Coupons as $Coupon) {
-	        if (StrHelper::strtolower($Coupon->code) === StrHelper::strtolower($code)) {
-	            return $Coupon;
-	        }
-	    }
+        foreach ($Coupons as $Coupon) {
+            if (StrHelper::strtolower($Coupon->code) === StrHelper::strtolower($code)) {
+                return $Coupon;
+            }
+        }
 
-	    return null;
-	}
+        return null;
+    }
 
-	/**
-	 * @param $orderNumber
-	 * @param $packageId
-	 * @param $params
-	 *
-	 * @return Coupon[]
-	 * */
-	public function getCouponsForOrder($orderNumber, $packageId, $params): array
+    /**
+     * @param $orderNumber
+     * @param $packageId
+     * @param $params
+     *
+     * @return Coupon[]
+     * */
+    public function getCouponsForOrder($orderNumber, $packageId, $params): array
     {
-	    $res = $this->request("/discount/order/$orderNumber/package/$packageId", $params, "post");
+        $res = $this->request("/discount/order/$orderNumber/package/$packageId", $params, "post");
 
-	    $result = [];
+        $result = [];
 
-	    if (!empty($res["results"])) {
-	        foreach ($res["results"] as $data) {
-	            $Coupon = new Coupon;
-	            $Coupon->loadData($data);
-	            $result[] = $Coupon;
-	        }
-	    }
+        if (!empty($res["results"])) {
+            foreach ($res["results"] as $data) {
+                $Coupon = new Coupon;
+                $Coupon->loadData($data);
+                $result[] = $Coupon;
+            }
+        }
 
-	    return $result;
-	}
+        return $result;
+    }
 
 //	/**
 //	 * @param $orderNumber

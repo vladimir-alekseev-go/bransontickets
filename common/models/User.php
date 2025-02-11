@@ -17,25 +17,25 @@ use yii\web\IdentityInterface;
 class User extends _source_Users implements IdentityInterface
 {
     public const STATUS_INACTIVE = 0;
-    public const STATUS_ACTIVE   = 1;
+    public const STATUS_ACTIVE = 1;
     public const STATUS_REGISTER = 2;
 
-    public const STATE_USA    = 'US';
-	public const STATE_CANADA = 'CA';
-	public const STATE_OTHER  = '';
+    public const STATE_USA = 'US';
+    public const STATE_CANADA = 'CA';
+    public const STATE_OTHER = '';
 
-	public const SCENARIO_PROFILE = 'profile';
+    public const SCENARIO_PROFILE = 'profile';
 
     public $withoutTripium = false;
-    public $withoutBasket  = false;
+    public $withoutBasket = false;
 
     public const FACEBOOK = 'facebook';
     public const TWITTER  = 'twitter';
     public const GOOGLE   = 'google';
 
-	public function behaviors()
+    public function behaviors()
     {
-       return [
+        return [
             'timestamp' => [
                 'class' => TimestampBehavior::class,
                 'attributes' => [
@@ -54,7 +54,7 @@ class User extends _source_Users implements IdentityInterface
     {
         return [
             [['fb_id', 'tw_id', 'gp_id', 'tripium_id'], 'integer'],
-        	['status', 'default', 'value' => self::STATUS_INACTIVE],
+            ['status', 'default', 'value' => self::STATUS_INACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE, self::STATUS_REGISTER]],
             [['updated_at', 'created_at', 'logined_at', 'city'], 'safe'],
             [['zip_code'], 'integer'],
@@ -74,92 +74,92 @@ class User extends _source_Users implements IdentityInterface
         ];
     }
 
-	public function beforeSave($insert)
-	{
-		$save = [];
-		$save["email"] = $this->email;
-		$save["firstName"] = $this->first_name;
-		$save["lastName"] = $this->last_name;
-		$save["phone"] = $this->phone;
-		$save["address"] = $this->address;
-		$save["city"] = $this->city;
-		$save["state"] = $this->state;
-		$save["zipCode"] = $this->zip_code;
+    public function beforeSave($insert)
+    {
+        $save = [];
+        $save["email"] = $this->email;
+        $save["firstName"] = $this->first_name;
+        $save["lastName"] = $this->last_name;
+        $save["phone"] = $this->phone;
+        $save["address"] = $this->address;
+        $save["city"] = $this->city;
+        $save["state"] = $this->state;
+        $save["zipCode"] = $this->zip_code;
 
-		if ($this->getOldAttribute("email") && $this->email != $this->getOldAttribute("email")) {
-			if ($this->fb_id || $this->tw_id || $this->gp_id) {
-				$this->addError("email", "You can't change email, it has connection with social network");
-			} else {
-				$this->username = $this->email;
-			}
-		}
+        if ($this->getOldAttribute("email") && $this->email != $this->getOldAttribute("email")) {
+            if ($this->fb_id || $this->tw_id || $this->gp_id) {
+                $this->addError("email", "You can't change email, it has connection with social network");
+            } else {
+                $this->username = $this->email;
+            }
+        }
 
-		if (!$this->withoutTripium) {
-			if (!$this->tripium_id) {
-				$tripium = new Tripium;
-		    	$result = $tripium->postCustomer($save);
+        if (!$this->withoutTripium) {
+            if (!$this->tripium_id) {
+                $tripium = new Tripium;
+                $result = $tripium->postCustomer($save);
 
-		    	if (!empty($result["id"])) {
-		    		$this->tripium_id = $result["id"];
-		    	}
-			} else {
-				$tripium = new Tripium;
-				$saveTripium = $save;
-				$saveTripium["id"] = $this->tripium_id;
-		    	$result = $tripium->postCustomer($saveTripium);
-			}
+                if (!empty($result["id"])) {
+                    $this->tripium_id = $result["id"];
+                }
+            } else {
+                $tripium = new Tripium;
+                $saveTripium = $save;
+                $saveTripium["id"] = $this->tripium_id;
+                $result = $tripium->postCustomer($saveTripium);
+            }
 
-	    	if (!empty($result["errors"]["email"])) {
-	    		$this->addError("email", $result["errors"]["email"][0]);
-	    	}
+            if (!empty($result["errors"]["email"])) {
+                $this->addError("email", $result["errors"]["email"][0]);
+            }
 
-	    	if (!$this->isNewRecord) {
-	    	    if (!empty($result["errors"]["phone"])) {
+            if (!$this->isNewRecord) {
+                if (!empty($result["errors"]["phone"])) {
                     $this->addError("phone", $result["errors"]["phone"][0]);
                 }
-	    	    if (!empty($result["errors"]["firstName"])) {
+                if (!empty($result["errors"]["firstName"])) {
                     $this->addError("first_name", $result["errors"]["firstName"][0]);
                 }
-	    	    if (!empty($result["errors"]["lastName"])) {
+                if (!empty($result["errors"]["lastName"])) {
                     $this->addError("last_name", $result["errors"]["lastName"][0]);
                 }
-	    	    if (!empty($result["errors"]["address"])) {
+                if (!empty($result["errors"]["address"])) {
                     $this->addError("address", $result["errors"]["address"][0]);
                 }
-	    	    if (!empty($result["errors"]["city"])) {
+                if (!empty($result["errors"]["city"])) {
                     $this->addError("city", $result["errors"]["city"][0]);
                 }
-	    	    if (!empty($result["errors"]["state"])) {
+                if (!empty($result["errors"]["state"])) {
                     $this->addError("state", $result["errors"]["state"][0]);
                 }
-	    	    if (!empty($result["errors"]["zipCode"])) {
+                if (!empty($result["errors"]["zipCode"])) {
                     $this->addError("zip_code", $result["errors"]["zipCode"][0]);
                 }
-	    	}
-		}
+            }
+        }
 
-    	if ($this->getErrors()) {
-    		return false;
-    	}
-		return parent::beforeSave($insert);
-	}
+        if ($this->getErrors()) {
+            return false;
+        }
+        return parent::beforeSave($insert);
+    }
 
-	public function afterSave($insert, $data)
-	{
-		parent::afterSave($insert, $data);
+    public function afterSave($insert, $data)
+    {
+        parent::afterSave($insert, $data);
 
-		// set the connect between basket with user
-		//if (!$this->withoutBasket) {
-		//	$b = new Basket;
-		//	$b->setForUser($this->id);
-		//}
-		// updating orders of users
+        // set the connect between basket with user
+        if (!$this->withoutBasket) {
+            $b = new TrBasket();
+            $b->setForUser($this->id);
+        }
+        // updating orders of users
 //		if(!$this->withoutTripium && $this->tripium_id)
 //		{
 //			$Orders = new Orders;
 //			$Orders->updateFromTripium($this->tripium_id);
 //		}
-	}
+    }
 
     /**
      * @inheritdoc
@@ -191,7 +191,7 @@ class User extends _source_Users implements IdentityInterface
      */
     public static function findByUsername($username)
     {
-    	return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
+        return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
     }
 
     /**
@@ -207,9 +207,9 @@ class User extends _source_Users implements IdentityInterface
         }
 
         return static::findOne([
-            'password_reset_token' => $token,
-            'status' => self::STATUS_ACTIVE,
-        ]);
+                                   'password_reset_token' => $token,
+                                   'status' => self::STATUS_ACTIVE,
+                               ]);
     }
 
     /**
@@ -261,7 +261,7 @@ class User extends _source_Users implements IdentityInterface
      */
     public function validatePassword($password)
     {
-    	if (!$this->password_hash) {
+        if (!$this->password_hash) {
             return false;
         }
 
@@ -306,7 +306,7 @@ class User extends _source_Users implements IdentityInterface
 
     public static function socialAuth($client): bool
     {
-    	$name = $client->getName();
+        $name = $client->getName();
 
         if ($name === self::FACEBOOK) {
             return self::authByFacebook($client);
@@ -455,76 +455,76 @@ class User extends _source_Users implements IdentityInterface
      */
     public static function getCurrentUser($force = false): ?User
     {
-		if (!Yii::$app->user->isGuest) {
-			if ($force) {
-			    Yii::$app->user->identity->refresh();
-			}
-			return Yii::$app->user->identity;
-		}
-		return null;
-	}
+        if (!Yii::$app->user->isGuest) {
+            if ($force) {
+                Yii::$app->user->identity->refresh();
+            }
+            return Yii::$app->user->identity;
+        }
+        return null;
+    }
 
-	public static function getCustomerTripium()
-	{
-		if (!Yii::$app->user->isGuest) {
-		    return Yii::$app->user->identity;
-		}
+    public static function getCustomerTripium()
+    {
+        if (!Yii::$app->user->isGuest) {
+            return Yii::$app->user->identity;
+        }
 
         return Custumer::get();
     }
 
-	public static function getCustomerTripiumID()
-	{
-		if (!Yii::$app->user->isGuest) {
-		    return Yii::$app->user->identity->tripium_id;
-		}
+    public static function getCustomerTripiumID()
+    {
+        if (!Yii::$app->user->isGuest) {
+            return Yii::$app->user->identity->tripium_id;
+        }
 
         return Custumer::getID();
     }
 
-	public function isProfileComplete()
-	{
-	    $model = clone $this;
-		$model->scenario = self::SCENARIO_PROFILE;
-    	return $model->validate();
-	}
+    public function isProfileComplete()
+    {
+        $model = clone $this;
+        $model->scenario = self::SCENARIO_PROFILE;
+        return $model->validate();
+    }
 
-	public static function getStateList(): array
-	{
-		return [
-			self::STATE_USA => 'USA',
-			self::STATE_CANADA => 'Canada',
-			self::STATE_OTHER => 'Other',
-		];
-	}
+    public static function getStateList(): array
+    {
+        return [
+            self::STATE_USA => 'USA',
+            self::STATE_CANADA => 'Canada',
+            self::STATE_OTHER => 'Other',
+        ];
+    }
 
-	public static function getStateValue($val): string
-	{
-		$ar = self::getStateList();
+    public static function getStateValue($val): string
+    {
+        $ar = self::getStateList();
 
-		return $ar[$val] ?? $val;
-	}
+        return $ar[$val] ?? $val;
+    }
 
-	public function isSocialRegister()
-	{
-		if (!$this->id) {
+    public function isSocialRegister()
+    {
+        if (!$this->id) {
             return null;
         }
 
-		if ($this->fb_id || $this->tw_id || $this->gp_id) {
+        if ($this->fb_id || $this->tw_id || $this->gp_id) {
             return true;
         }
 
         return false;
     }
 
-	public function updateFromTripium($recreate = false): ?array
-	{
-		$Tripium = new Tripium;
+    public function updateFromTripium($recreate = false): ?array
+    {
+        $Tripium = new Tripium;
 
-		$res = $Tripium->getCustomer($this->tripium_id);
+        $res = $Tripium->getCustomer($this->tripium_id);
 
-		if ($res) {
+        if ($res) {
             $this->first_name = $res['firstName'];
             $this->last_name = $res['lastName'];
             $this->address = $res['address'];
@@ -544,7 +544,7 @@ class User extends _source_Users implements IdentityInterface
         }
 
         return null;
-	}
+    }
 
     public static function getStatusList()
     {

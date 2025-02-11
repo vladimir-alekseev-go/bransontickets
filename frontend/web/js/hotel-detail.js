@@ -69,7 +69,14 @@ let hotelDetail = {
         $(document).on("submit", "form#bookingHotel", function () {
             let btn = $(this);
             $.post($(this).attr('action'), $(this).serialize(), function(data, textStatus, jqXHR) {
-                btn.closest('.js-reservation-form').html(data);
+                if (data.html) {
+                    btn.closest('.js-reservation-form').html(data.html);
+                } else if (data.added) {
+                    btn.closest('.js-room').find('.js-reservation-url').addClass('hide');
+                    btn.closest('.js-room').find('.js-go-to-cart').removeClass('hide');
+                    btn.closest('.js-room').find('.js-reservation-cancel').trigger('click');
+                    (new bootstrap.Modal(document.getElementById('room-has-added'))).show();
+                }
             }).always(function(jqXHR) {
                 if (jqXHR.status === 302) {
                     window.location.href = jqXHR.responseText;

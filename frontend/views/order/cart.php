@@ -9,7 +9,6 @@ use common\models\TrPosHotels;
 use common\models\TrShows;
 use yii\bootstrap\Alert;
 use yii\helpers\Url;
-use yii\web\JqueryAsset;
 use yii\web\View;
 
 /**
@@ -123,7 +122,7 @@ $remove = Yii::$app->session->getFlash('remove');
             </div>
         </div>
     <?php } elseif ($remove) { ?>
-        <div class="white-block shadow-block text-center">
+        <div class="white-block shadow-block text-center mb-5">
             <div class="cart-cleared">You cleared cart. You could choose other items:</div>
             <div class="cart-item-section">
                 <a href="<?= Url::to(['shows/index']) ?>">Shows</a>
@@ -133,7 +132,7 @@ $remove = Yii::$app->session->getFlash('remove');
             </div>
         </div>
     <?php } else { ?>
-        <div class="white-block shadow-block text-center">
+        <div class="white-block shadow-block text-center mb-5">
             <div class="cart-empty">Cart is empty!</div>
         </div>
     <?php } ?>

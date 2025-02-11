@@ -40,7 +40,7 @@ class TrPosHotels extends _source_TrPosHotels
 
     public const TYPE_ID = 5;
 
-    public const priceClass = TrPosHotelsPriceRoom::class;
+//    public const priceClass = TrPosHotelsPriceRoom::class;
 
     private const ASSOCIATE_WITH_PRICE_LINE_HOTELS = [
         'Comfort Inn & Suites Branson Meadows' => 'Comfort Inn & Suites Branson Meadows',
@@ -516,6 +516,9 @@ class TrPosHotels extends _source_TrPosHotels
 
         if (!empty($Search->starRating)) {
             $query->andWhere(['rating' => $Search->starRating]);
+        }
+        if (!empty($Search->c) && !empty($Search->c[0])) {
+            $query->joinWith('categories')->andWhere(['id_external_category' => $Search->c]);
         }
         if (!empty($Search->city) && !empty($Search->city[0])) {
             $query->andWhere(['city' => $Search->city]);

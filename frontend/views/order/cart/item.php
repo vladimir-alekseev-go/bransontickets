@@ -153,9 +153,6 @@ $user = User::getCurrentUser();
                         <a class="reade me-3 text-nowrap" href="#" data-bs-toggle="modal" data-bs-target=".js-popup-cart-policy">
                             <i class="fa fa-book"></i>&nbsp;<strong>Read policy</strong>
                         </a>
-                        <a class="me-3 text-nowrap" href="<?= $item->getUrl() ?>#availability">
-                            <i class="fa fa-edit"></i>&nbsp;<strong>Modify</strong>
-                        </a>
                     <?php } else { ?>
                         <a class="reade me-3 js-popup-cancellation-policy text-nowrap" href="#"
                            data-url="<?= Url::to(

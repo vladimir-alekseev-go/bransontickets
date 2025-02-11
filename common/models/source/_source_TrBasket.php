@@ -38,7 +38,7 @@ class _source_TrBasket extends \yii\db\ActiveRecord
             [['user_id', 'accept_terms'], 'integer'],
             [['data'], 'string'],
             [['updated_at', 'reserve_at'], 'safe'],
-            [['session_id'], 'string', 'max' => 16],
+            [['session_id'], 'string', 'max' => 36],
             [['coupon_data'], 'string', 'max' => 2048],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::class, 'targetAttribute' => ['user_id' => 'id']],
         ];

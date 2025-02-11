@@ -29,20 +29,20 @@ class CustumerForm extends Model
             [['phone'], 'string', 'min' => 10, 'max' => 10],
         ];
     }
-//
-//    public function isAgree($attribute, $params)
-//    {
-//        if (!$this->agree) {
-//            $this->addError($attribute, 'Need to accept terms');
-//        }
-//    }
-//
-//    public function isCount($attribute, $params)
-//    {
-//        if (!$this->count) {
-//            $this->addError($attribute, 'Need to take the ticket');
-//        }
-//    }
+
+    public function isAgree($attribute, $params)
+    {
+        if (!$this->agree) {
+            $this->addError($attribute, 'Need to accept terms');
+        }
+    }
+
+    public function isCount($attribute, $params)
+    {
+        if (!$this->count) {
+            $this->addError($attribute, 'Need to take the ticket');
+        }
+    }
 
     public function register()
     {
