@@ -22,7 +22,9 @@ use yii\helpers\Url;
         <li><a href="<?= Url::to(['shows/index']) ?>">Shows</a></li>
         <li><a href="<?= Url::to(['attractions/index']) ?>">Attractions</a></li>
         <li><a href="<?= Url::to(['lodging/index']) ?>">Lodging</a></li>
+        <?php /*?>
         <li><a href="<?= Url::to(['packages/index']) ?>">Vacation Packages</a></li>
+ <?*/?>
         <li class="d-inline-block d-lg-none"><a href="<?= Url::to(['site/about']) ?>">About Us</a></li>
         <li class="d-inline-block d-lg-none"><a href="<?= Url::to(['site/search']) ?>">Search</a></li>
     </ul>

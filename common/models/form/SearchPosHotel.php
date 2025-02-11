@@ -3,58 +3,15 @@
 namespace common\models\form;
 
 use common\models\TrPosHotels;
-use common\models\TrPosPlHotels;
 use DateInterval;
 use DateTime;
 use Exception;
 use Yii;
 use yii\helpers\Json;
-/** @deprecated  */
-class SearchPlHotel extends SearchHotelGeneral
+
+class SearchPosHotel extends SearchHotelGeneral
 {
-//    public const SORT_BY_PRICE = 'price';
-//    public const SORT_PRICE_AVERAGE = 'hp';
-//    public const SORT_PRICE_REVERSE = 'lp';
-//    public const SORT_BY_GUEST_SCORE = 'gs';
-//    public const SORT_BY_STAR_RATING = 'sr';
-
-//    public const FIELD_SORT_BY_PRICE = 'hp';
-
-//    public $by = self::SORT_BY_GUEST_SCORE;
     public $model;
-
-//    /**
-//     * @return array
-//     */
-//    public function rules(): array
-//    {
-//        return array_merge(
-//            parent::rules(),
-//            [
-//                [
-//                    'fieldSort',
-//                    'filter',
-//                    'filter' => static function ($attr) {
-//                        return array_key_exists($attr, self::sortList()) ? $attr : self::FIELD_SORT_PRICE_AVERAGE;
-//                    }
-//                ],
-//            ]
-//        );
-//    }
-
-    /**
-     * @return array
-     */
-    public static function sortList(): array
-    {
-        return [
-            self::FIELD_SORT_PRICE_AVERAGE => 'Price low to high',
-            self::FIELD_SORT_PRICE_REVERSE => 'Price high to low',
-            self::FIELD_SORT_GUEST_SCORE => 'Guest score',
-            self::FIELD_SORT_STAR_RATING => 'Star rating low to high',
-            self::FIELD_SORT_STAR_RATING_DESC => 'Star rating high to low',
-        ];
-    }
 
     /**
      * @return array
@@ -158,15 +115,10 @@ class SearchPlHotel extends SearchHotelGeneral
     public static function getAmenities(): array
     {
         if (empty(self::$amenitiesCache)) {
-            $amenities = TrPosPlHotels::getActive()
+            $amenities = TrPosHotels::getActive()
                 ->select('amenities')
                 ->where(['not', 'amenities' => ''])
                 ->column();
-            $amenities2 = TrPosHotels::getActive()
-                ->select('amenities')
-                ->where(['not', 'amenities' => ''])
-                ->column();
-            $amenities = array_merge($amenities, $amenities2);
             $result = [];
             foreach ($amenities as $it) {
                 $ar = explode(';', $it);
@@ -192,9 +144,7 @@ class SearchPlHotel extends SearchHotelGeneral
      */
     public static function getCities(): array
     {
-        $cities = TrPosPlHotels::find()->select('city')->distinct()->asArray()->column();
-        $cities2 = TrPosHotels::find()->select('city')->distinct()->asArray()->column();
-        $cities = array_merge($cities, $cities2);
+        $cities = TrPosHotels::getActive()->select('city')->distinct()->asArray()->column();
         $list = [];
         foreach ($cities as $city) {
             if (!empty($city)) {
@@ -209,7 +159,7 @@ class SearchPlHotel extends SearchHotelGeneral
      */
     public function getSliderPriceRange(): array
     {
-        $max = TrPosPlHotels::getActive()->select(['max(min_rate) as max'])->column();
+        $max = TrPosHotels::getActive()->select(['max(min_rate) as max'])->column();
         $max = !empty($max) ? $max[0] : 500;
         $max = floor(($max + 100) / 100) * 100;
         $max = ceil($max / 30) * 30;
@@ -219,5 +169,30 @@ class SearchPlHotel extends SearchHotelGeneral
             'min'        => 0,
             'max'        => $max,
         ];
+    }
+
+    public static function getSliderAmenities(): array
+    {
+        $list = TrPosHotels::getActive()->select(['amenities'])->column();
+
+        $amenities = [];
+        foreach ($list as $it) {
+            $ar = array_merge($amenities, explode(';', $it));
+            $amenities = $ar;
+        }
+        $amenities = array_unique($amenities);
+        asort($amenities);
+        $ar = [];
+        foreach ($amenities as $amenity) {
+            if (!empty($amenity)) {
+                $ar[$amenity] = $amenity;
+            }
+        }
+        return $ar;
+    }
+
+    public function getRooms(): array
+    {
+        return $this->room;
     }
 }

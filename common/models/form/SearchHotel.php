@@ -6,7 +6,7 @@ use common\helpers\General;
 use Exception;
 use Yii;
 use yii\helpers\Json;
-
+/** @deprecated  */
 class SearchHotel extends SearchHotelGeneral
 {
 //    public const ORDER_BY_MARKETING_LEVEL = 'marketing_level';

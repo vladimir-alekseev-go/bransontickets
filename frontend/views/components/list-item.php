@@ -10,7 +10,7 @@ use yii\helpers\Html;
  * @var array                                $priceAll
  * @var common\models\form\Search            $Search
  * @var yii\data\Pagination                  $pagination
- * @var TrShows|TrAttractions||TrPosPlHotels $model
+ * @var TrShows|TrAttractions|TrPosHotels $model
  */
 
 ?>
@@ -180,7 +180,7 @@ use yii\helpers\Html;
                         'Search' => $Search,
                     ]
                 );
-            } elseif ($model instanceof TrPosPlHotels || $model instanceof TrPosHotels) {
+            } elseif ($model instanceof TrPosHotels) {
                 echo $this->render('@app/views/components/list-item-hotel', compact('model'));
             } ?>
         </div>

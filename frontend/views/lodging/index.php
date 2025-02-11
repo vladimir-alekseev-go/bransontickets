@@ -1,6 +1,5 @@
 <?php
 
-$items = [];
 $priceAll = [];
 $itemCount = 0;
 

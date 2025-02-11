@@ -2,12 +2,12 @@
 
 namespace common\models;
 
+use common\models\form\SearchPosHotel;
 use common\models\upload\UploadItemsPhotosHotel;
 use common\models\upload\UploadItemsPhotosPreviewHotel;
 use common\tripium\Tripium;
 use DateInterval;
-use DatePeriod;
-use common\models\form\SearchPlHotel;
+use DateTime;
 use Throwable;
 use Yii;
 use yii\base\InvalidConfigException;
@@ -25,6 +25,9 @@ class TrPosHotels extends _source_TrPosHotels
 
     public const STATUS_ACTIVE = 1;
     public const STATUS_INACTIVE = 0;
+
+    public const STATUS_WL_ACTIVE = 1;
+    public const STATUS_WL_INACTIVE = 0;
 
     public const DISPLAY_IN_WHERE_TO_STAY_YES = 1;
     public const DISPLAY_IN_WHERE_TO_STAY_NO = 0;
@@ -48,33 +51,82 @@ class TrPosHotels extends _source_TrPosHotels
         'Best Western Center Pointe Inn' => 'Best Western Center Pointe Inn',
     ];
 
-    /**
-     * @var bool
-     */
-    public $updateVideo = false;
-
-    /**
-     * !!!!! Should move to utility!!!!!
-     *
-     * @param TrPosHotels[]|TrPosPlHotels[] $items
-     */
-    public static function clearDuplicate(array &$items): void
+    public static function getPricesByFilterFromTripium(SearchPosHotel $Search): array
     {
-        $pos = array_keys(self::ASSOCIATE_WITH_PRICE_LINE_HOTELS);
-        $deletePlItems = [];
-        foreach ($items as $item) {
-            if ($item instanceof self && in_array($item->name, $pos, false)) {
-                $deletePlItems[] = self::ASSOCIATE_WITH_PRICE_LINE_HOTELS[$item->name] ?: null;
+        $cache = Yii::$app->cache;
+        $cacheKey = serialize(
+            [
+                'hotels',
+                'start' => $Search->getDepartureDate()->format('Y-m-d'),
+                'end' => $Search->getArrivalDate()->format('Y-m-d'),
+                'adults' => $Search->getMaxAdults(),
+                'childAge' => $Search->getMaxChildAge(),
+            ]
+        );
+        $cacheData = $cache->get($cacheKey);
+
+        if ($cacheData === false) {
+            $query = self::getActive();
+            $query->select([self::tableName() . '.external_id']);
+            if (empty($query->column())) {
+                return [];
             }
+            $tripium = new Tripium();
+            $res = $tripium->getPosHotelsPrice(
+                $query->column(),
+                $Search->getArrivalDate(),
+                $Search->getDepartureDate(),
+                $Search->getMaxAdults(),
+                $Search->getMaxChildAge()
+            );
+            if ($tripium->statusCode !== Tripium::STATUS_CODE_SUCCESS) {
+                return [];
+            }
+            $cacheData = $res ? ArrayHelper::map($res, 'vendorId', 'nightlyRate') : [];
+            $cache->set($cacheKey, $cacheData, 60*60);
         }
-        foreach ($items as $k => $item) {
-            if ($item instanceof TrPosPlHotels && in_array($item->name, $deletePlItems, false)) {
-                unset($items[$k]);
-            }
+        return $cacheData;
+    }
+
+    public static function setPrices(array &$items, array $prices): void
+    {
+        foreach ($items as $item) {
+            $item->setAttributes(
+                [
+                    'min_rate'        => $prices[$item->external_id],
+                    'min_rate_source' => $prices[$item->external_id],
+                ]
+            );
         }
     }
 
-    public function rules()
+    public static function sortByPrice(array &$items, SearchPosHotel $Search): void
+    {
+        usort($items, static function ($a, $b) use ($Search)
+        {
+            if ($a->min_rate === $b->min_rate) {
+                return 0;
+            }
+            $direction = $Search->fieldSort === $Search::FIELD_SORT_PRICE_REVERSE ? -1 : 1;
+            return ($a->min_rate < $b->min_rate) ? -1 * $direction : 1 * $direction;
+        });
+    }
+
+    public static function filterByPrice(array $items, SearchPosHotel $Search): array
+    {
+        if ($Search->priceFrom === null || $Search->priceTo === null) {
+            return $items;
+        }
+        $ar = [];
+        foreach ($items as $item) {
+            if ($Search->priceFrom <= $item->min_rate && $item->min_rate <= $Search->priceTo) {
+                $ar[] = $item;
+            }
+        }
+        return $ar;
+    }
+
+    public function rules(): array
     {
         return array_merge(
             parent::rules(),
@@ -93,7 +145,7 @@ class TrPosHotels extends _source_TrPosHotels
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
+    public function attributeLabels(): array
     {
         return array_merge(parent::attributeLabels(), ['show_in_footer' => 'Display In Footer']);
     }
@@ -128,7 +180,7 @@ class TrPosHotels extends _source_TrPosHotels
     /**
      * @return ActiveQuery
      */
-    public static function getActualCategories()
+    public static function getActualCategories(): ActiveQuery
     {
         return TrCategories::find()
             ->joinWith(
@@ -153,7 +205,7 @@ class TrPosHotels extends _source_TrPosHotels
 
     /**
      * @return ActiveQuery
-     * @deprecated
+     * @deprecated Use getRelatedPhotos()
      */
     public function getItemsPhoto(): ActiveQuery
     {
@@ -161,6 +213,7 @@ class TrPosHotels extends _source_TrPosHotels
     }
 
     /**
+     * @deprecated Use online data
      * @return ActiveQuery
      */
     public function getRoomTypes(): ActiveQuery
@@ -169,6 +222,7 @@ class TrPosHotels extends _source_TrPosHotels
     }
 
     /**
+     * @deprecated Use online data
      * @return ActiveQuery
      * @throws InvalidConfigException
      */
@@ -181,12 +235,9 @@ class TrPosHotels extends _source_TrPosHotels
     /**
      * @return array
      */
-    public function getSourceData()
+    public function getSourceData(): ?array
     {
-        $tripium = new Tripium();
-        $res = $tripium->getPosHotels($this->updateOnlyIdExternal);
-        $this->statusCodeTripium = $tripium->statusCode;
-        return $res;
+        return (new Tripium())->getPosHotels($this->updateOnlyIdExternal);
     }
 
     /**
@@ -196,7 +247,24 @@ class TrPosHotels extends _source_TrPosHotels
      */
     private static function contentItemHash($data): string
     {
-        return md5(serialize(array_values($data)) . serialize($data));
+        if (empty($data['gallery']['photos'])) {
+            $data['gallery']['photos'] = [];
+        }
+        if (empty($data['gallery']['videos'])) {
+            $data['gallery']['videos'] = [];
+        }
+        if (empty($data['gallery']['cover'])) {
+            $data['gallery']['cover'] = '';
+        }
+        return md5(
+            serialize(
+                array_merge(
+                    $data['gallery']['photos'],
+                    $data['gallery']['videos'],
+                    [$data['gallery']['cover']]
+                )
+            )
+        );
     }
 
     /**
@@ -206,42 +274,21 @@ class TrPosHotels extends _source_TrPosHotels
      */
     private function needUpdateContent($result): bool
     {
-        if (empty($result['content']['IMAGE'])) {
-            $result['content']['IMAGE'] = [];
-        }
-        if (empty($result['content']['VIDEO'])) {
-            $result['content']['VIDEO'] = [];
-        }
-        if (empty($result['cover'])) {
-            $result['cover'] = [];
-        }
-        return $this->hash_image_content !== self::contentItemHash(
-                array_merge($result['content']['IMAGE'], $result['content']['VIDEO'], [$result['cover']])
-            );
+        return $this->hash_image_content !== self::contentItemHash($result);
     }
 
     /**
+     * @param $result
+     *
      * @return bool
      */
-    public function setVideo(): bool
+    public function setVideo($result): bool
     {
-        if (!$this->updateVideo) {
-            return false;
+        if (empty($result['gallery']['videos'])) {
+            $result['gallery']['videos'] = [];
         }
 
-        $tripium = new Tripium();
-        $result = $tripium->getContent('hotel', $this->id_external, 'VIDEO');
-
-        if (!$this->needUpdateContent($result)) {
-            return false;
-        }
-
-        if (empty($result['content']['VIDEO'])) {
-            $result['content']['VIDEO'] = [];
-        }
-
-        $this->setAttribute('videos', implode(';', ArrayHelper::getColumn($result['content']['VIDEO'], 'content')));
-        $this->save();
+        $this->setAttribute('videos', implode(';', $result['gallery']['videos']));
 
         return true;
     }
@@ -253,24 +300,46 @@ class TrPosHotels extends _source_TrPosHotels
      */
     public function setPhotoAndPreview(): bool
     {
+        if (!$this->price_line) {
+            return false;
+        }
+
         if (!$this->updateImages) {
             return false;
         }
 
         $tripium = new Tripium();
-        $result = $tripium->getContent('hotel', $this->id_external, 'IMAGES');
+        $result = $tripium->getHotelContent(
+            true,
+            $this->external_id,
+            (new DateTime())->add(new DateInterval('P10D')),
+            (new DateTime())->add(new DateInterval('P11D')),
+            [
+                ['adult' => 1]
+            ]
+        );
 
-        if (!$this->needUpdateContent($result)) {
+        if ($tripium->statusCode !== Tripium::STATUS_CODE_SUCCESS) {
             return false;
         }
 
-        if (empty($result['content']['IMAGE'])) {
-            $result['content']['IMAGE'] = [];
+        $this->setAttributes(
+            [
+                'min_rate'        => $result['nightlyRate'] ?? null,
+                'min_rate_source' => $result['nightlyRate'] ?? null,
+                'check_in'        => $result['checkInPolicy']['checkIn'] ?? null,
+                'check_out'       => $result['checkInPolicy']['checkOut'] ?? null,
+            ]
+        );
+
+        if (!$this->needUpdateContent($result)) {
+            $this->save();
+            return false;
         }
 
-        $this->updatePreview($result['cover']);
+        $this->updatePreview($result['gallery']['cover']);
 
-        $newImages = ArrayHelper::getColumn($result['content']['IMAGE'], 'contentId');
+        $this->setVideo($result);
 
         /**
          * @var TrPosHotelsPhotoJoin[] $uploadedImages
@@ -278,34 +347,14 @@ class TrPosHotels extends _source_TrPosHotels
         $uploadedImages = $this->getRelatedPhotos()->with(['photo'])->all();
 
         foreach ($uploadedImages as $uploadedImage) {
-            if (!in_array($uploadedImage->photo->source_url, $newImages, true)) {
-                $uploadedImage->delete();
-            } elseif (count($result['content']['IMAGE']) > 0) {
-                foreach ($result['content']['IMAGE'] as $k => $image) {
-                    if ($image['contentId'] === $uploadedImage->photo->source_url) {
-                        if (self::contentItemHash($image) === $uploadedImage->hash) {
-                            unset ($result['content']['IMAGE'][$k]);
-                        } else {
-                            $uploadedImage->delete();
-                        }
-                    }
-                }
-            }
+            $uploadedImage->delete();
         }
 
-        $roomTypesIds = TrPosRoomTypes::find()->select(['id_external'])->column();
+        if (empty($result['gallery']['photos'])) {
+            $result['gallery']['photos'] = [];
+        }
 
-        foreach ($result['content']['IMAGE'] as $image) {
-            if (!empty($image['subentityId']) && !in_array($image['subentityId'], $roomTypesIds, true)) {
-                continue;
-            }
-
-            $imageUrl = $image['contentId'];
-
-            $tags = $image['tags'];
-            if (($key = array_search('none', $tags, true)) !== false) {
-                unset($tags[$key]);
-            }
+        foreach ($result['gallery']['photos'] as $imageUrl) {
 
             $uploadItemsPhotos = new UploadItemsPhotosHotel();
             $uploadItemsPhotos->downloadByUrl($imageUrl);
@@ -317,13 +366,10 @@ class TrPosHotels extends _source_TrPosHotels
                 $modelPhotoJoin = new TrPosHotelsPhotoJoin();
                 $modelPhotoJoin->setAttributes(
                     [
-                        'item_id' => $this->id,
+                        'item_id'    => $this->id,
                         'preview_id' => $uploadItemsPhotosPreview->id,
-                        'photo_id' => $uploadItemsPhotos->id,
-                        'subcategory' => $image['subcategory'],
-                        'room_type_external_id' => $image['subentityId'],
-                        'tags' => !empty($tags) ? "'" . implode("';'", $tags) . "'" : null,
-                        'hash' => self::contentItemHash($image),
+                        'photo_id'   => $uploadItemsPhotos->id,
+                        'hash'       => md5($imageUrl),
                     ]
                 );
                 $modelPhotoJoin->save();
@@ -339,19 +385,14 @@ class TrPosHotels extends _source_TrPosHotels
             }
         }
 
-        $this->hash_image_content = self::contentItemHash(
-            array_merge(
-                !empty($result['content']['IMAGE']) ? $result['content']['IMAGE'] : [],
-                !empty($result['content']['VIDEO']) ? $result['content']['VIDEO'] : [],
-                !empty($result['cover']) ? [$result['cover']] : []
-            )
-        );
+        $this->hash_image_content = self::contentItemHash($result);
         $this->save();
 
         return true;
     }
 
     /**
+     * @deprecated Use online data
      * @return ActiveQuery
      */
     public static function actualMinPrice(): ActiveQuery
@@ -387,6 +428,7 @@ class TrPosHotels extends _source_TrPosHotels
     }
 
     /**
+     * @deprecated should get online
      * @return ActiveQuery
      * @throws InvalidConfigException
      */
@@ -397,6 +439,7 @@ class TrPosHotels extends _source_TrPosHotels
     }
 
     /**
+     * @deprecated should get online
      * @return ActiveQuery
      * @throws InvalidConfigException
      */
@@ -407,6 +450,7 @@ class TrPosHotels extends _source_TrPosHotels
     }
 
     /**
+     * @deprecated should get online
      * @return ActiveQuery
      */
     public static function getAvailable(): ActiveQuery
@@ -417,94 +461,21 @@ class TrPosHotels extends _source_TrPosHotels
     }
 
     /**
-     * @param SearchPlHotel $Search
-     *
-     * @return ActiveQuery
-     */
-    public static function getByFilterAll(SearchPlHotel $Search): ActiveQuery
-    {
-        if (!$Search) {
-            return self::getAvailable();
-        }
-
-        $query = self::getAvailable();
-
-        if ($Search->title) {
-            $query->andFilterWhere(['like', self::tableName() . '.name', $Search->title]);
-        }
-
-        if (isset($Search->statusWl)) {
-            $query->andWhere([self::tableName() . '.status_wl' => $Search->statusWl]);
-        }
-
-        if (!empty($Search->c) && !empty($Search->c[0])) {
-            $query->joinWith('categories')->andWhere(['id_external_category' => $Search->c]);
-        }
-
-        if (!empty($Search->externalIds)) {
-            $query->andWhere([self::tableName() . '.id_external' => $Search->externalIds]);
-        }
-
-        if (!empty($Search->c) && !empty($Search->c[0])) {
-            $query->joinWith('categories')->andWhere(['id_external_category' => $Search->c]);
-        }
-
-        $dateFormat = [];
-
-        $range = new DatePeriod($Search->getArrivalDate(), new DateInterval('P1D'), $Search->getDepartureDate());
-        foreach ($range as $d) {
-            $dateFormat[] = $d->format('Y-m-d');
-        }
-        $subQuery = TrPosHotelsPriceRoom::find()
-            ->select(['id_external', 'count' => 'count(id_external)'])
-            ->where(['start' => $dateFormat])
-            ->groupBy('id_external, name')
-            ->having(['count' => count($dateFormat)]);
-
-        $query->innerJoin(
-            '(' . $subQuery->createCommand()->getRawSql() . ') as priceActual',
-            'priceActual.id_external = ' . TrPosRoomTypes::tableName() . '.id_external'
-        );
-
-        $query
-            ->andFilterWhere(['>=', TrPosHotelsPriceRoom::tableName() . '.price', $Search->priceFrom])
-            ->andFilterWhere(['<=', TrPosHotelsPriceRoom::tableName() . '.price', $Search->priceTo])
-            ->orderby($Search->getOrderby())
-        ;
-
-        if ($Search->amenities) {
-            $filterAmenities = ['and'];
-            foreach ($Search->amenities as $amenity) {
-                $filterAmenities[] = [
-                    'like',
-                    'amenities',
-                    $amenity
-                ];
-            }
-            $query->andFilterWhere($filterAmenities);
-        }
-
-        if ($Search->city) {
-            $filterCities = ['or'];
-            foreach ($Search->city as $city) {
-                $filterCities[] = [
-                    'city' => $city
-                ];
-            }
-            $query->andFilterWhere($filterCities);
-        }
-
-        return $query;
-    }
-
-    /**
      * Return item url
+     *
+     * @param array  $options
+     * @param string $urlManager
      *
      * @return string
      */
-    public function getUrl(): string
+    public function getUrl($options = null, $urlManager = 'urlManager'): string
     {
-        return Yii::$app->urlManager->createUrl(['hotel/detail', 'code' => $this->code]);
+        if (is_array($options)) {
+            return Yii::$app->{$urlManager}->createUrl(
+                array_merge(['lodging/detail'], $options, ['code' => $this->code])
+            );
+        }
+        return Yii::$app->{$urlManager}->createUrl(['lodging/detail', 'code' => $this->code]);
     }
 
     /**
@@ -513,7 +484,7 @@ class TrPosHotels extends _source_TrPosHotels
      */
     public function getSimilar(): ActiveQuery
     {
-        return self::getAvailable()
+        return self::getActive()
             ->joinWith('categories', false)
             ->andOnCondition(
                 ['id_external_category' => ArrayHelper::getColumn($this->getCategories()->all(), 'id_external')]
@@ -530,5 +501,56 @@ class TrPosHotels extends _source_TrPosHotels
         return trim(
             $this->theatre->address1 . ' ' . $this->theatre->state . ' ' . $this->theatre->zip_code
         );
+    }
+
+    /**
+     * Build query by $Search
+     *
+     * @param SearchPosHotel $Search
+     *
+     * @return ActiveQuery
+     */
+    public static function getByFilter($Search = null): ActiveQuery
+    {
+        $query = self::getActive();
+
+        if (!empty($Search->starRating)) {
+            $query->andWhere(['rating' => $Search->starRating]);
+        }
+        if (!empty($Search->city) && !empty($Search->city[0])) {
+            $query->andWhere(['city' => $Search->city]);
+        }
+        if (!empty($Search->amenities) && !empty($Search->amenities[0])) {
+            $query->andWhere(['like', 'amenities', $Search->amenities]);
+        }
+
+        if ($Search->title) {
+            $query->joinWith('theatre')->andFilterWhere(
+                [
+                    'or',
+                    ['like', self::tableName() . '.name', $Search->title],
+                    ['like', TrTheaters::tableName() . '.name', $Search->title]
+                ]
+            );
+        }
+
+        if (!empty($Search->externalIds)) {
+            $query->andWhere([self::tableName() . '.id_external' => $Search->externalIds]);
+        }
+
+        if (isset($Search->statusWl)) {
+            $query->andWhere([self::tableName() . '.status_wl' => $Search->statusWl]);
+        }
+
+//        if (isset($Search->priceFrom, $Search->priceTo)) {
+//            $query->andFilterWhere(['>=', self::tableName() . '.min_rate', $Search->priceFrom]);
+//            $query->andFilterWhere(['<=', self::tableName() . '.min_rate', $Search->priceTo]);
+//        }
+
+//        $query->orderBy(
+//            self::tableName() . '.min_rate ' .
+//            ($Search->fieldSort === $Search::FIELD_SORT_PRICE_REVERSE ? 'DESC' : 'ASC')
+//        );
+        return $query;
     }
 }

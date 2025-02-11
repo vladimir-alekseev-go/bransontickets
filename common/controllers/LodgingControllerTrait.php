@@ -9,6 +9,7 @@ use yii\data\Pagination;
 use yii\helpers\ArrayHelper;
 use yii\web\Response;
 
+/** @deprecated  */
 trait LodgingControllerTrait
 {
     /**

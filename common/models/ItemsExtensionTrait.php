@@ -822,7 +822,7 @@ trait ItemsExtensionTrait
     {
         if ($Search instanceof \common\models\form\SearchPosHotel) {
             $query = TrPosHotels::getByFilter($Search);
-            $query->with(['preview', 'wishUser', 'theatre']);
+            $query->with(['preview', 'theatre']);
             $items = $query->all();
         } else {
             $query = self::getByFilter($Search)

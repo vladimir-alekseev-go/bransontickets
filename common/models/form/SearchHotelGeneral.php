@@ -3,7 +3,6 @@
 namespace common\models\form;
 
 use common\models\TrPosHotels;
-use common\models\TrPosPlHotels;
 use DateInterval;
 use DateTime;
 use Exception;
@@ -17,9 +16,9 @@ class SearchHotelGeneral extends Model
 
     public const FIELD_SORT_PRICE_AVERAGE = 'lp';
     public const FIELD_SORT_PRICE_REVERSE = 'hp';
-    public const FIELD_SORT_GUEST_SCORE = 'gs';
-    public const FIELD_SORT_STAR_RATING = 'sr';
-    public const FIELD_SORT_STAR_RATING_DESC = 'sr';
+//    public const FIELD_SORT_GUEST_SCORE = 'gs';
+//    public const FIELD_SORT_STAR_RATING = 'sr';
+//    public const FIELD_SORT_STAR_RATING_DESC = 'sr';
 
     public $title;
     public $arrivalDate;
@@ -38,6 +37,7 @@ class SearchHotelGeneral extends Model
     public $fieldSort;
     public $display;
     public $externalIds = [];
+    public $amenity;
 
     /**
      * @var array
@@ -63,7 +63,7 @@ class SearchHotelGeneral extends Model
     /**
      * {@inheritdoc}
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             ['title', 'filter', 'filter' => '\yii\helpers\HtmlPurifier::process'],
@@ -89,13 +89,6 @@ class SearchHotelGeneral extends Model
                     return !empty($attr) ? (int)$attr : null;
                 }
             ],
-//            [
-//                'sort',
-//                'filter',
-//                'filter' => static function ($attr) {
-//                    return in_array($attr, ['desc', 'asc']) ? $attr : 'asc';
-//                }
-//            ],
             [
                 'fieldSort',
                 'filter',
@@ -120,9 +113,9 @@ class SearchHotelGeneral extends Model
         return [
             self::FIELD_SORT_PRICE_AVERAGE => 'Price low to high',
             self::FIELD_SORT_PRICE_REVERSE => 'Price high to low',
-            self::FIELD_SORT_GUEST_SCORE => 'Guest Score',
-            self::FIELD_SORT_STAR_RATING => 'Rating low to high',
-            self::FIELD_SORT_STAR_RATING_DESC => 'Rating high to low',
+//            self::FIELD_SORT_GUEST_SCORE => 'Guest Score',
+//            self::FIELD_SORT_STAR_RATING => 'Rating low to high',
+//            self::FIELD_SORT_STAR_RATING_DESC => 'Rating high to low',
         ];
     }
 
@@ -249,9 +242,7 @@ class SearchHotelGeneral extends Model
             return [];
         }
 
-        $cities = TrPosPlHotels::find()->select('city')->distinct()->asArray()->column();
-        $cities2 = TrPosHotels::find()->select('city')->distinct()->asArray()->column();
-        $cities = array_merge($cities, $cities2);
+        $cities = TrPosHotels::find()->select('city')->distinct()->asArray()->column();
 
         foreach ($attr as $k => $v) {
             if (!in_array($v, $cities, false)) {
@@ -288,11 +279,7 @@ class SearchHotelGeneral extends Model
             return new DateTime($this->arrivalDate);
         } catch (Exception $e) {
         }
-        try {
-            return new DateTime();
-        } catch (Exception $e) {
-            return null;
-        }
+        return new DateTime();
     }
 
     /**
@@ -304,11 +291,7 @@ class SearchHotelGeneral extends Model
             return new DateTime($this->departureDate);
         } catch (Exception $e) {
         }
-        try {
-            return new DateTime();
-        } catch (Exception $e) {
-            return null;
-        }
+        return new DateTime();
     }
 
     /**
@@ -349,6 +332,18 @@ class SearchHotelGeneral extends Model
     /**
      * @return int
      */
+    public function getMaxAdults(): int
+    {
+        $max = 0;
+        foreach ($this->room as $room) {
+            $max = $max < $room['adult'] ? $room['adult'] : $max;
+        }
+        return $max;
+    }
+
+    /**
+     * @return int
+     */
     public function getChildrenCount(): int
     {
         $result = 0;
@@ -356,6 +351,23 @@ class SearchHotelGeneral extends Model
             $result += $room['children'];
         }
         return $result;
+    }
+
+    /**
+     * @return array
+     */
+    public function getMaxChildAge(): ?array
+    {
+        $max = 0;
+        $age = [];
+        foreach ($this->room as $room) {
+            $ageCount = !empty($room['age']) ? count($room['age']) : 0;
+            if ($max < (int)$room['adult'] + $ageCount) {
+                $max = $room['adult'] + $ageCount;
+                $age = $room['age'] ?? null;
+            }
+        }
+        return !empty($age) ? $age : null;
     }
 
     /**

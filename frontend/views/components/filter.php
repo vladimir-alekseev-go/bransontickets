@@ -1,9 +1,9 @@
 <?php
 
 use common\helpers\ActiveForm;
-use common\models\form\SearchPlHotel;
+use common\models\form\SearchPosHotel;
 use common\models\TrAttractions;
-use common\models\TrPosPlHotels;
+use common\models\TrPosHotels;
 use common\models\TrShows;
 use common\models\form\Search;
 use yii\helpers\ArrayHelper;
@@ -41,7 +41,7 @@ $model = $Search->model ? $Search->model->className() : null;
             <?= $form->field($Search, "display")->hiddenInput()->label(false) ?>
             <?= $form->field($Search, "priceFrom")->hiddenInput()->label(false) ?>
             <?= $form->field($Search, "priceTo")->hiddenInput()->label(false) ?>
-            <?php if (!($Search->model instanceof TrPosPlHotels)) { ?>
+            <?php if ($Search->model instanceof TrShows || $Search->model instanceof TrAttractions) { ?>
                 <?= $form->field($Search, "timeFrom")->hiddenInput()->label(false) ?>
                 <?= $form->field($Search, "timeTo")->hiddenInput()->label(false) ?>
             <?php } ?>
@@ -49,11 +49,11 @@ $model = $Search->model ? $Search->model->className() : null;
             <?php if ($Search->model) { ?>
     <div class="input-daterange row row-small-padding">
         <div class="it js-it col-xs-6">
-            <label class="control-label"><?= $Search->model instanceof TrPosPlHotels
+            <label class="control-label"><?= $Search->model instanceof TrPosHotels
                     ? 'Check In' : 'Start Date'?></label>
             <?= $form->field(
                 $Search,
-                $Search->model instanceof TrPosPlHotels ? 'arrivalDate' : 'dateFrom',
+                $Search->model instanceof TrPosHotels ? 'arrivalDate' : 'dateFrom',
                 [
                     'template' => '{label}{input}{error}{hint}',
                     'inputOptions' => ['class' => 'form-control datepicker text-left', 'autocomplete' => 'off'],
@@ -62,11 +62,11 @@ $model = $Search->model ? $Search->model->className() : null;
             )->textInput(['placeholder' => 'Select start date'])->label(false) ?>
         </div>
         <div class="it js-it col-xs-6">
-            <label class="control-label"><?= $Search->model instanceof TrPosPlHotels
+            <label class="control-label"><?= $Search->model instanceof TrPosHotels
                     ? 'Check Out' : 'End Date'?></label>
             <?= $form->field(
                 $Search,
-                $Search->model instanceof TrPosPlHotels ? 'departureDate' : 'dateTo',
+                $Search->model instanceof TrPosHotels ? 'departureDate' : 'dateTo',
                 [
                     'template' => '{label}{input}{error}{hint}',
                     'inputOptions' => ['class' => 'form-control datepicker text-left', 'autocomplete' => 'off'],
@@ -91,7 +91,7 @@ $model = $Search->model ? $Search->model->className() : null;
     </div>
 <?php } ?>
 
-            <?php if (!($Search instanceof SearchPlHotel)) { ?>
+            <?php if (!($Search instanceof SearchPosHotel)) { ?>
                 <div class="it">
                     Price range: <span class="cost price-range-info">
                         $ <span id="range-from">0</span> - <span id="range-to">0</span>
@@ -103,7 +103,7 @@ $model = $Search->model ? $Search->model->className() : null;
             <?php } ?>
 
     <div class="it">
-        <?php if (!($Search->model instanceof TrPosPlHotels)) { ?>
+        <?php if (!($Search->model instanceof TrPosHotels)) { ?>
             <?= $form->field($Search, 'alternativeRate', [])->checkbox(
                 [
                     'template' => '{input}<label class="text-uppercase" for="s-alternativerate"><span class="tag tag-non-refundable">Non-refundable ticket</span></label>'
@@ -118,7 +118,7 @@ $model = $Search->model ? $Search->model->className() : null;
             ?>
         <?php } ?>
     </div>
-<?php if ($Search instanceof SearchPlHotel) { ?>
+<?php if ($Search instanceof SearchPosHotel) { ?>
     <div class="it it-filter-rooms">
         <?= $this->render('filter-rooms', compact('Search')) ?>
     </div>
@@ -219,7 +219,7 @@ $model = $Search->model ? $Search->model->className() : null;
     </div>
 <?php } ?>
 
-<?php if ($Search instanceof SearchPlHotel) { ?>
+<?php if ($Search instanceof SearchPosHotel) { ?>
     <div class="it">
         <?= $form->field($Search, 'city')
             ->inline(true)
