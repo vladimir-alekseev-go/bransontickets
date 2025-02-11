@@ -85,7 +85,9 @@ let hotelDetail = {
         formReservationContainer.html('<div class="load-progress"></div>');
 
         $.get(url, function (result) {
-            formReservationContainer.html(result);
+            if (result.html) {
+                formReservationContainer.html(result.html);
+            }
         });
     },
 }

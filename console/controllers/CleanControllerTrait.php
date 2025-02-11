@@ -6,7 +6,6 @@ use common\models\AttractionsPhotoJoin;
 use common\models\ContentFiles;
 use common\models\ShowsPhotoJoin;
 use common\models\TrPosHotelsPhotoJoin;
-use common\models\TrPosPlHotelsPhotoJoin;
 use Yii;
 
 trait CleanControllerTrait
@@ -19,7 +18,6 @@ trait CleanControllerTrait
         $ar = [
             ShowsPhotoJoin::class,
             AttractionsPhotoJoin::class,
-            TrPosPlHotelsPhotoJoin::class,
             TrPosHotelsPhotoJoin::class,
         ];
         $query = Yii::$app->db->createCommand(

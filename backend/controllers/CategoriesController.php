@@ -6,7 +6,6 @@ use backend\models\search\TrCategoriesSearch;
 use common\models\TrAttractions;
 use common\models\TrCategories;
 use common\models\TrPosHotels;
-use common\models\TrPosPlHotels;
 use common\models\TrShows;
 use Yii;
 use yii\web\NotFoundHttpException;
@@ -33,7 +32,6 @@ class CategoriesController extends CrudController
             $cache->delete(TrShows::TYPE . '.Categories');
             $cache->delete(TrAttractions::TYPE . '.Categories');
             $cache->delete(TrPosHotels::TYPE . '.Categories');
-            $cache->delete(TrPosPlHotels::TYPE . '.Categories');
         }
         return parent::actionUpdate($id);
     }

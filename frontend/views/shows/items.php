@@ -1,6 +1,6 @@
 <?php
 
-use common\models\TrPosPlHotels;
+use common\models\TrPosHotels;
 use common\models\TrShows;
 
 /**
@@ -29,7 +29,7 @@ $currentCity = null;
             <div class="line-title"><span><?= $model::NAME ?> without availability</span></div>
             <div class="container-list">
         <?php }
-        if ($model instanceof TrPosPlHotels && $currentCity !== $model->city) {?>
+        if ($model instanceof TrPosHotels && $currentCity !== $model->city) {?>
         <?php $currentCity = $model->city?>
         <?php /* ?><div class="city-line-title line-title"><span><?= $model->city?></span></div><?php } */ ?>
     <?php }

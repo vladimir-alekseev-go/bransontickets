@@ -3,27 +3,26 @@
 use common\models\Package;
 use common\models\TrAttractions;
 use common\models\TrPosHotels;
-use common\models\TrPosPlHotels;
 use common\models\TrShows;
 
 /**
  * @var Package                                         $package
- * @var TrShows|TrAttractions|TrPosPlHotels|TrPosHotels $item
+ * @var TrShows|TrAttractions|TrPosHotels $item
  */
 
 ?>
-<a class="img" href="<?= $item->getUrl() ?>">
+<a class="img" href="<?= '$item->getUrl()' ?>">
     <?php if (!empty($item->preview_id)) { ?>
         <img src="<?= $item->preview->url ?>" alt=""/>
     <?php } else { ?>
         <img src="/img/bransontickets-noimage.png" alt=""/>
     <?php } ?>
 </a>
-<a href="<?= $item->getUrl() ?>">
+<a href="<?= '$item->getUrl()' ?>">
     <div class="name"><?= $item->name ?></div>
 </a>
 
-<?php if (in_array($item::TYPE, [TrPosHotels::TYPE, TrPosPlHotels::TYPE], true)) { ?>
+<?php if ($item::TYPE === TrPosHotels::TYPE) { ?>
     <div class="d-block d-lg-none ps-2 overflow-hidden">
         <i class="icon br-t-location"></i> <small>Location 1</small>
         <div class="ms-3"><small><?= $item->theatre->getSearchAddress() ?></small></div>
@@ -74,7 +73,7 @@ use common\models\TrShows;
                 <div class="ms-3"><small><?= $package->getStartDataTime()->format('m/d/Y h:i A') ?></small>
                 </div>
             </div>
-        <?php } elseif (in_array($item::TYPE, [TrAttractions::TYPE], true)) { ?>
+        <?php } elseif ($item::TYPE === TrAttractions::TYPE) { ?>
             <div class="col-7">
                 <i class="icon br-t-calendar"></i> <small>Avail dates</small>
                 <div class="ms-3"><small>

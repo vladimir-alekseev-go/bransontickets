@@ -9,6 +9,7 @@ use yii\db\Expression;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
+/** @deprecated  */
 class HotelController extends Controller
 {
     /**
@@ -16,6 +17,7 @@ class HotelController extends Controller
      *
      * @return string
      * @throws NotFoundHttpException
+     * @deprecated
      */
     public function actionDetail($code): string
     {
@@ -23,7 +25,7 @@ class HotelController extends Controller
          * @var TrPosHotels $model
          */
         $model = TrPosHotels::getActive()->where(['code' => $code])->one();
-        
+
         if (!$model) {
             throw new NotFoundHttpException;
         }
@@ -42,7 +44,7 @@ class HotelController extends Controller
             $this->layout = false;
             return $this->render('@app/views/components/item/menu-content/hotel-rooms', compact('HotelReservationForm'));
         }
-        
+
         $showsRecommended = TrPosHotels::getActive()
             ->orderBy(new Expression('rand()'))
             ->limit(6)

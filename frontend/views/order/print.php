@@ -3,7 +3,6 @@
 use common\models\TrAttractions;
 use common\models\TrOrders;
 use common\models\TrPosHotels;
-use common\models\TrPosPlHotels;
 use common\models\TrShows;
 use yii\helpers\ArrayHelper;
 
@@ -75,7 +74,7 @@ $this->title = 'Print Page';
             			<div class="date"><?= $package->getItem()::NAME?> date: <?= $package->getStartDataTime()->format('l m/d/Y h:iA')?></div>
             		<?php } else if (!$package->isAnyTime && $package->getItem()::TYPE === TrAttractions::TYPE) {?>
             			<div class="date">Tickets on <?= $package->getStartDataTime()->format('l, M d, h:i A')?></div>
-                    <?php } elseif (in_array($package['category'], [TrPosPlHotels::TYPE, TrPosHotels::TYPE], true)) {?>
+                    <?php } elseif ($package->category === TrPosHotels::TYPE) {?>
                         <div class="date">
                             Check in: <?= $package->getStartDataTime()->format('m/d/Y')?> <?= $package->getItem()->getCheckIn() ?><br/>
                             Check out: <?= $package->getEndDataTime()->format("m/d/Y")?> <?= $package->getItem()->getCheckOut() ?>
@@ -128,13 +127,6 @@ $this->title = 'Print Page';
                             ("l m/d/Y h:iA")?></p>
             		<?php } else if ($package->getItem()::TYPE === TrAttractions::TYPE && !$package->isAnyTime) {?>
             			<p class="date">Tickets on <?= $package->getStartDataTime()->format('l, M d, h:i A')?></p>
-                    <?php } elseif ($package->category === TrPosPlHotels::TYPE) {?>
-                        <p>Phone number: <?= $package->hotelPhone?></p>
-                        <p>Reservation status: <?= $package->status?></p>
-                        <p>
-                            Check in: <?= $package->getStartDataTime()->format('m/d/Y')?> <?= $package->getItem()->getCheckIn() ?><br/>
-                            Check out: <?= $package->getEndDataTime()->format("m/d/Y")?> <?= $package->getItem()->getCheckOut() ?>
-                        </p>
                     <?php } elseif ($package->category === TrPosHotels::TYPE) {?>
                         <p>
                             Check in: <?= $package->getStartDataTime()->format('m/d/Y')?> <?= $package->getItem()->getCheckIn() ?><br/>
@@ -150,15 +142,13 @@ $this->title = 'Print Page';
                     <?php if ($package->confirmation) {?><p>Confirmation: <?= $package->confirmation?></p><?php }?>
                     <?php if ($package->itinerary_id) {?><p>Itinerary Id: <?= $package->itinerary_id?></p><?php }?>
 					<?php foreach ($package->getTickets() as $key => $ticket) {?>
-                        <?php if ($package->category === TrPosPlHotels::TYPE) {?>
-                            <?php if ($package->category === TrPosPlHotels::TYPE) {?>
-                                <strong>Room <?= $key+1?></strong>: <?= $ticket->name?><br/>
-                            <?php }?>
+                        <?php if ($package->category === TrPosHotels::TYPE) {?>
+                            <strong>Room <?= $key+1?></strong>: <?= $ticket->name?><br/>
 
                         <p>Guest Name: <?=trim($ticket->first_name.' '.$ticket->last_name)?>,
 							<?= $ticket->qty?> Adult<?= $ticket->qty > 1 ? 's' : ''?>
                             <?= $ticket->child_ages ? count($ticket->child_ages) . ', Children ('.implode('y, ', $ticket->child_ages).'y)' : ''?>
-							<?= $ticket->smoking_preference ? ', '.TrPosPlHotels::getSmokingValue($ticket->smoking_preference) : ''?>
+
 							</p>
                             <p>Room number: <?= $ticket->confirmation?></p>
 						<?php } else {?>
@@ -169,16 +159,12 @@ $this->title = 'Print Page';
 				</div>
 			</td>
                 <td class="text-end"><span class="cost">$ <?= number_format($package->total, 2, '.', '')?></span></td>
-                <?php if ($package->category === TrPosPlHotels::TYPE) {?>
-                    <td class="text-end"><span class="cost">$ <?= number_format($package->tax, 2, '.', '')?></span></td>
-                <?php } else {?>
-                    <td class="text-end"><span class="cost">$ <?= number_format($package->tax + $package->cancellation_tax + $package->serviceFee, 2, '.', '')?></span></td>
-                <?php }?>
+                <td class="text-end"><span class="cost">$ <?= number_format($package->tax + $package->cancellation_tax + $package->serviceFee, 2, '.', '')?></span></td>
                 <td class="text-end"><span class="cost">$ <?= number_format($package->coupon, 2, '.', '')?></span></td>
                 <td class="text-end"><span class="cost">$ <?= number_format($package->full_total, 2, '.', '')?></span></td>
 
 		</tr>
-        <?php if ($package->category === TrPosPlHotels::TYPE && !empty($package->priceLine)) {?>
+        <?php if ($package->category === TrPosHotels::TYPE && !empty($package->priceLine)) {?>
     <tr>
         <td class="padding text-end line-height" colspan="4">
             <div class="total">

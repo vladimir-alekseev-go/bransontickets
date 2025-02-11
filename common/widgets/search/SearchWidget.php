@@ -3,7 +3,7 @@
 namespace common\widgets\search;
 
 use common\models\TrAttractions;
-use common\models\TrPosPlHotels;
+use common\models\TrPosHotels;
 use common\models\TrShows;
 use common\models\TrTheaters;
 use common\widgets\vacationPackagesList\VacationPackagesListWidget;
@@ -81,7 +81,7 @@ class SearchWidget extends Widget
             ]
         )->all();
 
-        $this->hotels = TrPosPlHotels::getActive()->with(['preview'])->andFilterWhere(
+        $this->hotels = TrPosHotels::getActive()->with(['preview'])->andFilterWhere(
             [
                 'or',
                 ['like', 'name', $this->query],

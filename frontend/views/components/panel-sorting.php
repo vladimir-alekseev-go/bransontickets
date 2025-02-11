@@ -1,11 +1,10 @@
 <?php
 
-use common\models\form\SearchPlHotel;
 use common\models\form\Search;
 use yii\widgets\ActiveForm;
 
 /**
- * @var Search|SearchPlHotel $Search
+ * @var Search $Search
  * @var int                  $itemCount
  */
 

@@ -28,10 +28,6 @@ use Yii;
  * @property TrPosHotels[] $trPosHotels0
  * @property TrPosHotelsPhotoJoin[] $trPosHotelsPhotoJoins
  * @property TrPosHotelsPhotoJoin[] $trPosHotelsPhotoJoins0
- * @property TrPosPlHotels[] $trPosPlHotels
- * @property TrPosPlHotels[] $trPosPlHotels0
- * @property TrPosPlHotelsPhotoJoin[] $trPosPlHotelsPhotoJoins
- * @property TrPosPlHotelsPhotoJoin[] $trPosPlHotelsPhotoJoins0
  * @property TrShows[] $trShows
  * @property TrShows[] $trShows0
  * @property VacationPackage[] $vacationPackages
@@ -187,46 +183,6 @@ class _source_ContentFiles extends \yii\db\ActiveRecord
     public function getTrPosHotelsPhotoJoins0()
     {
         return $this->hasMany(TrPosHotelsPhotoJoin::class, ['preview_id' => 'id']);
-    }
-
-    /**
-     * Gets query for [[TrPosPlHotels]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getTrPosPlHotels()
-    {
-        return $this->hasMany(TrPosPlHotels::class, ['image_id' => 'id']);
-    }
-
-    /**
-     * Gets query for [[TrPosPlHotels0]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getTrPosPlHotels0()
-    {
-        return $this->hasMany(TrPosPlHotels::class, ['preview_id' => 'id']);
-    }
-
-    /**
-     * Gets query for [[TrPosPlHotelsPhotoJoins]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getTrPosPlHotelsPhotoJoins()
-    {
-        return $this->hasMany(TrPosPlHotelsPhotoJoin::class, ['photo_id' => 'id']);
-    }
-
-    /**
-     * Gets query for [[TrPosPlHotelsPhotoJoins0]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getTrPosPlHotelsPhotoJoins0()
-    {
-        return $this->hasMany(TrPosPlHotelsPhotoJoin::class, ['preview_id' => 'id']);
     }
 
     /**

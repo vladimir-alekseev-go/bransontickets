@@ -1,12 +1,10 @@
 <?php
 
-use common\models\form\HotelReservationForm;
 use common\models\TrPosHotels;
 use frontend\models\SearchHotel;
 use yii\bootstrap\ActiveForm;
 
 /**
- * @var HotelReservationForm $ReservationForm
  * @var SearchHotel          $Search
  */
 
@@ -19,8 +17,6 @@ $form = $form ?? ActiveForm::begin(
         ]
     ); ?>
 
-<?= $form->field($ReservationForm, 'packageId')->hiddenInput()->label(false) ?>
-<div class="name mb-3"><?= $ReservationForm->model->name ?> Availability</div>
 <div class="row align-items-end">
     <div class="col-12 col-lg-6 col-xl-6">
         <div class="row input-daterange default-range align-items-end">

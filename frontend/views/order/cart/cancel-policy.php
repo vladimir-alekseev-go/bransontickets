@@ -2,7 +2,6 @@
 
 use common\models\Package;
 use common\models\TrPosHotels;
-use common\models\TrPosPlHotels;
 use common\models\VacationPackageOrder;
 
 /**
@@ -25,28 +24,23 @@ $this->title = 'Policy';
                         </ul>
                     <?php } ?>
                 <?php } ?>
-                <?php if ($package instanceof Package && $package->getItem()::TYPE === TrPosPlHotels::TYPE) { ?>
-                    <ul>
-                        <li><?= $this->render('package-policy', compact('package')) ?></li>
-                    </ul>
-                <?php } else { ?>
-                    <?php if (is_array($package->getCancellationPolicyText())) { ?>
-                        <?php foreach ($package->getCancellationPolicyText() as $text) { ?>
-                            <ul>
-                                <li><?= $text ?></li>
-                            </ul>
-                        <?php } ?>
-                    <?php } else { ?>
+
+                <?php if (is_array($package->getCancellationPolicyText())) { ?>
+                    <?php foreach ($package->getCancellationPolicyText() as $text) { ?>
                         <ul>
-                            <li><?= $package->getCancellationPolicyText() ?></li>
+                            <li><?= $text ?></li>
                         </ul>
                     <?php } ?>
-                    <?php if (!empty($package->cancelPolicies)) { ?>
-                        <?php foreach ($package->cancelPolicies as $cancelPolicy) { ?>
-                            <ul>
-                                <li><?= $cancelPolicy['names'] ?><br/><?= strip_tags($cancelPolicy['text']) ?></li>
-                            </ul>
-                        <?php } ?>
+                <?php } else { ?>
+                    <ul>
+                        <li><?= $package->getCancellationPolicyText() ?></li>
+                    </ul>
+                <?php } ?>
+                <?php if (!empty($package->cancelPolicies)) { ?>
+                    <?php foreach ($package->cancelPolicies as $cancelPolicy) { ?>
+                        <ul>
+                            <li><?= $cancelPolicy['names'] ?><br/><?= strip_tags($cancelPolicy['text']) ?></li>
+                        </ul>
                     <?php } ?>
                 <?php } ?>
                 <br/>

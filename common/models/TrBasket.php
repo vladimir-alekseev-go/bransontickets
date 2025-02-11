@@ -433,7 +433,7 @@ class TrBasket extends _source_TrBasket
     public function hasHotel(): ?string
     {
         foreach ($this->getPackages() as $package) {
-            if ($package->category === TrPosPlHotels::TYPE) {
+            if ($package->category === TrPosHotels::TYPE) {
                 return $package->package_id;
             }
         }

@@ -11,7 +11,7 @@ use frontend\models\SearchHotel;
 use Throwable;
 use Yii;
 use yii\db\ActiveQuery;
-
+/** @deprecated  */
 class HotelReservationForm extends GeneralReservationForm
 {
     /**

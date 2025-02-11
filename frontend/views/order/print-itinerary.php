@@ -1,12 +1,11 @@
 <?php
-use common\models\TrPosPlHotels;
 use common\models\TrOrders;
 use common\models\TrPosHotels;
 use common\models\TrShows;
 use common\models\TrAttractions;
 
 /**
- * @var TrOrders                                           $Order
+ * @var TrOrders                                $Order
  * @var TrShows[]|TrPosHotels[]|TrAttractions[] $shows
  */
 
@@ -64,7 +63,7 @@ $tickets = $Order->getValidTicketsByGroupData();
                     			->format('l m/d/Y h:iA')?></div>
                     		<?php } else if (!$package->isAnyTime && $package->getItem()::TYPE === TrAttractions::TYPE) {?>
                     			<div class="date">Tickets on <?= $package->getStartDataTime()->format('l, M d, h:i A')?></div>
-                            <?php } elseif (in_array($package['category'], [TrPosPlHotels::TYPE, TrPosHotels::TYPE], true)) {?>
+                            <?php } elseif ($package->category === TrPosHotels::TYPE) {?>
                                 <p>
                                     Check in: <?= $package->getStartDataTime()->format('m/d/Y')?> <?= $package->getItem()->getCheckIn() ?><br/>
                                     Check out: <?= $package->getEndDataTime()->format("m/d/Y")?> <?= $package->getItem()->getCheckOut() ?>
@@ -75,13 +74,13 @@ $tickets = $Order->getValidTicketsByGroupData();
         					<?php }?>
 
 							<?php foreach ($tickets[$package->getHashData()] as $ticketHash => $ticket) {?>
-							<?php if ($package['category'] === TrPosPlHotels::TYPE) {?>
+							<?php if ($package->category === TrPosHotels::TYPE) {?>
 							<?php $key = empty($key) ? 0 : $key;?>
 								Room <?= $key+1?>: <?= $ticket->description?><br/>
 								<?= trim($ticket->first_name.' '.$ticket->last_name)?>, <br/>
                 				<?= $ticket->qty?> Adult<?= $ticket->qty > 1 ? 's' : ''?>,
                                     <?= $ticket->child_ages ? count($ticket->child_ages) . ' Children ' : ''?><?= $ticket->child_ages ? '('.implode('y, ', $ticket->child_ages).'y)' : ''?>
-                				<?= $ticket->smoking_preference ? ', '.TrPosPlHotels::getSmokingValue($ticket->smoking_preference) : ''?>
+
 							<?php } else {?>
 								<?= $ticket->name?>
 								<?= $ticket->description?>

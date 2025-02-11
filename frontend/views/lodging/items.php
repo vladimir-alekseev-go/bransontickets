@@ -1,10 +1,9 @@
 <?php
 
 use common\models\TrPosHotels;
-use common\models\TrPosPlHotels;
 
 /**
- * @var TrPosPlHotels[]|TrPosHotels[] $items
+ * @var TrPosHotels[] $items
  */
 $pagination = null;
 $priceAll = [];

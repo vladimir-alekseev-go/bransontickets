@@ -1,11 +1,10 @@
 <?php
 
 /**
- * @var TrPosHotels|TrPosPlHotels $model
+ * @var TrPosHotels $model
  */
 
 use common\models\TrPosHotels;
-use common\models\TrPosPlHotels;
 
 ?>
 <?php if (!empty($model->amenities)) { ?>

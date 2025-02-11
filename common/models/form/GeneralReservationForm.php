@@ -16,7 +16,7 @@ class GeneralReservationForm extends DynamicModel
     public const SMOKING_E = 'E';
 
     /**
-     * @var SearchPlHotel|SearchHotel $searchHotel
+     * @var SearchHotel $searchHotel
      */
     public $searchHotel;
 

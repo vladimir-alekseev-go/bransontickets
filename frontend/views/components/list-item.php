@@ -2,14 +2,13 @@
 
 use common\models\TrAttractions;
 use common\models\TrPosHotels;
-use common\models\TrPosPlHotels;
 use common\models\TrShows;
 use yii\helpers\Html;
 
 /**
- * @var array                                $priceAll
- * @var common\models\form\Search            $Search
- * @var yii\data\Pagination                  $pagination
+ * @var array                             $priceAll
+ * @var common\models\form\Search         $Search
+ * @var yii\data\Pagination               $pagination
  * @var TrShows|TrAttractions|TrPosHotels $model
  */
 
@@ -28,7 +27,7 @@ use yii\helpers\Html;
             <?php } ?>
         </a>
     </div>
-    <?php if ($model instanceof TrPosHotels || $model instanceof TrPosPlHotels) { ?>
+    <?php if ($model instanceof TrPosHotels) { ?>
         <?php if (!empty($model->rating)) { ?>
             <?= $this->render('@app/views/components/star-rating', ['rating' => floor($model->rating)]) ?>
         <?php } ?>
@@ -38,7 +37,7 @@ use yii\helpers\Html;
             <div class="title">
                 <a href="<?= $model->getUrl() ?>"><?= $model->name ?></a>
             </div>
-            <?php if ($model instanceof TrPosHotels || $model instanceof TrPosPlHotels) { ?>
+            <?php if ($model instanceof TrPosHotels) { ?>
                 <div class="place"><?= $model->address() ?>, <?= $model->city ?></div>
             <?php } else { ?>
                 <?php $theatre = $model->theatre; ?>
@@ -52,7 +51,7 @@ use yii\helpers\Html;
             </div>
         </div>
         <div class="links mb-3">
-            <?php if ($model instanceof TrPosHotels || $model instanceof TrPosPlHotels) { ?>
+            <?php if ($model instanceof TrPosHotels) { ?>
                 <div class="rows">
                     <div class="row">
                         <div class="col-7 col-sm-5 pt-1 compare-block">
@@ -62,25 +61,17 @@ use yii\helpers\Html;
                                 <label class="compare-add" for="it-<?= $model->id_external ?>">Add Comparison</label>
                             </span>
                         </div>
-                        <?php if ($model instanceof TrPosPlHotels && !empty($model->rating)) { ?>
-                            <div class="col-5 col-sm-4 review-rating">
-                                <small class="blue"><i class="fa fa-thumbs-up"></i> Review Rating</small>
-                                <div><small class="ms-3 blue">
-                                        <?= $model->rating ?> <?= $model->review_rating_desc ?>
-                                    </small></div>
-                            </div>
-                            <div class="col-12 d-none d-sm-block col-sm-3 text-sm-end pt-1 more-detail">
-                                <a href="<?= $model->getUrl() ?>">
-                                    More Detail <i class="icon br-t-points"></i>
-                                </a>
-                            </div>
-                        <?php } else { ?>
-                            <div class="col-5 col-sm-7 text-end pt-3 more-detail">
-                                <a href="<?= $model->getUrl() ?>">
-                                    More Detail <i class="icon br-t-points"></i>
-                                </a>
-                            </div>
-                        <?php } ?>
+                        <div class="col-5 col-sm-4 review-rating">
+                            <small class="blue"><i class="fa fa-thumbs-up"></i> Review Rating</small>
+                            <div><small class="ms-3 blue">
+                                <?= $model->rating ?>
+                            </small></div>
+                        </div>
+                        <div class="col-12 d-none d-sm-block col-sm-3 text-sm-end pt-1 more-detail">
+                            <a href="<?= $model->getUrl() ?>">
+                                More Detail <i class="icon br-t-points"></i>
+                            </a>
+                        </div>
                     </div>
                 </div>
             <?php } else { ?>
@@ -109,35 +100,29 @@ use yii\helpers\Html;
                         <div class="name-ticket">Adult tickets from</div>
                     <?php } elseif ($model instanceof TrAttractions) { ?>
                         <div class="name-ticket">Tickets from</div>
-                    <?php } elseif ($model instanceof TrPosHotels || $model instanceof TrPosPlHotels) { ?>
+                    <?php } elseif ($model instanceof TrPosHotels) { ?>
                         <div class="name-ticket">Rate per Night</div>
                     <?php } ?>
                     <div class="row row-small-padding mb-1">
-                        <?php if ($model instanceof TrPosPlHotels) { ?>
-                            <div class="col-6">
-                                <div class="cost">$ <?= number_format($model->avgNightlyRate(), 2, '.', '') ?></div>
+                        <div class="col-6">
+                            <div class="cost">$ <?= number_format($model->min_rate, '2', '.', '') ?></div>
+                        </div>
+                        <?php if ($model->min_rate !== $model->min_rate_source) { ?>
+                            <div class="col-6 text-end">
+                                <div class="cost cost-old">$ <?= number_format(
+                                        $model->min_rate_source,
+                                        '2',
+                                        '.',
+                                        ''
+                                    ) ?></div>
                             </div>
-                        <?php } else { ?>
-                            <div class="col-6">
-                                <div class="cost">$ <?= number_format($model->min_rate, '2', '.', '') ?></div>
-                            </div>
-                            <?php if ($model->min_rate !== $model->min_rate_source) { ?>
-                                <div class="col-6 text-end">
-                                    <div class="cost cost-old">$ <?= number_format(
-                                            $model->min_rate_source,
-                                            '2',
-                                            '.',
-                                            ''
-                                        ) ?></div>
-                                </div>
-                            <?php } ?>
                         <?php } ?>
                     </div>
                 </div>
                 <div class="col-5 col-md-12">
                     <?php if (!empty($model->getBuyNowUrl())) { ?>
                         <a href="<?= $model->getBuyNowUrl() ?>" class="btn btn-primary w-100">Buy now</a>
-                    <?php } elseif ($model instanceof TrPosHotels || $model instanceof TrPosPlHotels) { ?>
+                    <?php } elseif ($model instanceof TrPosHotels) { ?>
                         <a href="<?= $model->getUrl() ?>" class="btn btn-primary w-100">Book now</a>
                     <?php } else { ?>
                         <a href="<?= $model->getUrl() ?>" class="btn btn-primary w-100">More</a>

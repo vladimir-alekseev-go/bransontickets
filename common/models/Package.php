@@ -11,6 +11,11 @@ use Exception;
 use yii\base\Model;
 use yii\helpers\Url;
 
+/**
+ * Class Package
+ *
+ * @property $package_id
+ */
 class Package extends Model
 {
     public const ANY_TIME = 'Any time';
@@ -93,7 +98,7 @@ class Package extends Model
      */
     public $status;
 
-    public function loadData($data)
+    public function loadData($data): void
     {
         if (!empty($data['id'])) {
             $this->id = $data['id'];
@@ -105,7 +110,11 @@ class Package extends Model
             $this->type_id = $data['typeId'];
         }
         if (!empty($data['category'])) {
-            $this->category = $data['category'];
+            if (in_array($data['category'], [TrPosHotels::TYPE, 'hotels'], true)) {
+                $this->category = TrPosHotels::TYPE;
+            } else {
+                $this->category = $data['category'];
+            }
         }
         if (!empty($data['name'])) {
             $this->name = $data['name'];
@@ -123,6 +132,8 @@ class Package extends Model
         }
         if (!empty($data['order'])) {
             $this->order = $data['order'];
+        } else if (!empty($data['orderNumber'])) {
+            $this->order = $data['orderNumber'];
         }
         if (!empty($data['packageId'])) {
             $this->package_id = $data['packageId'];
@@ -307,7 +318,7 @@ class Package extends Model
     }
 
     /**
-     * @return TrShows|TrAttractions|TrPosHotels|TrPosPlHotels|null
+     * @return TrShows|TrAttractions|TrPosHotels|null
      */
     public function getItem()
     {
@@ -373,12 +384,15 @@ class Package extends Model
         }
 
         $limitTime = $this->category === TrShows::TYPE ? $this->getStartDataTime() : $this->getEndDataTime();
-        return $this->category !== TrHotels::TYPE
-            && $limitTime->format('U') > time();
+        return $limitTime->format('U') > time();
     }
 
     public function canModify(): bool
     {
+        if ($this->getOrder()) {
+            return false;
+        }
+
         $item = $this->item;
         if (!empty($item->external_service) && $item->external_service === $item::EXTERNAL_SERVICE_SDC) {
             return false;
@@ -388,9 +402,7 @@ class Package extends Model
             return false;
         }
 
-        $limitTime = $this->category === TrShows::TYPE ? $this->getStartDataTime() : $this->getEndDataTime();
-        return $this->category !== TrHotels::TYPE
-            && $limitTime->format('U') > time();
+        return $this->getStartDataTime()->format('U') > time();
     }
 
     /**
@@ -422,21 +434,31 @@ class Package extends Model
     }
 
     /**
+     * Get url of barcode
+     *
+     * @param $barCode
+     *
+     * @return string|null
+     */
+    public function getBarcodeUrl($barCode): ?string
+    {
+        if ($this->getItem() !== null) {
+            $object = $this->item;
+            if ($object->external_service === $object::EXTERNAL_SERVICE_SDC) {
+                return Tripium::getBarcodeUrl($this->category, $this->package_id, $barCode);
+            }
+        }
+        return null;
+    }
+
+    /**
      * Return status NonRefundable
      *
      * @return bool
      */
     public function isNonRefundable(): bool
     {
-        if ($this->getItem() instanceof TrPosPlHotels) {
-            return $this->nonRefundable;
-        }
-        foreach ($this->tickets as $ticket) {
-            if ($ticket->non_refundable) {
-                return true;
-            }
-        }
-        return false;
+        return $this->nonRefundable;
     }
 
     /**
@@ -511,7 +533,7 @@ class Package extends Model
                 if (!$ticket->supplementary) {
                     return Url::to(
                         [
-                            'hotel/reservation',
+                            'lodging/reservation',
                             'code' => $this->getItem()->code,
                             'HotelReservationForm' =>[
                                 'packageId' => $this->package_id
@@ -521,16 +543,6 @@ class Package extends Model
                     );
                 }
             }
-        } elseif ($this->category === TrPosPlHotels::TYPE) {
-            return Url::to(
-                [
-                    'pl-hotel/reservation',
-                    'code' => $this->getItem()->code,
-                    'id' => $this->getRoomId(),
-                    'ppnBundle' => $this->ppnBundle,
-                    'packageId' => $this->package_id
-                ]
-            );
         } else {
             $controller = $this->getItem()::TYPE;
             return Url::to(
@@ -538,7 +550,7 @@ class Package extends Model
                     $controller . '/tickets',
                     'code' => $this->getItem()->code,
                     'date' => General::formatDateUrlTicket($this->getStartDataTime()->format('Y-m-d H:i:s')),
-                    'allotmentId' => $this->type_id,
+                    'allotmentId' => $this->getItem()::TYPE === TrShows::TYPE ? null : $this->type_id,
                     OrderForm::getFormName() => ['package_modify' => $this->package_id],
                     '#' => 'availability',
                 ]

@@ -1,8 +1,7 @@
 <?php
 
-use common\helpers\Template;
 use common\models\TrOrders;
-use common\models\TrPosPlHotels;
+use common\models\TrPosHotels;
 use yii\helpers\Url;
 
 /**
@@ -14,7 +13,7 @@ $phone = '1-877-368-3782';
 $packageIds = [];
 
 foreach ($order->getValidPackages() as $package) {
-    if ($package->category !== TrPosPlHotels::TYPE && empty($package->voucher_link)) {
+    if ($package->category !== TrPosHotels::TYPE && empty($package->voucher_link)) {
         $packageIds[] = $package->package_id;
     }
 }

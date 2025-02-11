@@ -2,13 +2,12 @@
 
 use common\models\TrAttractions;
 use common\models\TrPosHotels;
-use common\models\TrPosPlHotels;
 use common\models\TrShows;
 
 /**
- * @var TrShows|TrAttractions|TrPosHotels|TrPosPlHotels $model
- * @var string                                          $class
- * @var array|null                                      $priceAll
+ * @var TrShows|TrAttractions|TrPosHotels $model
+ * @var string                            $class
+ * @var array|null                        $priceAll
  */
 $discount = false;
 $priceAll = $priceAll ?? [];

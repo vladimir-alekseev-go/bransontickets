@@ -2,11 +2,10 @@
 
 use common\models\TrAttractions;
 use common\models\TrPosHotels;
-use common\models\TrPosPlHotels;
 use common\models\TrShows;
 
 /**
- * @var TrShows|TrAttractions|TrPosHotels|TrPosPlHotels $item
+ * @var TrShows|TrAttractions|TrPosHotels $item
  */
 ?>
 

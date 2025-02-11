@@ -61,9 +61,7 @@ class Itinerary extends Model
                 $totalCount++;
                 continue;
             }
-//                if ($package['category'] === TrPosPlHotels::TYPE) {
-//                    $total_count += count($package['tickets']);
-//                }
+
             foreach ($package->getTickets() as $ticket) {
                 if ($package->category !== TrPosHotels::TYPE) {
                     $totalCount += $ticket['qty'];

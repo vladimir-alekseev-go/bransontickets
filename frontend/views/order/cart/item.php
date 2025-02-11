@@ -3,15 +3,14 @@
 use common\models\Package;
 use common\models\TrAttractions;
 use common\models\TrPosHotels;
-use common\models\TrPosPlHotels;
 use common\models\TrShows;
 use common\models\User;
 use yii\helpers\Url;
 
 /**
- * @var Package                                         $package
- * @var TrShows|TrAttractions|TrPosPlHotels|TrPosHotels $item
- * @var bool                                            $isOrderDetail
+ * @var Package                           $package
+ * @var TrShows|TrAttractions|TrPosHotels $item
+ * @var bool                              $isOrderDetail
  */
 
 $isOrderDetail = $isOrderDetail ?? false;
@@ -34,7 +33,7 @@ $user = User::getCurrentUser();
                 <div class="ticket">
                     <div class="row">
                         <div class="col-12 col-sm-5 mb-3 mb-sm-0">
-                            <?php if ($item::TYPE === TrPosPlHotels::TYPE || $item::TYPE === TrPosHotels::TYPE) { ?>
+                            <?php if ($item::TYPE === TrPosHotels::TYPE) { ?>
                                 <div><small>Room <?= $i + 1 ?></small></div>
                                 <div><?= $ticket->name ?></div>
                                 <?php if ($package->isNonRefundable()) { ?>
@@ -46,13 +45,13 @@ $user = User::getCurrentUser();
                                 <div><small>Ticket type</small></div>
                                 <?= $ticket->name ?> <?= $ticket->description ? '- ' . $ticket->description : '' ?><?=
                             $ticket->seats ? ', seats:' . $ticket->seats : '' ?>
-                                <?php if ($ticket->non_refundable) { ?>
+                                <?php if ($package->isNonRefundable()) { ?>
                                     <div class="tag tag-non-refundable">Non refundable</div>
                                 <?php } ?>
                             <?php } ?>
                         </div>
 
-                        <?php if ($item::TYPE === TrPosPlHotels::TYPE || $item::TYPE === TrPosHotels::TYPE) { ?>
+                        <?php if ($item::TYPE === TrPosHotels::TYPE) { ?>
                             <div class="col-8 col-sm-4">
                                 <div><small>Guests</small></div>
                                 <div><?= trim($ticket->first_name . ' ' . $ticket->last_name) ?></div>
@@ -74,7 +73,7 @@ $user = User::getCurrentUser();
                         <div class="col-6 col-sm-3 text-end">
                         <?php } ?>
                             <div><small>
-                                    Price / <?php if ($item::TYPE === TrPosPlHotels::TYPE) { ?>Room<?php } else {
+                                    Price / <?php if ($item::TYPE === TrPosHotels::TYPE) { ?>Room<?php } else {
                                         ?>Ticket<?php } ?>
                                 </small></div>
                             <?php if ($ticket->retail_rate !== $ticket->result_rate) { ?>
@@ -105,7 +104,7 @@ $user = User::getCurrentUser();
             <div class="col-8">
                 <?php if ($isOrderDetail) { ?>
                     <?php if (!$package->cancelled) { ?>
-                        <?php if ($package->category !== TrPosPlHotels::TYPE) { ?>
+                        <?php if ($package->category !== TrPosHotels::TYPE) { ?>
                             <?php if (!empty($package->voucher_link)) { ?>
                                 <a class="me-3" href="<?= $package->voucher_link ?>" target="_blank">
                                     <strong>eTicket</strong>
@@ -150,7 +149,7 @@ $user = User::getCurrentUser();
                         <?php } ?>
                     <?php } ?>
                 <?php } else { ?>
-                    <?php if ($item::TYPE === TrPosPlHotels::TYPE) { ?>
+                    <?php if ($item::TYPE === TrPosHotels::TYPE) { ?>
                         <a class="reade me-3 text-nowrap" href="#" data-bs-toggle="modal" data-bs-target=".js-popup-cart-policy">
                             <i class="fa fa-book"></i>&nbsp;<strong>Read policy</strong>
                         </a>

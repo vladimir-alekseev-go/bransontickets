@@ -4,14 +4,13 @@ use common\helpers\General;
 use common\models\TrAttractions;
 use common\models\TrShows;
 use common\models\TrPosHotels;
-use common\models\TrPosPlHotels;
 use yii\helpers\Html;
 use yii\helpers\Json;
 
 /**
- * @var TrShows|TrAttractions|TrPosHotels|TrPosPlHotels $model
- * @var TrShows[]|TrAttractions[]                       $similar
- * @var string                                          $content
+ * @var TrShows|TrAttractions|TrPosHotels $model
+ * @var TrShows[]|TrAttractions[]         $similar
+ * @var string                            $content
  */
 
 $this->beginContent('@app/views/layouts/main.php');
@@ -74,7 +73,7 @@ if (!empty($theatreAddress)) {
                     </div>
                     <?php } ?>
                 </div>
-                <?php if ($model instanceof TrPosHotels || $model instanceof TrPosPlHotels) { ?>
+                <?php if ($model instanceof TrPosHotels) { ?>
                     <?php if (!empty($model->check_in) || !empty($model->check_out)) { ?>
                         <div class="theatre-info check-time mb-3 mb-md-4">
                             <?php if (!empty($model->check_in)) { ?>

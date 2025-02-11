@@ -2,7 +2,6 @@
 
 use common\models\form\Search;
 use common\models\TrPosHotels;
-use common\models\TrPosPlHotels;
 use common\models\TrShows;
 use frontend\controllers\BaseController;
 use yii\data\Pagination;
@@ -28,7 +27,7 @@ $this->registerJsFile('/js/page-nav.js', ['depends' => [JqueryAsset::class]]);
 $this->registerJsFile('/js/bootstrap-datepicker.min.js', ['depends' => [JqueryAsset::class]]);
 $this->registerJsFile('/js/datepicker.js', ['depends' => [JqueryAsset::class]]);
 $this->registerJsFile('/js/data-list.js', ['depends' => [JqueryAsset::class]]);
-if ($Search->model instanceof TrPosHotels || $Search->model instanceof TrPosPlHotels) {
+if ($Search->model instanceof TrPosHotels) {
     $this->registerJsFile('/js/hotel.filter.js', ['depends' => [JqueryAsset::class]]);
     $this->registerJs('hotelFilter.init($("#show-list"), $("#panel-list"), $("#list-filter"), $(".filter-room"))');
 } else {
@@ -71,8 +70,8 @@ if ($Search->model instanceof TrPosHotels || $Search->model instanceof TrPosPlHo
 <?= $this->render(
     '@app/views/components/popup-compare',
     [
-        'types' => $Search->model instanceof TrPosPlHotels
-            ? [TrPosPlHotels::TYPE, TrPosHotels::TYPE] : [$Search->model::TYPE],
+        'types' => $Search->model instanceof TrPosHotels
+            ? [TrPosHotels::TYPE] : [$Search->model::TYPE],
         'url'   => Url::to([$this->context->id . '/popup-compare'])
     ]
 ) ?>
