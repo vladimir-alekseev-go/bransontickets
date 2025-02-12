@@ -202,7 +202,6 @@ class TrPrices extends _source_TrPrices
                             $Model->setAttributes($dataNew);
                             $Model->save();
                             $err = $Model->getErrors();
-                            var_dump($err);
                             if ($err) {
                                 $this->errors_add[] = $err;
                             }
