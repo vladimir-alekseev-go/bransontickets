@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use common\helpers\General;
 use common\tripium\Tripium;
 use DateInterval;
 use DateTime;
@@ -40,16 +41,16 @@ class TrOrders extends _source_TrOrders
      *
      * @return TrOrders
      */
-    public static function build($order)
+    public static function build($order): TrOrders
     {
         $data = [
             "order_number" => $order["orderNumber"],
             "created_at" => date("Y-m-d H:i:s", $order["created"]/1000),
             "data" => Json::encode($order),
-            "tripium_user_id" => $order['customerId'],
+            "tripium_user_id" => $order['customer']['id'],
             "past" => empty($order["past"]) ? 0 : 1,
-            "discount" => Orders::getDiscount($order),
-            "coupon" => Orders::getDiscountCoupon($order),
+            "discount" => self::getDiscount($order),
+            "coupon" => self::getDiscountCoupon($order),
             "created" => self::getCreated($order["created"] / 1000)->format('Y-m-d H:i:s'),
         ];
 
@@ -63,7 +64,7 @@ class TrOrders extends _source_TrOrders
     /**
      * {@inheritdoc}
      */
-    public function behaviors()
+    public function behaviors(): array
     {
         return [
             'timestamp' => [
@@ -80,7 +81,7 @@ class TrOrders extends _source_TrOrders
     /**
      * @inheritdoc
      */
-    public function init()
+    public function init(): void
     {
         parent::init();
 
@@ -88,7 +89,7 @@ class TrOrders extends _source_TrOrders
         $this->messageCallUsToBookModification = 'Changes and/or cancellations for this item are not able to be done online. <br>Please call '.$phone.' and we can assist you with this item.';
     }
 
-    public static function getDiscount($data)
+    public static function getDiscount($data): float
     {
         $discount = 0;
 
@@ -98,7 +99,7 @@ class TrOrders extends _source_TrOrders
 
         if ($data["transactions"]) {
             foreach ($data["transactions"] as $transaction) {
-                if ($transaction["paid"] && $transaction["paymentMethod"] == self::DISCOUNT) {
+                if ($transaction["paid"] && $transaction["paymentMethod"] === self::DISCOUNT) {
                     $discount += $transaction["amount"];
                 }
             }
@@ -107,7 +108,7 @@ class TrOrders extends _source_TrOrders
         return $discount;
     }
 
-    public static function getDiscountCoupon($data)
+    public static function getDiscountCoupon($data): float
     {
         $discount = 0;
 
@@ -117,7 +118,7 @@ class TrOrders extends _source_TrOrders
 
         if ($data["transactions"]) {
             foreach ($data["transactions"] as $transaction) {
-                if ($transaction["paymentMethod"] == self::DISCOUNT_COUPON) {
+                if ($transaction["paymentMethod"] === self::DISCOUNT_COUPON) {
                     $discount += $transaction["amount"];
                 }
             }
@@ -134,7 +135,7 @@ class TrOrders extends _source_TrOrders
      * @return bool
      * @throws Exception
      */
-    public function updateByTripium($force = false)
+    public function updateByTripium($force = false): bool
     {
         $updatedAt = new DateTime($this->updated_at);
         $limitUpdatedAt = (new DateTime())->sub(new DateInterval('PT5M'));
@@ -142,13 +143,14 @@ class TrOrders extends _source_TrOrders
             return false;
         }
 
-        $Tripium = new Tripium;
+        $Tripium = new Tripium();
 
         $order = $Tripium->getOrder($this->order_number);
-        if (empty($Tripium->errors)) {
+
+        if ($Tripium->statusCode === Tripium::STATUS_CODE_SUCCESS) {
             $data = [
                 "data" => Json::encode($order),
-                "tripium_user_id" => $order["customerId"],
+                "tripium_user_id" => $order['customer']['id'],
                 "discount" => self::getDiscount($order),
                 "coupon" => self::getDiscountCoupon($order),
                 "created" => self::getCreated($order["created"] / 1000)->format('Y-m-d H:i:s'),
@@ -160,7 +162,7 @@ class TrOrders extends _source_TrOrders
                 foreach ($this->getPackages() as $package) {
                     $item = $package->getItem();
                     if ($item && !empty($item->external_service)
-                        && $item->external_service == $item::EXTERNAL_SERVICE_SDC) {
+                        && $item->external_service === $item::EXTERNAL_SERVICE_SDC) {
                         $Tripium = new Tripium;
                         $sdcVouchers = $Tripium->getSdcVouchersOrder($this->order_number);
                         if (empty($Tripium->errors)) {
@@ -185,7 +187,7 @@ class TrOrders extends _source_TrOrders
      * @return bool
      * @throws Exception
      */
-    public static function updateFromTripium($id, $force = false)
+    public static function updateFromTripium($id, $force = false): bool
     {
         if (!$id) {
             return false;
@@ -248,8 +250,8 @@ class TrOrders extends _source_TrOrders
                 "data" => Json::encode($order),
                 "tripium_user_id" => $id,
                 "past" => $order["past"],
-                "discount" => Orders::getDiscount($order),
-                "coupon" => Orders::getDiscountCoupon($order),
+                "discount" => self::getDiscount($order),
+                "coupon" => self::getDiscountCoupon($order),
                 "created" => self::getCreated($order["created"] / 1000)->format('Y-m-d H:i:s'),
             ];
 
@@ -261,7 +263,7 @@ class TrOrders extends _source_TrOrders
                 $model->setAttributes($dataShow);
                 $model->save();
 
-            } else if ($dataShow["hash_summ"] != $orders[$order["orderNumber"]]["hash_summ"]) {
+            } else if ($dataShow["hash_summ"] !== $orders[$order["orderNumber"]]["hash_summ"]) {
 
                 $model = self::find()->where(["order_number"=>$order["orderNumber"], "tripium_user_id"=>$id])->one();
                 $model->setAttributes($dataShow);
@@ -269,16 +271,16 @@ class TrOrders extends _source_TrOrders
 
             }
 
-            unset($orders[$order["orderNumber"]]);
+//            unset($orders[$order["orderNumber"]]);
         }
 
-        //delete old orders
-        if (!empty($orders)) {
-            $orderNumbers = array_keys($orders);
-            if ($orderNumbers) {
-                self::deleteAll(["order_number"=>$orderNumbers, "tripium_user_id"=>$id]);
-            }
-        }
+//        //delete old orders
+//        if (!empty($orders)) {
+//            $orderNumbers = array_keys($orders);
+//            if ($orderNumbers) {
+//                self::deleteAll(["order_number"=>$orderNumbers, "tripium_user_id"=>$id]);
+//            }
+//        }
 
         return true;
     }
@@ -288,10 +290,10 @@ class TrOrders extends _source_TrOrders
      *
      * @return Package|null
      */
-    public function getPackage($packageNumber)
+    public function getPackage($packageNumber): ?Package
     {
         foreach ($this->getPackages() as $package) {
-            if ($package->package_id == $packageNumber) {
+            if ($package->package_id === $packageNumber) {
                 return $package;
             }
         }
@@ -313,13 +315,13 @@ class TrOrders extends _source_TrOrders
                 if (!empty($this->sdc_vouchers)) {
                     $sdc_vouchers = Json::decode($this->sdc_vouchers);
                     foreach ($sdc_vouchers as $sdc_voucher) {
-                        if ($sdc_voucher['packageId'] == $packageData['packageId']) {
+                        if ($sdc_voucher['packageId'] === $packageData['packageId']) {
                             $packageData['sdc_voucher'] = $sdc_voucher;
                         }
                     }
                 }
-                $package = new Package;
-                $package->loadData($packageData);
+                $package = new Package();
+                $package->loadData(array_merge($packageData, ['order' => $this->order_number]));
                 $packages[] = $package;
             }
         }
@@ -332,12 +334,16 @@ class TrOrders extends _source_TrOrders
         return Json::decode($this->data);
     }
 
-    public function canCancel()
+    public function canCancel(): bool
     {
+        if ($this->getStatus() === self::STATUS_CANCELLED) {
+            return false;
+        }
         $categories = ArrayHelper::getColumn($this->getPackages(), 'category');
 
-        $canBeCanselled = in_array(TrShows::TYPE, $categories, false) || in_array(TrAttractions::TYPE, $categories, false) ||
-            $this->getVacationPackages();
+        $canBeCancelled = in_array(TrShows::TYPE, $categories, false)
+            || in_array(TrAttractions::TYPE, $categories, false)
+            || $this->getVacationPackages();
 
         $user = User::getCurrentUser();
 
@@ -349,7 +355,7 @@ class TrOrders extends _source_TrOrders
             }
             $item = $package->getItem();
 
-            if ($item && $item->external_service == $item::EXTERNAL_SERVICE_SDC) {
+            if ($item && strtolower($item->external_service) === strtolower($item::EXTERNAL_SERVICE_SDC)) {
                 return false;
             }
 
@@ -377,8 +383,8 @@ class TrOrders extends _source_TrOrders
             }
         }
 
-        return $canBeCanselled && $user['tripium_id'] == $this->getData()['customer']['id']
-            && $this->getData()["status"] != self::STATUS_CANCELLED && $limitTime->format('U') > time();
+        return $canBeCancelled && $user && $user['tripium_id'] === $this->getData()['customer']['id']
+            && $this->getData()["status"] !== self::STATUS_CANCELLED && $limitTime->format('U') > time();
     }
 
     /**
@@ -412,10 +418,10 @@ class TrOrders extends _source_TrOrders
 
     /**
      * Cancel all similar vacation packages
-     * @param int $vacationPackageId
+     * @param $vacationPackageId
      * @return boolean
      */
-    public function cancelUniqueVacationPackage($vacationPackageId)
+    public function cancelUniqueVacationPackage($vacationPackageId): bool
     {
         $return = true;
 
@@ -438,10 +444,10 @@ class TrOrders extends _source_TrOrders
 
     /**
      * Cancel Vacation Package
-     * @param int $vacationPackageId
+     * @param $vacationPackageId
      * @return boolean
      */
-    public function cancelVacationPackage($vacationPackageId)
+    public function cancelVacationPackage($vacationPackageId): bool
     {
         if ($vacationPackage = $this->getVacationPackage($vacationPackageId)) {
             $Tripium = new Tripium;
@@ -466,7 +472,7 @@ class TrOrders extends _source_TrOrders
      *
      * @return boolean
      */
-    public function cancelPackage($packageNumber)
+    public function cancelPackage($packageNumber): bool
     {
         if ($package = $this->getPackage($packageNumber)) {
             $Tripium = new Tripium;
@@ -484,7 +490,7 @@ class TrOrders extends _source_TrOrders
         return false;
     }
 
-    public function getPackageById($packageId)
+    public function getPackageById($packageId): ?Package
     {
         foreach ($this->getPackages() as $package) {
             if ($package->package_id == $packageId) {
@@ -499,7 +505,7 @@ class TrOrders extends _source_TrOrders
      *
      * @return Package[]
      */
-    public function getValidPackages()
+    public function getValidPackages(): array
     {
         $packages = [];
         foreach ($this->getPackages() as $package) {
@@ -510,7 +516,7 @@ class TrOrders extends _source_TrOrders
         return $packages;
     }
 
-    public function isCallUsToBook()
+    public function isCallUsToBook(): bool
     {
         foreach ($this->getPackages() as $package) {
             if (isset($package->getItem()->call_us_to_book) && $package->getItem()->call_us_to_book) {
@@ -521,7 +527,7 @@ class TrOrders extends _source_TrOrders
         return false;
     }
 
-    public function getCoupon()
+    public function getCoupon(): ?Coupon
     {
         $data = $this->getData();
 
@@ -552,10 +558,10 @@ class TrOrders extends _source_TrOrders
 
     public function getStatus()
     {
-        return $this->getDataByKey("status");
+        return $this->getDataByKey('status') ?? $this->getDataByKey('orderStatus');
     }
 
-    public function getStatusClass()
+    public function getStatusClass(): string
     {
         $statusClass = 'warning';
         if ($this->getStatus() === self::STATUS_CONFIRMED) {
@@ -592,7 +598,7 @@ class TrOrders extends _source_TrOrders
         return $this->getDataByKey("fullCancellationFee");
     }
 
-    public function getServiceFee()
+    public function getServiceFee(): float
     {
         $total = 0;
         foreach ($this->getPackages() as $package) {
@@ -606,7 +612,7 @@ class TrOrders extends _source_TrOrders
         return $this->getDataByKey("fullTax");
     }
 
-    public function getValidSubTotal()
+    public function getValidSubTotal(): float
     {
         $subTotal = 0;
         foreach ($this->getValidPackages() as $package) {
@@ -623,7 +629,7 @@ class TrOrders extends _source_TrOrders
      *
      * @return string
      */
-    public function getUserFullName()
+    public function getUserFullName(): string
     {
         $user = User::getCurrentUser();
         $userFullName = $user !== null ? trim($user->first_name . " " . $user->last_name) : '';
@@ -645,9 +651,9 @@ class TrOrders extends _source_TrOrders
      *
      * @return array
      */
-    public function getValidPackagesByGroupData()
+    public function getValidPackagesByGroupData(): array
     {
-    	$itemsByCategory = [];
+        $itemsByCategory = [];
         foreach ($this->getValidVacationPackages() as $vacationPackage) {
             foreach ($vacationPackage->getPackages() as $package) {
                 $itemsByCategory[$package->getHashData()][] = $package;
@@ -665,7 +671,7 @@ class TrOrders extends _source_TrOrders
      *
      * @return array
      */
-    public function getValidTicketsCountByGroupData()
+    public function getValidTicketsCountByGroupData(): array
     {
         $ticketCount = [];
         foreach ($this->getValidPackagesByGroupData() as $packages) {
@@ -687,7 +693,7 @@ class TrOrders extends _source_TrOrders
      *
      * @return array
      */
-    public function getValidTicketsByGroupData()
+    public function getValidTicketsByGroupData(): array
     {
         $tickets = [];
         foreach ($this->getValidPackagesByGroupData() as $packages) {
@@ -707,12 +713,12 @@ class TrOrders extends _source_TrOrders
      *
      * @return VacationPackageOrder[]
      */
-    public function getVacationPackagesByPackage(Package $package)
+    public function getVacationPackagesByPackage(Package $package): array
     {
         $VacationPackages = [];
         foreach ($this->getUniqueVacationPackages() as $vacationPackage) {
             foreach ($vacationPackage->getPackages() as $_package) {
-                if ($_package->getHashData() == $package->getHashData()) {
+                if ($_package->getHashData() === $package->getHashData()) {
                     $VacationPackages[$this->getGroupHashVacationPackageById($vacationPackage->id)] = $vacationPackage;
                 }
             }
@@ -727,7 +733,7 @@ class TrOrders extends _source_TrOrders
      *
      * @return string
      */
-    public function cancellationTextOfVacationPackagesByPackage(Package $package)
+    public function cancellationTextOfVacationPackagesByPackage(Package $package): string
     {
         foreach ($this->getVacationPackagesByPackage($package) as $vacationPackage) {
             if (!empty($vacationPackage->cancellation_text)) {
@@ -741,7 +747,7 @@ class TrOrders extends _source_TrOrders
      * @return DateTime
      * @throws Exception
      */
-    public function getCreatedAt()
+    public function getCreatedAt(): DateTime
     {
         return new DateTime($this->created_at);
     }

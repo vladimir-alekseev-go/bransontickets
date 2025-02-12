@@ -3,28 +3,19 @@ namespace common\controllers;
 
 use common\analytics\Analytics;
 use common\helpers\General;
-use common\hubspot\HubSpot;
 use common\models\CartForm;
 use common\models\Custumer;
 use common\models\CustumerForm;
 use common\models\form\CartCouponForm;
-//use common\models\LocationServices;
-use common\models\Mailchimp;
 use common\models\OrderModifyForm;
-use common\models\Package;
 use common\models\PaymentForm;
 use common\models\PaymentFormAddCard;
-use common\models\PaymentModifyForm;
-use common\models\PaymentModifyFormAddCard;
-use common\models\TrAttractions;
 use common\models\TrBasket;
-use common\models\TrLunchs;
 use common\models\TrOrders;
 use common\models\TrShows;
 use common\models\User;
 use common\tripium\Tripium;
 use frontend\controllers\BaseController;
-use wlfrontend\widgets\scheduleSlider\ScheduleSliderWidget;
 use DateTime;
 use Exception;
 use Yii;
@@ -255,34 +246,6 @@ trait OrderController
             Yii::$app->session->setFlash('message', "You need to fill in the required fields");
             return $this->redirect("/profile/edit/");
         }
-
-//        if ($customerTripium && Yii::$app->request->post('subscribe')) {
-//            if (!empty(Yii::$app->params['hubSpot']['hApiKey'])) {
-//                try {
-//                    $hubSpot = new HubSpot(Yii::$app->params['hubSpot']['hApiKey']);
-//                    $hubSpot->updateContactByEmail(
-//                        $customerTripium->email,
-//                        [
-//                            'firstname' => $customerTripium->first_name,
-//                            'lastname' => $customerTripium->last_name,
-//                            'phone' => $customerTripium->phone,
-//                        ]
-//                    );
-//                } catch (Exception $e) {
-//                }
-//            }
-//            if (!empty(Yii::$app->siteSettings->data->mailchimp_key) && !empty(Yii::$app->siteSettings->data->mailchimp_list_id)) {
-//                $mailchimp = new Mailchimp([
-//                                               'apikey' => Yii::$app->siteSettings->data->mailchimp_key,
-//                                               'listID' => Yii::$app->siteSettings->data->mailchimp_list_id
-//                                           ]);
-//                $mailchimp->email = $customerTripium->email;
-//                $mailchimp->subscribe([
-//                                          "FNAME" => $customerTripium->first_name,
-//                                          "LNAME" => $customerTripium->last_name,
-//                                      ]);
-//            }
-//        }
 
         $tripium = new Tripium();
         $cards = $tripium->getCustomerCards($tripium_id);
@@ -619,40 +582,40 @@ trait OrderController
      * @return string
      * @throws NotFoundHttpException
      */
-	public function actionModification($orderNumber, $packageNumber)
-	{
-		if (Yii::$app->user->isGuest) {
-			return '<script>document.location.reload()</script>';
-		}
-
-		$tripium_id = User::getCustomerTripiumID();
-
-    	$Order = TrOrders::find()->where(["tripium_user_id"=>$tripium_id, "order_number"=>$orderNumber])->one();
-
-    	if (!$Order) {
-	    	throw new NotFoundHttpException;
-    	}
-
-    	$package = $Order->getPackage($packageNumber);
-
-    	if (!$package) {
-	    	throw new NotFoundHttpException;
-		}
-
-        $ScheduleSlider = new ScheduleSliderWidget(
-            [
-                'model' => $package->item,
-                'date' => $package->startDataTime,
-                'package' => $package,
-                'scheduleIsShow' => false
-            ]
-        );
-
-	    $OrderForm = new OrderModifyForm();
-	    $OrderForm->coupon_code = $Order->getCoupon() ? $Order->getCoupon()->code : null;
-
-		return $this->renderAjax('modification', compact('ScheduleSlider', 'package', 'Order', 'OrderForm'));
-	}
+//	public function actionModification($orderNumber, $packageNumber)
+//	{
+//		if (Yii::$app->user->isGuest) {
+//			return '<script>document.location.reload()</script>';
+//		}
+//
+//		$tripium_id = User::getCustomerTripiumID();
+//
+//    	$Order = TrOrders::find()->where(["tripium_user_id"=>$tripium_id, "order_number"=>$orderNumber])->one();
+//
+//    	if (!$Order) {
+//	    	throw new NotFoundHttpException;
+//    	}
+//
+//    	$package = $Order->getPackage($packageNumber);
+//
+//    	if (!$package) {
+//	    	throw new NotFoundHttpException;
+//		}
+//
+//        $ScheduleSlider = new ScheduleSliderWidget(
+//            [
+//                'model' => $package->item,
+//                'date' => $package->startDataTime,
+//                'package' => $package,
+//                'scheduleIsShow' => false
+//            ]
+//        );
+//
+//	    $OrderForm = new OrderModifyForm();
+//	    $OrderForm->coupon_code = $Order->getCoupon() ? $Order->getCoupon()->code : null;
+//
+//		return $this->renderAjax('modification', compact('ScheduleSlider', 'package', 'Order', 'OrderForm'));
+//	}
 
     /**
      * @param $orderNumber
@@ -708,99 +671,95 @@ trait OrderController
      * @throws InvalidConfigException
      * @throws NotFoundHttpException
      */
-	public function actionModificationProceed($orderNumber, $packageNumber, $process = false)
-	{
-	    $post = Yii::$app->request->post();
-
-		$user = User::getCurrentUser();
-
-		$tripium_id = User::getCustomerTripiumID();
-
-		$Order = TrOrders::find()->where(['order_number'=>$orderNumber, 'tripium_user_id'=>$tripium_id])->one();
-
-		if (!$Order) {
-		    throw new NotFoundHttpException;
-		}
-
-		$packageOld = $Order->getPackage($packageNumber);
-
-		if (!$packageOld) {
-		    throw new NotFoundHttpException;
-		}
-
-	    $date = $packageOld->startDataTime;
-
-	    $OrderForm = new OrderModifyForm();
-	    $OrderForm->setAttributes(['date'=>$date, 'model'=>$packageOld->item]);
-	    $OrderForm->setPackageOrder($packageOld);
-    	$OrderForm->load($post);
-    	$OrderForm->initData();
-    	$OrderForm->initPrice();
-    	$OrderForm->initPackage();
-    	$OrderForm->load($post);
-    	$OrderForm->correctFamilyPack();
-	    $result = $OrderForm->check();
-
-	    if ((int)$process === 0) {
-	        $OrderForm->initPriceByCoupon();
-	        $result['orderForm'] = $this->renderPartial('order-form', compact('OrderForm'));
-	    }
-	    $result['prices'] = $OrderForm->prices;
-	    $result['totalPrice'] = $OrderForm->totalPrice;
-
-	    $PackageNew = new Package;
-	    $PackageNew->loadData($result);
-
-	    if ($PackageNew->category === TrShows::TYPE || $PackageNew->category === TrAttractions::TYPE) {
-		    $result['datePackepgeFormat'] = $PackageNew->getStartDataTime()->format("l, M d, h:i A");
-        } else if ($PackageNew->category === TrLunchs::TYPE){
-            $result['datePackepgeFormat'] = 'Avail dates ' .
-                $PackageNew->getStartDataTime()->format("l, M d, h:i A") . ' - ' . $PackageNew->getEndDataTime()
-                    ->format("l, M d, h:i A");
-		}
-
-	    if ($OrderForm->getErrors('check')) {
-    		$result['globalErrors'] = $OrderForm->getErrors('check');
-    	}
-
-	    if ((int)$process === 1) {
-	    	$this->layout = BaseController::LAYOUT_EMPTY;
-	    	$PaymentModifyForm = new PaymentModifyForm(['coupon_code'=>$OrderForm->coupon_code]);
-	    	$PaymentModifyFormAddCard = new PaymentModifyFormAddCard(['coupon_code'=>$OrderForm->coupon_code]);
-
-			$PaymentModifyForm->setModifyRequest($OrderForm->createRequest());
-			$PaymentModifyFormAddCard->setModifyRequest($OrderForm->createRequest());
-
-			$Tripium = new Tripium;
-			$result['order_modify_info'] = $this->render('order-modify-info', ['result'=>$result, 'model'=>$packageOld->item, 'package'=>$PackageNew, 'packageOld'=>$packageOld, 'OrderForm'=>$OrderForm]);
-
-	    	//if ($result['fullTotal'] - $package['fullTotal'] > 0) {
-	    	if ($result['modifyAmount'] > 0) {
-	    		$cards = $Tripium->getCustomerCards($tripium_id);
-		    	if ($cards) {
-		    		$cards = ArrayHelper::map($cards, 'id', 'cardNumber');
-		    	}
-	    		$result['html'] = $this->render('order-form-pay', compact('result', 'PaymentModifyForm', 'PaymentModifyFormAddCard', 'cards', 'user'));
-	    	} else if ($result['modifyAmount'] < 0){
-	    	    $cards = $Tripium->orderCards($orderNumber);
-	    		$result['html'] = $this->render('order-form-refund', compact('result', 'cards'));
-	    	}
-
-	    } else if ((int)$process === 2) {
-
-	    	if ($OrderForm->run()) {
-		    	$Order->updateByTripium(true);
-		    	Yii::$app->session->setFlash('success', "Item has changed");
-	    	} else {
-		    	$err = $OrderForm->getFirstErrors();
-	        	if ($err) {
-	        		$result['error'] = is_array($err) ? array_shift($err) : $err;
-	        	}
-	    	}
-	    }
-
-	    return Json::encode($result);
-	}
+//	public function actionModificationProceed($orderNumber, $packageNumber, $process = false)
+//	{
+//	    $post = Yii::$app->request->post();
+//
+//		$user = User::getCurrentUser();
+//
+//		$tripium_id = User::getCustomerTripiumID();
+//
+//		$Order = TrOrders::find()->where(['order_number'=>$orderNumber, 'tripium_user_id'=>$tripium_id])->one();
+//
+//		if (!$Order) {
+//		    throw new NotFoundHttpException;
+//		}
+//
+//		$packageOld = $Order->getPackage($packageNumber);
+//
+//		if (!$packageOld) {
+//		    throw new NotFoundHttpException;
+//		}
+//
+//	    $date = $packageOld->startDataTime;
+//
+//	    $OrderForm = new OrderModifyForm();
+//	    $OrderForm->setAttributes(['date'=>$date, 'model'=>$packageOld->item]);
+//	    $OrderForm->setPackageOrder($packageOld);
+//    	$OrderForm->load($post);
+//    	$OrderForm->initData();
+//    	$OrderForm->initPrice();
+//    	$OrderForm->initPackage();
+//    	$OrderForm->load($post);
+//    	$OrderForm->correctFamilyPack();
+//	    $result = $OrderForm->check();
+//
+//	    if ((int)$process === 0) {
+//	        $OrderForm->initPriceByCoupon();
+//	        $result['orderForm'] = $this->renderPartial('order-form', compact('OrderForm'));
+//	    }
+//	    $result['prices'] = $OrderForm->prices;
+//	    $result['totalPrice'] = $OrderForm->totalPrice;
+//
+//	    $PackageNew = new Package;
+//	    $PackageNew->loadData($result);
+//
+//	    if ($PackageNew->category === TrShows::TYPE || $PackageNew->category === TrAttractions::TYPE) {
+//		    $result['datePackepgeFormat'] = $PackageNew->getStartDataTime()->format("l, M d, h:i A");
+//        }
+//
+//	    if ($OrderForm->getErrors('check')) {
+//    		$result['globalErrors'] = $OrderForm->getErrors('check');
+//    	}
+//
+//	    if ((int)$process === 1) {
+//	    	$this->layout = BaseController::LAYOUT_EMPTY;
+//	    	$PaymentModifyForm = new PaymentModifyForm(['coupon_code'=>$OrderForm->coupon_code]);
+//	    	$PaymentModifyFormAddCard = new PaymentModifyFormAddCard(['coupon_code'=>$OrderForm->coupon_code]);
+//
+//			$PaymentModifyForm->setModifyRequest($OrderForm->createRequest());
+//			$PaymentModifyFormAddCard->setModifyRequest($OrderForm->createRequest());
+//
+//			$Tripium = new Tripium;
+//			$result['order_modify_info'] = $this->render('order-modify-info', ['result'=>$result, 'model'=>$packageOld->item, 'package'=>$PackageNew, 'packageOld'=>$packageOld, 'OrderForm'=>$OrderForm]);
+//
+//	    	//if ($result['fullTotal'] - $package['fullTotal'] > 0) {
+//	    	if ($result['modifyAmount'] > 0) {
+//	    		$cards = $Tripium->getCustomerCards($tripium_id);
+//		    	if ($cards) {
+//		    		$cards = ArrayHelper::map($cards, 'id', 'cardNumber');
+//		    	}
+//	    		$result['html'] = $this->render('order-form-pay', compact('result', 'PaymentModifyForm', 'PaymentModifyFormAddCard', 'cards', 'user'));
+//	    	} else if ($result['modifyAmount'] < 0){
+//	    	    $cards = $Tripium->orderCards($orderNumber);
+//	    		$result['html'] = $this->render('order-form-refund', compact('result', 'cards'));
+//	    	}
+//
+//	    } else if ((int)$process === 2) {
+//
+//	    	if ($OrderForm->run()) {
+//		    	$Order->updateByTripium(true);
+//		    	Yii::$app->session->setFlash('success', "Item has changed");
+//	    	} else {
+//		    	$err = $OrderForm->getFirstErrors();
+//	        	if ($err) {
+//	        		$result['error'] = is_array($err) ? array_shift($err) : $err;
+//	        	}
+//	    	}
+//	    }
+//
+//	    return Json::encode($result);
+//	}
 
     /**
      * @param $orderNumber
