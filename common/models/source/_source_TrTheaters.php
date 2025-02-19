@@ -9,7 +9,7 @@ use Yii;
  *
  * @property int $id
  * @property int $id_external
- * @property string|null $name
+ * @property string $name
  * @property string|null $address1
  * @property string|null $address2
  * @property string|null $city
@@ -44,11 +44,11 @@ class _source_TrTheaters extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id_external', 'hash_summ'], 'required'],
+            [['id_external', 'name', 'hash_summ'], 'required'],
             [['id_external', 'status'], 'integer'],
             [['updated_at', 'location_updated_at'], 'safe'],
-            [['name', 'city'], 'string', 'max' => 64],
-            [['address1', 'address2'], 'string', 'max' => 128],
+            [['name', 'address1', 'address2'], 'string', 'max' => 128],
+            [['city'], 'string', 'max' => 64],
             [['state'], 'string', 'max' => 4],
             [['zip_code'], 'string', 'max' => 8],
             [['directions'], 'string', 'max' => 1024],
