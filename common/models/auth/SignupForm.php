@@ -38,10 +38,10 @@ class SignupForm extends Model
 
             ['password', 'required'],
             ['password', 'string', 'min' => 6],
-            
+
             ['password_repeat', 'required'],
         	['password_repeat', 'compare', 'compareAttribute'=>'password', 'message'=>"Passwords don't match"],
-        	
+
         ];
     }
 
@@ -61,11 +61,11 @@ class SignupForm extends Model
                 $user->status = Users::STATUS_REGISTER;
                 $user->generateAuthKey();
         	}
-        	
+
         	$user->setPassword($this->password);
-        	
+
         	$user->withoutTripium = true;
-        	
+
             if ($user->save()) {
             	$this->user = $user;
             	$this->send();
@@ -80,10 +80,10 @@ class SignupForm extends Model
             	}
             }
         }
-        
+
         return null;
     }
-	
+
 	/**
 	 * Sends an email to the specified email address using the information collected by this model.
 	 * @return boolean whether the email was sent
@@ -91,17 +91,18 @@ class SignupForm extends Model
 	public function send()
     {
         $scheme = parse_url(Yii::$app->request->hostInfo, PHP_URL_SCHEME) . "://";
-        
+
         Yii::$app->mailer
             ->compose('confirm/confirm_email', ['params' => [
                 "confirm_link" => $scheme . Yii::$app->params['domain'] . "/confirm/?id=" . $this->user->id . "&ak=" . $this->user->auth_key,
                 "scheme" => $scheme,
         ]])
+        ->addHeader('List-Unsubscribe', '<' . $scheme . Yii::$app->params['domain'] . '/?unsubscripbe=true>')
         ->setTo($this->user->email)
         ->setFrom($this->emailFrom)
         ->setSubject('Confirm your email address')
         ->send();
-		
+
 		return true;
 	}
 }
