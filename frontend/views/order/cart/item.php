@@ -149,20 +149,16 @@ $user = User::getCurrentUser();
                         <?php } ?>
                     <?php } ?>
                 <?php } else { ?>
-                    <?php if ($item::TYPE === TrPosHotels::TYPE) { ?>
-                        <a class="reade me-3 text-nowrap" href="#" data-bs-toggle="modal" data-bs-target=".js-popup-cart-policy">
-                            <i class="fa fa-book"></i>&nbsp;<strong>Read policy</strong>
-                        </a>
-                    <?php } else { ?>
-                        <a class="reade me-3 js-popup-cancellation-policy text-nowrap" href="#"
-                           data-url="<?= Url::to(
-                               ['order/cancellation-policy', 'packageId' => $package->package_id]
-                           ) ?>">
-                            <i class="fa fa-book"></i>&nbsp;<strong>Read policy</strong>
-                        </a>
-                        <a class="me-3 text-nowrap" href="<?= $package->getModifyUrl() ?>">
-                            <i class="fa fa-edit"></i>&nbsp;<strong>Modify</strong>
-                        </a>
+                    <a class="reade me-3 js-popup-cancellation-policy text-nowrap" href="#"
+                       data-url="<?= Url::to(
+                           ['order/cancellation-policy', 'packageId' => $package->package_id]
+                       ) ?>">
+                        <i class="fa fa-book"></i>&nbsp;<strong>Read policy</strong>
+                    </a>
+                    <?php if ($package->canModify()) { ?>
+                    <a class="me-3 text-nowrap" href="<?= $package->getModifyUrl() ?>">
+                        <i class="fa fa-edit"></i>&nbsp;<strong>Modify</strong>
+                    </a>
                     <?php } ?>
                     <a class="me-3 text-nowrap" href="<?= Url::to(
                         [

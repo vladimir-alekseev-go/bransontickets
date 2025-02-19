@@ -390,8 +390,8 @@ trait ItemsExtensionTrait
                 $Shows->setAttributes($dataShow);
 
                 if ($Shows->save()) {
-                    if ($this instanceof TrPosHotels) {
-                        $Shows->setPhotoAndPreview();
+                    if (($Shows instanceof TrPosHotels) && $Shows->price_line) {
+                        $Shows->setPhotoAndPreviewPriceLine();
                     } else {
                         $Shows->updatePreview($show['cover']);
                         $Shows->setPhotoAndPreview($photos);
@@ -425,8 +425,8 @@ trait ItemsExtensionTrait
                 }
 
                 if ($Shows->save() || $this->updateForce) {
-                    if ($this instanceof TrPosHotels) {
-                        $Shows->setPhotoAndPreview();
+                    if (($Shows instanceof TrPosHotels) && $Shows->price_line) {
+                        $Shows->setPhotoAndPreviewPriceLine();
                     } else {
                         $Shows->updatePreview($show['cover']);
                         $Shows->setPhotoAndPreview($photos);
@@ -660,7 +660,8 @@ trait ItemsExtensionTrait
                     [
                         'item_id' => $this->id,
                         'preview_id' => $uploadItemsPhotosPreview->id,
-                        'photo_id' => $uploadItemsPhotos->id
+                        'photo_id' => $uploadItemsPhotos->id,
+                        'hash' => 'x',
                     ]
                 );
                 $modelPhotoJoin->save();

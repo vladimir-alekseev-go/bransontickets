@@ -298,7 +298,7 @@ class TrPosHotels extends _source_TrPosHotels
      * @throws Throwable
      * @throws StaleObjectException
      */
-    public function setPhotoAndPreview(): bool
+    public function setPhotoAndPreviewPriceLine(): bool
     {
         if (!$this->price_line) {
             return false;

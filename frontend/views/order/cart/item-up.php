@@ -11,14 +11,14 @@ use common\models\TrShows;
  */
 
 ?>
-<a class="img" href="<?= '$item->getUrl()' ?>">
+<a class="img" href="<?= $item->getUrl() ?>">
     <?php if (!empty($item->preview_id)) { ?>
         <img src="<?= $item->preview->url ?>" alt=""/>
     <?php } else { ?>
         <img src="/img/bransontickets-noimage.png" alt=""/>
     <?php } ?>
 </a>
-<a href="<?= '$item->getUrl()' ?>">
+<a href="<?= $item->getUrl() ?>">
     <div class="name"><?= $item->name ?></div>
 </a>
 

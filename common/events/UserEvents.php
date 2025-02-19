@@ -13,6 +13,6 @@ class UserEvents
         $event->sender->identity->save();
 
         // set the connect between basket with user
-        TrBasket::setForUser($event->sender->id);
+        (new TrBasket())->setForUser($event->sender->id);
     }
 }

@@ -182,7 +182,7 @@ class ShowsController extends Controller
             throw new NotFoundHttpException;
         }
 
-        $showsRecommended = TrShows::getActive()
+        $showsRecommended = TrShows::getAvailable()
             ->orderBy(new Expression('rand()'))
             ->limit(6)
             ->all();

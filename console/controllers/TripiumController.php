@@ -64,21 +64,21 @@ class TripiumController extends Controller
         $TripiumUpdater = new TripiumUpdater(
             [
                 'models' => [
-                    ['class' => TrShows::class],
-                    [
-                        'class' => TrPrices::class,
-                        'arg' => ["start" => date("m/d/Y"), "end" => date("m/d/Y", time() + 3600 * 24 * 540)]
-                    ],
-                    ['class' => TrAttractions::class],
-                    ['class' => TrAdmissions::class],
-                    [
-                        'class' => TrAttractionsPrices::class,
-                        'arg' => [
-                            "start" => date("m/d/Y"),
-                            "end" => date("m/d/Y", time() + 3600 * 24 * 360 * 2)
-                        ]
-                    ],
-                    ['class' => TrAttractions::class],
+//                    ['class' => TrShows::class],
+//                    [
+//                        'class' => TrPrices::class,
+//                        'arg' => ["start" => date("m/d/Y"), "end" => date("m/d/Y", time() + 3600 * 24 * 540)]
+//                    ],
+//                    ['class' => TrAttractions::class],
+//                    ['class' => TrAdmissions::class],
+//                    [
+//                        'class' => TrAttractionsPrices::class,
+//                        'arg' => [
+//                            "start" => date("m/d/Y"),
+//                            "end" => date("m/d/Y", time() + 3600 * 24 * 360 * 2)
+//                        ]
+//                    ],
+//                    ['class' => TrAttractions::class],
                     [
                         'class' => TrPosHotels::class,
                         'params' => ['updateForce' => true, 'updateImages' => true, 'updateVideo' => true]

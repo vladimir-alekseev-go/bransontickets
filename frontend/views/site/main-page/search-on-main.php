@@ -9,6 +9,11 @@ $this->registerJS(
     "
     $('.js-select-type').on('change', function() {
         $('.js-search-on-main form').attr('action', $(this).val());
+        $('.js-submit').attr('disabled', false);
+    });
+    $('#search-on-main').submit(function(){
+        $('.js-submit').attr('disabled', true);
+        return true;
     });
 "
 );
@@ -49,7 +54,7 @@ $this->registerJS(
             )->textInput(['placeholder' => 'Choose date'])->label(false) ?>
         </div>
         <div class="it col-md-2">
-            <button class="btn btn-primary w-100">Search</button>
+            <button class="btn btn-primary w-100 js-submit">Search</button>
             <p class="help-block help-block-error"></p>
         </div>
     </div>

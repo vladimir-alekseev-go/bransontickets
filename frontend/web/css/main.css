@@ -189,7 +189,8 @@ input[type=checkbox]+label:before, input[type=radio]+label:before, .tag-premium:
 .btn-link:hover:not(.cursor-default) {color:var(--c-new-blue);}
 .btn-primary, .btn-third.active {background: var(--c-primary);border:1px solid transparent;color:var(--c-white);}
 .btn-primary:hover:not(.cursor-default), .btn-third.active:hover:not(.cursor-default) {background:var(--c-primary-deep);border:1px solid transparent;color:var(--c-white);}
-.btn-primary:disabled, .btn-third.active:disabled {background:var(--c-primary-ligth);border:1px solid transparent;color:var(--c-primary-disabled);}
+.btn-primary:disabled {}
+.btn-third.active:disabled {background:var(--c-primary-ligth);border:1px solid transparent;color:var(--c-primary-disabled);}
 
 .btn-sm {font-size:12px;border-radius:6px;}
 
@@ -1236,3 +1237,6 @@ input, .form-control {padding:11px 14px 7px;text-align:left;color:var(--c-new-bl
 @media (max-width:576px) {
     .btn-basket {margin-right:15px;}
 }
+
+.gallery-detail {display:flex;justify-content: center;gap:25px;flex-wrap: wrap;}
+.gallery-detail img {border-radius: 8px;}

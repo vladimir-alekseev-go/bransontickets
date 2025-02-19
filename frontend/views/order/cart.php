@@ -97,12 +97,12 @@ $remove = Yii::$app->session->getFlash('remove');
                             ],
                             [
                                 'label' => TrPosHotels::NAME_PLURAL,
-                                'url'   => ['pl-hotel/index'],
+                                'url'   => ['lodging/index'],
                             ],
-                            [
-                                'label' => 'Packages',
-                                'url'   => ['packages/index'],
-                            ],
+//                            [
+//                                'label' => 'Packages',
+//                                'url'   => ['packages/index'],
+//                            ],
                         ]; ?>
                         <button type="button" class="shadow-block btn btn-secondary w-100 mb-3"
                                 onclick="$('.dropdown-menu').toggle('slow')">

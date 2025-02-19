@@ -383,7 +383,7 @@ class TrShows extends _source_TrShows
     {
         return self::getActive()
             ->distinct()
-            ->joinWith('availablePrices', false, 'INNER JOIN');
+            ->joinWith('prices', false, 'INNER JOIN');
     }
 
     /**

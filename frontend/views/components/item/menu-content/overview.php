@@ -16,6 +16,7 @@ $this->registerJs('order.init()');
 
 <div class="overview-calendar-block">
     <div class="row align-items-end">
+        <?php if ($model->min_rate) { ?>
         <div class="col-lg-2 order-2 d-none d-lg-block">
             <div class="ticket text-center pt-3">
                 <div class="title">
@@ -27,6 +28,7 @@ $this->registerJs('order.init()');
                 </a>
             </div>
         </div>
+        <?php } ?>
         <div class="col-lg-10 order-1">
             <?= $ScheduleSlider->run() ?>
         </div>

@@ -42,7 +42,7 @@ if (!empty($priceAll[$model->id_external])) {
                                         '#'               => 'availability'
                                     ]
                                 ),
-                                ['class' => 'btn btn-third btn-sm w-100 cursor-default mb-1' . ($hasSpecialPrice ? ' tag-discount' : '')]
+                                ['class' => 'btn btn-third btn-sm w-100 mb-1' . ($hasSpecialPrice ? ' tag-discount' : '')]
                             );
                         }
                         if (!empty($data['list'][$date->format('Md')][0])) {
@@ -57,7 +57,7 @@ if (!empty($priceAll[$model->id_external])) {
                                             '#'               => 'availability',
                                         ]
                                     ),
-                                    ['class' => 'btn btn-third btn-sm w-100 cursor-default mb-1' . ($price['special_rate'] ? ' tag-discount' : '')]
+                                    ['class' => 'btn btn-third btn-sm w-100 mb-1' . ($price['special_rate'] ? ' tag-discount' : '')]
                                 );
                             }
                         }
