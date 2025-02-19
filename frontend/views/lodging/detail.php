@@ -50,20 +50,6 @@ $this->title = $model->name;
         <?php }*/ ?>
     </div>
 </div>
-<?php
-$this->registerJsFile('/js/lightbox.js', ['depends' => [JqueryAsset::class]]);
-$this->registerCssFile('/css/lightbox.css', ['depends' => [JqueryAsset::class]]);
-?>
-<div class="fixed">
-    <h2 class="text-center">
-        Gallery
-    </h2>
-    <div class="white-block margin-block-small gallery-detail">
-        <?php foreach ($model->relatedPhotos as $relatedPhoto) { ?>
-            <a href="<?= $relatedPhoto->preview->getUrl() ?>"  data-lightbox="image-1" data-title="<?= $model->name?>">
-            <img src="<?= $relatedPhoto->preview->getUrl() ?>" >
-            </a>
-        <?php } ?>
-    </div>
-</div>
+<?= $this->render('@app/views/components/item/gallery', compact('model')) ?>
+
 
