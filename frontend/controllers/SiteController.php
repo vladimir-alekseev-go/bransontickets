@@ -79,14 +79,14 @@ class SiteController extends Controller
             ->andWhere(['not', ['min_rate' => null]])
             ->groupBy(TrShows::tableName() . '.id')
             ->orderBy(new Expression('rand()'))
-            ->andWhere("TRIM(photos) <> ''")
+            ->where(['not', ['preview_id' => false]])
             ->limit(3);
         $queryAttractions = TrAttractions::getAvailable()->with(['theatre', 'preview'])
             ->andWhere(['<', 'start', (new DateTime)->add(new DateInterval('P30D'))->format('Y-m-d H:i:s')])
             ->andWhere(['not', ['min_rate' => null]])
             ->groupBy(TrAttractions::tableName() . '.id')
             ->orderBy(new Expression('rand()'))
-            ->andWhere("TRIM(photos) <> ''")
+            ->where(['not', ['preview_id' => false]])
             ->limit(3);
 
         $showsAllF = $queryShows->all();
