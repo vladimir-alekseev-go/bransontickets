@@ -10,7 +10,7 @@ class AttractionsSearch extends TrAttractions
     /**
      * {@inheritdoc}
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             [

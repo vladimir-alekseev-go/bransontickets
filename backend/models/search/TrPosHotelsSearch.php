@@ -11,7 +11,7 @@ class TrPosHotelsSearch extends TrPosHotels
     /**
      * {@inheritdoc}
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             [['id_external', 'id', 'status'], 'integer'],
@@ -21,7 +21,7 @@ class TrPosHotelsSearch extends TrPosHotels
 
     /**
      * @param array $params
-     * @return \yii\data\ActiveDataProvider
+     * @return ActiveDataProvider
      */
     public function search($params)
     {

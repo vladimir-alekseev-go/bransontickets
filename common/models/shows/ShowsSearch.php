@@ -1,16 +1,17 @@
 <?php
+
 namespace common\models\shows;
 
+use common\models\TrShows;
 use Yii;
-use yii\base\Model;
 use yii\data\ActiveDataProvider;
 
-class ShowsSearch extends \common\models\TrShows
+class ShowsSearch extends TrShows
 {
     /**
      * {@inheritdoc}
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             [
@@ -39,38 +40,43 @@ class ShowsSearch extends \common\models\TrShows
     }
 
     /**
-     * @param [] $params
-     * @return \yii\data\ActiveDataProvider
+     * @param array $params
+     *
+     * @return ActiveDataProvider
      */
     public function search($params)
     {
         $query = self::find();
 
-        $dataProvider = new ActiveDataProvider([
-            'query' => $query,
-            'pagination' => [
-                'pageSize' => Yii::$app->request->cookies->getValue('_grid_page_size', 20),
-            ],
-            'sort' => [
-                'defaultOrder' => [
-                    'id' => SORT_ASC,
+        $dataProvider = new ActiveDataProvider(
+            [
+                'query'      => $query,
+                'pagination' => [
+                    'pageSize' => Yii::$app->request->cookies->getValue('_grid_page_size', 20),
                 ],
-            ],
-        ]);
+                'sort'       => [
+                    'defaultOrder' => [
+                        'id' => SORT_ASC,
+                    ],
+                ],
+            ]
+        );
 
         $this->load($params);
 
-        $query->andFilterWhere([
-            'id' => $this->id,
-            'id_external' => $this->id_external,
-            'status' => $this->status,
-            'show_in_footer' => $this->show_in_footer,
-            'rank_level' => $this->rank_level,
-            'marketing_level' => $this->marketing_level,
-            'weekly_schedule' => $this->weekly_schedule,
-            'cut_off' => $this->cut_off,
-            'display_image' => $this->display_image,
-        ]);
+        $query->andFilterWhere(
+            [
+                'id'              => $this->id,
+                'id_external'     => $this->id_external,
+                'status'          => $this->status,
+                'show_in_footer'  => $this->show_in_footer,
+                'rank_level'      => $this->rank_level,
+                'marketing_level' => $this->marketing_level,
+                'weekly_schedule' => $this->weekly_schedule,
+                'cut_off'         => $this->cut_off,
+                'display_image'   => $this->display_image,
+            ]
+        );
 
         $query->andFilterWhere(['like', 'code', $this->code]);
         $query->andFilterWhere(['like', 'name', $this->name]);
