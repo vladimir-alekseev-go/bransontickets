@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "11965307577f277272e8e89515a1f610",
+    "content-hash": "69f2513df607b6600aa205123a5e83b9",
     "packages": [
         {
             "name": "2amigos/yii2-ckeditor-widget",
@@ -715,6 +715,56 @@
             "time": "2017-09-25T11:47:24+00:00"
         },
         {
+            "name": "dmstr/yii2-cookie-consent",
+            "version": "1.4.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dmstr/yii2-cookie-consent.git",
+                "reference": "49d57b7c250584bc3508e09225a8711699d06555"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dmstr/yii2-cookie-consent/zipball/49d57b7c250584bc3508e09225a8711699d06555",
+                "reference": "49d57b7c250584bc3508e09225a8711699d06555",
+                "shasum": ""
+            },
+            "require": {
+                "npm-asset/dmstr--cookie-consent": "^0.4.0",
+                "yiisoft/yii2": "~2.0.0"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "dmstr\\cookieconsent\\": "./src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "German Bisurgi",
+                    "email": "g.bisurgi@herzogkommunikation.de"
+                },
+                {
+                    "name": "Elias Luhr",
+                    "email": "e.luhr@herzogkommunikation.de"
+                }
+            ],
+            "description": "Yii2 Cookie Consent Widget",
+            "keywords": [
+                "cookie consent",
+                "extension",
+                "yii2"
+            ],
+            "support": {
+                "issues": "https://github.com/dmstr/yii2-cookie-consent/issues",
+                "source": "https://github.com/dmstr/yii2-cookie-consent/tree/master"
+            },
+            "time": "2020-04-24T10:39:10+00:00"
+        },
+        {
             "name": "doctrine/deprecations",
             "version": "v1.1.1",
             "source": {
@@ -1241,6 +1291,18 @@
                 "source": "https://github.com/kartik-v/bootstrap-fileinput/tree/master"
             },
             "time": "2015-05-02T11:29:22+00:00"
+        },
+        {
+            "name": "npm-asset/dmstr--cookie-consent",
+            "version": "0.4.1",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/@dmstr/cookie-consent/-/cookie-consent-0.4.1.tgz"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
         },
         {
             "name": "paragonie/random_compat",
@@ -7341,5 +7403,5 @@
         "php": ">=7.4.0"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.1.0"
+    "plugin-api-version": "2.6.0"
 }

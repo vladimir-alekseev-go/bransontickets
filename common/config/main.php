@@ -1,5 +1,6 @@
 <?php
 
+use dmstr\cookieconsent\components\CookieConsentHelper;
 use phtamas\yii2\imageprocessor\Component;
 use yii\caching\FileCache;
 
@@ -15,6 +16,9 @@ return [
     'name'       => 'Branson Tickets',
     'timeZone'   => DEFAULT_TIMEZONE,
     'components' => [
+        'cookieConsentHelper' => [
+            'class' => CookieConsentHelper::class
+        ],
         'cache' => [
             'class' => FileCache::class,
             'cachePath' => '@common/runtime/cache',

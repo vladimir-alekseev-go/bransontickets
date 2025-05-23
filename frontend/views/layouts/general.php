@@ -1,6 +1,6 @@
 <?php
 
-use frontend\assets\AppAsset;
+use common\widgets\yii2CookieConsent\CookieConsent;use frontend\assets\AppAsset;
 use yii\helpers\Html;
 use yii\web\View;
 
@@ -43,6 +43,37 @@ $this->beginPage() ?><!DOCTYPE html>
                 ]
             ) ?>
         <?php } ?>
+        <?= CookieConsent::widget([
+          'name' => 'cookie_consent_status',
+          'path' => '/',
+          'domain' => '',
+          'expiryDays' => 365,
+          'message' => '',
+          'save' => 'Save',
+          'acceptAll' => 'Accept all',
+          'controlsOpen' => 'Change',
+          'detailsOpen' => 'Cookie Details',
+          'learnMore' => 'Cookies Policy',
+          'visibleControls' => false,
+          'visibleDetails' => false,
+          'link' => '/cookies-policy/',
+          'consent' => [
+              'cookie_necessary' => [
+                  'label' => 'Necessary',
+                  'checked' => true,
+                  'disabled' => true
+              ],
+              'cookie_statistics' => [
+                  'label' => 'Statistics',
+                  'checked' => true,
+                  'cookies' => [
+                      ['name' => '_ga'],
+                      ['name' => '_gat', 'domain' => '', 'path' => '/'],
+                      ['name' => '_gid', 'domain' => '', 'path' => '/']
+                  ]
+              ]
+          ]
+      ]) ?>
     </main>
     <?= $this->render('footer') ?>
 </div>

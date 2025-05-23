@@ -62,6 +62,7 @@ use yii\web\View;
         <?php } ?>
     </div>
 </div>
+<?php if (Yii::$app->cookieConsentHelper->hasConsent('cookie_statistics')) { ?>
 <?php
 $this->registerJS("
     var urlInput = document.getElementById('ci_consenturl');
@@ -107,5 +108,5 @@ $this->registerJS("
 ", View::POS_END);
 ?>
 <!-- End of signup -->
-
+<?php } ?>
 

@@ -28,7 +28,8 @@
         "2amigos/yii2-file-input-widget": "~1.0",
         "2amigos/yii2-ckeditor-widget" : "*",
         "yiisoft/yii2-authclient": "^2.1.8",
-        "yiisoft/yii2-swiftmailer": "*"
+        "yiisoft/yii2-swiftmailer": "*",
+        "dmstr/yii2-cookie-consent": "^1.4"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",
