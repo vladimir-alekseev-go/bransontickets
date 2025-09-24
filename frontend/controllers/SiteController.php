@@ -75,26 +75,38 @@ class SiteController extends Controller
     public function actionIndex()
     {
         $queryShows = TrShows::getAvailable()->with(['theatre', 'preview'])
-            ->andWhere(['<', 'start', (new DateTime)->add(new DateInterval('P30D'))->format('Y-m-d H:i:s')])
+//            ->andWhere(['<', 'start', (new DateTime)->add(new DateInterval('P30D'))->format('Y-m-d H:i:s')])
             ->andWhere(['not', ['min_rate' => null]])
             ->groupBy(TrShows::tableName() . '.id')
             ->orderBy(new Expression('rand()'))
             ->where(['not', ['preview_id' => false]])
             ->limit(3);
         $queryAttractions = TrAttractions::getAvailable()->with(['theatre', 'preview'])
-            ->andWhere(['<', 'start', (new DateTime)->add(new DateInterval('P30D'))->format('Y-m-d H:i:s')])
+//            ->andWhere(['<', 'start', (new DateTime)->add(new DateInterval('P30D'))->format('Y-m-d H:i:s')])
             ->andWhere(['not', ['min_rate' => null]])
             ->groupBy(TrAttractions::tableName() . '.id')
             ->orderBy(new Expression('rand()'))
             ->where(['not', ['preview_id' => false]])
             ->limit(3);
 
-        $showsAllF = $queryShows->all();
+        $showsFeatured = TrShows::getAvailable()->with(['theatre', 'preview'])
+            ->andWhere("marketing_level < 999")
+            ->andWhere(['not', ['min_rate' => null]])
+            ->groupBy(TrShows::tableName() . '.id')
+            ->orderBy('marketing_level')
+            ->all();
+
+        $attractionsFeatured = TrAttractions::getAvailable()->with(['theatre', 'preview'])
+            ->andWhere("marketing_level < 999")
+            ->andWhere(['not', ['min_rate' => null]])
+            ->groupBy(TrAttractions::tableName() . '.id')
+            ->orderBy('marketing_level')
+            ->all();
+
         $showsAllR = $queryShows->all();
-        $attractionsAllF = $queryAttractions->all();
         $attractionsAllR = $queryAttractions->all();
 
-        $showsFeatured = array_merge($showsAllF, $attractionsAllF);
+        $showsFeatured = array_merge($showsFeatured, $attractionsFeatured);
         $showsRecommended = array_merge($showsAllR, $attractionsAllR);
 
         return $this->render('index', compact('showsFeatured', 'showsRecommended'));

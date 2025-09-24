@@ -38,7 +38,7 @@ return [
         ],
         'imageProcessor' => [
             'class'          => Component::class,
-            'jpegQuality'    => 70,
+            'jpegQuality'    => 75,
             'pngCompression' => 9,
             'define' => [
                 'servicesBanners' => [
@@ -64,8 +64,8 @@ return [
                 'itemsPreview' => [
 			        'process' => [
 			            ['autorotate'],
-			            ['resize', 'width' => 260, 'height' => 190, 'scaleTo' => 'cover'],
-			            ['crop', 'width' => 260, 'height' => 190, 'x' => 'center - ' . floor(260/2), 'y' => 'center - ' . floor(190/2)],
+			            ['resize', 'width' => 450, 'height' => 330, 'scaleTo' => 'cover'],
+			            ['crop', 'width' => 450, 'height' => 330, 'x' => 'center - ' . floor(450/2), 'y' => 'center - ' . floor(330/2)],
 			        ],
 			    ],
 				'vacationPackageImage' => [

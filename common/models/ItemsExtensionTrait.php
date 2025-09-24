@@ -329,7 +329,7 @@ trait ItemsExtensionTrait
                     $this instanceof TrShows || $this instanceof TrAttractions || $this instanceof TrPosHotels)
                 && !empty($show['theatre']['locationId']) ? $show['theatre']['locationId'] : $show['location'],
                 'rank_level' => $show['rank'],
-                'marketing_level' => (int)$show['marketingLevel'],
+                'marketing_level' => (int)ItemLevel::getLevelValue($show['marketingLevel']),
                 'voucher_procedure' => $show['voucherProcedure'],
                 'weekly_schedule' => $show['weeklySchedule'] ? 1 : 0,
                 'on_special_text' => $show['onSpecialText'],
