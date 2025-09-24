@@ -23,6 +23,6 @@ class ItemLevel
     {
         $ar = self::getLevelList();
 
-        return $ar[$val] ?? $val;
+        return $ar[$val] ?? (string)$val;
     }
 }
