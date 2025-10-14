@@ -91,6 +91,7 @@ class SiteController extends Controller
 
         $showsFeatured = TrShows::getAvailable()->with(['theatre', 'preview'])
             ->andWhere("marketing_level < 999")
+            ->andWhere("marketing_level > 0")
             ->andWhere(['not', ['min_rate' => null]])
             ->groupBy(TrShows::tableName() . '.id')
             ->orderBy('marketing_level')
@@ -98,6 +99,7 @@ class SiteController extends Controller
 
         $attractionsFeatured = TrAttractions::getAvailable()->with(['theatre', 'preview'])
             ->andWhere("marketing_level < 999")
+            ->andWhere("marketing_level > 0")
             ->andWhere(['not', ['min_rate' => null]])
             ->groupBy(TrAttractions::tableName() . '.id')
             ->orderBy('marketing_level')
