@@ -5,6 +5,7 @@ namespace common\models;
 use common\behaviors\TimestampIfFieldChangeBehavior;
 use common\helpers\General;
 use common\helpers\Media;
+use common\helpers\StrHelper;
 use common\models\upload\UploadItemsPhotos;
 use common\models\upload\UploadItemsPhotosPreview;
 use common\models\upload\UploadItemsPreview;
@@ -330,7 +331,7 @@ trait ItemsExtensionTrait
                 && !empty($show['theatre']['locationId']) ? $show['theatre']['locationId'] : $show['location'],
                 'rank_level' => $show['rank'],
                 'marketing_level' => (int)ItemLevel::getLevelValue($show['marketingLevel']),
-                'voucher_procedure' => $show['voucherProcedure'],
+                'voucher_procedure' => strlen($show['voucherProcedure'] ?? '') < 2048 ? $show['voucherProcedure'] : '',
                 'weekly_schedule' => $show['weeklySchedule'] ? 1 : 0,
                 'on_special_text' => $show['onSpecialText'],
                 'cast_size' => $show['castSize'] ?? null,
@@ -367,7 +368,7 @@ trait ItemsExtensionTrait
             ];
 
             if (!($this instanceof TrPosHotels)) {
-                $dataShow['videos'] = implode(';', $videos);
+                $dataShow['videos'] = StrHelper::strFromArray($videos);
             }
 
             $dataShow['hash_summ'] = md5(Json::encode($dataShow));

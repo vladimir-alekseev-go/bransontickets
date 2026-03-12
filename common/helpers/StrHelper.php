@@ -51,4 +51,17 @@ class StrHelper
     {
         return trim(preg_replace('/\s+/', ' ', strip_tags($str)));
     }
+
+    public static function strFromArray($ar, $limit = 2048): string
+    {
+        $currentLength = 0;
+        $filteredVideos = [];
+        foreach ($ar as $video) {
+            $len = mb_strlen($video) + 1;
+            if ($currentLength + $len > $limit) break;
+            $filteredVideos[] = $video;
+            $currentLength += $len;
+        }
+        return implode(';', $filteredVideos);
+    }
 }
