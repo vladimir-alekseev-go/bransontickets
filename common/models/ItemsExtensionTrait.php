@@ -970,7 +970,6 @@ trait ItemsExtensionTrait
         if (isset($this->availablePrices)) {
             foreach ($this->availablePrices as $price) {
                 $dtStart = new DateTime($price->start);
-                $dtEnd = new DateTime($price->end);
                 if ($dtStart >= $range->start && $dtStart <= new DateTime($range->end->format('Y-m-d 23:59:59')) && !empty($price->special_rate)) {
                     $isOnSale = $price->retail_rate != $price->special_rate ? true : $isOnSale;
                 }
