@@ -129,8 +129,8 @@ class OrderForm extends DynamicModel
     public function getAllotmentHash($item)
     {
         $start = new DateTime($item['start']);
-        $end = new DateTime($item['end']);
-        if ($this->model->getType() === TrShows::TYPE) {
+        $end = new DateTime($item['end'] ?? '');
+        if ($this->model::TYPE === TrShows::TYPE) {
             return $item['allotment_external_id'] . '__' .
                 $start->format('Y_m_d_H_i_s') . '__' . $end->format('Y_m_d_H_i_s');
         }

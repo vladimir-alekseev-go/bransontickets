@@ -1,7 +1,8 @@
 <?php
 
 use common\models\StaticPage;
-use dosamigos\ckeditor\CKEditor;
+use mihaildev\ckeditor\CKEditor;
+use mihaildev\elfinder\ElFinder;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
 
@@ -29,25 +30,15 @@ use yii\helpers\Html;
     <?= $form->field($model, 'status')->dropDownList(StaticPage::getStatusList()) ?>
 
     <?php
-    echo $form->field($model, 'text')->widget(
-        CKEditor::class,
-        [
-            'options'       => ['rows' => 6],
-            'kcfinder'      => true,
-            'clientOptions' => [
-                'filebrowserUploadMethod' => 'form',
-                'language'                => 'en',
-                'extraPlugins'            => 'lightbox',
-            ],
-            'kcfOptions'    => [
-                'uploadURL' => '@web/upload/editor',
-                'uploadDir' => '@root/upload/editor',
-                'dirPerms'  => 0777,
-                'filePerms' => 0664,
-            ],
-            'preset'        => 'full'
-        ]
-    )
+    echo $form->field($model, 'text')->widget(CKEditor::class, [
+        'editorOptions' => ElFinder::ckeditorOptions('elfinder', [
+            'preset' => 'full',
+            'inline' => false,
+            'path' => 'editor',
+            'filter' => 'image',
+            'filebrowserUploadMethod' => 'form',
+        ]),
+    ]);
     ?>
 
     <?php $this->registerJs("CKEDITOR.plugins.addExternal('lightbox', '/js/ckeditor-plugins/lightbox/');"); ?>

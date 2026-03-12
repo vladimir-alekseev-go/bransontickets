@@ -160,7 +160,7 @@ $this->title = 'Print Page';
 			</td>
                 <td class="text-end"><span class="cost">$ <?= number_format($package->total, 2, '.', '')?></span></td>
                 <td class="text-end"><span class="cost">$ <?= number_format($package->tax + $package->cancellation_tax + $package->serviceFee, 2, '.', '')?></span></td>
-                <td class="text-end"><span class="cost">$ <?= number_format($package->coupon, 2, '.', '')?></span></td>
+                <td class="text-end"><span class="cost">$ <?= number_format($package->coupon ?? 0, 2, '.', '')?></span></td>
                 <td class="text-end"><span class="cost">$ <?= number_format($package->full_total, 2, '.', '')?></span></td>
 
 		</tr>

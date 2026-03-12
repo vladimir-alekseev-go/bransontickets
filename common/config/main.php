@@ -1,8 +1,9 @@
 <?php
 
+use common\components\ImageProcessor;
 use dmstr\cookieconsent\components\CookieConsentHelper;
-use phtamas\yii2\imageprocessor\Component;
 use yii\caching\FileCache;
+use yii\symfonymailer\Mailer;
 
 defined('DEFAULT_TIMEZONE') or define('DEFAULT_TIMEZONE', 'America/Chicago');
 date_default_timezone_set(DEFAULT_TIMEZONE);
@@ -24,7 +25,7 @@ return [
             'cachePath' => '@common/runtime/cache',
         ],
         'mailer' => [
-            'class' => 'yii\swiftmailer\Mailer',
+            'class' => Mailer::class,
 	    	'useFileTransport' => false,
             'viewPath' => '@common/mail',
 	    	/*'transport' => [
@@ -37,7 +38,7 @@ return [
 	        ],*/
         ],
         'imageProcessor' => [
-            'class'          => Component::class,
+            'class' => ImageProcessor::class,
             'jpegQuality'    => 75,
             'pngCompression' => 9,
             'define' => [

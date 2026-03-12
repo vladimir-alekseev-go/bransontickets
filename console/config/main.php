@@ -1,5 +1,6 @@
 <?php
 
+use yii\symfonymailer\Mailer;
 use yii\log\FileTarget;
 use webvimark\modules\UserManagement\UserManagementModule;
 
@@ -35,7 +36,7 @@ return [
             ],
         ],
         'mailer' => [
-            'class' => 'yii\swiftmailer\Mailer',
+            'class' => Mailer::class,
 	    	'useFileTransport' => false,
 	    	'transport' => [
 	            'class' => 'Swift_SmtpTransport',

@@ -21,7 +21,7 @@ $message = Yii::$app->session->getFlash('message');
 $warnings = Yii::$app->session->getFlash('warnings');
 $emailConfirmation = Yii::$app->session->getFlash('emailConfirmation');
 
-$warnings = $emailConfirmation . (strlen($emailConfirmation) > 0 && strlen($warnings) > 0 ? '<br>' : '') . $warnings;
+$warnings = $emailConfirmation . (strlen($emailConfirmation ?? '') > 0 && strlen($warnings ?? '') > 0 ? '<br>' : '') . $warnings;
 ?>
 <div class="fixed">
     <h1 class="text-center fw-bold"><?= $this->title ?></h1>

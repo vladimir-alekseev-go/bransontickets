@@ -11,39 +11,34 @@ use Exception;
 use yii\base\Model;
 use yii\helpers\Url;
 
-/**
- * Class Package
- *
- * @property $package_id
- */
 class Package extends Model
 {
     public const ANY_TIME = 'Any time';
 
     private $startDataTime;
     private $endDataTime;
-    private $ticketsQty = 0;
-    private $item;
-    private $comments;
+    private int $ticketsQty = 0;
+    private TrAttractions|TrShows|TrPosHotels|null $item = null;
+    private ?string $comments = null;
     private $tickets;
     private $riceLineContract;
-    private $nonRefundable = true;
+    private bool $nonRefundable = true;
     private $session;
     private $cancellationTexts;
 
     public $id;
     public $type_id;
     public $category;
-    public $name;
+    public string $name;
     public $start_date;
     public $start_time;
     public $end_date;
     public $end_time;
     public $package_id;
     public $order;
-    public $tax;
-    public $total;
-    public $full_total;
+    public float $tax = 0.0;
+    public float $total = 0.0;
+    public float $full_total = 0.0;
     public $display_price;
     public $retail_amount;
     public $type_name;
@@ -62,7 +57,7 @@ class Package extends Model
     public $special_check_in_instructions;
     public $itinerary_id;
     public $voucher_link;
-    public $ignore_special_rates = false;
+    public bool $ignore_special_rates = false;
     public $sdc_voucher;
     public $serviceFee;
     public $ppnBundle;
@@ -93,10 +88,7 @@ class Package extends Model
      * @var string $tripId
      */
     public $tripId;
-    /**
-     * @var string $status
-     */
-    public $status;
+    public string $status;
 
     public function loadData($data): void
     {
@@ -116,9 +108,7 @@ class Package extends Model
                 $this->category = $data['category'];
             }
         }
-        if (!empty($data['name'])) {
-            $this->name = $data['name'];
-        }
+        $this->name = $data['name'] ?? '';
         if (!empty($data['date'])) {
             $this->start_date = $data['date'];
         }
@@ -137,9 +127,6 @@ class Package extends Model
         }
         if (!empty($data['packageId'])) {
             $this->package_id = $data['packageId'];
-        }
-        if (!empty($data['ppnBundle'])) {
-            $this->ppnBundle = $data['ppnBundle'];
         }
         if (!empty($data['ppnBundle'])) {
             $this->ppnBundle = $data['ppnBundle'];
@@ -175,7 +162,7 @@ class Package extends Model
             if (!empty($data['total'])) {
                 $this->total = $data['total'];
             }
-            if (!empty($data['fullTotal'])) {
+            if (isset($data['fullTotal'])) {
                 $this->full_total = $data['fullTotal'];
             }
         }
@@ -312,15 +299,12 @@ class Package extends Model
         return $this->ticketsQty;
     }
 
-    public function getComments()
+    public function getComments(): ?string
     {
         return $this->comments;
     }
 
-    /**
-     * @return TrShows|TrAttractions|TrPosHotels|null
-     */
-    public function getItem()
+    public function getItem(): TrAttractions|TrShows|TrPosHotels|null
     {
         if (empty($this->item) && !empty($this->category) && $this->id) {
             $model = MarketingItemHelper::getItemClassNames()[$this->category];
@@ -329,16 +313,9 @@ class Package extends Model
         return $this->item;
     }
 
-    /**
-     * @return string|null
-     */
     public function getItemUrl(): ?string
     {
-        if ($this->getItem()) {
-            return $this->getItem()->getUrl();
-        }
-
-        return null;
+        return $this->getItem()?->getUrl();
     }
 
     /**
@@ -347,12 +324,12 @@ class Package extends Model
     public function getTickets(): array
     {
         if ($this->category === TrPosHotels::TYPE) {
-            usort($this->tickets, static function ($a, $b) {
-                if ($a->supplementary === $b->supplementary) {
-                    return 0;
-                }
-                return ($a < $b) ? -1 : 1;
-            });
+            usort(
+                $this->tickets,
+                static fn($a, $b) => $a->supplementary === $b->supplementary
+                    ? ($a <=> $b)
+                    : ($a->supplementary <=> $b->supplementary)
+            );
         }
 
         return $this->tickets;
@@ -405,10 +382,7 @@ class Package extends Model
         return $this->getStartDataTime()->format('U') > time();
     }
 
-    /**
-     * Return hash of Data
-     */
-    public function getHashData()
+    public function getHashData(): string
     {
         return md5(
             implode(
@@ -424,13 +398,11 @@ class Package extends Model
     }
 
     /**
-     * Return Tickets Sdc
-     *
      * @return TicketSdc[]
      */
-    public function getTicketsSdc()
+    public function getTicketsSdc(): array
     {
-        return $this->sdc_voucher['tickets'];
+        return $this->sdc_voucher['tickets'] ?? [];
     }
 
     /**
@@ -471,15 +443,12 @@ class Package extends Model
                 return $ticket->getRoomId();
             }
         }
-        return false;
+        return null;
     }
 
-    /**
-     * @return string|array
-     */
-    public function getCancellationPolicyText()
+    public function getCancellationPolicyText(): string|array|null
     {
-        return $this->getItem()->getCancelPolicyText();
+        return $this->getItem()?->getCancelPolicyText();
     }
 
     /**
@@ -496,31 +465,7 @@ class Package extends Model
         }
         return $this->cancellationTexts;
     }
-//
-//    /**
-//     * @return array|null
-//     */
-//    public function getPriceLineContract(): ?array
-//    {
-//        if ($this->riceLineContract) {
-//            return $this->riceLineContract;
-//        }
-//        $tripium = new Tripium();
-//        $this->riceLineContract = $tripium->getPriceLineContract($this->package_id);
-//        return $this->riceLineContract;
-//    }
-//
-//    /**
-//     * @return string|null
-//     */
-//    public function getPpnBundle(): ?string
-//    {
-//        $priceLineContract = $this->getPriceLineContract();
-//        if ($priceLineContract) {
-//            return $priceLineContract['bundle_data']['ppn_book_bundle'];
-//        }
-//        return null;
-//    }
+
     /**
      * Returns url to modify the package in a basket
      *
@@ -559,35 +504,28 @@ class Package extends Model
         return null;
     }
 
-    public function getTotal()
+    public function getTotal(): float
     {
-        return $this->total;
+        return $this->total ?? 0;
     }
 
-    public function getFullTotal()
+    public function getFullTotal(): float
     {
-        return $this->full_total;
+        return $this->full_total ?? 0;
     }
 
-    public function getTax()
+    public function getTax(): float
     {
-        return $this->tax;
+        return $this->tax ?? 0;
     }
 
-    public function getServiceFee()
+    public function getServiceFee(): float
     {
-        return $this->serviceFee;
+        return $this->serviceFee ?? 0;
     }
 
-    /**
-     * @return TrOrders|null
-     */
     public function getOrder(): ?TrOrders
     {
-        /**
-         * @var TrOrders $return
-         */
-        $return = TrOrders::find()->where(['order_number' => $this->order])->one();
-        return $return;
+        return TrOrders::find()->where(['order_number' => $this->order])->one();
     }
 }

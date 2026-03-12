@@ -54,9 +54,9 @@ if (!empty($this->context->controller)) {
 			            $special_rate = !empty($d['special_rate']) ? true : $special_rate;
     			        $priceData[] = [
                             'n'=> urlencode($d['name']),
-                            'p'=> urlencode($d['retail_rate']),
-                            's'=> urlencode($d['special_rate']),
-                            'd'=> urlencode($d['description']),
+                            'p'=> urlencode($d['retail_rate'] ?? ''),
+                            's'=> urlencode($d['special_rate'] ?? ''),
+                            'd'=> urlencode($d['description'] ?? ''),
     			        ];
 			        }
 
@@ -105,9 +105,9 @@ if (!empty($this->context->controller)) {
 					        $special_rate = !empty($p['special_rate']) ? true : $special_rate;
     					    $priceData[] = [
                                 'n'=> urlencode($p['name']),
-                                'p'=> urlencode($p['retail_rate']),
-                                's'=> urlencode($p['special_rate']),
-                                'd'=> urlencode($p['description']),
+                                'p'=> urlencode($p['retail_rate'] ?? ''),
+                                's'=> urlencode($p['special_rate'] ?? ''),
+                                'd'=> urlencode($p['description'] ?? ''),
         			        ];
 					    }
                         if ($ScheduleSliderWidget->package && $ScheduleSliderWidget->package->getOrder()) {

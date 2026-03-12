@@ -3,9 +3,7 @@
 namespace backend\assets;
 
 use dmstr\web\AdminLteAsset;
-use yii\bootstrap\BootstrapAsset;
 use yii\web\AssetBundle;
-use yii\web\YiiAsset;
 
 /**
  * Main backend application asset bundle.
@@ -18,6 +16,7 @@ class AppAsset extends AssetBundle
         'css/site.css',
     ];
     public $js = [
+        'js/site.js'
     ];
     public $depends = [
         AdminLteAsset::class,

@@ -45,7 +45,7 @@ class TrOrders extends _source_TrOrders
     {
         $data = [
             "order_number" => $order["orderNumber"],
-            "created_at" => date("Y-m-d H:i:s", $order["created"]/1000),
+            "created_at" => date("Y-m-d H:i:s", (int)($order["created"] / 1000)),
             "data" => Json::encode($order),
             "tripium_user_id" => $order['customer']['id'],
             "past" => empty($order["past"]) ? 0 : 1,
@@ -355,7 +355,7 @@ class TrOrders extends _source_TrOrders
             }
             $item = $package->getItem();
 
-            if ($item && strtolower($item->external_service) === strtolower($item::EXTERNAL_SERVICE_SDC)) {
+            if ($item && strtolower($item->external_service ?? '') === strtolower($item::EXTERNAL_SERVICE_SDC)) {
                 return false;
             }
 

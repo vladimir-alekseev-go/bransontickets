@@ -1,7 +1,10 @@
 {
     "name": "branson/tickets",
     "description": "Branson tickets",
-    "keywords": ["branson", "tickets"],
+    "keywords": [
+        "branson",
+        "tickets"
+    ],
     "homepage": "https://www.yiiframework.com/",
     "type": "project",
     "license": "BSD-3-Clause",
@@ -13,62 +16,60 @@
         "source": "https://github.com/yiisoft/yii2"
     },
     "minimum-stability": "dev",
-    "prefer-stable" : true,
+    "prefer-stable": true,
     "require": {
-        "php": ">=7.4.0",
-        "yiisoft/yii2": "~2.0.45",
-        "yiisoft/yii2-bootstrap": "*",
-        "yiisoft/yii2-symfonymailer": "~2.0.3",
+        "php": ">=8.2.0",
+        "yiisoft/yii2": "^2.0.54",
+        "yiisoft/yii2-bootstrap5": "*",
+        "yiisoft/yii2-symfonymailer": "^2.0",
         "yidas/yii2-fontawesome": "^5.0",
-        "webvimark/module-user-management": "*",
-        "dmstr/yii2-adminlte-asset": "*",
-        "almasaeed2010/adminlte": "v2.3.11",
-        "vladimir-alekseev-go/yii2-image-processor": ">=v1.1.2",
-        "2amigos/yii2-file-upload-widget": "*",
-        "2amigos/yii2-file-input-widget": "~1.0",
-        "2amigos/yii2-ckeditor-widget" : "*",
-        "yiisoft/yii2-authclient": "^2.1.8",
-        "yiisoft/yii2-swiftmailer": "*",
-        "dmstr/yii2-cookie-consent": "^1.4"
+        "webvimark/module-user-management": "^1.0.13",
+        "dmstr/yii2-adminlte-asset": "^2.6.2",
+        "2amigos/yii2-file-upload-widget": "^1.0.9",
+        "2amigos/yii2-file-input-widget": "^1.0.2",
+        "yiisoft/yii2-authclient": "^2.2.17",
+        "dmstr/yii2-cookie-consent": "^1.4",
+        "yiisoft/yii2-imagine": "*",
+        "mihaildev/yii2-ckeditor": "^1.0",
+        "mihaildev/yii2-elfinder": "^1.4"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",
-        "yiisoft/yii2-gii": "~2.2.0",
-        "yiisoft/yii2-faker": "~2.0.0",
-        "phpunit/phpunit": "~9.5.0",
-        "codeception/codeception": "^5.0.0 || ^4.0",
-        "codeception/lib-innerbrowser": "^4.0 || ^3.0 || ^1.1",
-        "codeception/module-asserts": "^3.0 || ^1.1",
-        "codeception/module-yii2": "^1.1",
-        "codeception/module-filesystem": "^3.0 || ^2.0 || ^1.1",
-        "codeception/verify": "^3.0 || ^2.2",
-        "symfony/browser-kit": "^6.0 || >=2.7 <=4.2.4"
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "common\\tests\\": ["common/tests/", "common/tests/_support"],
-            "backend\\tests\\": ["backend/tests/", "backend/tests/_support"],
-            "frontend\\tests\\": ["frontend/tests/", "frontend/tests/_support"]
-        }
+        "yiisoft/yii2-gii": "~2.2.0"
     },
     "config": {
-        "allow-plugins": {
-            "yiisoft/yii2-composer" : true
-        },
         "process-timeout": 1800,
+        "optimize-autoloader": true,
         "fxp-asset": {
-            "enabled": false
+            "enabled": "false"
+        },
+        "platform": {
+            "php": "8.2"
+        },
+        "allow-plugins": {
+            "yiisoft/yii2-composer": true,
+            "composer/installers": true
         }
     },
-    "repositories": [
-        {
-            "type": "composer",
-            "url": "https://asset-packagist.org"
+    "extra": {
+        "installer-types": [
+            "npm-asset",
+            "bower-asset"
+        ],
+        "asset-installer-paths": {
+            "npm-asset-library": "vendor/npm-asset",
+            "bower-asset-library": "vendor/bower-asset"
         }
-    ],
+    },
     "autoload": {
         "classmap": [
             "common/models/source"
         ]
+    },
+    "repositories": {
+        "asset-packagist": {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        }
     }
 }

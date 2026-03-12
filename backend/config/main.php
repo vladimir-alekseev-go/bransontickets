@@ -1,5 +1,6 @@
 <?php
 
+use mihaildev\elfinder\PathController;
 use yii\i18n\PhpMessageSource;
 use webvimark\modules\UserManagement\components\UserConfig;
 use webvimark\modules\UserManagement\models\UserVisitLog;
@@ -28,6 +29,16 @@ return [
                 }
             },
         ],
+    ],
+    'controllerMap' => [
+        'elfinder' => [
+            'class' => PathController::class,
+            'access' => ['@'],
+            'root' => [
+                'path' => 'upload/editor',
+                'name' => 'Files'
+            ],
+        ]
     ],
     'components' => [
         'urlManager'   => array(
