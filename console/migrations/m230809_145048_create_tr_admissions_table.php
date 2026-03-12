@@ -20,7 +20,7 @@ class m230809_145048_create_tr_admissions_table extends Migration
             'tr_admissions',
             [
                 'id'               => $this->primaryKey(),
-                'id_external'      => $this->integer(11)->notNull(),
+                'id_external'      => $this->integer(11)->notNull()->unique(),
                 'id_external_item' => $this->integer(11)->notNull(),
                 'name'             => $this->string(64)->notNull(),
                 'hash_summ'        => $this->string(32)->notNull(),
@@ -31,13 +31,13 @@ class m230809_145048_create_tr_admissions_table extends Migration
         );
 
         $this->createIndex(
-            'id_external',
+            'idx-tr_admissions-id_external',
             'tr_admissions',
             'id_external'
         );
 
         $this->createIndex(
-            'id_external_item',
+            'idx-tr_admissions-id_external_item',
             'tr_admissions',
             'id_external_item'
         );

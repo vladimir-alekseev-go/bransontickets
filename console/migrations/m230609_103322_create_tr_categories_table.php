@@ -20,7 +20,7 @@ class m230609_103322_create_tr_categories_table extends Migration
             'tr_categories',
             [
                 'id'               => $this->primaryKey(),
-                'id_external'      => $this->integer(11)->notNull(),
+                'id_external'      => $this->integer(11)->notNull()->unique(),
                 'name'             => $this->string(64)->null(),
                 'hash_summ'        => $this->string(32)->notNull(),
                 'sort_shows'       => $this->integer(4)->defaultValue(500),
@@ -31,7 +31,7 @@ class m230609_103322_create_tr_categories_table extends Migration
         );
 
         $this->createIndex(
-            'id_external',
+            'idx-tr_categories-id_external',
             'tr_categories',
             'id_external'
         );

@@ -18,7 +18,7 @@ class m230819_140859_create_tr_pos_room_types_table extends Migration
         }
         $this->createTable('tr_pos_room_types', [
             'id'               => $this->primaryKey(),
-            'id_external'      => $this->integer()->null(),
+            'id_external'      => $this->integer()->null()->unique(),
             'id_external_item' => $this->integer()->null(),
             'name'             => $this->string(64)->notNull(),
             'hash_summ'        => $this->string(32)->notNull(),

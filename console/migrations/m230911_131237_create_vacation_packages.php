@@ -18,7 +18,7 @@ class m230911_131237_create_vacation_packages extends Migration
         }
         $this->createTable('vacation_package', [
             'id'             => $this->primaryKey(),
-            'vp_external_id' => $this->integer()->notNull(),
+            'vp_external_id' => $this->integer()->notNull()->unique(),
             'name'           => $this->string(128)->notNull(),
             'code'           => $this->string(128)->null(),
             'description'    => $this->string(4096)->null(),

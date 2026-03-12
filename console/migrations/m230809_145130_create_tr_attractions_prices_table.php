@@ -44,7 +44,7 @@ class m230809_145130_create_tr_attractions_prices_table extends Migration
         );
 
         $this->createIndex(
-            'id_external',
+            'idx-tap-id_external',
             'tr_attractions_prices',
             'id_external'
         );
