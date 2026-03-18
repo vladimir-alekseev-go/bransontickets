@@ -1,22 +1,23 @@
 <?php
+
 namespace common\models\auth;
 
+use common\models\User;
 use Yii;
 use yii\base\Model;
-
-use common\models\User;
+use yii\db\Exception;
 
 /**
  * Password reset request form
  */
 class PasswordResetRequestForm extends Model
 {
-    public $email;
+    public string $email;
 
     /**
      * @inheritdoc
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             ['email', 'filter', 'filter' => 'trim'],
@@ -32,11 +33,12 @@ class PasswordResetRequestForm extends Model
 
     /**
      * Sends an email with a link, for resetting the password.
-     * @param email $emailFrom
+     * @param string $emailFrom
      * @param string $siteName
-     * @return boolean whether the email was send
+     * @return bool
+     * @throws Exception
      */
-    public function sendEmail($emailFrom = null, $siteName = null)
+    public function sendEmail(string $emailFrom, string $siteName = ''): bool
     {
         $user = User::findOne([
             'status' => User::STATUS_ACTIVE,
@@ -44,14 +46,14 @@ class PasswordResetRequestForm extends Model
         ]);
         if ($user) {
             $user->withoutTripium = true;
-            
+
             if (!User::isPasswordResetTokenValid($user->password_reset_token)) {
                 $user->generatePasswordResetToken();
             }
 
             if ($user->save()) {
                 return Yii::$app->mailer->compose(['html' => 'passwordResetToken-html', 'text' => 'passwordResetToken-text'], ['user' => $user])
-                    ->setFrom([$emailFrom => $siteName." Ticket Service"])
+                    ->setFrom([$emailFrom => $siteName . " Ticket Service"])
                     ->setTo($this->email)
                     ->setBcc(Yii::$app->params['passwordResetRequestEmailCopy'])
                     ->setSubject('Password reset for ' . $siteName)
