@@ -12,7 +12,7 @@ use yii\db\Exception;
  */
 class PasswordResetRequestForm extends Model
 {
-    public string $email;
+    public ?string $email = null;
 
     /**
      * @inheritdoc

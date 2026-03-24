@@ -239,7 +239,7 @@ class Package extends Model
             $this->cancelPolicies = $data['cancelPolicies'];
         }
         if (!empty($data['dateUpdated'])) {
-            $this->dateUpdated = (new DateTime())->setTimestamp($data['dateUpdated']/1000);
+            $this->dateUpdated = (new DateTime())->setTimestamp((int)($data['dateUpdated']/1000));
         }
         if (!empty($data['sdc_voucher'])) {
             $this->sdc_voucher = $data['sdc_voucher'];
