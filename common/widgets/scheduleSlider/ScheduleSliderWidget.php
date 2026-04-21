@@ -156,9 +156,9 @@ class ScheduleSliderWidget extends Widget
 	        ->one();
 
         $start = new DateTime();
-        $start_min = new DateTime($range['start_min']);
+        $start_min = new DateTime($range['start_min'] ?? 'now');
         $start_min = $start_min > $start ? $start_min : $start;
-        $start_max = new DateTime($range['start_max']);
+        $start_max = new DateTime($range['start_max'] ?? 'now');
 	    $start_max->add(new DateInterval('P1D'));
 
 	    if (!($start_min instanceof DateTime && $start_max instanceof DateTime)) {
