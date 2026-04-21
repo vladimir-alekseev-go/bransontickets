@@ -27,8 +27,8 @@ $error = Yii::$app->session->getFlash('error');
                 <div class="row">
                     <div class="col-12 col-sm-5 mb-5 mb-sm-0">
                         <div class="form-data">
-                            <?php if (!empty($messages)) { ?>
-                                <div class="alert alert-success"><?= $messages[0] ?></div>
+                            <?php if (!empty($success)) { ?>
+                                <div class="alert alert-success"><?= $success ?></div>
                             <?php } ?>
                             <?php $form = ActiveForm::begin(
                                 ['id' => 'request-password-reset-form', 'class' => 'form-restore-pass']

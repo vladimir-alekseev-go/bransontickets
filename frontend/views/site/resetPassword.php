@@ -2,8 +2,9 @@
 
 /* @var $this yii\web\View */
 /* @var $form yii\bootstrap\ActiveForm */
-/* @var $model \frontend\models\ResetPasswordForm */
+/* @var $model ResetPasswordForm */
 
+use common\models\auth\ResetPasswordForm;
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 
@@ -29,6 +30,7 @@ $success = Yii::$app->session->getFlash('success');
                 <?php $form = ActiveForm::begin(['id' => 'reset-password-form', 'class'=>'form-restore-pass']); ?>
 
                     <?= $form->field($model, 'password')->passwordInput() ?>
+                    <?= $form->field($model, 'password_repeat')->passwordInput() ?>
 
                     <div class="form-group">
                         <?= Html::submitButton('Save', ['class' => 'btn btn-primary d-inline-block ps-5 pe-5']) ?>

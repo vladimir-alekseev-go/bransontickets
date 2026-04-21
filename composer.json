@@ -21,7 +21,6 @@
         "php": ">=8.2.0",
         "yiisoft/yii2": "^2.0.54",
         "yiisoft/yii2-bootstrap5": "*",
-        "yiisoft/yii2-symfonymailer": "^2.0",
         "yidas/yii2-fontawesome": "^5.0",
         "webvimark/module-user-management": "^1.0.13",
         "dmstr/yii2-adminlte-asset": "^2.6.2",

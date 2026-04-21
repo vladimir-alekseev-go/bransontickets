@@ -88,15 +88,14 @@ trait SiteControllerTrait
      * Resets password.
      *
      * @param string $token
-     * @return mixed
-     * @throws BadRequestHttpException
+     * @throws NotFoundHttpException
      */
     public function actionResetpassword($token)
     {
         try {
             $model = new ResetPasswordForm($token);
-        } catch (InvalidArgumentException $e) {
-            throw new BadRequestHttpException($e->getMessage());
+        } catch (\Exception $e) {
+            throw new NotFoundHttpException($e->getMessage());
         }
 
         if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->resetPassword()) {

@@ -1,6 +1,5 @@
 <?php
 
-use yii\symfonymailer\Mailer;
 use yii\log\FileTarget;
 use webvimark\modules\UserManagement\UserManagementModule;
 
@@ -27,26 +26,6 @@ return [
         ],
     ],
     'components' => [
-        'log' => [
-            'targets' => [
-                [
-                    'class' => FileTarget::class,
-                    'levels' => ['error', 'warning'],
-                ],
-            ],
-        ],
-        'mailer' => [
-            'class' => Mailer::class,
-	    	'useFileTransport' => false,
-	    	'transport' => [
-	            'class' => 'Swift_SmtpTransport',
-	            'host' => 'smtp.mandrillapp.com',
-	            'username' => 'Tripium',
-	            'password' => 'myxA2oC35Av6AzVY00Z2qw',
-	            'port' => '587',
-	            'encryption' => 'tls',
-	        ],
-        ],
     ],
     'params' => $params,
 ];

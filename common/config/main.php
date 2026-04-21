@@ -3,7 +3,6 @@
 use common\components\ImageProcessor;
 use dmstr\cookieconsent\components\CookieConsentHelper;
 use yii\caching\FileCache;
-use yii\symfonymailer\Mailer;
 
 defined('DEFAULT_TIMEZONE') or define('DEFAULT_TIMEZONE', 'America/Chicago');
 date_default_timezone_set(DEFAULT_TIMEZONE);
@@ -23,19 +22,6 @@ return [
         'cache' => [
             'class' => FileCache::class,
             'cachePath' => '@common/runtime/cache',
-        ],
-        'mailer' => [
-            'class' => Mailer::class,
-	    	'useFileTransport' => false,
-            'viewPath' => '@common/mail',
-	    	/*'transport' => [
-	            'class' => 'Swift_SmtpTransport',
-	            'host' => 'smtp.mandrillapp.com',
-	            'username' => 'Tripium',
-	            'password' => 'myxA2oC35Av6AzVY00Z2qw',
-	            'port' => '587',
-	            'encryption' => 'tls',
-	        ],*/
         ],
         'imageProcessor' => [
             'class' => ImageProcessor::class,
