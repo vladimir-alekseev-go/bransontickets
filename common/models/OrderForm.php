@@ -733,8 +733,8 @@ class OrderForm extends DynamicModel
 
     public function familyPass($attribute): void
     {
-        $family_pass_seats = (int)trim($this->{$attribute});
-        $family_pass = (int)trim($this->{substr($attribute, 0, -strlen(self::SEATS_FIELD_SUB_NAME))});
+        $family_pass_seats = (int)trim($this->{$attribute} ?? '');
+        $family_pass = (int)trim($this->{substr($attribute, 0, -strlen(self::SEATS_FIELD_SUB_NAME))} ?? '');
 
         if ($family_pass && !$family_pass_seats) {
             $this->addError($attribute, 'You need to enter the number of seats needed with the family pass');
