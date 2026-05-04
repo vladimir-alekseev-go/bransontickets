@@ -121,6 +121,10 @@ class Tripium extends Model
         $this->curlInfo = curl_getinfo($this->ch);
         $this->statusCode = (int)$this->curlInfo['http_code'];
         $this->errorCode = null;
+        if ($server_output === false) {
+            Yii::error(curl_error($this->ch));
+            Yii::error(curl_errno($this->ch));
+        }
         if ($this->statusCode === 0 && $server_output === false && floor(
                 $this->curlInfo['total_time']
             ) == $this->timeout) {
