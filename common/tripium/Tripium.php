@@ -101,6 +101,7 @@ class Tripium extends Model
         curl_setopt($this->ch, CURLOPT_URL, $this->url . $path);
         curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($this->ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($this->ch, CURLOPT_SSL_VERIFYHOST, false);
 //        curl_setopt($this->ch, CURLOPT_CONNECTTIMEOUT, 10);
         curl_setopt($this->ch, CURLOPT_TIMEOUT, $this->timeout);
 

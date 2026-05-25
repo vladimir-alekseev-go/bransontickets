@@ -521,7 +521,13 @@ class TrPosHotels extends _source_TrPosHotels
             $query->joinWith('categories')->andWhere(['id_external_category' => $Search->c]);
         }
         if (!empty($Search->city) && !empty($Search->city[0])) {
-            $query->andWhere(['city' => $Search->city]);
+            $query->joinWith('theatre')->andFilterWhere(
+                [
+                    'or',
+                    [self::tableName() . '.city' => $Search->city],
+                    [TrTheaters::tableName() . '.city' => $Search->city]
+                ]
+            );
         }
         if (!empty($Search->amenities) && !empty($Search->amenities[0])) {
             $query->andWhere(['like', 'amenities', $Search->amenities]);
