@@ -24,8 +24,6 @@
         "yidas/yii2-fontawesome": "^5.0",
         "webvimark/module-user-management": "^1.0.13",
         "dmstr/yii2-adminlte-asset": "^2.6.2",
-        "2amigos/yii2-file-upload-widget": "^1.0.9",
-        "2amigos/yii2-file-input-widget": "^1.0.2",
         "yiisoft/yii2-authclient": "^2.2.17",
         "dmstr/yii2-cookie-consent": "^1.4",
         "yiisoft/yii2-imagine": "*",
